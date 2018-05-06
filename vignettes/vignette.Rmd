@@ -1,0 +1,74 @@
+---
+title: "Introducing 'cwbtools'"
+author: "Andreas Blätte (andreas.blaette@uni-due.de)"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing 'cwbtools'}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# Initialization
+
+
+```{r}
+library(cwbtools)
+# library(pbapply)
+# library(tokenizers)
+# library(data.table)
+```
+
+
+```{r}
+teidir <- system.file()
+```
+
+
+# Generate Basetable
+
+```{r basetable, eval = TRUE}
+metadata <- c(
+  lp = "//legislativePeriod", session = "//titleStmt/sessionNo",
+  date = "//publicationStmt/date", url = "//sourceDesc/url",
+  src = "//sourceDesc/filetype"
+)
+cdata <- as_corpusdata(x = list.files(teidir, full.names = TRUE), meta = metadata)
+```
+
+Remove speaker elements. ### DO IT in as_corpusdata ###
+
+```{r cleaning, eval = TRUE}
+# cdata <- cdata[is.na(speaker)][, speaker := NULL] 
+setnames(cdata[["metadata"]], old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
+```
+
+
+```{r dissect, eval = TRUE}
+cdata2 <- tokenize_corpusdata(cdata)
+```
+
+
+```{r}
+s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
+encode_corpusdata(
+  x = cdata2,
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  data_dir = "~/Data/cwb/indexed_corpora/unga",
+  corpus = "UNGA",
+  encoding = "utf8",
+  p_attributes = "word",
+  s_attributes = s_attrs
+  )
+```
+
+
+
+# Final check
+
+```{r check_use, eval = TRUE}
+library(polmineR)
+use("UNGA") # to make the new corpus available
+```

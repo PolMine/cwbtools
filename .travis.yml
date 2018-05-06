@@ -17,10 +17,10 @@ r_packages:
   - RcppCWB
   - data.table
   - R6
-  - pbapply,
+  - pbapply
   - xml2
   - stringi
-  - tm,
+  - tm
   - knitr
   - tokenizers
   - tidytext
