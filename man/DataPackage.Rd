@@ -64,8 +64,6 @@ perform standard tasks in a standardized fashion.
 }
 
 \examples{
-polmineR::use("polmineR")
-
 y <- tempdir()
 DP <- DataPackage$new(dir = y)
 DP$createDirectoryStructure()

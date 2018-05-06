@@ -6,6 +6,11 @@
 \usage{
 get_encoding(x, verbose = TRUE)
 }
+\arguments{
+\item{x}{a character vector}
+
+\item{verbose}{logical, whether to output messages}
+}
 \description{
 Get Encoding of Character Vector.
 }

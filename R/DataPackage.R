@@ -46,8 +46,6 @@
 #'   .gitignore file to the package.}
 #' }
 #' @examples 
-#' polmineR::use("polmineR")
-#' 
 #' y <- tempdir()
 #' DP <- DataPackage$new(dir = y)
 #' DP$createDirectoryStructure()
@@ -59,7 +57,6 @@
 #' 
 #' @rdname DataPackage
 #' @export DataPackage
-#' @importFrom polmineR RegistryFile
 #' @importFrom R6 R6Class
 DataPackage <- R6Class(
   
@@ -137,7 +134,7 @@ DataPackage <- R6Class(
         dir.create(targetDir)
       }
       filesToCopy <- list.files(
-        polmineR::RegistryFile$new(corpus, registry = registry)$getHome(),
+        registry_file_parse(corpus, registry = registry)[["home"]],
         full.names = TRUE
         )
       dummy <- lapply(

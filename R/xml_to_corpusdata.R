@@ -1,4 +1,4 @@
-#' Parse an XML/TEI file as data.table
+#' Parse an XML/TEI file as corpusdata.
 #' 
 #' The procedure is inspired by the tidytext paradigm, but
 #' uses a data.table for efficiency.
@@ -7,14 +7,16 @@
 #' @param body an xpath expression defining the body of the xml document
 #' @param meta a named character vector with xpath expressions
 #' @param mc a numeric/integer value, number of cores to use
-#' @export as_corpusdata
+#' @export xml_to_corpusdata
 #' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name xml_parents xml_text
 #' @importFrom data.table as.data.table
 #' @importFrom pbapply pblapply
-as_corpusdata <- function(x, body = "//body", meta = NULL, mc = NULL){
+#' @importFrom stats setNames
+#' @importFrom data.table data.table
+xml_to_corpusdata <- function(x, body = "//body", meta = NULL, mc = NULL){
   if (length(x) > 1){
     if (!all(file.exists(x))) stop("all files provided by x need to exist (not fulfilled)")
-    data <- pbapply::pblapply(x, function(x) as_corpusdata(x, body = body, meta = meta, mc = 1))
+    data <- pbapply::pblapply(x, function(x) xml_to_corpusdata(x, body = body, meta = meta, mc = 1))
     text <- rbindlist(lapply(data, function(x) x[["text"]]))
     text[["id"]] <- 1L:nrow(text)
     metadata <- rbindlist(lapply(data, function(x) x[["metadata"]]), fill = TRUE)
@@ -25,7 +27,7 @@ as_corpusdata <- function(x, body = "//body", meta = NULL, mc = NULL){
     if (file.info(x)[["isdir"]]){
       filenames <- list.files(x, full.names = TRUE)
       if (length(filenames) == 0) warning("directory x is empty")
-      dt <- as_corpusdata(x = filenames, body = body, meta = meta, mc = mc)
+      dt <- xml_to_corpusdata(x = filenames, body = body, meta = meta, mc = mc)
       return(dt)
     } else {
       doc <- xml2::read_xml(x)

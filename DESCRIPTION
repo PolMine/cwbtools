@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.1
-Date: 2018-04-27
+Version: 0.0.2
+Date: 2018-05-05
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.
@@ -11,21 +11,25 @@ Depends:
     R6
 Imports:
     pbapply,
-    polmineR,
-    xml2
+    xml2,
+    stringi,
+    RcppCWB
 Suggests:
     tm,
-    knitr
+    knitr,
+    tokenizers,
+    tidytext
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3
 Collate:
     'cwbtools.R'
     'DataPackage.R'
-    'add_corpus_positions.R'
-    'as_corpusdata.R'
     'cwb.R'
-    'encode.R'
-    'tokenize.R'
     'utils.R'
+    'p_attribute.R'
+    's_attribute.R'
+    'registry_file.R'
+    'corpusdata.R'
+    'xml_to_corpusdata.R'
 RoxygenNote: 6.0.1

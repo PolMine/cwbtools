@@ -10,6 +10,7 @@
 Toolset to Manage CWB Corpora.
 }
 \examples{
+\dontrun{
 library(tm)
 reut21578 <- system.file("texts", "crude", package = "tm")
 reuters.tm <- VCorpus(DirSource(reut21578), list(reader = readReut21578XMLasPlain))
@@ -41,7 +42,7 @@ encode_corpusdata(
   cdata, corpus = "REUTERS", encoding = "utf8",
   registry_dir = registry_dir_tmp, data_dir = data_dir_tmp
   )
-
+}
 }
 \author{
 Andreas Blaette

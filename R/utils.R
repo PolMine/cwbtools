@@ -1,8 +1,11 @@
 #' Get Encoding of Character Vector.
 #' 
+#' @param x a character vector
+#' @param verbose logical, whether to output messages
 #' @export get_encoding
 #' @rdname get_encoding
 #' @name get_encoding
+#' @importFrom utils localeToCharset
 get_encoding = function(x, verbose = TRUE){
   enc <- unique(Encoding(x))
   if (length(enc) == 1){
