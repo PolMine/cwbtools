@@ -1,0 +1,37 @@
+language: r
+cache: packages
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+    - os: osx
+      osx_image: xcode9.1
+
+addons:
+  apt:
+    packages:
+      - libxml2-utils
+
+r_packages:
+  - RcppCWB
+  - data.table
+  - R6
+  - pbapply,
+  - xml2
+  - stringi
+  - tm,
+  - knitr
+  - tokenizers
+  - tidytext
+  - covr
+
+warnings_are_errors: false
+
+notifications:
+  email:
+  on_success: change
+  on_failure: change
+
+after_success:
+  - Rscript -e 'library(covr); codecov(token = "26677b57-5e66-44cd-ad0c-49957456a028")'
