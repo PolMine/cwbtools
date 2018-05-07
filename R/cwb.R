@@ -7,7 +7,7 @@
 cwb_make = function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
 
   if (verbose) message("... running cwb-make")
-  cwb_make_cmd <- paste0(c("cwb-make", "-V", corpus, "-r", registry_dir), collapse = " ")
+  cwb_make_cmd <- paste0(c("cwb-make", "-V", toupper(corpus), "-r", registry_dir), collapse = " ")
   system(cwb_make_cmd)
   # polmineR::use(dir = registry_dir)
 }

@@ -6,10 +6,9 @@ Date: 2018-05-05
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.
-Depends:
-    data.table,
-    R6
 Imports:
+    data.table,
+    R6,
     pbapply,
     xml2,
     stringi,

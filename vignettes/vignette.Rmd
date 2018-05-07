@@ -7,27 +7,50 @@ vignette: >
   %\VignetteIndexEntry{Introducing 'cwbtools'}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
 ---
 
-# Initialization
+# Using the 'cwbtools' package: A sample workflow
 
+## Initialization
+
+For the following examples, we create a directory structure for registry files, and the the indexed corpora in a temporary directory.
+
+```{r}
+tmpdir <- tempdir()
+if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
+registry_tmp <- file.path(tmpdir, "registry")
+data_dir_tmp <- file.path(tmpdir, "data_dir")
+unga_data_dir_tmp <- file.path(data_dir_tmp, "unga")
+dir.create (registry_tmp)
+dir.create(data_dir_tmp)
+dir.create(unga_data_dir_tmp)
+```
+
+Trying to keep installation requirements at minimum, we only rely on cwbtools, and the data.table package.
 
 ```{r}
 library(cwbtools)
-# library(pbapply)
-# library(tokenizers)
-# library(data.table)
+library(data.table)
 ```
 
+
+## Indexing the UN General Assembly Corpus
+
+The first example is a small sample corpus of the UN General Assembly. The package includes some XML files (TEI standardization).
 
 ```{r}
-teidir <- system.file()
+teidir <- system.file(package = "cwbtools", "xml", "UNGA")
+unga_tei_files <- list.files(teidir, full.names = TRUE)
 ```
 
+We will need a corpusdata object, which is essentially a list of:
+  - a metadata table;
+  - a table of text chunks;
+  - a table of the tokenstream (prepared as we proceed).
+  
+The metadata table and the table of text_chunks is linked via a unique id. At a later stage, so-called corpus positions are added to the metadata table and the tokenstream table.
 
-# Generate Basetable
+To turn the XML files into the corpusdata object, we use the function `xml_to_corpusdata`. To be able to add metadata from the header to the metadata table, it requires a named vector of XPath expressions.
 
 ```{r basetable, eval = TRUE}
 metadata <- c(
@@ -35,40 +58,147 @@ metadata <- c(
   date = "//publicationStmt/date", url = "//sourceDesc/url",
   src = "//sourceDesc/filetype"
 )
-cdata <- as_corpusdata(x = list.files(teidir, full.names = TRUE), meta = metadata)
+CD <- xml_to_corpusdata(x = unga_tei_files, meta = metadata)
 ```
 
-Remove speaker elements. ### DO IT in as_corpusdata ###
+The input XML files are TEI files. Speaker information is included in the attributes of a tag 'sp'. To maintain the original content, there is a element 'speaker' in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we need to consider it as noise to be removed.
 
 ```{r cleaning, eval = TRUE}
-# cdata <- cdata[is.na(speaker)][, speaker := NULL] 
-setnames(cdata[["metadata"]], old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
+to_keep <- which(is.na(CD[["metadata"]][["speaker"]]))
+
+CD[["text"]] <- CD[["text"]][to_keep]
+
+CD[["metadata"]] <- CD[["metadata"]][to_keep][, speaker := NULL]
+setnames(CD[["metadata"]], old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
+```
+
+The CWB requires a tokenstream as input to generate positional attributes. Standard NLP tools will offer lemmatization, part-of-speech-recognition and more at this stage. To keep things simple, we perform a very simple tokenization using the tokenizers pacakge.
+
+```{r dissect, eval = TRUE}
+CD <- corpusdata_tokenize(CD)
+```
+
+The corpusdata object now includes a table with the token stream. We are ready to import the corpus into the CWB. We use the corpusdata_encode function for this purpose. It is a wrapper on the `p_attribute_encode` function (to encode the token stream), and the `s_attribute_encode` function (to encode the structural attributes / the metadata).
+
+```{r}
+s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
+corpusdata_encode(
+  x = CD,
+  registry_dir = registry_tmp, data_dir = file.path(data_dir_tmp, "unga"),
+  corpus = "UNGA", encoding = "utf8", method = "CWB",
+  p_attributes = "word", s_attributes = s_attrs,
+  make = TRUE
+  )
+```
+
+Note that we set the logical parameter make as TRUE. This performs a so-called huffcode compression, which will reduce corpus size and speed up queries. For big corpora, the compression step can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be delayed.
+
+The indexed corpus has now been prepared. We still need a 'registry file' describing the corpus. It can be created in a two-step procedure. Using the registry_data function, we create the data for in a standardized manner. Then we use registry_file_write to actually create the registry file.
+
+```{r}
+regdata <- registry_data(
+  name = "UN General Assembly", id = "UNGA",
+  home = file.path(data_dir_tmp, "unga"),
+  properties = c(charset = "utf8"),
+  p_attributes = "word", s_attributes = s_attrs
+  )
+registry_file_write(regdata, corpus = "UNGA", registry_dir = registry_tmp)
 ```
 
 
-```{r dissect, eval = TRUE}
-cdata2 <- tokenize_corpusdata(cdata)
+## Inspecting the results
+
+The corpus is now ready to be used with CQP (or CQPweb), or a more advanced and convenient environment for corpus analysis, such as 'polmineR'. To gain a quick insight whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the RcppCWB package. 
+
+```{r check_use, eval = TRUE}
+library(RcppCWB)
+id_peace <- cl_str2id(corpus = "UNGA", p_attribute = "word", str = "peace", registry = registry_tmp)
+cpos_peace <- cl_id2cpos(corpus = "UNGA", p_attribute = "word", id = id_peace, registry = registry_tmp)
+peace_context <- sapply(
+  cpos_peace,
+  function(x){
+    ids <- cl_cpos2id(corpus = "UNGA", p_attribute = "word", cpos = (x - 5):(x + 5), registry = registry_tmp)
+    tokens <- cl_id2str(corpus = "UNGA", p_attribute = "word", id = ids, registry = registry_tmp)
+    paste0(tokens, collapse = " ")
+  }
+)
+head(peace_context)
+```
+
+
+### Scenario 2: Tidytext to CWB 
+
+In a second scenario, we create a corpus of Jane Austen's books (included in the package janeaustenr)
+
+```{r}
+books <- janeaustenr::austen_books()
+tbl <- tidytext::unnest_tokens(books, word, text, to_lower = FALSE)
+```
+
+```{r}
+tbl[["stem"]] <- SnowballC::wordStem(tbl[["word"]], language = "english")
+```
+
+```{r}
+tbl[["cpos"]] <- 0L:(nrow(tbl) - 1L)
+meta <- plyr::ddply(
+  .data = tbl, .variable = "book",
+  .fun = function(x) c(cpos_left = min(x[["cpos"]]), cpos_right = max(x[["cpos"]]))
+)
+meta[["book"]] <- as.character(meta[["book"]])
+```
+
+```{r}
+encdata <- list(tokenstream = tbl, metadata = meta)
 ```
 
 
 ```{r}
-s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
-encode_corpusdata(
-  x = cdata2,
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
-  data_dir = "~/Data/cwb/indexed_corpora/unga",
-  corpus = "UNGA",
-  encoding = "utf8",
-  p_attributes = "word",
-  s_attributes = s_attrs
-  )
+cwbtools::corpusdata_encode(
+   encdata, corpus = "AUSTEN", encoding = "utf8",
+   p_attributes = c("word", "stem"), s_attributes = "book",
+   registry_dir = registry_tmp, data_dir = data_dir_tmp,
+   method = "CWB", make = TRUE
+)
 ```
 
+```{r}
+id_pride <- cl_str2id(
+  corpus = "AUSTEN", p_attribute = "stem", str = "pride",
+  registry = registry_tmp
+  )
+cpos_pride <- cl_id2cpos(
+  corpus = "AUSTEN", p_attribute = "stem",
+  id = id_pride,
+  registry = registry_tmp
+  )
+length(cpos_pride)
+```
 
+### Scenairo 3: A tm VCorpus to CWB
 
-# Final check
+```{r}
+library(tm)
+reut21578 <- system.file("texts", "crude", package = "tm")
+reuters.tm <- VCorpus(DirSource(reut21578), list(reader = readReut21578XMLasPlain))
+```
 
-```{r check_use, eval = TRUE}
-library(polmineR)
-use("UNGA") # to make the new corpus available
+```{r}
+tbl <- tidy(reuters.tm)
+tbl[["topics_cat"]] <- sapply(tbl[["topics_cat"]], function(x) paste(x, collapse = "|"))
+tbl[["places"]] <- sapply(tbl[["places"]], function(x) paste(x, collapse = "|"))
+
+data <- list(
+   text = data.table(tbl[, c("id", "text")]),
+   metadata = data.table(tbl[,c("id", "topics_cat", "places")])
+)
+data <- corpusdata_tokenize(data)
+
+corpusdata_encode(
+   data, corpus = "REUTERS", encoding = "utf8",
+   p_attributes = "word", s_attributes = c("topics_cat", "places"),
+   registry_dir = registry_tmp,
+   data_dir = data_dir_tmp,
+   method = "CWB"
+)
 ```

@@ -13,7 +13,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats setNames
 #' @importFrom data.table data.table
-xml_to_corpusdata <- function(x, body = "//body", omit, meta = NULL, mc = NULL){
+xml_to_corpusdata <- function(x, body = "//body", meta = NULL, mc = NULL){
   if (length(x) > 1){
     if (!all(file.exists(x))) stop("all files provided by x need to exist (not fulfilled)")
     data <- pbapply::pblapply(x, function(x) xml_to_corpusdata(x, body = body, meta = meta, mc = 1))

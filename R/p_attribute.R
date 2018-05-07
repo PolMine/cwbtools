@@ -91,7 +91,6 @@ p_attribute_encode <- function(
     return( TRUE )
   } else if (method == "CWB"){
     if (p_attribute == "word"){
-      if (verbose) message("Creating new CWB indexed corpus ", corpus)
       if (any(grepl("^\\s*<.*?>\\s*$", token_stream)))
         warning("there is markup in the character vector - cwb-encode will issue warnings")
       
@@ -102,10 +101,9 @@ p_attribute_encode <- function(
         Encoding(token_stream) <- encoding
       }
       
-      if (verbose) message("... writing token stream to disk")
       vrt_tmp_file <- tempfile()
       data.table::fwrite(
-        token_stream, file = vrt_tmp_file,
+        list(token_stream = token_stream), file = vrt_tmp_file,
         col.names = FALSE, quote = FALSE, showProgress = TRUE
       )
       
@@ -124,7 +122,7 @@ p_attribute_encode <- function(
         stop("Length of character vector must be identical with size of corpus - not TRUE")
       
       if (p_attribute %in% registry_file_parse(tolower(corpus))[["p_attribute"]])
-        stop("pAttribute already exists")
+        stop("p-attribute already exists")
       
       if (any(grepl("^\\s*<.*?$", token_stream)))
         warning("there is markup in the character vector - cwb-encode will issue warnings")

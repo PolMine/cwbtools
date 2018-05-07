@@ -65,7 +65,7 @@ corpusdata_encode <- function(x, corpus, p_attributes = "word", s_attributes = N
   registry_file <- file.path(registry_dir, tolower(corpus))
   if (file.exists(registry_file)){
     message("corpus already exists")
-    data_dir <- registry_file_parse(tolower(corpus))[["home"]]
+    if (is.null(data_dir)) data_dir <- registry_file_parse(tolower(corpus))[["home"]]
   } else {
     message(sprintf("Creating new corpus '%s'", corpus))
     if (is.null(data_dir)){
@@ -89,7 +89,8 @@ corpusdata_encode <- function(x, corpus, p_attributes = "word", s_attributes = N
   if (verbose) message("... encoding p-attribute 'word'")
   p_attribute_encode(
     token_stream = x[["tokenstream"]][["word"]], corpus = corpus, encoding = encoding,
-    registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = verbose
+    registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = verbose,
+    make = make
     )
   
   # add other pAttributes than 'word'
@@ -98,7 +99,8 @@ corpusdata_encode <- function(x, corpus, p_attributes = "word", s_attributes = N
       if (verbose) message(sprintf("... encoding p-attribute '%s'", new_attribute))
       p_attribute_encode(
         token_stream = x[["tokenstream"]][[new_attribute]], corpus = corpus, encoding = encoding,
-        registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = verbose
+        registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = verbose,
+        make = make
         )
     }
   }

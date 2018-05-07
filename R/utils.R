@@ -10,8 +10,9 @@ get_encoding = function(x, verbose = TRUE){
   enc <- unique(Encoding(x))
   if (length(enc) == 1){
     if (enc == "unknown"){
-      if (verbose) message("... encoding of the input vector is 'unknown', assuming it to be that of the locale")
-      return( localeToCharset()[1] )
+      locale <- localeToCharset()[1]
+      if (verbose) message(sprintf("... encoding of the input vector is 'unknown', assuming it to be '%s'", locale))
+      return( locale )
     } else {
       if (verbose) message("... encoding of the input vector is: ", enc)
       return(enc)

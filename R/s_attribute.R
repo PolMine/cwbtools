@@ -37,7 +37,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     return( TRUE )
   } else if (method == "CWB"){
     
-    tab <- data.table(s_attribute = values, region_matrix)
+    tab <- data.table(region_matrix, s_attribute = values)
     setorderv(tab, cols = "cpos_left", order = 1L)
     
     # adjust encoding, if necessary
@@ -47,11 +47,10 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
       Encoding(tab[["s_attribute"]]) <- encoding
     }
     
-    if (verbose) message("... writing table to disk")
     tmp_file <- tempfile()
     data.table::fwrite(x = tab, file = tmp_file, quote = FALSE, sep = "\t", col.names = FALSE)
     
-    if (verbose) message("... running cwb-s-encode")
+    if (verbose) message(sprintf("... running 'cwb-s-encode' to add structural annotation for attribute '%s'", s_attribute))
     cmd <- c(
       "cwb-s-encode",
       "-d", data_dir,
@@ -63,7 +62,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     
     regdata <- registry_file_parse(tolower(corpus), registry_dir = registry_dir)
     if (!s_attribute %in% regdata[["s_attributes"]]){
-      if (verbose) message("... adding sAttribute to registry")
+      if (verbose) message(sprintf("... adding s-attribute '%s' to registry", s_attribute))
       regdata[["s_attributes"]] <- c(regdata[["s_attributes"]], s_attribute)
       registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
     }
