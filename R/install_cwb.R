@@ -3,9 +3,9 @@
 #' Install precompiled version of the Corpus Workbench in the directory
 #' extdata/cwb/CWB. This is a precondition to offer full CQP functionality
 #' on Windows systems.
-#' @export install.cwb
-#' @importFrom utils unzip untar
-install.cwb <- function(){
+#' @export install_cwb
+#' @importFrom utils unzip untar download.file
+install_cwb <- function(){
   if (.Platform$OS.type == "unix"){
     if (Sys.info()["sysname"] == "Darwin"){
       urlToGet <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-osx-10.5-universal.tar.gz"
@@ -20,7 +20,7 @@ install.cwb <- function(){
     subdir <- "cwb-3.4.10-windows-i586"
   }
   
-  baseDir <- system.file(package = "polmineR", "extdata", "cwb")
+  baseDir <- system.file(package = "cwbtools", "extdata", "cwb")
   cwbDir <- file.path(baseDir, "CWB")
   dir.create(cwbDir)
   
