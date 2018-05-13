@@ -160,7 +160,7 @@ registry_file_compose <- function(x){
 #' @export registry_data
 registry_data <- function(name, id, home, info = file.path(home, ".info"), properties = c(charset = "utf-8"), p_attributes, s_attributes = character()){
   y <- list(
-    name = name, id = id, home = home, info = info,
+    name = name, id = tolower(id), home = home, info = info,
     properties = properties, p_attributes = p_attributes, s_attributes = s_attributes
   )
   class(y) <- "registry_data"

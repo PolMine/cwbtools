@@ -24,16 +24,18 @@ install_cwb <- function(){
   cwbDir <- file.path(baseDir, "CWB")
   dir.create(cwbDir)
   
-  tmpDir <- tempdir()
-  oldWorkingDir <- setwd(tmpDir)
-  download.file(urlToGet, destfile = basename(urlToGet))
+  download.file(urlToGet, destfile = file.path(tmpDir, basename(urlToGet)))
   if (.Platform$OS.type == "windows"){
-    unzip(basename(urlToGet))
+    unzip(file.path(tmpDir, basename(urlToGet)))
   } else {
-    untar(basename(urlToGet))
+    untar(file.path(tmpDir, basename(urlToGet)))
   }
   setwd(subdir)
-  installScriptFile <- if (.Platform$OS.type == "windows") "install-cwb-win.bat" else "./install-cwb.sh"
+  if (.Platform$OS.type == "windows"){
+    installScriptFile <- file.path(tmpDir, subdir, "install-cwb-win.bat")
+  } else {
+    installScriptFile <- file.path(tmpDir, subdir, "install-cwb.sh")
+  }
   installScript <- readLines(installScriptFile)
   if (.Platform$OS.type == "windows"){
     cwbDir <- gsub("/", "\\\\", cwbDir)
@@ -45,5 +47,4 @@ install_cwb <- function(){
   cat(installScript, file = installScriptFile, sep = "\n")
   if (.Platform$OS.type == "windows") shell(installScriptFile) else system(installScriptFile)
   unlink(tmpDir)
-  setwd(oldWorkingDir)
 }

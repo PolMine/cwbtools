@@ -2,22 +2,11 @@
 % Please edit documentation in R/p_attribute.R
 \name{p_attribute_encode}
 \alias{p_attribute_encode}
-\alias{p_attribute_makeall}
-\alias{p_attribute_huffcode}
-\alias{p_attribute_compress_rdx}
 \title{Encode Positional Attributes.}
 \usage{
 p_attribute_encode(token_stream, p_attribute = "word", registry_dir, corpus,
-  data_dir, method = c("R", "CWB"), verbose = TRUE, encoding = "latin1",
-  make = NULL)
-
-p_attribute_makeall(token_stream, p_attribute = "word", data_dir)
-
-p_attribute_huffcode(corpus, p_attribute,
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"))
-
-p_attribute_compress_rdx(corpus, p_attribute,
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"))
+  data_dir, method = c("R", "CWB"), verbose = TRUE,
+  encoding = get_encoding(token_stream), compress = NULL)
 }
 \arguments{
 \item{token_stream}{a character vector with the tokens of the corpus}
@@ -36,7 +25,7 @@ p_attribute_compress_rdx(corpus, p_attribute,
 
 \item{encoding}{encoding of the data}
 
-\item{make}{logical}
+\item{compress}{logical}
 }
 \description{
 Pure R implementation to generate positional attribute from a character vector of
@@ -68,17 +57,17 @@ tmpdir <- tempdir()
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 registry_tmp <- file.path(tmpdir, "registry")
 data_dir_tmp <- file.path(tmpdir, "data_dir")
-dir.create (registry_tmp)
-dir.create(data_dir_tmp)
+if (!file.exists(registry_tmp)) dir.create (registry_tmp)
+if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 
 p_attribute_encode(
+  corpus = "reuters",
   token_stream = tokens, p_attribute = "word",
-  data_dir = data_dir_tmp, method = "R"
+  data_dir = data_dir_tmp, method = "R",
+  registry_dir = registry_tmp,
+  compress = FALSE,
+  encoding = "utf8"
   )
-p_attribute_makeall(
-  token_stream = tokens, p_attribute = "word",
-  data_dir = data_dir_tmp
-)
 
 regdata <- registry_data(
   id = "REUTERS", name = "Reuters Sample Corpus", home = data_dir_tmp,

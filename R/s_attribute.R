@@ -66,9 +66,5 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
       regdata[["s_attributes"]] <- c(regdata[["s_attributes"]], s_attribute)
       registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
     }
-    
-    # polmineR::use(dir = registry_dir)
-    
-    
   }
 }

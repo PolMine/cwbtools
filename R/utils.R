@@ -6,7 +6,7 @@
 #' @rdname get_encoding
 #' @name get_encoding
 #' @importFrom utils localeToCharset
-get_encoding = function(x, verbose = TRUE){
+get_encoding = function(x, verbose = FALSE){
   enc <- unique(Encoding(x))
   if (length(enc) == 1){
     if (enc == "unknown"){
@@ -29,3 +29,5 @@ get_encoding = function(x, verbose = TRUE){
     stop("please check encoding of the input character vector - more than one encoding found")
   }
 }
+
+

@@ -4,7 +4,7 @@
 \alias{get_encoding}
 \title{Get Encoding of Character Vector.}
 \usage{
-get_encoding(x, verbose = TRUE)
+get_encoding(x, verbose = FALSE)
 }
 \arguments{
 \item{x}{a character vector}
