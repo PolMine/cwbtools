@@ -107,7 +107,7 @@ corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
   regdata <- registry_file_parse(corpus = old, registry_dir = registry_dir)
   data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new))
   if (file.exists(data_dir_new)){
-    if (!askYesNo(msg = "Data directory already exists. Proceed anyway? "))
+    if (readline(prompt = "Data directory already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y")
       stop("Aborting the operation.")
   } else {
     dir.create(data_dir_new)
@@ -127,7 +127,7 @@ corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
   message("make copy of registry file")
   registry_file_new <- file.path(registry_file_new, tolower(new))
   if (file.exists(registry_file_new)){
-    if (askYesNo(msg = "New registry file already exists. Proceed anyway? ")){
+    if (readline(prompt = "New registry file already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y"){
       file.remove(registry_file_new)
     } else {
       stop("Aborting the operation.")
@@ -194,11 +194,11 @@ corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
   
   reg <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   data_directory <- reg[["home"]]
-  if (askYesNo(msg = sprintf("Are you sure you want to data files for corpus '%s'?", corpus))){
+  if (readline(prompt = sprintf("Are you sure you want to data files for corpus '%s'? ('Y' to continue, anything else to abort", corpus)) != "Y"){
     for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
     file.remove(data_directory)
   }
-  if (askYesNo(msg = sprintf("Are you sure you want to relete the corpus '%s'?", corpus))){
+  if (readline(prompt = sprintf("Are you sure you want to relete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)) != "Y"){
     file.remove(file.path(registry_dir, tolower(x)))
   }
 }

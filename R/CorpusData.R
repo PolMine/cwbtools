@@ -29,7 +29,7 @@
 #' @export CorpusData
 #' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv as.data.table data.table
 #' @importFrom data.table uniqueN setkeyv
-#' @importFrom utils txtProgressBar setTxtProgressBar askYesNo
+#' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name xml_parents xml_text
 #' @importFrom pbapply pblapply
 #' @importFrom stats setNames
@@ -200,8 +200,8 @@ CorpusData <- R6::R6Class(
           if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
           data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus))
           message(sprintf("suggesting data_dir: %s\n", data_dir))
-          feedback <- askYesNo("Use this data directory?")
-          if (!feedback) stop("aborting")
+          feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
+          if (feedback != "Y") stop("aborting")
           if (!file.exists(data_dir)) dir.create(data_dir)
         } else {
           if (!file.exists(data_dir)) dir.create(data_dir)
