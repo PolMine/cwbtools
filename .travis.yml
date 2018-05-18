@@ -13,6 +13,9 @@ addons:
     packages:
       - libxml2-utils
 
+before_install:
+  - Rscript -e 'install.packages("rmarkdown")'
+
 r_packages:
   - RcppCWB
   - data.table
