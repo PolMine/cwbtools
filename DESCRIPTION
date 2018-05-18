@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.5
-Date: 2018-05-17
+Version: 0.0.6
+Date: 2018-05-18
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.
@@ -25,12 +25,12 @@ LazyData: yes
 License: GPL-3
 Collate:
     'cwbtools.R'
-    'DataPackage.R'
+    'pkg.R'
     'utils.R'
     'p_attribute.R'
     's_attribute.R'
     'registry_file.R'
     'CorpusData.R'
     'corpus.R'
-    'install_cwb.R'
+    'cwb.R'
 RoxygenNote: 6.0.1

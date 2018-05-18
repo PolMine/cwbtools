@@ -51,6 +51,7 @@ CWB/Perl'').
 }
 \examples{
 library(RcppCWB)
+if (!cwb_is_installed()) cwb_install()
 tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 
 tmpdir <- tempdir()

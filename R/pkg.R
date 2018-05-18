@@ -9,17 +9,17 @@
 #' 
 #' @examples 
 #' y <- tempdir()
-#' setwd(y)
 #' pkg_create_cwb_dirs(pkg = y)
 #' pkg_add_description(pkg = y, package = "reuters", description = "Reuters data package")
-#' pkg_add_corpus(pkg = y, corpus = "REUTERS", registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry"))
+#' pkg_add_corpus(
+#'   pkg = y, corpus = "REUTERS",
+#'   registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
+#' )
 #' pkg_add_gitattributes_file(pkg = y)
 #' pkg_add_configure_scripts(pkg = y)
 #' pkg_add_creativecommons_license(pkg = y)
-#' usethis::use_git_ignore(ignores = "^.DS_Store$")
-#' usethis::use_build_ignore(files = c("data-raw", "data-raw/*", "_pkgdown.yml"), escape = TRUE)
 #' @rdname pkg_utils
-#' @name data_package_utils
+#' @name pkg_utils
 NULL
 
 
@@ -53,6 +53,8 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
   invisible(dirs_to_create)
 }
 
+#' @param corpus name of the CWB corpus to insert into the package
+#' @param registry registry directory
 #' @details \code{pkg_add_corpus} will add the corpus described in registry directory to
 #' the package defined by \code{pkg}.
 #' @rdname pkg_utils
@@ -73,7 +75,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
     dir.create(target_dir)
   }
   files_to_copy <- list.files(
-    registry_file_parse(corpus, registry = registry)[["home"]],
+    registry_file_parse(corpus, registry_dir = registry)[["home"]],
     full.names = TRUE
   )
   for (x in files_to_copy){
@@ -162,6 +164,7 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
   invisible( TRUE )
 }
 
+#' @param file path to file with fulltext of Creative Commons license.
 #' @details \code{pkg_add_creativecommons_license} will license information to
 #'   the DESCRIPTION file, and move file LICENSE to top level directory of the
 #'   package.

@@ -33,6 +33,7 @@
 #' @rdname p_attribute_encode
 #' @examples
 #' library(RcppCWB)
+#' if (!cwb_is_installed()) cwb_install()
 #' tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 #' 
 #' tmpdir <- tempdir()
@@ -159,7 +160,7 @@ p_attribute_encode <- function(
     if (p_attribute == "word"){
       if (verbose) message("... running cwb-encode")
       system2(
-        command = "cwb-encode",
+        command = file.path(cwb_get_bindir(), "cwb-encode"),
         args = c(sprintf("-d %s", data_dir), sprintf("-f %s", vrt_tmp_file), sprintf("-R %s", registry_file), sprintf("-c %s", encoding), "-v")
       )
     } else {
@@ -174,7 +175,8 @@ p_attribute_encode <- function(
       if (verbose) message("... calling cwb-encode")
       p_attrs_old <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attributes"]] # for checking later if anything is missing
       cwb_encode_cmd_vec <- c(
-        "cwb-encode", "-d", data_dir, "-f", vrt_tmp_file, "-R", registry_file,
+        file.path(cwb_get_bindir(), "cwb-encode"),
+        "-d", data_dir, "-f", vrt_tmp_file, "-R", registry_file,
         "-p", "-", "-P", p_attribute, "-c", encoding
       )
       system(paste0(cwb_encode_cmd_vec, collapse = " "))
@@ -203,14 +205,14 @@ p_attribute_encode <- function(
   # create reverse index using cwb-makeall
   if (verbose) message("... calling cwb-makeall")
   system2(
-    command = "cwb-makeall",
+    command = file.path(cwb_get_bindir(), "cwb-makeall"),
     args = c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), "-V", toupper(corpus))
   )
 
   if (compress){
     compression_cmd_args <- c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), toupper(corpus))
-    system2(command = "cwb-huffcode", args = compression_cmd_args, stdout = TRUE )
-    system2(command = "cwb-compress-rdx", args = compression_cmd_args, stdout = TRUE)
+    system2(command = file.path(cwb_get_bindir(), "cwb-huffcode"), args = compression_cmd_args, stdout = TRUE )
+    system2(command = file.path(cwb_get_bindir(), "cwb-compress-rdx"), args = compression_cmd_args, stdout = TRUE)
     files_to_remove <- c(
       rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute)),
       rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute))

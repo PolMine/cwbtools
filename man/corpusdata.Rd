@@ -42,6 +42,7 @@ CorpusData
 \examples{
 library(RcppCWB)
 library(data.table)
+if (!cwb_is_installed()) cwb_install()
 
 registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 
@@ -54,10 +55,17 @@ s_attrs_places[["id"]] <- 1:nrow(s_attrs_places)
 setnames(s_attrs_places, old = "value", new = "places")
 
 tokens <- apply(s_attrs_places, 1, function(row){
-  ids <- cl_cpos2id(corpus = "REUTERS", cpos = row[1]:row[2], p_attribute = "word", registry = registry_rcppcwb)
+  ids <- cl_cpos2id(
+    corpus = "REUTERS", cpos = row[1]:row[2],
+    p_attribute = "word", registry = registry_rcppcwb
+  )
   cl_id2str(corpus = "REUTERS", id = ids, p_attribute = "word", registry = registry_rcppcwb)
 })
-tokenstream <- rbindlist(lapply(1:length(tokens), function(i) data.table(id = i, word = tokens[[i]])))
+tokenstream <- rbindlist(
+lapply(
+  1:length(tokens),
+  function(i) data.table(id = i, word = tokens[[i]]))
+  )
 tokenstream[["cpos"]] <- 1:nrow(tokenstream)
 
 CD <- CorpusData$new()

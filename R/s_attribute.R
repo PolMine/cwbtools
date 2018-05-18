@@ -52,7 +52,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     
     if (verbose) message(sprintf("... running 'cwb-s-encode' to add structural annotation for attribute '%s'", s_attribute))
     cmd <- c(
-      "cwb-s-encode",
+      file.path(cwb_get_bindir(), "cwb-s-encode"),
       "-d", data_dir,
       "-f", tmp_file,
       "-V", s_attribute
