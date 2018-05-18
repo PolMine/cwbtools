@@ -41,6 +41,7 @@ Trying to keep installation requirements at minimum, we only rely on cwbtools, a
 
 ```{r}
 library(cwbtools)
+if (!cwb_is_installed()) cwb_install()
 library(data.table)
 ```
 
