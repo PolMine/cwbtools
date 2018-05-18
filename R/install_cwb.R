@@ -3,9 +3,9 @@
 #' Install precompiled version of the Corpus Workbench in the directory
 #' extdata/cwb/CWB. This is a precondition to offer full CQP functionality
 #' on Windows systems.
-#' @export install_cwb
+#' @export cwb_install
 #' @importFrom utils unzip untar download.file
-install_cwb <- function(){
+cwb_install <- function(){
   if (.Platform$OS.type == "unix"){
     if (Sys.info()["sysname"] == "Darwin"){
       urlToGet <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-osx-10.5-universal.tar.gz"
