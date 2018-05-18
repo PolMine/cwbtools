@@ -27,7 +27,7 @@
 #'   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 #'   )
 registry_file_parse <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
-  r <- readLines(file.path(registry_dir, corpus))
+  r <- readLines(file.path(registry_dir, tolower(corpus)))
   regex_vec <- c(
     name = '^NAME\\s+"(.*?)"\\s*$',
     id = "^ID\\s+(.*?)\\s*$",
