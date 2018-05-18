@@ -29,7 +29,7 @@ perform standard tasks in a standardized fashion.
   \item{pkg}{The package name (may not include special chars, no _).}
   \item{version}{The version number of the corpus.}
   \item{date}{The date of creation.}
-  \item{maintainer}{Maintainer, R package style.} 
+  \item{maintainer}{Maintainer, R package style, either \code{character} vector or \code{person}.} 
   \item{description}{Short description of the data package.} 
   \item{license}{The license.}
   \item{verbose}{Logical, whether to be verbose.}
@@ -40,25 +40,27 @@ perform standard tasks in a standardized fashion.
 
 \describe{
   \item{\code{initialize(dir)}}{Initialize a new object of class
-  \code{DataPackage}.} \item{\code{createDirectoryStructure(verbose =
-  TRUE)}}{Create the (sub)directories of the data package.} 
-  \item{\code{addDescription(pkg = NULL, version = "0.0.1", date = NULL, 
+  \code{DataPackage}.}
+  \item{\code{create_directory_structure(verbose = TRUE)}}{Create the
+  (sub)directories of the data package.}
+  \item{\code{add_description(pkg = NULL, version = "0.0.1", date = NULL, 
   author = "", maintainer = "", description = "", license = "", verbose = 
   TRUE)}}{}
-  \item{\code{addCorpus(corpus, registry = Sys.getenv("CORPUS_REGISTRY"),
+  \item{\code{add_corpus(corpus, registry = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE)}}{Add a corpus to the data package.} 
-  \item{\code{addLicense(license = "CC-BY-NC-SA", file = system.file(package
+  \item{\code{add_license(license = "CC-BY-NC-SA", file = system.file(package
   = "ctk", "txt", "licenses", "CC_BY-NC-SA_3.0.txt"))}}{Add license information to
   the DESCRIPTION file, and move file LICENSE to top level directory of the package.} 
-  \item{\code{addConfigureScripts()}}{Add standardized and tested configure scripts \code{configure}
-  for Linux and macOS, and \code{configure.win} for Windows to the top level directory of the 
-  data package, and file \code{setpaths.R} to \code{tools} subdirectory. The configuration
-  mechanism ensures that the data directory is specified correctly in the registry files
-  during the installation of the data package.}
-  \item{\code{addGitattributesFile()}}{Add file \code{.gitattributes} to toplevel directory
-  of the data package. The file specifies file endings for Git LFS (large file storage), i.e. binary
-  files that cannot be diffed.} 
-  \item{\code{addRbuildignoreFile()}}{} \item{\code{addGitignoreFile()}}{Add
+  \item{\code{add_configure_scripts()}}{Add standardized and tested configure
+  scripts \code{configure} for Linux and macOS, and \code{configure.win} for
+  Windows to the top level directory of the data package, and file
+  \code{setpaths.R} to \code{tools} subdirectory. The configuration mechanism
+  ensures that the data directory is specified correctly in the registry
+  files during the installation of the data package.}
+  \item{\code{add_gitattributes_file()}}{Add file \code{.gitattributes} to
+  toplevel directory of the data package. The file specifies file endings for
+  Git LFS (large file storage), i.e. binary files that cannot be diffed.}
+  \item{\code{add_RbuildignoreFile()}}{} \item{\code{addGitignoreFile()}}{Add
   .gitignore file to the package.}
 }
 }
@@ -66,12 +68,21 @@ perform standard tasks in a standardized fashion.
 \examples{
 y <- tempdir()
 DP <- DataPackage$new(dir = y)
-DP$createDirectoryStructure()
-DP$addDescription()
-DP$addCorpus("REUTERS")
-DP$addGitattributesFile()
-DP$addConfigureScripts()
-DP$addLicense()
+DP$create_directory_structure()
+DP$add_description_file(pkg = "reuters", description = "Reuters data package")
+DP$add_corpus("REUTERS", registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry"))
+DP$add_gitattributes_file()
+DP$add_configure_scripts()
+DP$add_license()
 
+# exactly the same, with method chaining
+y <- tempdir()
+DP <- DataPackage$new(dir = y)$
+  create_directory_structure()$
+  add_description(pkg = "reuters", description = "Reuters data package")$
+  add_corpus("REUTERS", registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry"))$
+  add_gitattributes_file()$
+  add_configure_scripts()$
+  add_license()
 }
 \keyword{datasets}

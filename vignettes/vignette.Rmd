@@ -124,14 +124,16 @@ The corpus is now ready to be used with CQP (or CQPweb), or a more advanced and 
 library(RcppCWB)
 id_peace <- cl_str2id(corpus = "UNGA", p_attribute = "word", str = "peace", registry = registry_tmp)
 cpos_peace <- cl_id2cpos(corpus = "UNGA", p_attribute = "word", id = id_peace, registry = registry_tmp)
-peace_context <- sapply(
-  cpos_peace,
-  function(x){
-    ids <- cl_cpos2id(corpus = "UNGA", p_attribute = "word", cpos = (x - 5):(x + 5), registry = registry_tmp)
-    tokens <- cl_id2str(corpus = "UNGA", p_attribute = "word", id = ids, registry = registry_tmp)
-    paste0(tokens, collapse = " ")
-  }
-)
+
+tab <- data.frame(
+  i = unlist(lapply(1:length(cpos_peace), function(x) rep(x, times = 11))),
+  cpos = unlist(lapply(cpos_peace, function(x) (x - 5):(x + 5)))
+  )
+tab[["id"]] <- cl_cpos2id(corpus = "UNGA", p_attribute = "word", cpos = tab[["cpos"]], registry = registry_tmp)
+tab[["str"]] <- cl_id2str(corpus = "UNGA", p_attribute = "word", id = tab[["id"]], registry = registry_tmp)
+
+peace_context <- split(tab[["str"]], as.factor(tab[["i"]]))
+peace_context <- unname(sapply(peace_context, function(x) paste(x, collapse = " ")))
 head(peace_context)
 ```
 

@@ -15,7 +15,7 @@
 #'   \item{pkg}{The package name (may not include special chars, no _).}
 #'   \item{version}{The version number of the corpus.}
 #'   \item{date}{The date of creation.}
-#'   \item{maintainer}{Maintainer, R package style.} 
+#'   \item{maintainer}{Maintainer, R package style, either \code{character} vector or \code{person}.} 
 #'   \item{description}{Short description of the data package.} 
 #'   \item{license}{The license.}
 #'   \item{verbose}{Logical, whether to be verbose.}
@@ -24,37 +24,48 @@
 #' @section Methods:
 #' \describe{
 #'   \item{\code{initialize(dir)}}{Initialize a new object of class
-#'   \code{DataPackage}.} \item{\code{createDirectoryStructure(verbose =
-#'   TRUE)}}{Create the (sub)directories of the data package.} 
-#'   \item{\code{addDescription(pkg = NULL, version = "0.0.1", date = NULL, 
+#'   \code{DataPackage}.}
+#'   \item{\code{create_directory_structure(verbose = TRUE)}}{Create the
+#'   (sub)directories of the data package.}
+#'   \item{\code{add_description(pkg = NULL, version = "0.0.1", date = NULL, 
 #'   author = "", maintainer = "", description = "", license = "", verbose = 
 #'   TRUE)}}{}
-#'   \item{\code{addCorpus(corpus, registry = Sys.getenv("CORPUS_REGISTRY"),
+#'   \item{\code{add_corpus(corpus, registry = Sys.getenv("CORPUS_REGISTRY"),
 #'   verbose = TRUE)}}{Add a corpus to the data package.} 
-#'   \item{\code{addLicense(license = "CC-BY-NC-SA", file = system.file(package
+#'   \item{\code{add_license(license = "CC-BY-NC-SA", file = system.file(package
 #'   = "ctk", "txt", "licenses", "CC_BY-NC-SA_3.0.txt"))}}{Add license information to
 #'   the DESCRIPTION file, and move file LICENSE to top level directory of the package.} 
-#'   \item{\code{addConfigureScripts()}}{Add standardized and tested configure scripts \code{configure}
-#'   for Linux and macOS, and \code{configure.win} for Windows to the top level directory of the 
-#'   data package, and file \code{setpaths.R} to \code{tools} subdirectory. The configuration
-#'   mechanism ensures that the data directory is specified correctly in the registry files
-#'   during the installation of the data package.}
-#'   \item{\code{addGitattributesFile()}}{Add file \code{.gitattributes} to toplevel directory
-#'   of the data package. The file specifies file endings for Git LFS (large file storage), i.e. binary
-#'   files that cannot be diffed.} 
-#'   \item{\code{addRbuildignoreFile()}}{} \item{\code{addGitignoreFile()}}{Add
+#'   \item{\code{add_configure_scripts()}}{Add standardized and tested configure
+#'   scripts \code{configure} for Linux and macOS, and \code{configure.win} for
+#'   Windows to the top level directory of the data package, and file
+#'   \code{setpaths.R} to \code{tools} subdirectory. The configuration mechanism
+#'   ensures that the data directory is specified correctly in the registry
+#'   files during the installation of the data package.}
+#'   \item{\code{add_gitattributes_file()}}{Add file \code{.gitattributes} to
+#'   toplevel directory of the data package. The file specifies file endings for
+#'   Git LFS (large file storage), i.e. binary files that cannot be diffed.}
+#'   \item{\code{add_RbuildignoreFile()}}{} \item{\code{addGitignoreFile()}}{Add
 #'   .gitignore file to the package.}
 #' }
 #' @examples 
 #' y <- tempdir()
 #' DP <- DataPackage$new(dir = y)
-#' DP$createDirectoryStructure()
-#' DP$addDescription()
-#' DP$addCorpus("REUTERS")
-#' DP$addGitattributesFile()
-#' DP$addConfigureScripts()
-#' DP$addLicense()
+#' DP$create_directory_structure()
+#' DP$add_description_file(pkg = "reuters", description = "Reuters data package")
+#' DP$add_corpus("REUTERS", registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry"))
+#' DP$add_gitattributes_file()
+#' DP$add_configure_scripts()
+#' DP$add_license()
 #' 
+#' # exactly the same, with method chaining
+#' y <- tempdir()
+#' DP <- DataPackage$new(dir = y)$
+#'   create_directory_structure()$
+#'   add_description(pkg = "reuters", description = "Reuters data package")$
+#'   add_corpus("REUTERS", registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry"))$
+#'   add_gitattributes_file()$
+#'   add_configure_scripts()$
+#'   add_license()
 #' @rdname DataPackage
 #' @export DataPackage
 #' @importFrom R6 R6Class
@@ -73,8 +84,8 @@ DataPackage <- R6Class(
       invisible(self)
     },
     
-    createDirectoryStructure = function(verbose = TRUE){
-      dirsToCreate <- c(
+    create_directory_structure = function(verbose = TRUE){
+      dirs_to_create <- c(
         "R",
         "man",
         "inst",
@@ -83,42 +94,58 @@ DataPackage <- R6Class(
         file.path("inst", "extdata", "cwb", "registry"),
         file.path("inst", "extdata", "cwb", "indexed_corpora")
       )
-      for (dir in dirsToCreate) {
-        newDir <- file.path(self$dir, dir)
-        if (!file.exists(newDir)){
-          if (verbose) message("... creating directory: ", newDir)
-          dir.create(newDir)
-        } 
+      for (dir in dirs_to_create) {
+        new_dir <- file.path(self$dir, dir)
+        if (!file.exists(new_dir)){
+          if (verbose) message("... creating directory: ", new_dir)
+          dir.create(new_dir)
+        } else {
+          if (verbose) message("... directory already exists:", new_dir)
+        }
       }
+      invisible(self)
     },
     
-    addDescription = function(pkg = NULL, version = "0.0.1", date = NULL, author = "", maintainer = "", description = "", license = "", verbose = TRUE){
+    add_description_file = function(pkg = NULL, version = "0.0.1", date = Sys.Date(), author = "", maintainer = NULL, description = "", license = "", verbose = TRUE){
+      if (file.exists(file.path(self$dir, "DESCRIPTION"))){
+        user_input <- readline(prompt = "DESCRIPTION file already exists. Proceed anyway (Y / any other key to abort)?")
+        if (user_input != "Y"){
+          message("file DESCRIPTION is not generated anew")
+          return( invisible(self) )
+        }
+      }
+      
+      # sanity checks, to be extended
+      stopifnot(
+        class(author)[1] %in% c("character", "person"),
+        length(date) == 1,
+        is.character(date) || class(date)[1] 
+      )
+      
       if (verbose) message("... creating DESCRIPTION file")
       if (is.null(pkg)){
         pkg <- basename(self$dir)
-        if (verbose) message("... package name not provided, using extract from path: ", pkg)
+        if (verbose) message("... package name not provided, using basename: ", pkg)
       }
-      description_list <- list(
+      description_list <- c(
         Package = pkg,
         Type = "Package",
         Title = pkg,
         Version = version,
-        Date = if (is.null(date)) as.character(Sys.Date()) else date,
-        Author = author,
-        Maintainer = if (is.null(maintainer)) author else maintainer,
+        Date = as.character(date),
+        Author = paste0(as.character(author), collapse = "\n\t"),
+        Maintainer = if (is.null(maintainer)) paste0(as.character(author), collapse = "\n\t") else paste0(as.character(maintainer), collapse = "\n\t"),
         Depends = "",
         LazyData = "yes",
         Description = description,
         License = license
       )
-      description_char <- sapply(
-        names(description_list),
-        function(x) paste(x, description_list[[x]], sep = ": ")
-      )
-      writeLines(description_char, con = file.path(self$dir, "DESCRIPTION"))
+      desc <- paste0(names(description_list), ": ", unname(description_list))
+      writeLines(desc, con = file.path(self$dir, "DESCRIPTION"))
+      invisible(self)
     },
     
-    addCorpus = function(corpus, registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
+    add_corpus = function(corpus, registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
       # copy registry file
       file.copy(
         from = file.path(registry, tolower(corpus)),
@@ -126,45 +153,42 @@ DataPackage <- R6Class(
       )
       
       # copy files in dir for indexed corpora
-      dataDir <- file.path(self$dir, "inst", "extdata", "cwb", "indexed_corpora")
-      if (!file.exists(dataDir)) stop("data directory does not exist")
-      targetDir <- file.path(dataDir, tolower(corpus))
-      if (!file.exists(targetDir)){
-        message("... directory for indexed corpus does not yet exist, creating: ", targetDir)
-        dir.create(targetDir)
+      data_dir <- file.path(self$dir, "inst", "extdata", "cwb", "indexed_corpora")
+      if (!file.exists(data_dir)) stop("data directory does not exist")
+      target_dir <- file.path(data_dir, tolower(corpus))
+      if (!file.exists(target_dir)){
+        message("... directory for indexed corpus does not yet exist, creating: ", target_dir)
+        dir.create(target_dir)
       }
-      filesToCopy <- list.files(
+      files_to_copy <- list.files(
         registry_file_parse(corpus, registry = registry)[["home"]],
         full.names = TRUE
         )
-      dummy <- lapply(
-        filesToCopy,
-        function(x) {
-          if (verbose) message("... file to copy: ", x)
-          file.copy(from = x, to = targetDir)
-        }
-      )
+      for (x in files_to_copy){
+        if (verbose) message("... copying file: ", x)
+        file.copy(from = x, to = target_dir)
+      }
+      invisible(self)
     },
     
-    addLicense = function(license = "CC-BY-NC-SA", file = system.file(package = "ctk", "txt", "licenses", "CC_BY-NC-SA_3.0.txt")){
-      descriptionFile <- file.path(self$dir, "DESCRIPTION")
-      if (!file.exists(descriptionFile)){
-        stop("The DESCRIPTION file does exist - please generate it first using the addDescription method")
+    add_license = function(license = "CC-BY-NC-SA", file = system.file(package = "cwbtools", "txt", "licenses", "CC_BY-NC-SA_3.0.txt")){
+      description_file <- file.path(self$dir, "DESCRIPTION")
+      if (!file.exists(description_file)){
+        stop("The DESCRIPTION file does exist - please generate it first using the add_description method")
       }
-      desc <- readLines(descriptionFile)
-      licenseLine <- grep("^Licen[cs]e", desc)
-      desc[licenseLine] <- paste("License:", license, "| file LICENSE", sep = " ")
+      desc <- readLines(description_file)
+      desc[grep("^Licen[cs]e", desc)] <- paste("License:", license, "| file LICENSE", sep = " ")
       writeLines(text = desc, con = file.path(self$dir, "DESCRIPTION"))
       file.copy(from = file, to = file.path(self$dir, "LICENSE"))
       invisible(self)
     },
     
-    addConfigureScripts = function(){
-      toolDir <- file.path(self$dir, "tools")
-      if (!file.exists(toolDir)) dir.create(toolDir)
+    add_configure_scripts = function(){
+      tool_dir <- file.path(self$dir, "tools")
+      if (!file.exists(tool_dir)) dir.create(tool_dir)
       file.copy(
-        from = system.file(package = "ctk", "Rscript", "setpaths.R"),
-        to = file.path(toolDir, "setpaths.R")
+        from = system.file(package = "cwbtools", "Rscript", "setpaths.R"),
+        to = file.path(tool_dir, "setpaths.R")
       )
       writeLines(
         text = c('#!/bin/bash', '${R_HOME}/bin/Rscript ./tools/setpaths.R --args "$R_PACKAGE_DIR"'),
@@ -174,9 +198,10 @@ DataPackage <- R6Class(
         text = c('#!/bin/sh', '${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe ./tools/setpaths.R --args "$R_PACKAGE_DIR"'),
         con = file.path(self$dir, "configure.win")
       )
+      invisible(self)
     },
     
-    addGitattributesFile = function(){
+    add_gitattributes_file = function(){
       extensions <- c(
         "RData", "cnt", "crc", "crx", "hcd", "huf", "syn",
         "lexicon", "idx", "srt", "rng", "avs", "avx"
@@ -188,7 +213,7 @@ DataPackage <- R6Class(
       invisible(self)
     },
     
-    addRbuildignoreFile = function(){
+    add_Rbuildignore_file = function(){
       content <- c(
         "^data-raw$",
         "^data-raw/*$",
@@ -201,7 +226,7 @@ DataPackage <- R6Class(
       invisible(self)
     },
     
-    addGitignoreFile = function(){
+    add_gitignore_file = function(){
       content <- c("^.DS_Store$")
       writeLines(
         text = content,
