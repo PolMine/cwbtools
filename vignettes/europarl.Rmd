@@ -20,6 +20,7 @@ The example keeps the number of dependencies to a minimum, so we only need to lo
 
 ```{r load_cwbtools, eval = TRUE}
 library(cwbtools)
+library(devtools)
 ```
 
 The procedure will be as follow:
@@ -40,7 +41,7 @@ tmp_dir <- tempdir()
 ```
 
 ```{r execute, eval = TRUE}
-exec <- TRUE
+exec <- FALSE
 ```
 
 
@@ -145,7 +146,6 @@ unlink(file.path(tmp_dir, "Europarl3-CWB"), recursive = TRUE)
 ## Create and install package tarball
 
 ```{r build_package, eval = exec}
-library(devtools)
 europarl_tarball <- build(pkg = europarl_pkg_dir, path = tmp_dir, vignettes = TRUE)
 ```
 
