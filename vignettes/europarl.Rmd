@@ -1,0 +1,212 @@
+---
+title: "Creating a Corpus Data Package: Wrapping Europarl"
+author: "Andreas Blätte (andreas.blaette@uni-due.de)"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Europarl}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+# Creating the 'europarl' 
+
+The European Parliament Proceedings Parallel Corpus 1996-2011, known as [Europarl](http://www.statmt.org/europarl/) is a classical resource in the CWB community for demonstration purposes. It is a resource valuable in itself. So we will be happy in the following example to use the CWB version of Europarl as an example how to wrap a CWB indexed corpus into a R data package.
+
+
+## Preparations
+
+The example keeps the number of dependencies to a minimum, so we only need to load the *cwbtools* package. 
+
+```{r load_cwbtools, eval = TRUE}
+library(cwbtools)
+```
+
+The procedure will be as follow:
+
+  * we download a tarball with the CWB version of Europarl,
+  * extract the compressed data and adjust the path to data directories,
+  * create the structure of a *europarl*-data package,
+  * move registry files and data to the package,
+  * create a package tarball of the *europarl*-package, and finally 
+  * install the *europarl*-package from the package tarball.
+  
+We then conclude the example by running a simple test whether the corpora can be used.
+
+For the steps 1 through 5, we use a temporary directory. One precaution in advance: The files that will be downloaded are large (~ 2 GB). So it will be important to remove the temporary data at the end. 
+
+```{r create_tmp_dir, eval = TRUE}
+tmp_dir <- tempdir()
+```
+
+```{r execute, eval = TRUE}
+exec <- TRUE
+```
+
+
+## Downloading the CWB version of Europarl
+
+The OPUS project offers a tarball with the Europarl corpus in English, French, German, Dutch, Spanish and Italian. The download may take a while. Take care that you have a good internet connection!
+
+```{r download_europarl_tarball, eval = exec}
+europarl_url <- "http://corpora.linguistik.uni-erlangen.de/demos/download/Europarl3-CWB-2010-02-28.tar.gz"
+europarl_tarball <- file.path(tmp_dir, basename(europarl_url))
+download.file(url = europarl_url, destfile = europarl_tarball)
+```
+
+
+## Extract the compressed file
+
+The tarball is large, so please do not be surprised that extracting it may take a while.
+
+```{r untar_europarl_tarball, eval = exec}
+untar(tarfile = europarl_tarball, exdir = tmp_dir)
+```
+
+## Adjust paths
+
+The directory with the extracted files includes a directory _registry_ and _data_. To be able to move the corpora later on, the paths in the registry files need to point to the correct directories in the data directory. 
+
+```{r get_corpora, eval = exec}
+europarl_registry_dir <- file.path(tmp_dir, "Europarl3-CWB", "registry")
+europarl_data_dir <- file.path(tmp_dir, "Europarl3-CWB", "data")
+corpora <- list.files(europarl_registry_dir)
+corpora
+```
+
+So these are the corpora. We iterate throught the registry files and adjust the path to the data directories.
+
+```{r adjust_home_dirs, eval = exec}
+for (corpus in corpora){
+  registry <- registry_file_parse(corpus = corpus, registry_dir = europarl_registry_dir)
+  registry[["home"]] <- file.path(europarl_data_dir, gsub("^europarl-(.*)$", "\\1", corpus))
+  registry_file_write(data = registry, corpus = corpus, registry_dir = europarl_registry_dir)
+}
+```
+
+You now already have working, albeit temporary installation of Europarl on your system. But we want to move things into a data package.
+
+
+## Create data package
+
+We create a directory for the package and generate the directory structure required to put CWB indexed corpus in there.
+
+```{r create_package_skeleton, eval = exec}
+europarl_pkg_dir <- file.path(tmp_dir, "europarl")
+if (!file.exists(europarl_pkg_dir)) dir.create(europarl_pkg_dir)
+pkg_create_cwb_dirs(pkg = europarl_pkg_dir)
+```
+
+To acknowledge authorshop for the Europarl corpus, we use some information in the readme.txt that is included in the Europarl tarball.
+
+```{r create_description, eval = exec}
+europarl_desc <- paste0(
+  readLines(file.path(tmp_dir, "Europarl3-CWB", "readme.txt")),
+  collapse = " "
+  )
+europarl_desc
+```
+
+The package might include much more, so we choose a version for the package indicating infancy.
+
+```{r package_version, eval = exec}
+pkg_version <- "0.0.2"
+```
+
+So we generate the DESCRIPTION file ... 
+
+```{r add_description, eval = exec}
+pkg_add_description(
+  pkg = europarl_pkg_dir, package = "europarl", version = pkg_version,
+  date = Sys.Date(),
+  author = "cwbtools",
+  maintainer = "Andreas Blaette <andreas.blaette@uni-due.de>",
+  description = europarl_desc
+  )
+pkg_add_configure_scripts(pkg = europarl_pkg_dir)
+```
+
+
+## Moving corpora
+
+```{r move_corpora, eval = exec}
+for (corpus in corpora){
+  pkg_add_corpus(pkg = europarl_pkg_dir, corpus = corpus, registry = europarl_registry_dir)
+}
+```
+
+The untarred corpus will not be needed at this stage. We remove it, so that we do not waste disk space.
+
+```{r remove_stuff, eval = exec}
+unlink(file.path(tmp_dir, "Europarl3-CWB"), recursive = TRUE)
+```
+
+
+## Create and install package tarball
+
+```{r build_package, eval = exec}
+library(devtools)
+europarl_tarball <- build(pkg = europarl_pkg_dir, path = tmp_dir, vignettes = TRUE)
+```
+
+There are large binary data in the package, so this may take a while. The return value of the `build`-function is the path to the tarball of the package that has been generated. The `instal.packages`-function can be used to install from a local file if we set the argument `param` to NULL.
+
+```{r install_package, eval = exec}
+install.packages(pkgs = europarl_tarball, repos = NULL)
+```
+
+
+## Does it work?
+
+The more convenient way to work with the corpora in the package is to use the *polmineR*-package. You would load the package (`library(polmineR)`), activate the corpora in the *europarl*-package (`use("europarl")`), check which corpora are present (`corpus()`), and perform some simple query (`kwic("EUROPARL-EN", query = "Europe")`). 
+
+To keep installation requirements to a minimum, the *cwbtools*-package does not make *polmineR* a dependency, so we use the low-level functionality of *RcppCWB* to check whether everything works.
+
+The first question is: Which corpora do we have in the *europarl* package?
+
+```{r list_corpora, eval = exec}
+library(RcppCWB)
+europarl_pkg_registry <- system.file(package = "europarl", "extdata", "cwb", "registry")
+Sys.setenv(CORPUS_REGISTRY = europarl_pkg_registry)
+cqp_initialize()
+cqp_list_corpora()
+```
+
+Second, we want to have a look at the concordances of 'Europe' in the English version of Europarl.
+
+```{r query_europe, eval = exec}
+query <- "Europe"
+id <- cl_str2id(
+  corpus = "europarl-en", registry = europarl_pkg_registry,
+  str = query, p_attribute = "word"
+  )
+cpos <- cl_id2cpos(
+  corpus = "europarl-en", registry = europarl_pkg_registry,
+  id = id, p_attribute = "word"
+)
+tab <- data.frame(
+  i = unlist(lapply(1:length(cpos), function(x) rep(x, times = 11))),
+  cpos = unlist(lapply(cpos, function(x) (x - 5):(x + 5)))
+  )
+tab[["id"]] <- cl_cpos2id(
+  corpus = "europarl-en", registry = europarl_pkg_registry,
+  cpos = tab[["cpos"]], p_attribute = "word"
+  )
+tab[["str"]] <- cl_id2str(
+  corpus = "europarl-en", registry = europarl_pkg_registry,
+  p_attribute = "word", id = tab[["id"]]
+  )
+concordances_list <- split(tab[["str"]], as.factor(tab[["i"]]))
+concordances <- unname(sapply(concordances_list, function(x) paste(x, collapse = " ")))
+head(concordances)
+```
+
+As mentioned before: Using *polmineR* is what we recommend for working with CWB corpora from R.
+
+Finally, time to clean up. There are some large files in the temporary directory that has been used. It should be deleted to avoid wasting space on your disk.
+
+```{r unlink_things, eval = exec}
+unlink(tmp_dir, recursive = TRUE)
+```
+
+Enjoy!

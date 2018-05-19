@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.6
-Date: 2018-05-18
+Version: 0.0.6.9001
+Date: 2018-05-19
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.
@@ -19,7 +19,8 @@ Suggests:
     tokenizers,
     tidytext,
     SnowballC,
-    janeaustenr
+    janeaustenr,
+    devtools
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3

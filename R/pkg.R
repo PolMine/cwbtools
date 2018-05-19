@@ -47,7 +47,7 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
       dir.create(new_dir)
     } else {
       if (verbose) message("... directory already exists:", new_dir)
-      dirs_to_create <- dirs_to_create[-which(dirs_to_create) == "new_dir"]
+      dirs_to_create <- dirs_to_create[-which(dirs_to_create == "new_dir")]
     }
   }
   invisible(dirs_to_create)
