@@ -29,7 +29,10 @@
 #'   \item{\code{$tokenize(verbose = TRUE)}}{Simple tokenization of text in chunktable.}
 #'   \item{\code{$add_corpus_positions(verbose = TRUE)}}{Add column \code{cpos} to tokenstream and
 #'   columns \code{cpos_left} and \code{cpos_right} to metadata.}
-#'   \item{\code{encode(corpus, p_attributes = "word", s_attributes = NULL, encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL, method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.}
+#'   \item{\code{$encode(corpus, p_attributes = "word", s_attributes = NULL,
+#'   encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL,
+#'   method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.
+#'   If the corpus already exists, it will be removed.}
 #'   \item{\code{$import_xml(x, body = "//body", meta = NULL, mc = NULL)}}{}
 #' }
 #' @export CorpusData
@@ -243,22 +246,21 @@ CorpusData <- R6::R6Class(
       registry_file <- file.path(registry_dir, tolower(corpus))
       
       if (file.exists(registry_file)){
-        message(sprintf("registry file for corpus '%s' already exists", corpus))
-        if (is.null(data_dir)) data_dir <- registry_file_parse(tolower(corpus))[["home"]]
+        message(sprintf("registry file for corpus '%s' already exists - it should be removed", corpus))
+        corpus_remove(corpus = corpus, registry_dir = registry_dir)
+      }
+      message(sprintf("Creating new corpus '%s'", corpus))
+      if (is.null(data_dir)){
+        super_dir <- dirname(registry_dir)
+        potential_data_dir <- grep("index", list.files(super_dir), value = TRUE, perl = TRUE)
+        if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
+        data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus))
+        message(sprintf("suggesting data_dir: %s\n", data_dir))
+        feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
+        if (feedback != "Y") stop("aborting")
+        if (!file.exists(data_dir)) dir.create(data_dir)
       } else {
-        message(sprintf("Creating new corpus '%s'", corpus))
-        if (is.null(data_dir)){
-          super_dir <- dirname(registry_dir)
-          potential_data_dir <- grep("index", list.files(super_dir), value = TRUE, perl = TRUE)
-          if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
-          data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus))
-          message(sprintf("suggesting data_dir: %s\n", data_dir))
-          feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
-          if (feedback != "Y") stop("aborting")
-          if (!file.exists(data_dir)) dir.create(data_dir)
-        } else {
-          if (!file.exists(data_dir)) dir.create(data_dir)
-        }
+        if (!file.exists(data_dir)) dir.create(data_dir)
       }
       
       if (!encoding %in% c("ascii", paste("latin", 1:9, sep = ""), "utf8")){

@@ -192,13 +192,13 @@ corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
   
   stopifnot(tolower(corpus) %in% list.files(registry_dir)) # check that corpus exists
   
-  reg <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  reg <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
   data_directory <- reg[["home"]]
   if (readline(prompt = sprintf("Are you sure you want to data files for corpus '%s'? ('Y' to continue, anything else to abort", corpus)) != "Y"){
     for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
     file.remove(data_directory)
   }
-  if (readline(prompt = sprintf("Are you sure you want to relete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)) != "Y"){
+  if (readline(prompt = sprintf("Are you sure you want to delete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)) != "Y"){
     file.remove(file.path(registry_dir, tolower(x)))
   }
 }

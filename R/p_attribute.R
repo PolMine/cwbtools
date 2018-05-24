@@ -103,7 +103,7 @@ p_attribute_encode <- function(
     rm(token_stream); gc()
     
     ids <- as.integer(tokenstream_factor) - 1L
-    if (verbose) message("... writing file: ", corpus_file)
+    if (verbose) message("... writing file: ", basename(corpus_file))
     writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
     rm(ids); gc()
     
@@ -119,13 +119,13 @@ p_attribute_encode <- function(
     
     lexicon_hex_list <- lapply(lexicon_hex_list, function(x) c(x, as.raw(0)))
     lexicon_hex_vec <- unlist(lexicon_hex_list)
-    if (verbose) message("... writing file: ", lexicon_file)
+    if (verbose) message("... writing file: ", basename(lexicon_file))
     writeBin(object = lexicon_hex_vec, con = lexicon_file)
     
     idx_raw <- cumsum(sapply(lexicon_hex_list, length))
     rm(lexicon_hex_list)
     idx <- c(0L, idx_raw[1:(length(idx_raw) - 1L)])
-    if (verbose) message("... writing file: ", lexicon_index_file)
+    if (verbose) message("... writing file: ", basename(lexicon_index_file))
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
     rm(idx_raw); gc()
     ### equivalent to cwb-makeall (build index files)
@@ -230,7 +230,7 @@ p_attribute_encode <- function(
     )
     for (x in files_to_remove){
       if (file.exists(x)) {
-        if (file.remove(x)) if (verbose) message("... file successfully removed: ", x)
+        if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
       }
     }
   }

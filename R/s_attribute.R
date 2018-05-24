@@ -41,7 +41,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     writeBin(object = avx_vector, con = avx_file, size = 4L, endian = "big")
     
     # generate and write attrib.rng
-    region_vector <- as.vector(region_matrix)
+    region_vector <- as.vector(t(region_matrix))
     writeBin(object = region_vector, con = rng_file, size = 4L, endian = "big")
     return( TRUE )
   } else if (method == "CWB"){

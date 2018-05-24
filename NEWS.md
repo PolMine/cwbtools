@@ -1,3 +1,8 @@
+# v0.0.8
+  * major bug removed when writing regions to disk (s_attribute_encode) with R
+  * when creating/removing files in p_attribute_encode, only basenames of filenames are outputted
+  * for CorpusData$encode(), an already existing corpus will be removed
+
 # v0.0.7
   * bug removed in function pkg_create_cwb_dirs causing error when a directory already exists
   * new vignette 'europarl': sample workflow for putting indexed corpus into package

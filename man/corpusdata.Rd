@@ -23,6 +23,7 @@ CorpusData
   \item{\code{s_attributes}}{columns of ... that will be encoded as structural attributes}
   \item{\code{data_dir}}{directory where to create directory for indexed corpus files}
   \item{\code{method}}{either "R" or "CWB"}
+  \item{\code{...}}{arguments that are passed into tokenizers::tokenize_words()}
   \item{\code{verbose}}{logical, whether to be verbose}
 }
 }
@@ -39,7 +40,10 @@ CorpusData
   \item{\code{$tokenize(verbose = TRUE)}}{Simple tokenization of text in chunktable.}
   \item{\code{$add_corpus_positions(verbose = TRUE)}}{Add column \code{cpos} to tokenstream and
   columns \code{cpos_left} and \code{cpos_right} to metadata.}
-  \item{\code{encode(corpus, p_attributes = "word", s_attributes = NULL, encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL, method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.}
+  \item{\code{$encode(corpus, p_attributes = "word", s_attributes = NULL,
+  encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL,
+  method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.
+  If the corpus already exists, it will be removed.}
   \item{\code{$import_xml(x, body = "//body", meta = NULL, mc = NULL)}}{}
 }
 }

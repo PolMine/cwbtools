@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.7
-Date: 2018-05-23
+Version: 0.0.8
+Date: 2018-05-24
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.
@@ -14,9 +14,9 @@ Imports:
     stringi,
     RcppCWB
 Suggests:
-    tm,
+    tm (>= 0.7.3),
     knitr,
-    tokenizers,
+    tokenizers (>= 0.2.1),
     tidytext,
     SnowballC,
     janeaustenr,
