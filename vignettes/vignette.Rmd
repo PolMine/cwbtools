@@ -277,5 +277,8 @@ count <- length(cpos)
 count
 ```
 
+```{r}
+unlink(tmpdir, recursive = TRUE)
+```
 
 Hope everything works. Enjoy!

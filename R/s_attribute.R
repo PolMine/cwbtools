@@ -19,11 +19,20 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     rng_file <- file.path(data_dir, paste(s_attribute, "rng", sep = ".")) # ranges
     
     # generate and write attrib.avs
+    if (!is.character(values)) values <- as.character(values)
     values_unique <- unique(values)
-    writeBin(object = values_unique, con = avs_file, useBytes = TRUE)
-    
+    if (encoding == "latin1"){
+      values_hex_list <- iconv(x = values_unique, from = "UTF-8", to = toupper(encoding), toRaw = TRUE)
+    } else {
+      values_hex_list <- lapply(values_unique, charToRaw)
+    }
+    values_hex_list <- lapply(values_hex_list, function(x) c(x, as.raw(0)))
+    values_hex_vec <- unlist(values_hex_list)
+    writeBin(object = values_hex_vec, con = avs_file)
+
     # generate and write attrib.avx
-    offset <- c(0L, cumsum(nchar(values_unique)[1L:(length(values_unique) - 1L)]))
+    offset <- cumsum(sapply(values_hex_list, length))
+    offset <- c(0L, offset[1:(length(offset) - 1L)])
     avx_matrix <- matrix(
       c(0L:(length(values) - 1L), offset[match(values, values_unique)]),
       ncol = 2, byrow = FALSE

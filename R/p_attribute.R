@@ -28,7 +28,8 @@
 #' @param method either 'CWB' or 'R'
 #' @param p_attribute the positional attribute
 #' @param data_dir the data directory for the corpus with the binary files
-#' @param encoding encoding of the data
+#' @param encoding encoding as defined in the charset corpus property of the
+#'   registry file for the corpus ('latin1' to 'latin9', and 'utf8')
 #' @export p_attribute_encode
 #' @rdname p_attribute_encode
 #' @examples
@@ -72,51 +73,61 @@
 #' kwic[1:10]
 #' @export p_attribute_encode
 #' @importFrom RcppCWB cl_attribute_size
+#' @importFrom stringi stri_detect_regex stri_replace_all
 p_attribute_encode <- function(
   token_stream, p_attribute = "word", registry_dir, corpus, data_dir, method = c("R", "CWB"),
-  verbose = TRUE, encoding = get_encoding(token_stream), compress = NULL
+  verbose = TRUE, encoding = get_encoding(token_stream),
+  compress = NULL
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
     stop("encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode")
   }
   
-  if (any(grepl("^\\s*<.*?>\\s*$", token_stream)))
-    warning("there is markup in the character vector - cwb-encode will issue warnings")
-
-  token_stream <- gsub("\u2019", "'", token_stream) # known to cause problems - right single quotation mark
-  # adjust encoding, if necessary
-  input_enc <- get_encoding(token_stream)
-  if (input_enc != encoding){
-    token_stream <- iconv(token_stream, from = input_enc, to = encoding)
-    Encoding(token_stream) <- encoding
-  }
-  
+  # the registry file will not accept tilde as a shortcut for the user's home directory
+  # so we expand it
+  registry_dir <- path.expand(registry_dir)
+  if (!file.exists(registry_dir)) stop("registry_dir does not exist")
+  data_dir <- path.expand(data_dir)
+  if (!file.exists(data_dir)) stop("data_dir does not exist")
   registry_file <- file.path(registry_dir, tolower(corpus))
   
   if (method == "R"){
     
-    # this is equivalent to cwb-encode
-    
-    tokenstream_factor <- factor(token_stream, levels = unique(token_stream))
-    ids <- as.integer(tokenstream_factor) - 1L
-    lexicon <- levels(tokenstream_factor)
-    idx <- c(0L, grep("\\|", strsplit(paste(lexicon, collapse = "|"), "")[[1]]))
-    
+    if (verbose) message("... writing tokenstream to disk (directly from R, equivalent to cwb-encode)")
     corpus_file <- file.path(data_dir, paste(p_attribute, "corpus", sep = "."))
     lexicon_file <- file.path(data_dir, paste(p_attribute, "lexicon", sep = "."))
     lexicon_index_file <- file.path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
     
+    if (verbose) message("... creating indices (in memory)")
+    tokenstream_factor <- factor(token_stream, levels = unique(token_stream))
+    rm(token_stream); gc()
+    
+    ids <- as.integer(tokenstream_factor) - 1L
+    if (verbose) message("... writing file: ", corpus_file)
     writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
-    writeBin(object = lexicon, con = lexicon_file)
-    # a dirty hack because I do not know how to write latin1 using writeBin
-    lexicon_file_tmp <- tempfile()
-    system(sprintf("iconv -f UTF-8 -t LATIN1 %s > %s", lexicon_file, lexicon_file_tmp))
-    file.remove(lexicon_file)
-    file.copy(from = lexicon_file_tmp, to = lexicon_file)
-    file.remove(lexicon_file_tmp)
+    rm(ids); gc()
     
+    lexicon <- levels(tokenstream_factor)
+    rm(tokenstream_factor); gc()
+    
+    if (encoding == "latin1"){
+      lexicon_hex_list <- iconv(x = lexicon, from = "UTF-8", to = toupper(encoding), toRaw = TRUE)
+    } else {
+      lexicon_hex_list <- lapply(lexicon, charToRaw)
+    }
+    rm(lexicon); gc()
+    
+    lexicon_hex_list <- lapply(lexicon_hex_list, function(x) c(x, as.raw(0)))
+    lexicon_hex_vec <- unlist(lexicon_hex_list)
+    if (verbose) message("... writing file: ", lexicon_file)
+    writeBin(object = lexicon_hex_vec, con = lexicon_file)
+    
+    idx_raw <- cumsum(sapply(lexicon_hex_list, length))
+    rm(lexicon_hex_list)
+    idx <- c(0L, idx_raw[1:(length(idx_raw) - 1L)])
+    if (verbose) message("... writing file: ", lexicon_index_file)
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
-    
+    rm(idx_raw); gc()
     ### equivalent to cwb-makeall (build index files)
     
     if (FALSE){
@@ -149,7 +160,7 @@ p_attribute_encode <- function(
       sorted <- order(lexicon) - 1L
       writeBin(object = sorted, size = 4, endian = "big", con = lexicon_srt_file)
     }
-
+    
   } else if (method == "CWB"){
     vrt_tmp_file <- tempfile()
     data.table::fwrite(
@@ -171,7 +182,7 @@ p_attribute_encode <- function(
       
       if (p_attribute %in% registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attribute"]])
         stop("p-attribute already exists")
-
+      
       if (verbose) message("... calling cwb-encode")
       p_attrs_old <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attributes"]] # for checking later if anything is missing
       cwb_encode_cmd_vec <- c(
@@ -181,7 +192,7 @@ p_attribute_encode <- function(
       )
       system(paste0(cwb_encode_cmd_vec, collapse = " "))
     }
-
+    
   }
   
   # create or augment registry file
@@ -208,7 +219,7 @@ p_attribute_encode <- function(
     command = file.path(cwb_get_bindir(), "cwb-makeall"),
     args = c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), "-V", toupper(corpus))
   )
-
+  
   if (compress){
     compression_cmd_args <- c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), toupper(corpus))
     system2(command = file.path(cwb_get_bindir(), "cwb-huffcode"), args = compression_cmd_args, stdout = TRUE )

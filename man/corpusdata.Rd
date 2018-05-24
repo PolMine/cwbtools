@@ -31,6 +31,11 @@ CorpusData
 \describe{
   \item{\code{$new()}}{Initialize a new instance of class \code{CorpusData}.}
   \item{\code{$print()}}{Print summary of \code{CorpusData} object.}
+  \item{\code{$purge(replacements = list(c("^\\s*<.*?>\\s*$", ""),
+  c("\u2019", "'")))}}{Remove patterns from chunkdata that are known to cause
+  problems. This is done most efficiently at the chunkdata level of data
+  preparation as the length of the character vector to handle is much smaller
+  than when tokenization/annotation has been performed.}
   \item{\code{$tokenize(verbose = TRUE)}}{Simple tokenization of text in chunktable.}
   \item{\code{$add_corpus_positions(verbose = TRUE)}}{Add column \code{cpos} to tokenstream and
   columns \code{cpos_left} and \code{cpos_right} to metadata.}

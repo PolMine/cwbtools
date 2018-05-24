@@ -23,7 +23,8 @@ p_attribute_encode(token_stream, p_attribute = "word", registry_dir, corpus,
 
 \item{verbose}{logical}
 
-\item{encoding}{encoding of the data}
+\item{encoding}{encoding as defined in the charset corpus property of the
+registry file for the corpus ('latin1' to 'latin9', and 'utf8')}
 
 \item{compress}{logical}
 }

@@ -14,12 +14,18 @@
 #'   \item{\code{s_attributes}}{columns of ... that will be encoded as structural attributes}
 #'   \item{\code{data_dir}}{directory where to create directory for indexed corpus files}
 #'   \item{\code{method}}{either "R" or "CWB"}
+#'   \item{\code{...}}{arguments that are passed into tokenizers::tokenize_words()}
 #'   \item{\code{verbose}}{logical, whether to be verbose}
 #' }
 #' @section Methods:
 #' \describe{
 #'   \item{\code{$new()}}{Initialize a new instance of class \code{CorpusData}.}
 #'   \item{\code{$print()}}{Print summary of \code{CorpusData} object.}
+#'   \item{\code{$purge(replacements = list(c("^\\s*<.*?>\\s*$", ""),
+#'   c("\u2019", "'")))}}{Remove patterns from chunkdata that are known to cause
+#'   problems. This is done most efficiently at the chunkdata level of data
+#'   preparation as the length of the character vector to handle is much smaller
+#'   than when tokenization/annotation has been performed.}
 #'   \item{\code{$tokenize(verbose = TRUE)}}{Simple tokenization of text in chunktable.}
 #'   \item{\code{$add_corpus_positions(verbose = TRUE)}}{Add column \code{cpos} to tokenstream and
 #'   columns \code{cpos_left} and \code{cpos_right} to metadata.}
@@ -33,6 +39,7 @@
 #' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name xml_parents xml_text
 #' @importFrom pbapply pblapply
 #' @importFrom stats setNames
+#' @importFrom stringi stri_detect_regex
 #' @rdname CorpusData
 #' @examples 
 #' library(RcppCWB)
@@ -114,9 +121,20 @@ CorpusData <- R6::R6Class(
       }
     },
     
-    tokenize = function(verbose = TRUE){
+    tokenize = function(..., verbose = TRUE, progress = TRUE){
       if (requireNamespace("tokenizers", quietly = TRUE)){
-        self$tokenstream <- self$chunktable[,{tokenizers::tokenize_words(.SD[["text"]], lowercase = FALSE)}, by = "id"]
+        if (class(self$chunktable)[1] != "data.table"){
+          stop("the chunktable needs to be a data. table")
+        }
+        
+        if (progress) pb <- txtProgressBar(min = 0, max = uniqueN(self$chunktable[["id"]]), style = 3)
+        .tokenize <- function(.SD, .GRP){
+          if (progress) setTxtProgressBar(pb, value = .GRP)
+          tokenizers::tokenize_words(.SD[["text"]], ...)
+        }
+        self$tokenstream <- self$chunktable[, .tokenize(.SD, .GRP), by = "id"]
+        if (progress) close(pb)
+        
       } else {
         self$tokenstream <- self$chunktable[,{strsplit(.SD[["text"]], split = "(\\s|[\\.:;\\?!])")[[1]]}, by = "id"]
       }
@@ -190,6 +208,33 @@ CorpusData <- R6::R6Class(
       invisible(self)
     },
     
+    purge = function(replacements = list(c("^\\s*<.*?>\\s*$", ""), c("\u2019", "'"))){
+      for (i in 1L:length(replacements)){
+        if (verbose) message("... checking for presence of regex: ", replacements[[i]][1])
+        matches <- stri_detect_regex(str = self$chunkdata[["text"]], pattern = replacements[[i]][1])
+        if (any(matches)){
+          self$chunkdata[["text"]] <- stri_replace_all(
+            str = self$chunkdata[["text"]],
+            regex = replacements[[i]][1],
+            replacement = replacements[[i]][2]
+            )
+        }
+      }
+      invisible(self)
+    },
+    
+    check_encodings = function(){
+      # adjust encoding, if necessary
+      # if (verbose) message("... checking encoding of input vector")
+      # input_enc <- get_encoding(token_stream)
+      # if (input_enc == "UTF-8") input_enc <- "utf8" # different capitalization in registry format
+      # if (input_enc != encoding){
+      #   if (verbose) message(sprintf("... encoding of input vector is '%s', adjusting to '%s'", input_enc, encoding))
+      #   token_stream <- iconv(token_stream, from = input_enc, to = encoding)
+      #   Encoding(token_stream) <- encoding
+      # }
+    },
+    
     encode = function(corpus, p_attributes = "word", s_attributes = NULL, encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL, method = c("R", "CWB"), verbose = TRUE, compress = FALSE){
       
       if (file.exists(registry_dir))
@@ -253,7 +298,7 @@ CorpusData <- R6::R6Class(
       
       reg_data <- registry_data(
         name = toupper(corpus), id = tolower(corpus),
-        home = data_dir, properties = c(charset = encoding), 
+        home = path.expand(data_dir), properties = c(charset = encoding), 
         p_attributes = p_attributes, s_attributes = s_attributes
         )
       registry_file_write(data = reg_data, corpus = tolower(corpus), registry_dir = registry_dir)
