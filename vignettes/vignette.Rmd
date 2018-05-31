@@ -97,7 +97,7 @@ setnames(UNGA$metadata, old = c("sp_who", "sp_state", "sp_role"), new = c("who",
 The CWB requires a tokenstream as input to generate positional attributes. Standard NLP tools will offer lemmatization, part-of-speech-recognition and more at this stage. To keep things simple, we perform a very simple tokenization using the tokenizers pacakge.
 
 ```{r dissect, eval = TRUE}
-UNGA$tokenize()
+UNGA$tokenize(lowercase = FALSE, strip_punct = FALSE)
 UNGA
 ```
 

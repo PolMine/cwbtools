@@ -1,3 +1,7 @@
+# v0.0.8.9001
+  * corpus_as_tarball-function added
+  * install_corpus able to install from tarball
+
 # v0.0.8
   * major bug removed when writing regions to disk (s_attribute_encode) with R
   * when creating/removing files in p_attribute_encode, only basenames of filenames are outputted

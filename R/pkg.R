@@ -59,29 +59,42 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
 #' the package defined by \code{pkg}.
 #' @rdname pkg_utils
 #' @export pkg_add_corpus
+#' @importFrom pbapply pblapply
 pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
-  # copy registry file
-  file.copy(
-    from = file.path(registry, tolower(corpus)),
-    to = file.path(pkg, "inst", "extdata", "cwb", "registry")
-  )
   
-  # copy files in dir for indexed corpora
-  data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora")
-  if (!file.exists(data_dir)) stop("data directory does not exist")
+  if (pkg %in% rownames(installed.packages())){
+    pkg <- system.file(package = pkg)
+    dest_registry <- file.path(pkg, "extdata", "cwb", "registry")
+    data_dir <- file.path(pkg, "extdata", "cwb", "indexed_corpora")
+  } else {
+    dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry")
+    data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora")
+  }
+  if (!file.exists(dest_registry)) stop(sprintf("registry directory '%s' does not exist", dest_registry))
+  if (!file.exists(data_dir)) stop(sprintf("data directory '%s' does not exist", data_dir))
   target_dir <- file.path(data_dir, tolower(corpus))
   if (!file.exists(target_dir)){
     message("... directory for indexed corpus does not yet exist, creating: ", target_dir)
     dir.create(target_dir)
   }
+
+  # copy registry file
+  if (verbose) message("... copying registry file")
+  file.copy(from = file.path(registry, tolower(corpus)), to = dest_registry)
+  
+  # copy files in dir for indexed corpora
+  if (verbose) message("... copying data files")
   files_to_copy <- list.files(
     registry_file_parse(corpus, registry_dir = registry)[["home"]],
     full.names = TRUE
   )
-  for (x in files_to_copy){
-    if (verbose) message("... copying file: ", x)
-    file.copy(from = x, to = target_dir)
-  }
+  pblapply(files_to_copy, function(x) file.copy(from = x, to = target_dir))
+  
+  # adjust registry dir
+  if (verbose) message("... adjusting paths in registry file")
+  regdata <- registry_file_parse(corpus = corpus, registry = dest_registry)
+  regdata[["home"]] <- target_dir
+  registry_file_write(data = regdata, corpus = corpus, registry_dir = dest_registry)
   invisible( TRUE )
 }
 
