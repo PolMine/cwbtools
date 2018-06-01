@@ -9,7 +9,6 @@ Description: Toolkit for Managing CWB Corpora.
 Imports:
     data.table,
     R6,
-    pbapply,
     xml2,
     stringi,
     RCurl,

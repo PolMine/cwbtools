@@ -92,7 +92,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
   
   # adjust registry dir
   if (verbose) message("... adjusting paths in registry file")
-  regdata <- registry_file_parse(corpus = corpus, registry = dest_registry)
+  regdata <- registry_file_parse(corpus = corpus, registry_dir = dest_registry)
   regdata[["home"]] <- target_dir
   registry_file_write(data = regdata, corpus = corpus, registry_dir = dest_registry)
   invisible( TRUE )

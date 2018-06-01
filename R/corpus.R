@@ -21,19 +21,19 @@
 #' @param new name of the (new) corpus
 #' @param pkg data package name
 #' @param repo URL of the repository 
+#' @param tarball the URL or local path to a tarball with a CWB indexed corpus
 #' @param lib directory for R packages, defaults to \code{.libPaths()[1]}; the path may not 
 #' include a whitespace sign
 #' @param verbose logical, whether to be verbose
 #' @param registry_dir directory of registry
 #' @param corpus a CWB corpus
 #' @param tarfile filename of tarball
-#' @param corpus_version version of the corpus to compress
 #' @param ... further parameters that will be passed into \code{install.packages}
 #' @name install.corpus
 #' @seealso For managing registry files, see \code{\link{registry_file_parse}}
 #' for switching to a packaged corpus. 
 #' @importFrom utils available.packages contrib.url install.packages
-#' @importFrom utils installed.packages
+#' @importFrom utils installed.packages tar
 #' @importFrom RCurl url.exists
 #' @rdname corpus_utils
 #' @export corpus_install
@@ -47,12 +47,12 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       stop("You do not have write permissions for directory ", lib,
            ". Please run R with the required privileges, or provide another directory (param 'lib').")
     }
-    install.packages(pkgs = package, repos = repo, lib = lib, ...)
-    pkg_registry <- system.file(package = package, "extdata", "cwb", "registry")
+    install.packages(pkgs = pkg, repos = repo, lib = lib, ...)
+    pkg_registry <- system.file(package = pkg, "extdata", "cwb", "registry")
     corpora <- list.files(pkg_registry)
     for (corpus in corpora){
       regdata <- registry_file_parse(corpus = corpus, registry_dir = pkg_registry)
-      data_dir <- system.file(package = package, "extdata", "cwb", "indexed_corpora", corpus)
+      data_dir <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", corpus)
       if (regdata[["home"]] != data_dir){
         regdata[["home"]] <- data_dir
         registry_file_write(data = regdata, corpus = corpus, registry_dir = pkg_registry)

@@ -30,6 +30,8 @@ corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 
 \item{repo}{URL of the repository}
 
+\item{tarball}{the URL or local path to a tarball with a CWB indexed corpus}
+
 \item{lib}{directory for R packages, defaults to \code{.libPaths()[1]}; the path may not 
 include a whitespace sign}
 
@@ -46,8 +48,6 @@ include a whitespace sign}
 \item{corpus}{a CWB corpus}
 
 \item{tarfile}{filename of tarball}
-
-\item{corpus_version}{version of the corpus to compress}
 }
 \description{
 Utitlity functions for making the installation of indexed CWB corpora wrapped
