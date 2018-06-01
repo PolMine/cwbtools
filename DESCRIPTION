@@ -14,8 +14,7 @@ Imports:
     stringi,
     RCurl,
     RcppCWB,
-    pbapply,
-    cwbtools
+    pbapply
 Suggests:
     tm (>= 0.7.3),
     knitr,
