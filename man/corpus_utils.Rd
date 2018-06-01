@@ -7,10 +7,11 @@
 \alias{corpus_copy}
 \alias{corpus_rename}
 \alias{corpus_remove}
+\alias{corpus_as_tarball}
 \title{Install and Manage corpora.}
 \usage{
-corpus_install(pkgs, repo = "http://polmine.sowi.uni-due.de/packages",
-  lib = .libPaths()[1], ...)
+corpus_install(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages",
+  tarball = NULL, lib = .libPaths()[1], verbose = TRUE, ...)
 
 corpus_packages()
 
@@ -21,14 +22,18 @@ corpus_rename(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE)
 
 corpus_remove(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
+
+corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 }
 \arguments{
-\item{pkgs}{names of data packages with corpora}
+\item{pkg}{data package name}
 
 \item{repo}{URL of the repository}
 
 \item{lib}{directory for R packages, defaults to \code{.libPaths()[1]}; the path may not 
 include a whitespace sign}
+
+\item{verbose}{logical, whether to be verbose}
 
 \item{...}{further parameters that will be passed into \code{install.packages}}
 
@@ -38,43 +43,48 @@ include a whitespace sign}
 
 \item{registry_dir}{directory of registry}
 
-\item{verbose}{logical, whether to be verbose}
-
 \item{corpus}{a CWB corpus}
+
+\item{tarfile}{filename of tarball}
+
+\item{corpus_version}{version of the corpus to compress}
 }
 \description{
-Utitlity functions for making the installation of indexed CWB corpora
-wrapped into R data packages as easy as possible.
+Utitlity functions for making the installation of indexed CWB corpora wrapped
+into R data packages as easy as possible. A data package with a CWB corpus is
+assumed to include a directory \code{/extdata/cwb/registry} for registry
+files and a directory \code{/extdata/cwb/indexed_corpora} for the inexed
+corpus files.
 }
 \details{
-The function combines two steps necessary to install a CWB corpus wrapped into
-a R data package. First, it calls \code{install.packages}, then it 
-resets the path pointing to the directory with the indexed corpus
-files in the registry file.
+The \code{corpus_install} function combines two steps necessary to
+  install a CWB corpus wrapped into a R data package. First, it calls
+  \code{install.packages}, then it resets the path pointing to the directory
+  with the indexed corpus files in the registry file. The package will be
+  installed to the standard library directory for installing R packages
+  (\code{.libPaths()[1]}). Another location can be used by stating the param
+  'lib' explicitly (see documentation for \code{\link{install.packages}}).
+  The function can also be used to install a corpus from a password protected
+  repository. Further parameters are handed over to install.packages, so you
+  might add \code{method = "wget" extra = "--user donald --password duck"}.
+  See examples how to check whether the directory has been set correctly.
 
-The corpus will be installed to the standard library directory for installing R packages
-(\code{.libPaths()[1]}). Another location can be used by stating the param 'lib'
-explicitly (see documentation for \code{\link{install.packages}}).
+\code{corpus_packages} will detect the packages that include CWB
+  corpora.
 
-The function can also be used to install a corpus from a password protected repository. Further
-parameters are handed over to install.packages, so you might add 
-\code{method = "wget" extra = "--user donald --password duck"}.
+\code{corpus_copy} will create a copy of a corpus (useful for
+  experimental modifications, for instance).
 
-See examples how to check whether the directory has been set correctly.
+\code{corpus_rename} will rename a corpus, affecting the name of the
+  registry file, the corpus id, and the name of the directory where data
+  files reside.
 
-An installed data package with a CWB corpus is assumed to include a directory
-\code{/extdata/cwb/registry} for registry files and a directory
-\code{/extdata/cwb/indexed_corpora} for the inexed corpus files.
-}
-\examples{
-\donttest{
-install.corpus("GermaParl")
-# is equivalent to:
-install.corpus("GermaParl", repo = "http://polmine.sowi.uni-due.de/packages")
-RegistryFile(package = "GermaParl")$adjustHome()
-# check the directory that has been set
-RegistryFile$new(package = "GermaParl")$getHome()
-}
+\code{corpus_remove} can be used to drop a corpus.
+
+\code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
+  two subdirectories. The 'registry' subdirectory will host the registry file
+  for the tarred corpus. The data files will be put in a subdirectory with
+  the corpus name in the 'indexed_corpora' subdirectory.
 }
 \seealso{
 For managing registry files, see \code{\link{registry_file_parse}}
