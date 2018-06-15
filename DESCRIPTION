@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.8.9002
-Date: 2018-06-01
+Version: 0.0.8.9004
+Date: 2018-06-15
 Author: Andreas Blaette
 Maintainer: Andreas Blaette <andreas.blaette@uni-due.de>
 Description: Toolkit for Managing CWB Corpora.

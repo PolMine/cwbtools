@@ -11,11 +11,9 @@ vignette: >
 
 # Using the 'cwbtools' package
 
-The 'cwbtools' package offers functionality to create corpora to be used with the Corpus Workbench (CWB), 
-or tools building on the CWB from R. It makes the transition from data formats known from well-known R
-packages such as tm, quanteda or tidytext to an indexed corpus as smooth as possible. 
+The 'cwbtools' package offers functionality to create corpora to be used with the Corpus Workbench (CWB), or tools building on the CWB from R. It makes the transition from data formats known from well-known R packages such as tm, quanteda or tidytext to an indexed corpus as smooth as possible.
 
-The core tool of the cwbtools package is the 'CorpusData'. It incorporates a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a R6 class due to the reference semantics of the R6 class system. This means, that copying the whole object can be omitted during different processing steps, which can be a wise idea when data are large.
+The core tool of the cwbtools package is the 'CorpusData'-Class. It incorporates a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a R6 class, using the reference semantics of the R6 class system. This means, that copying the object can be omitted during different processing steps, handling memory parsimoniously when data are large.
 
 
 ## The CWB directory structure

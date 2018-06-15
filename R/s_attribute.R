@@ -69,11 +69,12 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     
     system(paste(cmd, collapse = " "))
     
-    regdata <- registry_file_parse(tolower(corpus), registry_dir = registry_dir)
-    if (!s_attribute %in% regdata[["s_attributes"]]){
-      if (verbose) message(sprintf("... adding s-attribute '%s' to registry", s_attribute))
-      regdata[["s_attributes"]] <- c(regdata[["s_attributes"]], s_attribute)
-      registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
-    }
   }
+  regdata <- registry_file_parse(tolower(corpus), registry_dir = registry_dir)
+  if (!s_attribute %in% regdata[["s_attributes"]]){
+    if (verbose) message(sprintf("... adding s-attribute '%s' to registry", s_attribute))
+    regdata[["s_attributes"]] <- c(regdata[["s_attributes"]], s_attribute)
+    registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
+  }
+  
 }

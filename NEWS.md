@@ -1,3 +1,10 @@
+# v0.0.8.9004
+  * issue with ALTREP vector for corpus positions resolved
+  * layout of progress bars consistently using pbapply package
+
+# v0.0.8.9003
+  * s_attribute_encode will add structural attribute to registry when using R implementation, too
+
 # v0.0.8.9001
   * corpus_as_tarball-function added
   * install_corpus able to install from tarball

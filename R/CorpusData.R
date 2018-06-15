@@ -40,7 +40,7 @@
 #' @importFrom data.table uniqueN setkeyv
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name xml_parents xml_text
-#' @importFrom pbapply pblapply
+#' @importFrom pbapply pblapply timerProgressBar setTimerProgressBar
 #' @importFrom stats setNames
 #' @importFrom stringi stri_detect_regex
 #' @rdname CorpusData
@@ -126,10 +126,9 @@ CorpusData <- R6::R6Class(
     
     tokenize = function(..., verbose = TRUE, progress = TRUE){
       if (requireNamespace("tokenizers", quietly = TRUE)){
-        if (class(self$chunktable)[1] != "data.table"){
+        if (class(self$chunktable)[1] != "data.table")
           stop("the chunktable needs to be a data. table")
-        }
-        
+
         if (progress) pb <- txtProgressBar(min = 0, max = uniqueN(self$chunktable[["id"]]), style = 3)
         .tokenize <- function(.SD, .GRP){
           if (progress) setTxtProgressBar(pb, value = .GRP)
@@ -192,14 +191,14 @@ CorpusData <- R6::R6Class(
     add_corpus_positions = function(verbose = TRUE){
       
       if (!"id" %in% colnames(self$metadata)) stop("id column required")
-      self$tokenstream[["cpos"]] <- 0L:(nrow(self$tokenstream) - 1L)
+      self$tokenstream[, "cpos" := 0L:(nrow(self$tokenstream) - 1L)]
       
       if (verbose) message("... adding corpus positions to table 'metadata'")
       grpn <- uniqueN(self$tokenstream[["id"]])
-      if (interactive()) pb <- txtProgressBar(min = 0, max = grpn, style = 3)
+      if (interactive()) pb <- timerProgressBar(min = 0, max = grpn, width = getOption("pboptions")[["txt.width"]])
       cpos_dt <- self$tokenstream[
         ,{
-          if (interactive()) setTxtProgressBar(pb, .GRP);
+          if (interactive()) setTimerProgressBar(pb, .GRP);
           list(cpos_left = min(.SD[["cpos"]]), cpos_right = max(.SD[["cpos"]]))
         }, by = "id"
         ]
