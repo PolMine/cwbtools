@@ -13,6 +13,15 @@
 #' @rdname s_attribute
 #' @export s_attribute_encode
 s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, verbose = TRUE){
+  stopifnot(
+    class(region_matrix) == "matrix",
+    ncol(region_matrix) == 2,
+    is.character(values),
+    length(values) == nrow(region_matrix)
+    )
+  if (class(as.vector(region_matrix)) != "integer"){
+    region_matrix <- matrix(data = as.integer(as.vector(region_matrix)), ncol = 2)
+  }
   if (method == "R"){
     avs_file <- file.path(data_dir, paste(s_attribute, "avs", sep = ".")) # attribute values
     avx_file <- file.path(data_dir, paste(s_attribute, "avx", sep = ".")) # attribute value index
@@ -35,7 +44,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     offset <- c(0L, offset[1:(length(offset) - 1L)])
     avx_matrix <- matrix(
       c(0L:(length(values) - 1L), offset[match(values, values_unique)]),
-      ncol = 2, byrow = FALSE
+      ncol = 2L, byrow = FALSE
     )
     avx_vector <- as.integer(t(avx_matrix))
     writeBin(object = avx_vector, con = avx_file, size = 4L, endian = "big")
@@ -43,7 +52,6 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     # generate and write attrib.rng
     region_vector <- as.vector(t(region_matrix))
     writeBin(object = region_vector, con = rng_file, size = 4L, endian = "big")
-    return( TRUE )
   } else if (method == "CWB"){
     
     tab <- data.table(region_matrix, s_attribute = values)

@@ -1,6 +1,8 @@
 # v0.0.8.9004
   * issue with ALTREP vector for corpus positions resolved
   * layout of progress bars consistently using pbapply package
+  * sanity checks for s_attribute_encode, ensure that region_matrix is integer matrix
+  * s_attribute_encode when called with method = "R" will now add s_attribute to registry
 
 # v0.0.8.9003
   * s_attribute_encode will add structural attribute to registry when using R implementation, too
