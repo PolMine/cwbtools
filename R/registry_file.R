@@ -31,8 +31,8 @@ registry_file_parse <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGIST
   regex_vec <- c(
     name = '^NAME\\s+"(.*?)"\\s*$',
     id = "^ID\\s+(.*?)\\s*$",
-    home = "^HOME\\s+(.*?)\\s*$",
-    info = "^INFO\\s+(.*?)\\s*$",
+    home = '^HOME\\s+"?(.*?)"?\\s*$',
+    info = '^INFO\\s+"?(.*?)"?\\s*$',
     p_attributes = "^ATTRIBUTE\\s+(.*?)$",
     s_attributes = "^STRUCTURE\\s+(.*?)(|\\s+.*?)$"
   )

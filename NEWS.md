@@ -1,3 +1,6 @@
+# v0.0.8.9005
+  * issue with parsing path correctly in registry_file_path when path is in inverted commas solved (adjusted regex)
+
 # v0.0.8.9004
   * issue with ALTREP vector for corpus positions resolved
   * layout of progress bars consistently using pbapply package
