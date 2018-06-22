@@ -59,8 +59,7 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       }
     }
   } else {
-    tmp_dir <- tempdir()
-    cwbtools_tmpdir <- file.path(tmp_dir, "cwbtools_tmpdir")
+    cwbtools_tmpdir <- file.path(tempdir(), "cwbtools_tmpdir")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
     corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball))
@@ -76,12 +75,13 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     unlink(corpus_tarball)
     
-    tmp_registry_dir <- file.path(cwbtools_tmpdir, "registry")
-    tmp_data_dir <- file.path(cwbtools_tmpdir, "indexed_corpora")
+    tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry")
+    tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora")
     corpora <- list.files(tmp_registry_dir)
     for (corpus in corpora){
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       registry_data[["home"]] <- file.path(tmp_data_dir, tolower(registry_data[["id"]]))
+      registry_data[["info"]] <- file.path(registry_data[["home"]], basename(registry_data[["info"]]))
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)

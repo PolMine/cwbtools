@@ -80,7 +80,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
 
   # copy registry file
   if (verbose) message("... copying registry file")
-  file.copy(from = file.path(registry, tolower(corpus)), to = dest_registry)
+  file.copy(from = file.path(registry, tolower(corpus)), to = dest_registry, overwrite = TRUE)
   
   # copy files in dir for indexed corpora
   if (verbose) message("... copying data files")
@@ -94,6 +94,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
   if (verbose) message("... adjusting paths in registry file")
   regdata <- registry_file_parse(corpus = corpus, registry_dir = dest_registry)
   regdata[["home"]] <- target_dir
+  regdata[["info"]] <- file.path(target_dir, basename(regdata[["info"]]))
   registry_file_write(data = regdata, corpus = corpus, registry_dir = dest_registry)
   invisible( TRUE )
 }

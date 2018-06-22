@@ -102,7 +102,9 @@ print.registry_data <- function(x, ...){
 #' @export registry_file_compose
 registry_file_compose <- function(x){
   
-  data_dir_base <- x[["home"]]
+  data_dir_base <- x[["home"]] # will be needed for composing path to info file
+  
+  if (!file.exists(x[["home"]])) warning("cannot confirm that data/home directory exists")
   if (.Platform$OS.type == "windows"){
     x[["home"]] <- sprintf('"%s"', normalizePath(x[["home"]], winslash = "/"))
   } else {
@@ -110,9 +112,8 @@ registry_file_compose <- function(x){
   }
   
   
-  if (is.null(x[["info"]])){
-    x[["info"]] <- file.path(dirname(data_dir_base), ".info.md")
-  }
+  if (is.null(x[["info"]])) x[["info"]] <- file.path(dirname(data_dir_base), ".info.md")
+  if (!file.exists(x[["info"]])) warning("cannot confirm that info file exists")
   if (.Platform$OS.type == "windows"){
     x[["info"]] <- sprintf('"%s"', normalizePath(x[["info"]], winslash = "/"))
   } else {
