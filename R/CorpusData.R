@@ -33,7 +33,7 @@
 #'   encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL,
 #'   method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.
 #'   If the corpus already exists, it will be removed.}
-#'   \item{\code{$import_xml(x, body = "//body", meta = NULL, mc = NULL)}}{}
+#'   \item{\code{$import_xml(filenames, body = "//body", meta = NULL, mc = NULL)}}{}
 #' }
 #' @export CorpusData
 #' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv as.data.table data.table
@@ -44,6 +44,7 @@
 #' @importFrom stats setNames
 #' @importFrom stringi stri_detect_regex
 #' @rdname CorpusData
+#' @name CorpusData
 #' @examples 
 #' library(RcppCWB)
 #' library(data.table)
