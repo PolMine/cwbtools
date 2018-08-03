@@ -113,7 +113,7 @@ registry_file_compose <- function(x){
   
   
   if (is.null(x[["info"]])) x[["info"]] <- file.path(dirname(data_dir_base), ".info.md")
-  if (!file.exists(x[["info"]])) warning("cannot confirm that info file exists")
+  # if (!file.exists(x[["info"]])) warning("cannot confirm that info file exists")
   if (.Platform$OS.type == "windows"){
     x[["info"]] <- sprintf('"%s"', normalizePath(x[["info"]], winslash = "/"))
   } else {

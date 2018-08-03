@@ -1,18 +1,13 @@
-# v0.0.8.9005
+# v0.0.9
   * issue with parsing path correctly in registry_file_path when path is in inverted commas solved (adjusted regex)
-
-# v0.0.8.9004
   * issue with ALTREP vector for corpus positions resolved
   * layout of progress bars consistently using pbapply package
   * sanity checks for s_attribute_encode, ensure that region_matrix is integer matrix
   * s_attribute_encode when called with method = "R" will now add s_attribute to registry
-
-# v0.0.8.9003
   * s_attribute_encode will add structural attribute to registry when using R implementation, too
-
-# v0.0.8.9001
   * corpus_as_tarball-function added
   * install_corpus able to install from tarball
+  * progress option for `CorpusData$import_xml()`-method
 
 # v0.0.8
   * major bug removed when writing regions to disk (s_attribute_encode) with R

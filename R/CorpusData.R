@@ -16,6 +16,7 @@
 #'   \item{\code{method}}{either "R" or "CWB"}
 #'   \item{\code{...}}{arguments that are passed into tokenizers::tokenize_words()}
 #'   \item{\code{verbose}}{logical, whether to be verbose}
+#'   \item{\code{progress}} Logical, whether to show progress bar.
 #' }
 #' @section Methods:
 #' \describe{
@@ -33,7 +34,7 @@
 #'   encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL,
 #'   method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.
 #'   If the corpus already exists, it will be removed.}
-#'   \item{\code{$import_xml(filenames, body = "//body", meta = NULL, mc = NULL)}}{}
+#'   \item{\code{$import_xml(filenames, body = "//body", meta = NULL, mc = NULL, progress = TRUE)}}{}
 #' }
 #' @export CorpusData
 #' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv as.data.table data.table
@@ -145,7 +146,7 @@ CorpusData <- R6::R6Class(
       self$add_corpus_positions(verbose = verbose)
     },
     
-    import_xml = function(filenames, body = "//body", meta = NULL, mc = NULL){
+    import_xml = function(filenames, body = "//body", meta = NULL, mc = NULL, progress = TRUE){
       .xml_reader <- function(x){
         doc <- xml2::read_xml(x)
         textnodes <- xml2::xml_find_all(doc, xpath = sprintf("%s//text()", body))
@@ -180,7 +181,7 @@ CorpusData <- R6::R6Class(
       }
       
       if (!all(file.exists(filenames))) stop("all files provided by x need to exist (not fulfilled)")
-      data <- pblapply(filenames, .xml_reader)
+      data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
       self$chunktable <- rbindlist(lapply(data, function(x) x[["text"]]))
       self$chunktable[["id"]] <- 1L:nrow(self$chunktable)
       self$metadata <- rbindlist(lapply(data, function(x) x[["metadata"]]), fill = TRUE)
