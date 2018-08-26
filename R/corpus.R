@@ -7,7 +7,7 @@
 #' corpus files.
 #' 
 #' @details The \code{corpus_install} function combines two steps necessary to
-#'   install a CWB corpus wrapped into a R data package. First, it calls
+#'   install a CWB corpus. First, it calls
 #'   \code{install.packages}, then it resets the path pointing to the directory
 #'   with the indexed corpus files in the registry file. The package will be
 #'   installed to the standard library directory for installing R packages
@@ -27,17 +27,21 @@
 #' @param verbose logical, whether to be verbose
 #' @param registry_dir directory of registry
 #' @param corpus a CWB corpus
-#' @param tarfile filename of tarball
-#' @param ... further parameters that will be passed into \code{install.packages}
+#' @param tarfile Filename of tarball.
+#' @param ... Further parameters that will be passed into
+#'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
+#'   or \code{download.file}, if \code{tarball} is specified.
+#' @param user A user name that can be specified to download a corpus from a password protected site.
+#' @param password A password that can be specified to download a corpus from a password protected site. 
 #' @name install.corpus
 #' @seealso For managing registry files, see \code{\link{registry_file_parse}}
 #' for switching to a packaged corpus. 
 #' @importFrom utils available.packages contrib.url install.packages
 #' @importFrom utils installed.packages tar
-#' @importFrom RCurl url.exists
+#' @importFrom curl curl_download new_handle handle_setopt
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], verbose = TRUE, ...){
+corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], verbose = TRUE, user = NULL, password = NULL, ...){
   if (is.null(tarball)){
     if (!pkg %in% utils::available.packages(utils::contrib.url(repos = repo))) {
       stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
@@ -64,8 +68,18 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     dir.create(cwbtools_tmpdir)
     corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball))
     if (grepl("^http", tarball)){
-      if (!url.exists(tarball)) stop("tarball is not available")
-      download.file(url = tarball, destfile = corpus_tarball)
+      # if (!url.exists(tarball)) stop("tarball is not available")
+      # download.file(url = tarball, destfile = corpus_tarball, ...)
+      if (is.null(user)){
+        curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+      } else {
+        if (is.null(password)) stop("If user name is offered, a password needs to be specified as well.")
+        curl::curl_download(
+          url = tarball, destfile = corpus_tarball,
+          handle = handle_setopt(new_handle(), userpwd = sprintf("%s:%s", user, password)),
+          quiet = !verbose
+        )
+      }
     } else {
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' does not exist", tarball))
       file.copy(from = tarball, to = corpus_tarball)

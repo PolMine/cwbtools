@@ -8,6 +8,8 @@
   * corpus_as_tarball-function added
   * install_corpus able to install from tarball
   * progress option for `CorpusData$import_xml()`-method
+  * Minimal rework of progress bar in `CorpusData$add_corpus_positions()` (helper function .fn)
+  * Three dots (...) are passed into `download.file()` by `install_corpus()`, if argument tarball is specified. This is a precondition for passing arguments to download password-protected corpora.
 
 # v0.0.8
   * major bug removed when writing regions to disk (s_attribute_encode) with R

@@ -11,7 +11,8 @@
 \title{Install and Manage corpora.}
 \usage{
 corpus_install(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages",
-  tarball = NULL, lib = .libPaths()[1], verbose = TRUE, ...)
+  tarball = NULL, lib = .libPaths()[1], verbose = TRUE, user = NULL,
+  password = NULL, ...)
 
 corpus_packages()
 
@@ -37,7 +38,13 @@ include a whitespace sign}
 
 \item{verbose}{logical, whether to be verbose}
 
-\item{...}{further parameters that will be passed into \code{install.packages}}
+\item{user}{A user name that can be specified to download a corpus from a password protected site.}
+
+\item{password}{A password that can be specified to download a corpus from a password protected site.}
+
+\item{...}{Further parameters that will be passed into
+\code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
+or \code{download.file}, if \code{tarball} is specified.}
 
 \item{old}{name of the (old) corpus}
 
@@ -47,7 +54,7 @@ include a whitespace sign}
 
 \item{corpus}{a CWB corpus}
 
-\item{tarfile}{filename of tarball}
+\item{tarfile}{Filename of tarball.}
 }
 \description{
 Utitlity functions for making the installation of indexed CWB corpora wrapped
@@ -58,7 +65,7 @@ corpus files.
 }
 \details{
 The \code{corpus_install} function combines two steps necessary to
-  install a CWB corpus wrapped into a R data package. First, it calls
+  install a CWB corpus. First, it calls
   \code{install.packages}, then it resets the path pointing to the directory
   with the indexed corpus files in the registry file. The package will be
   installed to the standard library directory for installing R packages

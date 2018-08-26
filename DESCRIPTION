@@ -2,7 +2,7 @@ Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
 Version: 0.0.9
-Date: 2018-06-22
+Date: 2018-08-26
 Authors@R: person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de")
 Description: Toolkit for Managing CWB Corpora.
 Imports:
@@ -10,7 +10,7 @@ Imports:
     R6,
     xml2,
     stringi,
-    RCurl,
+    curl,
     RcppCWB,
     pbapply
 Suggests:

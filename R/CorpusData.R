@@ -16,7 +16,7 @@
 #'   \item{\code{method}}{either "R" or "CWB"}
 #'   \item{\code{...}}{arguments that are passed into tokenizers::tokenize_words()}
 #'   \item{\code{verbose}}{logical, whether to be verbose}
-#'   \item{\code{progress}} Logical, whether to show progress bar.
+#'   \item{\code{progress}}{Logical, whether to show progress bar.}
 #' }
 #' @section Methods:
 #' \describe{
@@ -198,12 +198,11 @@ CorpusData <- R6::R6Class(
       if (verbose) message("... adding corpus positions to table 'metadata'")
       grpn <- uniqueN(self$tokenstream[["id"]])
       if (interactive()) pb <- timerProgressBar(min = 0, max = grpn, width = getOption("pboptions")[["txt.width"]])
-      cpos_dt <- self$tokenstream[
-        ,{
-          if (interactive()) setTimerProgressBar(pb, .GRP);
-          list(cpos_left = min(.SD[["cpos"]]), cpos_right = max(.SD[["cpos"]]))
-        }, by = "id"
-        ]
+      .fn <- function(.SD, .GRP){
+        if (interactive()) setTimerProgressBar(pb, .GRP);
+        list(cpos_left = min(.SD[["cpos"]]), cpos_right = max(.SD[["cpos"]]))
+      }
+      cpos_dt <- self$tokenstream[, .fn(.SD, .GRP), by = "id"]
       if (interactive()) close(pb)
       
       setkeyv(cpos_dt, cols = "id")
