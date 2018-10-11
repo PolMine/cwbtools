@@ -1,3 +1,12 @@
+# v0.0.10.9001
+  * A call to `cl_delete_corpus()` from RcppCWB is added to `s_attribute_encode()`, so that 
+  newly added s-attributes can be used without restarting the R session.
+
+# v0.0.10
+  * Missing documentation written for fields of class CorpusData.
+  * New fiels 'sentences' and 'named_entities' added to class CorpusData, as a basis
+  for encoding annotation of sentences and named entities.
+
 # v0.0.9
   * issue with parsing path correctly in registry_file_path when path is in inverted commas solved (adjusted regex)
   * issue with ALTREP vector for corpus positions resolved

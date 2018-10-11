@@ -9,10 +9,37 @@
 #' @param method either 'R' or 'CWB'
 #' @param encoding encoding of the data
 #' @param registry_dir registry directory
+#' @param delete Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.
 #' @param verbose logicalds
 #' @rdname s_attribute
 #' @export s_attribute_encode
-s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, verbose = TRUE){
+#' @importFrom RcppCWB cl_delete_corpus
+#' @examples 
+#' \dontrun{
+#' library(polmineR)
+#' library(cwbtools)
+#' use("polmineR", tmp = TRUE)
+#' 
+#' dt <- decode("REUTERS", s_attribute = "id")
+#' 
+#' s_attribute_encode(
+#'   values = paste("id", dt[["id"]], sep = "_"),
+#'   data_dir = file.path(data_dir(), "reuters"),
+#'   s_attribute = "foo",
+#'   corpus = "REUTERS",
+#'   region_matrix = as.matrix(dt[, c("cpos_left", "cpos_right")]),
+#'   method = "R",
+#'   registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+#'   encoding = "latin1",
+#'   verbose = TRUE,
+#'   delete = TRUE
+#' )
+#' 
+#' s_attributes("REUTERS")
+#' s_attributes("REUTERS", "foo")
+#' dt <- decode("REUTERS", s_attribute = "foo")
+#' }
+s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, delete = FALSE, verbose = TRUE){
   stopifnot(
     class(region_matrix) == "matrix",
     ncol(region_matrix) == 2,
@@ -84,5 +111,6 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     regdata[["s_attributes"]] <- c(regdata[["s_attributes"]], s_attribute)
     registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
   }
-  
+  if (delete) cl_delete_corpus(corpus = toupper(corpus), registry = registry_dir)
+  invisible( NULL )
 }

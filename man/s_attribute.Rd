@@ -6,7 +6,7 @@
 \usage{
 s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
   method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"),
-  encoding, verbose = TRUE)
+  encoding, delete = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{values}{a character vector with the values of the structural attribute}
@@ -25,8 +25,36 @@ s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
 
 \item{encoding}{encoding of the data}
 
+\item{delete}{Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.}
+
 \item{verbose}{logicalds}
 }
 \description{
 Pure R implementation to generate structural attributes.
+}
+\examples{
+\dontrun{
+library(polmineR)
+library(cwbtools)
+use("polmineR", tmp = TRUE)
+
+dt <- decode("REUTERS", s_attribute = "id")
+
+s_attribute_encode(
+  values = paste("id", dt[["id"]], sep = "_"),
+  data_dir = file.path(data_dir(), "reuters"),
+  s_attribute = "foo",
+  corpus = "REUTERS",
+  region_matrix = as.matrix(dt[, c("cpos_left", "cpos_right")]),
+  method = "R",
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  encoding = "latin1",
+  verbose = TRUE,
+  delete = TRUE
+)
+
+s_attributes("REUTERS")
+s_attributes("REUTERS", "foo")
+dt <- decode("REUTERS", s_attribute = "foo")
+}
 }

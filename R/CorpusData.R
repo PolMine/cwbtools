@@ -1,6 +1,6 @@
 #' Manage Corpus Data and Encode CWB Corpus.
 #' 
-#' #' @section Arguments:
+#' @section Arguments:
 #' \describe{
 #'   \item{\code{x}}{single filename, a character vector of filenames, or a directory with XML files}
 #'   \item{\code{body}}{xpath expression defining the body of the xml document}
@@ -18,6 +18,20 @@
 #'   \item{\code{verbose}}{logical, whether to be verbose}
 #'   \item{\code{progress}}{Logical, whether to show progress bar.}
 #' }
+#' 
+#' @section Fiels:
+#' \describe{
+#'   \item{\code{chunktable}}{A \code{data.table} with column "id" (unique values), columns with metadata,
+#'   and a column with text chunks.}
+#'   \item{\code{tokenstream}}{A \code{data.table} with a column "cpos" (corpus position), and columns
+#'   with positional attributes, such as "word", "lemma", "pos", "stem".}
+#'   \item{\code{metadata}}{A \code{data.table} with a column "id", to link data with chunks/tokenstream,
+#'   columns with document-level metadata, and a column "cpos_left" and "cpos_right", which can
+#'   be generated using method \code{$add_corpus_positions()}.}
+#'   \item{\code{sentences}}{A \code{data.table}.}
+#'   \item{\code{named_entities}}{A code \code{data.table}}
+#' }
+#' 
 #' @section Methods:
 #' \describe{
 #'   \item{\code{$new()}}{Initialize a new instance of class \code{CorpusData}.}
@@ -101,6 +115,8 @@ CorpusData <- R6::R6Class(
     chunktable = NULL, # a data.table
     tokenstream = NULL, # a data.table
     metadata = NULL, # a data.table
+    sentences = NULL, # a data.table
+    named_entities = NULL, # a data.table
     
     initialize = function(){
       self
