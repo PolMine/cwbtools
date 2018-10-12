@@ -1,3 +1,7 @@
+# v0.0.10.9002
+  * A new function `corpus_copy()` is available to create a copy a corpus.
+  * Working example for `s_attribute_encode`().
+
 # v0.0.10.9001
   * A call to `cl_delete_corpus()` from RcppCWB is added to `s_attribute_encode()`, so that 
   newly added s-attributes can be used without restarting the R session.

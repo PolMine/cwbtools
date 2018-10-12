@@ -2,31 +2,31 @@
 % Please edit documentation in R/p_attribute.R
 \name{p_attribute_encode}
 \alias{p_attribute_encode}
-\title{Encode Positional Attributes.}
+\title{Encode Positional Attribute(s).}
 \usage{
 p_attribute_encode(token_stream, p_attribute = "word", registry_dir, corpus,
   data_dir, method = c("R", "CWB"), verbose = TRUE,
   encoding = get_encoding(token_stream), compress = NULL)
 }
 \arguments{
-\item{token_stream}{a character vector with the tokens of the corpus}
+\item{token_stream}{A character vector with the tokens of the corpus.}
 
-\item{p_attribute}{the positional attribute}
+\item{p_attribute}{The positional attribute.}
 
-\item{registry_dir}{registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx})}
+\item{registry_dir}{Registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).}
 
-\item{corpus}{the CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx})}
+\item{corpus}{The CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).}
 
-\item{data_dir}{the data directory for the corpus with the binary files}
+\item{data_dir}{The data directory for the corpus with the binary files.}
 
-\item{method}{either 'CWB' or 'R'}
+\item{method}{Either 'CWB' or 'R'.}
 
-\item{verbose}{logical}
+\item{verbose}{Logical.}
 
-\item{encoding}{encoding as defined in the charset corpus property of the
-registry file for the corpus ('latin1' to 'latin9', and 'utf8')}
+\item{encoding}{Encoding as defined in the charset corpus property of the
+registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 
-\item{compress}{logical}
+\item{compress}{Logical.}
 }
 \description{
 Pure R implementation to generate positional attribute from a character vector of
@@ -42,8 +42,9 @@ attributes: First, encode a character vector (the token stream) using
 
 The implementation for the first two steps (\code{p_attribute_encode} and
 \code{p_attribute_makeall}) is a pure R implementation (so far). These two
-steps are enough to use the CQP functionality. To run \code{p_attribute_huffcode}
-and \code{p_attribute_compress_rdx}, an installation of the CWB is required.
+steps are enough to use the CQP functionality. To run
+\code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}, an
+installation of the CWB may be necessary.
 
 See the CQP Corpus Encoding Tutorial
 (\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an

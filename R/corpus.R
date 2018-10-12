@@ -135,6 +135,10 @@ corpus_packages <- function(){
   M
 }
 
+#' @param data_dir The data directory where the files of the CWB corpus live.
+#' @param registry_dir_new Target directory with for (new) registry files.
+#' @param data_dir_new Target directory for corpus files.
+#' @param progress Logical, whether to show a progress bar.
 #' @details \code{corpus_copy} will create a copy of a corpus (useful for
 #'   experimental modifications, for instance).
 #' @rdname corpus_utils
@@ -291,4 +295,54 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
   unlink(archive_dir, recursive = TRUE)
   setwd(old_wd)
   invisible( NULL )
+}
+
+
+#' @details \code{corpus_copy} will create a copy of a corpus.
+#' @export corpus_copy
+#' @rdname corpus_utils
+#' @examples
+#' registry_file_new <- file.path(tempdir(), "cwb", "registry", "reuters")
+#' if (file.exists(registry_file_new)) file.remove(registry_file_new)
+#' corpus_copy(
+#'   corpus = "REUTERS",
+#'   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
+#'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+#' )
+#' unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
+corpus_copy <- function(
+  corpus, registry_dir, data_dir = NULL,
+  registry_dir_new = file.path(tempdir(), "cwb", "registry"),
+  data_dir_new = file.path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
+  verbose = interactive(),
+  progress = TRUE
+  ){
+  
+  registry_file_old <- file.path(registry_dir, tolower(corpus))
+  if (!file.exists(registry_file_old)) stop(sprintf("Aborting - registry file %s does not exist.", registry_file_old))
+  if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
+  
+  registry_file_new <- file.path(registry_dir_new, tolower(corpus))
+  if (file.exists(registry_file_new)) stop("Aborting - registry file %s already exists in target regsity", registry_file_new)
+  
+  if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
+  if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
+
+  if (verbose) message(sprintf("... creating copy of adjusted registry file"))
+  rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  rf[["home"]] <- data_dir_new
+  registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
+  
+  if (verbose) message(sprintf("... copying data files"))
+  data_files_to_copy <- list.files(data_dir, full.names = TRUE)
+  if (progress) pb <- txtProgressBar(min = 1L, max = length(data_files_to_copy), style = 3)
+  for (i in 1L:length(data_files_to_copy)){
+    if (progress) setTxtProgressBar(pb, value = i)
+    file.copy(
+      from = data_files_to_copy[i],
+      to = file.path(data_dir_new, basename(data_files_to_copy[i]))
+      )
+  }
+  if (progress) close(pb)
+  invisible(NULL)
 }

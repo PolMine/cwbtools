@@ -32,9 +32,9 @@ pkg_add_gitattributes_file(pkg = ".")
 
 \item{verbose}{Logical, whether to be verbose.}
 
-\item{corpus}{name of the CWB corpus to insert into the package}
+\item{corpus}{Name of the CWB corpus to insert into the package.}
 
-\item{registry}{registry directory}
+\item{registry}{Registry directory.}
 
 \item{package}{The package name, may not include special chars, and no underscores ('_').}
 
@@ -50,11 +50,11 @@ pkg_add_gitattributes_file(pkg = ".")
 
 \item{license}{The license.}
 
-\item{file}{path to file with fulltext of Creative Commons license.}
+\item{file}{Path to file with fulltext of Creative Commons license.}
 }
 \description{
 Putting CWB indexed corpora into R data packages is a convenient way to ship
-and share corpora, and to keep documentation and supplementary functionality 
+and share corpora, and to keep documentation and supplementary functionality
 with the data.
 }
 \details{

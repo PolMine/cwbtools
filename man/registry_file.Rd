@@ -5,7 +5,7 @@
 \alias{registry_file_compose}
 \alias{registry_data}
 \alias{registry_file_write}
-\title{Parse and Compose Registry Files.}
+\title{Parse and create registry files.}
 \usage{
 registry_file_parse(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 
@@ -49,8 +49,16 @@ A set of functions to parse, create and write registry files.
 \details{
 \code{registry_file_parse} will return an object of class \code{registry_data}.
 
-See the appendix to the 'Corpus Encoding Tutorial' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf)
-includes an explanation of the registry file format.
+See the appendix to the 'Corpus Encoding Tutorial'
+(http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
+explanation of the registry file format.
+
+\code{registry_file_compose} will turn an
+  \code{registry_data}-object into a character vector with a registry file
+  that can be written to disk.
+
+\code{registry_file_write} will compose a registry file from
+  \code{data} and write it to disk.
 }
 \examples{
 regdata <- registry_file_parse(

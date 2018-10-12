@@ -2,18 +2,18 @@
 % Please edit documentation in R/s_attribute.R
 \name{s_attribute_encode}
 \alias{s_attribute_encode}
-\title{Encode Structural Attribute.}
+\title{Encode structural attribute.}
 \usage{
 s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
   method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   encoding, delete = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{values}{a character vector with the values of the structural attribute}
+\item{values}{A character vector with the values of the structural attribute.}
 
-\item{data_dir}{the data directory where to write the files}
+\item{data_dir}{The data directory where to write the files.}
 
-\item{s_attribute}{atomic character vector, the name of the structural attribute}
+\item{s_attribute}{Atomic character vector, the name of the structural attribute.}
 
 \item{corpus}{the CWB corpus}
 
@@ -30,31 +30,57 @@ s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
 \item{verbose}{logicalds}
 }
 \description{
-Pure R implementation to generate structural attributes.
+Encode a structural attribute to an existing CWB corpus.
+}
+\details{
+In addition to using CWB functionality, the \code{s_attribute_encode}
+function includes a pure R implementation to add or modify structural attributes
+of an existing CWB corpus.
+
+If the corpus has been loaded/used before,
+a new s-attribute may not be available unless \code{RcppCWB::cl_delete_corpus}
+has been called. Use the argument \code{delete} for calling this function.
 }
 \examples{
-\dontrun{
-library(polmineR)
-library(cwbtools)
-use("polmineR", tmp = TRUE)
+require("RcppCWB")
+registry_tmp <- file.path(tempdir(), "cwb", "registry")
+data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", "reuters")
 
-dt <- decode("REUTERS", s_attribute = "id")
+corpus_copy(
+  corpus = "REUTERS",
+  registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
+  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters"),
+  registry_dir_new = registry_tmp,
+  data_dir_new = data_dir_tmp
+)
+
+no_strucs <- cl_attribute_size(
+  corpus = "REUTERS",
+  attribute = "id", attribute_type = "s",
+  registry = registry_tmp
+)
+cpos_list <- lapply(
+  0L:(no_strucs - 1L),
+  function(i)
+    cl_struc2cpos(corpus = "REUTERS", struc = i, s_attribute = "id", registry = registry_tmp)
+)
+cpos_matrix <- do.call(rbind, cpos_list)
 
 s_attribute_encode(
-  values = paste("id", dt[["id"]], sep = "_"),
-  data_dir = file.path(data_dir(), "reuters"),
+  values = as.character(1L:nrow(cpos_matrix)),
+  data_dir = data_dir_tmp,
   s_attribute = "foo",
   corpus = "REUTERS",
-  region_matrix = as.matrix(dt[, c("cpos_left", "cpos_right")]),
+  region_matrix = cpos_matrix,
   method = "R",
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  registry_dir = registry_tmp,
   encoding = "latin1",
   verbose = TRUE,
   delete = TRUE
 )
 
-s_attributes("REUTERS")
-s_attributes("REUTERS", "foo")
-dt <- decode("REUTERS", s_attribute = "foo")
-}
+cl_struc2str("REUTERS", struc = 0L:(nrow(cpos_matrix) - 1L), s_attribute = "foo", registry = registry_tmp)
+
+unlink(registry_tmp, recursive = TRUE)
+unlink(data_dir_tmp, recursive = TRUE)
 }

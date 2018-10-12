@@ -14,20 +14,20 @@ Manage Corpus Data and Encode CWB Corpus.
 \section{Arguments}{
 
 \describe{
-  \item{\code{x}}{single filename, a character vector of filenames, or a directory with XML files}
-  \item{\code{body}}{xpath expression defining the body of the xml document}
-  \item{\code{meta}}{named character vector with xpath expressions}
-  \item{\code{mc}}{numeric/integer value, number of cores to use}
-  \item{\code{compress}}{logical, whether to compress corpus}
-  \item{\code{encoding}}{encoding/charst of the CWB corpus }
-  \item{\code{registry_dir}}{corpus registry, the directory where registry files are stored}
-  \item{\code{corpus}}{the name of the CWB corpus}
-  \item{\code{p_attributes}}{...}
-  \item{\code{s_attributes}}{columns of ... that will be encoded as structural attributes}
-  \item{\code{data_dir}}{directory where to create directory for indexed corpus files}
-  \item{\code{method}}{either "R" or "CWB"}
-  \item{\code{...}}{arguments that are passed into tokenizers::tokenize_words()}
-  \item{\code{verbose}}{logical, whether to be verbose}
+  \item{\code{x}}{A single filename, a character vector of filenames, or a directory with XML files.}
+  \item{\code{body}}{An xpath expression defining the body of the xml document.}
+  \item{\code{meta}}{A named character vector with xpath expressions.}
+  \item{\code{mc}}{A numeric/integer value, number of cores to use.}
+  \item{\code{compress}}{Logical, whether to compress corpus.}
+  \item{\code{encoding}}{Encoding/charset of the CWB corpus.}
+  \item{\code{registry_dir}}{Corpus registry, the directory where registry files are stored.}
+  \item{\code{corpus}}{The name of the CWB corpus.}
+  \item{\code{p_attributes}}{Positional attributes.}
+  \item{\code{s_attributes}}{Columns that will be encoded as structural attributes.}
+  \item{\code{data_dir}}{Directory where to create directory for indexed corpus files.}
+  \item{\code{method}}{Either "R" or "CWB".}
+  \item{\code{...}}{Arguments that are passed into \code{tokenizers::tokenize_words()}.}
+  \item{\code{verbose}}{Logical, whether to be verbose.}
   \item{\code{progress}}{Logical, whether to show progress bar.}
 }
 }
