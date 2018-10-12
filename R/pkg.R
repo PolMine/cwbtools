@@ -1,7 +1,7 @@
 #' Create and manage packages with corpus data.
 #' 
 #' Putting CWB indexed corpora into R data packages is a convenient way to ship
-#' and share corpora, and to keep documentation and supplementary functionality 
+#' and share corpora, and to keep documentation and supplementary functionality
 #' with the data.
 #' 
 #' @param pkg Path to directory of data package.
@@ -53,8 +53,8 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
   invisible(dirs_to_create)
 }
 
-#' @param corpus name of the CWB corpus to insert into the package
-#' @param registry registry directory
+#' @param corpus Name of the CWB corpus to insert into the package.
+#' @param registry Registry directory.
 #' @details \code{pkg_add_corpus} will add the corpus described in registry directory to
 #' the package defined by \code{pkg}.
 #' @rdname pkg_utils
@@ -178,7 +178,7 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
   invisible( TRUE )
 }
 
-#' @param file path to file with fulltext of Creative Commons license.
+#' @param file Path to file with fulltext of Creative Commons license.
 #' @details \code{pkg_add_creativecommons_license} will license information to
 #'   the DESCRIPTION file, and move file LICENSE to top level directory of the
 #'   package.

@@ -1,39 +1,39 @@
-#' Install and Manage corpora. 
+#' Install and manage corpora. 
 #' 
-#' Utitlity functions for making the installation of indexed CWB corpora wrapped
-#' into R data packages as easy as possible. A data package with a CWB corpus is
-#' assumed to include a directory \code{/extdata/cwb/registry} for registry
-#' files and a directory \code{/extdata/cwb/indexed_corpora} for the inexed
-#' corpus files.
+#' Utitlity functions to keep the installation of indexed CWB corpora wrapped
+#' into R data packages simple. 
 #' 
-#' @details The \code{corpus_install} function combines two steps necessary to
-#'   install a CWB corpus. First, it calls
-#'   \code{install.packages}, then it resets the path pointing to the directory
-#'   with the indexed corpus files in the registry file. The package will be
-#'   installed to the standard library directory for installing R packages
-#'   (\code{.libPaths()[1]}). Another location can be used by stating the param
-#'   'lib' explicitly (see documentation for \code{\link{install.packages}}).
+#' 
+#' @details A data package with a CWB corpus is assumed to include a directory
+#'   \code{/extdata/cwb/registry} for registry files and a directory
+#'   \code{/extdata/cwb/indexed_corpora} for the inexed corpus files. The
+#'   \code{corpus_install} function combines two steps necessary to install a
+#'   CWB corpus. First, it calls \code{install.packages}, then it resets the
+#'   path pointing to the directory with the indexed corpus files in the
+#'   registry file. The package will be installed to the standard library
+#'   directory for installing R packages (\code{.libPaths()[1]}). Another
+#'   location can be used by stating the param 'lib' explicitly (see
+#'   documentation for \code{\link{install.packages}}).
 #'   The function can also be used to install a corpus from a password protected
 #'   repository. Further parameters are handed over to install.packages, so you
 #'   might add \code{method = "wget" extra = "--user donald --password duck"}.
 #'   See examples how to check whether the directory has been set correctly.
-#' @param old name of the (old) corpus
-#' @param new name of the (new) corpus
-#' @param pkg data package name
-#' @param repo URL of the repository 
-#' @param tarball the URL or local path to a tarball with a CWB indexed corpus
-#' @param lib directory for R packages, defaults to \code{.libPaths()[1]}; the path may not 
-#' include a whitespace sign
-#' @param verbose logical, whether to be verbose
-#' @param registry_dir directory of registry
-#' @param corpus a CWB corpus
+#' @param old Name of the (old) corpus.
+#' @param new Name of the (new) corpus.
+#' @param pkg Name of the data package.
+#' @param repo URL of the repository.
+#' @param tarball The URL or local path to a tarball with a CWB indexed corpus.
+#' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
+#' @param verbose Logical, whether to be verbose.
+#' @param registry_dir Directory of registry.
+#' @param corpus A CWB corpus.
 #' @param tarfile Filename of tarball.
 #' @param ... Further parameters that will be passed into
 #'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 #'   or \code{download.file}, if \code{tarball} is specified.
 #' @param user A user name that can be specified to download a corpus from a password protected site.
 #' @param password A password that can be specified to download a corpus from a password protected site. 
-#' @name install.corpus
+#' @name corpus_install
 #' @seealso For managing registry files, see \code{\link{registry_file_parse}}
 #' for switching to a packaged corpus. 
 #' @importFrom utils available.packages contrib.url install.packages

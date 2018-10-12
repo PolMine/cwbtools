@@ -1,4 +1,4 @@
-#' Encode Positional Attributes.
+#' Encode Positional Attribute(s).
 #' 
 #' Pure R implementation to generate positional attribute from a character vector of
 #' tokens (the token stream).
@@ -12,24 +12,25 @@
 #' 
 #' The implementation for the first two steps (\code{p_attribute_encode} and
 #' \code{p_attribute_makeall}) is a pure R implementation (so far). These two
-#' steps are enough to use the CQP functionality. To run \code{p_attribute_huffcode}
-#' and \code{p_attribute_compress_rdx}, an installation of the CWB is required.
+#' steps are enough to use the CQP functionality. To run
+#' \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}, an
+#' installation of the CWB may be necessary.
 #' 
 #' See the CQP Corpus Encoding Tutorial
 #' (\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an
 #' explanation of the procedure (section 3, ``Indexing and compression without
 #' CWB/Perl'').
 #' 
-#' @param corpus the CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx})
-#' @param registry_dir registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx})
-#' @param token_stream a character vector with the tokens of the corpus
-#' @param compress logical
-#' @param verbose logical
-#' @param method either 'CWB' or 'R'
-#' @param p_attribute the positional attribute
-#' @param data_dir the data directory for the corpus with the binary files
-#' @param encoding encoding as defined in the charset corpus property of the
-#'   registry file for the corpus ('latin1' to 'latin9', and 'utf8')
+#' @param corpus The CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).
+#' @param registry_dir Registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).
+#' @param token_stream A character vector with the tokens of the corpus.
+#' @param compress Logical.
+#' @param verbose Logical.
+#' @param method Either 'CWB' or 'R'.
+#' @param p_attribute The positional attribute.
+#' @param data_dir The data directory for the corpus with the binary files.
+#' @param encoding Encoding as defined in the charset corpus property of the
+#'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
 #' @export p_attribute_encode
 #' @rdname p_attribute_encode
 #' @examples

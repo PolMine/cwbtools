@@ -1,11 +1,12 @@
-#' Parse and Compose Registry Files.
+#' Parse and create registry files.
 #' 
 #' A set of functions to parse, create and write registry files.
 #' 
 #' \code{registry_file_parse} will return an object of class \code{registry_data}.
 #' 
-#' See the appendix to the 'Corpus Encoding Tutorial' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf)
-#' includes an explanation of the registry file format. 
+#' See the appendix to the 'Corpus Encoding Tutorial'
+#' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
+#' explanation of the registry file format.
 #' @param data registry_data
 #' @param corpus a CWB corpus
 #' @param registry_dir directory with registry files
@@ -98,6 +99,9 @@ print.registry_data <- function(x, ...){
 }
 
 
+#' @details \code{registry_file_compose} will turn an
+#'   \code{registry_data}-object into a character vector with a registry file
+#'   that can be written to disk.
 #' @rdname registry_file
 #' @export registry_file_compose
 registry_file_compose <- function(x){
@@ -169,6 +173,8 @@ registry_data <- function(name, id, home, info = file.path(home, ".info"), prope
 }
 
 
+#' @details \code{registry_file_write} will compose a registry file from
+#'   \code{data} and write it to disk.
 #' @rdname registry_file
 #' @export registry_file_write
 registry_file_write <- function(data, corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), ...){

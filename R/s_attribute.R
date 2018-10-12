@@ -1,9 +1,10 @@
-#' Encode Structural Attribute.
+#' Encode structural attribute.
 #' 
 #' Pure R implementation to generate structural attributes.
-#' @param values a character vector with the values of the structural attribute
-#' @param data_dir the data directory where to write the files
-#' @param s_attribute atomic character vector, the name of the structural attribute
+#' 
+#' @param values A character vector with the values of the structural attribute.
+#' @param data_dir The data directory where to write the files.
+#' @param s_attribute Atomic character vector, the name of the structural attribute.
 #' @param region_matrix two-column matrix with corpus positions
 #' @param corpus the CWB corpus
 #' @param method either 'R' or 'CWB'
