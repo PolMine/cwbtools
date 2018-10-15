@@ -346,3 +346,41 @@ corpus_copy <- function(
   if (progress) close(pb)
   invisible(NULL)
 }
+
+
+#' @export corpus_recode
+#' @rdname corpus_utils
+corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"), verbose = TRUE){
+  
+  regdata <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  if (regdata$properties[["charset"]] == to) stop("Aborting - target encoding identical with present encoding.")
+  
+  for (s_attr in regdata$s_attributes){
+    if (verbose) message("Recoding s-attribute: ", s_attr)
+    s_attribute_recode(
+      data_dir = data_dir,
+      s_attribute = s_attr,
+      from = regdata$properties[["charset"]],
+      to = to
+      )
+  }
+  
+  for (p_attr in regdata$p_attributes){
+    if (verbose) message("Recoding p-attribute: ", p_attr)
+    p_attribute_recode(
+      data_dir = data_dir,
+      p_attribute = p_attr,
+      from = regdata$properties[["charset"]],
+      to = to
+    )
+  }
+  
+  regdata$properties[["charset"]] <- to
+  registry_file_write(
+    data = regdata,
+    corpus = corpus,
+    registry_dir = registry_dir
+    )
+  
+  invisible(NULL)
+}

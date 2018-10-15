@@ -237,3 +237,43 @@ p_attribute_encode <- function(
   }
   
 }
+
+
+#' @details \code{p_attribute_recode} will recode the values in the avs-file and change
+#' the attribute value index in the avx file. The rng-file remains unchanged. The registry
+#' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
+#' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
+#' and will reset the encoding in the registry file.
+#' @export p_attribute_recode
+#' @rdname p_attribute
+p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
+  
+  p_attr_lexicon_file <- file.path(data_dir, sprintf("%s.lexicon", p_attribute))
+  
+  lexicon <- readBin(
+    con = p_attr_lexicon_file,
+    what = character(),
+    n = file.info(p_attr_lexicon_file)$size
+  )
+  Encoding(lexicon) <- from
+  
+  lexicon_hex_list <- iconv(x = lexicon, from = toupper(from), to = toupper(to), toRaw = TRUE)
+  lexicon_hex_list <- lapply(lexicon_hex_list, function(x) c(x, as.raw(0)))
+  lexcion_hex_vec <- unlist(lexicon_hex_list)
+  
+  writeBin(object = lexcion_hex_vec, con = p_attr_lexicon_file)
+  
+  # generate and write index file
+  p_attr_lexicon_index_file <- file.path(data_dir, sprintf("%s.lexicon.idx", p_attribute))
+  
+  index_new <- cumsum(sapply(lexicon_hex_list, length))
+  index_new <- c(0L, offset_new[1L:(length(offset_new) - 1L)])
+  
+  writeBin(
+    object = index_new,
+    con = p_attr_lexicon_index_file, size = 4L,
+    endian = "big"
+    )
+  
+  invisible( NULL )
+}

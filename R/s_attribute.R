@@ -149,7 +149,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
 #' and will reset the encoding in the registry file.
 #' @export s_attribute_recode
 #' @rdname s_attribute
-s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1"), verbose = TRUE){
+s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
   
   s_attr_files <- s_attribute_files(data_dir = data_dir, s_attribute = s_attribute)
   
