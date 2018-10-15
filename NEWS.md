@@ -1,3 +1,6 @@
+# v0.0.10.9003
+  * drafted a function `s_attribute_recode()`, and supplementary `s_attributed_files()`.
+
 # v0.0.10.9002
   * A new function `corpus_copy()` is available to create a copy a corpus.
   * Working example for `s_attribute_encode`().

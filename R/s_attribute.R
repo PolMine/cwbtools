@@ -140,3 +140,71 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
   if (delete) cl_delete_corpus(corpus = toupper(corpus), registry = registry_dir)
   invisible( NULL )
 }
+
+
+#' @details \code{s_attribute_recode} will recode the values in the avs-file and change
+#' the attribute value index in the avx file. The rng-file remains unchanged. The registry
+#' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
+#' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
+#' and will reset the encoding in the registry file.
+#' @export s_attribute_recode
+#' @rdname s_attribute
+s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1"), verbose = TRUE){
+  
+  s_attr_files <- s_attribute_files(data_dir = data_dir, s_attribute = s_attribute)
+  
+  # read, recode and write values of s-attribute
+  
+  attribute_values <- readBin(
+    con = s_attr_files[["avs"]],
+    what = character(),
+    n = file.info(s_attr_files[["avs"]])$size
+    )
+  Encoding(attribute_values) <- from
+
+  values_hex_list <- iconv(x = attribute_values, from = toupper(from), to = toupper(to), toRaw = TRUE)
+  values_hex_list <- lapply(values_hex_list, function(x) c(x, as.raw(0)))
+  values_hex_vec <- unlist(values_hex_list)
+  
+  writeBin(object = values_hex_vec, con = s_attr_files[["avs"]])
+  
+  # generate and write attrib.avx
+  
+  avx_vector <- readBin(
+    con = s_attr_files[["avx"]],
+    what = integer(), size = 4L,
+    n = file.info(s_attr_files[["avx"]])$size,
+    endian = "big"
+    )
+  avx_dt <- as.data.table(matrix(data = avx_vector, ncol = 2, byrow = TRUE))
+  colnames(avx_dt) <- c("struc", "offset_old")
+  avx_dt[["offset_id"]] <- match(
+    avx_dt[["offset_old"]],
+    sort.int(unique(avx_dt[["offset_old"]]), decreasing = FALSE)
+    )
+  
+  offset_new <- cumsum(sapply(values_hex_list, length))
+  offset_new <- c(0L, offset_new[1L:(length(offset_new) - 1L)])
+  avx_dt[["offset_new"]] <- offset_new[ avx_dt[["offset_id"]] ]
+  
+
+  avx_matrix_new <- as.matrix(avx_dt[, c("struc", "offset_new")])
+  avx_vector <- as.integer(t(avx_matrix))
+  writeBin(object = avx_vector, con = s_attr_files[["avx"]], size = 4L, endian = "big")
+  
+  invisible( NULL )
+}
+
+
+#' @details \code{s_attribute_files} will return a named character vector with
+#'   the data files (extensions: "avs", "avx", "rng") in the directory indicated
+#'   by \code{data_dir} for the structural attribute \code{s_attribute}.
+#' @export s_attribute_files
+#' @rdname s_attribute
+s_attribute_files <- function(s_attribute, data_dir){
+  sapply(
+    c("avs", "avx", "rng"),
+    function(fileext) file.path(data_dir, paste(s_attribute, fileext, sep = "."))
+  )
+}
+

@@ -2,11 +2,18 @@
 % Please edit documentation in R/s_attribute.R
 \name{s_attribute_encode}
 \alias{s_attribute_encode}
+\alias{s_attribute_recode}
+\alias{s_attribute_files}
 \title{Encode structural attribute.}
 \usage{
 s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
   method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   encoding, delete = FALSE, verbose = TRUE)
+
+s_attribute_recode(data_dir, s_attribute, from = c("UTF-8", "latin1"),
+  to = c("UTF-8", "latin1"), verbose = TRUE)
+
+s_attribute_files(s_attribute, data_dir)
 }
 \arguments{
 \item{values}{A character vector with the values of the structural attribute.}
@@ -40,6 +47,16 @@ of an existing CWB corpus.
 If the corpus has been loaded/used before,
 a new s-attribute may not be available unless \code{RcppCWB::cl_delete_corpus}
 has been called. Use the argument \code{delete} for calling this function.
+
+\code{s_attribute_recode} will recode the values in the avs-file and change
+the attribute value index in the avx file. The rng-file remains unchanged. The registry
+file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
+as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
+and will reset the encoding in the registry file.
+
+\code{s_attribute_files} will return a named character vector with
+  the data files (extensions: "avs", "avx", "rng") in the directory indicated
+  by \code{data_dir} for the structural attribute \code{s_attribute}.
 }
 \examples{
 require("RcppCWB")
