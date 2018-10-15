@@ -8,6 +8,7 @@
 \alias{corpus_remove}
 \alias{corpus_as_tarball}
 \alias{corpus_copy}
+\alias{corpus_recode}
 \title{Install and manage corpora.}
 \usage{
 corpus_install(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages",
@@ -32,6 +33,9 @@ corpus_copy(corpus, registry_dir, data_dir = NULL,
   registry_dir_new = file.path(tempdir(), "cwb", "registry"),
   data_dir_new = file.path(tempdir(), "cwb", "indexed_corpora",
   tolower(corpus)), verbose = interactive(), progress = TRUE)
+
+corpus_recode(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"),
+  verbose = TRUE)
 }
 \arguments{
 \item{pkg}{Name of the data package.}

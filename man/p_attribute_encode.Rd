@@ -2,11 +2,15 @@
 % Please edit documentation in R/p_attribute.R
 \name{p_attribute_encode}
 \alias{p_attribute_encode}
+\alias{p_attribute_recode}
 \title{Encode Positional Attribute(s).}
 \usage{
 p_attribute_encode(token_stream, p_attribute = "word", registry_dir, corpus,
   data_dir, method = c("R", "CWB"), verbose = TRUE,
   encoding = get_encoding(token_stream), compress = NULL)
+
+p_attribute_recode(data_dir, p_attribute, from = c("UTF-8", "latin1"),
+  to = c("UTF-8", "latin1"))
 }
 \arguments{
 \item{token_stream}{A character vector with the tokens of the corpus.}
@@ -50,6 +54,12 @@ See the CQP Corpus Encoding Tutorial
 (\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an
 explanation of the procedure (section 3, ``Indexing and compression without
 CWB/Perl'').
+
+\code{p_attribute_recode} will recode the values in the avs-file and change
+the attribute value index in the avx file. The rng-file remains unchanged. The registry
+file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
+as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
+and will reset the encoding in the registry file.
 }
 \examples{
 library(RcppCWB)

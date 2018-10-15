@@ -244,7 +244,7 @@ p_attribute_encode <- function(
 #' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
 #' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 #' and will reset the encoding in the registry file.
-#' @export p_attribute_recode
+#' @rdname p_attribute_encode
 #' @rdname p_attribute
 p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
   

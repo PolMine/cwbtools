@@ -11,7 +11,7 @@ s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
   encoding, delete = FALSE, verbose = TRUE)
 
 s_attribute_recode(data_dir, s_attribute, from = c("UTF-8", "latin1"),
-  to = c("UTF-8", "latin1"), verbose = TRUE)
+  to = c("UTF-8", "latin1"))
 
 s_attribute_files(s_attribute, data_dir)
 }
