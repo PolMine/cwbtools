@@ -351,7 +351,63 @@ corpus_copy <- function(
 #' @param to Character string describing the target encoding of the corpus.
 #' @export corpus_recode
 #' @rdname corpus_utils
+#' @examples 
+#' corpus <- "REUTERS"
+#' pkg <- "RcppCWB"
+#' s_attr <- "places"
+#' Q <- '"oil"'
+#' 
+#' registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
+#' data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
+#' 
+#' registry_dir_tmp <- file.path(tempdir(), "cwb", "registry")
+#' registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus))
+#' data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", tolower(corpus))
+#' 
+#' if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
+#' if (!dir.exists(data_dir_tmp)){
+#'    dir.create(data_dir_tmp, recursive = TRUE)
+#' } else {
+#'   if (length(list.files(data_dir_tmp)) > 0L) file.remove(list.files(data_dir_tmp, full.names = TRUE))
+#' }
+#' 
+#' corpus_copy(
+#'   corpus = corpus,
+#'   registry_dir = registry_dir_src,
+#'   data_dir = data_dir_src,
+#'   registry_dir_new = registry_dir_tmp,
+#'   data_dir_new = data_dir_tmp
+#' )
+#' 
+#' RcppCWB::cl_charset_name(corpus = corpus, registry = registry_dir_tmp)
+#' 
+#' corpus_recode(
+#'   corpus = corpus,
+#'   registry_dir = registry_dir_tmp,
+#'   data_dir = data_dir_tmp,
+#'   to = "UTF-8"
+#' )
+#' 
+#' RcppCWB::cl_delete_corpus(corpus = corpus, registry = registry_dir_tmp)
+#' RcppCWB::cl_charset_name(corpus = corpus, registry = registry_dir_tmp)
+#' 
+#' n_strucs <- RcppCWB::cl_attribute_size(corpus = corpus, attribute = s_attr, attribute_type = "s", registry = registry_dir_tmp)
+#' strucs <- 0L:(n_strucs - 1L)
+#' struc_values <- RcppCWB::cl_struc2str(corpus = corpus, s_attribute = s_attr, struc = strucs, registry = registry_dir_tmp)
+#' speakers <- unique(struc_values)
+#' 
+#' Sys.setenv("CORPUS_REGISTRY" = registry_dir_tmp)
+#' if (RcppCWB::cqp_is_initialized()) RcppCWB::cqp_reset_registry() else RcppCWB::cqp_initialize()
+#' RcppCWB::cqp_query(corpus = corpus, query = Q)
+#' cpos <- RcppCWB::cqp_dump_subcorpus(corpus = corpus)
+#' ids <- RcppCWB::cl_cpos2id(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, cpos = cpos)
+#' str <- RcppCWB::cl_id2str(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, id = ids)
+#' unique(str)
+#' 
+#' unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
 corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"), verbose = TRUE){
+  
+  if (to == "UTF-8") to <- "UTF8"
   
   regdata <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   if (regdata$properties[["charset"]] == to) stop("Aborting - target encoding identical with present encoding.")
@@ -362,7 +418,7 @@ corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-
       data_dir = data_dir,
       s_attribute = s_attr,
       from = regdata$properties[["charset"]],
-      to = to
+      to = toupper(to)
       )
   }
   
@@ -372,11 +428,11 @@ corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-
       data_dir = data_dir,
       p_attribute = p_attr,
       from = regdata$properties[["charset"]],
-      to = to
+      to = toupper(to)
     )
   }
   
-  regdata$properties[["charset"]] <- to
+  regdata$properties[["charset"]] <- tolower(to)
   registry_file_write(
     data = regdata,
     corpus = corpus,
