@@ -348,6 +348,7 @@ corpus_copy <- function(
 }
 
 
+#' @param to Character string describing the target encoding of the corpus.
 #' @export corpus_recode
 #' @rdname corpus_utils
 corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"), verbose = TRUE){

@@ -35,6 +35,10 @@ s_attribute_files(s_attribute, data_dir)
 \item{delete}{Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.}
 
 \item{verbose}{logicalds}
+
+\item{from}{Character string describing the current encoding of the attribute.}
+
+\item{to}{Character string describing the target encoding of the attribute.}
 }
 \description{
 Encode a structural attribute to an existing CWB corpus.

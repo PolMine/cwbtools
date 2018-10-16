@@ -73,6 +73,8 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{new}{Name of the (new) corpus.}
 
 \item{tarfile}{Filename of tarball.}
+
+\item{to}{Character string describing the target encoding of the corpus.}
 }
 \description{
 Utitlity functions to keep the installation of indexed CWB corpora wrapped

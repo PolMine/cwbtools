@@ -31,6 +31,10 @@ p_attribute_recode(data_dir, p_attribute, from = c("UTF-8", "latin1"),
 registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 
 \item{compress}{Logical.}
+
+\item{from}{Character string describing the current encoding of the attribute.}
+
+\item{to}{Character string describing the target encoding of the attribute.}
 }
 \description{
 Pure R implementation to generate positional attribute from a character vector of

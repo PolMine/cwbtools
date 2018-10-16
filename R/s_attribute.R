@@ -147,6 +147,8 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
 #' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
 #' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 #' and will reset the encoding in the registry file.
+#' @param from Character string describing the current encoding of the attribute.
+#' @param to Character string describing the target encoding of the attribute.
 #' @export s_attribute_recode
 #' @rdname s_attribute
 s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
@@ -186,10 +188,9 @@ s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"
   offset_new <- cumsum(sapply(values_hex_list, length))
   offset_new <- c(0L, offset_new[1L:(length(offset_new) - 1L)])
   avx_dt[["offset_new"]] <- offset_new[ avx_dt[["offset_id"]] ]
-  
 
   avx_matrix_new <- as.matrix(avx_dt[, c("struc", "offset_new")])
-  avx_vector <- as.integer(t(avx_matrix))
+  avx_vector <- as.integer(t(avx_matrix_new))
   writeBin(object = avx_vector, con = s_attr_files[["avx"]], size = 4L, endian = "big")
   
   invisible( NULL )

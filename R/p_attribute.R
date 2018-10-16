@@ -244,6 +244,8 @@ p_attribute_encode <- function(
 #' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
 #' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 #' and will reset the encoding in the registry file.
+#' @param from Character string describing the current encoding of the attribute.
+#' @param to Character string describing the target encoding of the attribute.
 #' @rdname p_attribute_encode
 #' @rdname p_attribute
 p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
@@ -267,7 +269,7 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
   p_attr_lexicon_index_file <- file.path(data_dir, sprintf("%s.lexicon.idx", p_attribute))
   
   index_new <- cumsum(sapply(lexicon_hex_list, length))
-  index_new <- c(0L, offset_new[1L:(length(offset_new) - 1L)])
+  index_new <- c(0L, index_new[1L:(length(index_new) - 1L)])
   
   writeBin(
     object = index_new,
