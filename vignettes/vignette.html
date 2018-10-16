@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Andreas Blätte (andreas.blaette@uni-due.de)" />
+
+<meta name="date" content="2018-10-16" />
+
+<title>Introducing ‘cwbtools’</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introducing ‘cwbtools’</h1>
+<h4 class="author"><em>Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de">andreas.blaette@uni-due.de</a>)</em></h4>
+<h4 class="date"><em>2018-10-16</em></h4>
+
+
+
+<div id="using-the-cwbtools-package" class="section level1">
+<h1>Using the ‘cwbtools’ package</h1>
+<p>The ‘cwbtools’ package offers functionality to create corpora to be used with the Corpus Workbench (CWB), or tools building on the CWB from R. It makes the transition from data formats known from well-known R packages such as tm, quanteda or tidytext to an indexed corpus as smooth as possible.</p>
+<p>The core tool of the cwbtools package is the ‘CorpusData’-Class. It incorporates a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a R6 class, using the reference semantics of the R6 class system. This means, that copying the object can be omitted during different processing steps, handling memory parsimoniously when data are large.</p>
+<div id="the-cwb-directory-structure" class="section level2">
+<h2>The CWB directory structure</h2>
+<p>The CWB stores indexed corpora in individual data directories for each corpus. Corresponding so-called registry files in a ‘registry directory’, or ‘registry’ in short describe the corpora.</p>
+<p>For the following examples, we create a temporary directory structure for registry files, and indexed corpora.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">tmpdir &lt;-<span class="st"> </span><span class="kw">tempdir</span>()</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="cf">if</span> (.Platform<span class="op">$</span>OS.type <span class="op">==</span><span class="st"> &quot;windows&quot;</span>) tmpdir &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(tmpdir, <span class="dt">winslash =</span> <span class="st">&quot;/&quot;</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">registry_tmp &lt;-<span class="st"> </span><span class="kw">file.path</span>(tmpdir, <span class="st">&quot;registry&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">data_dir_tmp &lt;-<span class="st"> </span><span class="kw">file.path</span>(tmpdir, <span class="st">&quot;data_dir&quot;</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(registry_tmp)){</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">dir.create</span> (registry_tmp)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="kw">file.remove</span>(<span class="kw">list.files</span>(registry_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(data_dir_tmp)) <span class="kw">dir.create</span>(data_dir_tmp)</a></code></pre></div>
+<p>Trying to keep installation requirements at minimum, we only rely on cwbtools, and the data.table package. Note that the data.table package is used because of its efficiency to handle large data. In addition to speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(cwbtools)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw">cwb_is_installed</span>()) <span class="kw">cwb_install</span>()</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(data.table)</a></code></pre></div>
+</div>
+<div id="scenario-1-from-xml-to-cwb---indexing-the-un-general-assembly-corpus" class="section level2">
+<h2>Scenario 1: From XML to CWB - Indexing the UN General Assembly Corpus</h2>
+<p>The first example is a small sample corpus of debates in the UN General Assembly. The package includes some XML files (TEI standardization).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">teidir &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;cwbtools&quot;</span>, <span class="st">&quot;xml&quot;</span>, <span class="st">&quot;UNGA&quot;</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">teifiles &lt;-<span class="st"> </span><span class="kw">list.files</span>(teidir, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">list.files</span>(teidir)</a></code></pre></div>
+<pre><code>## [1] &quot;N9986497.xml&quot; &quot;N9986515.xml&quot; &quot;N9986521.xml&quot; &quot;N9986551.xml&quot;
+## [5] &quot;N9986557.xml&quot; &quot;N9986569.xml&quot; &quot;N9986587.xml&quot;</code></pre>
+<p>We create a CorpusData object that will serve as a processor for these files and storage facility for the corpus data. The <code>chunktable</code>, <code>tokenstream</code> and <code>metadata</code>. When we inspect the new object at the outset, we will see that these fields are not filled initially.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">unga_data_dir_tmp &lt;-<span class="st"> </span><span class="kw">file.path</span>(data_dir_tmp, <span class="st">&quot;unga&quot;</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">unga_registry_dir &lt;-<span class="st"> </span><span class="kw">file.path</span>(registry_tmp, <span class="st">&quot;unga&quot;</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(unga_data_dir_tmp)) <span class="kw">dir.create</span>(unga_data_dir_tmp)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">file.remove</span>(<span class="kw">list.files</span>(unga_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>## logical(0)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(unga_registry_dir)) <span class="kw">file.remove</span>(unga_registry_dir)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">UNGA &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">UNGA</a></code></pre></div>
+<pre><code>## chunktable: NULL
+## tokenstream: NULL
+## metadata: NULL</code></pre>
+<p>To turn the XML files into the corpusdata object, we use the method <code>$import_xml</code>. To be able to add metadata from the header to the metadata table, it requires a named vector of XPath expressions.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">metadata &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">lp =</span> <span class="st">&quot;//legislativePeriod&quot;</span>, <span class="dt">session =</span> <span class="st">&quot;//titleStmt/sessionNo&quot;</span>,</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">date =</span> <span class="st">&quot;//publicationStmt/date&quot;</span>, <span class="dt">url =</span> <span class="st">&quot;//sourceDesc/url&quot;</span>,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">src =</span> <span class="st">&quot;//sourceDesc/filetype&quot;</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">UNGA<span class="op">$</span><span class="kw">import_xml</span>(<span class="dt">filenames =</span> teifiles, <span class="dt">meta =</span> metadata)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">UNGA</a></code></pre></div>
+<pre><code>## chunktable: 2 columns / 1148 rows
+## tokenstream: NULL
+## metadata: 20 columns / 1148 rows</code></pre>
+<p>The input XML files are TEI files. Speaker information is included in the attributes of a tag ‘sp’. To maintain the original content, there is a element ‘speaker’ in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we need to consider it as noise to be removed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">to_keep &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">is.na</span>(UNGA<span class="op">$</span>metadata[[<span class="st">&quot;speaker&quot;</span>]]))</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">UNGA<span class="op">$</span>chunktable &lt;-<span class="st"> </span>UNGA<span class="op">$</span>chunktable[to_keep]</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">UNGA<span class="op">$</span>metadata &lt;-<span class="st"> </span>UNGA<span class="op">$</span>metadata[to_keep][, speaker <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</a></code></pre></div>
+<p>Let us assign nicer column names …</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">setnames</span>(UNGA<span class="op">$</span>metadata, <span class="dt">old =</span> <span class="kw">c</span>(<span class="st">&quot;sp_who&quot;</span>, <span class="st">&quot;sp_state&quot;</span>, <span class="st">&quot;sp_role&quot;</span>), <span class="dt">new =</span> <span class="kw">c</span>(<span class="st">&quot;who&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;role&quot;</span>))</a></code></pre></div>
+<p>The CWB requires a tokenstream as input to generate positional attributes. Standard NLP tools will offer lemmatization, part-of-speech-recognition and more at this stage. To keep things simple, we perform a very simple tokenization using the tokenizers pacakge.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">UNGA<span class="op">$</span><span class="kw">tokenize</span>(<span class="dt">lowercase =</span> <span class="ot">FALSE</span>, <span class="dt">strip_punct =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |                                                                 |   1%
+  |                                                                       
+  |=                                                                |   1%
+  |                                                                       
+  |=                                                                |   2%
+  |                                                                       
+  |==                                                               |   2%
+  |                                                                       
+  |==                                                               |   3%
+  |                                                                       
+  |==                                                               |   4%
+  |                                                                       
+  |===                                                              |   4%
+  |                                                                       
+  |===                                                              |   5%
+  |                                                                       
+  |====                                                             |   5%
+  |                                                                       
+  |====                                                             |   6%
+  |                                                                       
+  |====                                                             |   7%
+  |                                                                       
+  |=====                                                            |   7%
+  |                                                                       
+  |=====                                                            |   8%
+  |                                                                       
+  |======                                                           |   9%
+  |                                                                       
+  |======                                                           |  10%
+  |                                                                       
+  |=======                                                          |  10%
+  |                                                                       
+  |=======                                                          |  11%
+  |                                                                       
+  |========                                                         |  12%
+  |                                                                       
+  |========                                                         |  13%
+  |                                                                       
+  |=========                                                        |  13%
+  |                                                                       
+  |=========                                                        |  14%
+  |                                                                       
+  |=========                                                        |  15%
+  |                                                                       
+  |==========                                                       |  15%
+  |                                                                       
+  |==========                                                       |  16%
+  |                                                                       
+  |===========                                                      |  16%
+  |                                                                       
+  |===========                                                      |  17%
+  |                                                                       
+  |===========                                                      |  18%
+  |                                                                       
+  |============                                                     |  18%
+  |                                                                       
+  |============                                                     |  19%
+  |                                                                       
+  |=============                                                    |  19%
+  |                                                                       
+  |=============                                                    |  20%
+  |                                                                       
+  |=============                                                    |  21%
+  |                                                                       
+  |==============                                                   |  21%
+  |                                                                       
+  |==============                                                   |  22%
+  |                                                                       
+  |===============                                                  |  22%
+  |                                                                       
+  |===============                                                  |  23%
+  |                                                                       
+  |===============                                                  |  24%
+  |                                                                       
+  |================                                                 |  24%
+  |                                                                       
+  |================                                                 |  25%
+  |                                                                       
+  |=================                                                |  25%
+  |                                                                       
+  |=================                                                |  26%
+  |                                                                       
+  |=================                                                |  27%
+  |                                                                       
+  |==================                                               |  27%
+  |                                                                       
+  |==================                                               |  28%
+  |                                                                       
+  |===================                                              |  29%
+  |                                                                       
+  |===================                                              |  30%
+  |                                                                       
+  |====================                                             |  30%
+  |                                                                       
+  |====================                                             |  31%
+  |                                                                       
+  |====================                                             |  32%
+  |                                                                       
+  |=====================                                            |  32%
+  |                                                                       
+  |=====================                                            |  33%
+  |                                                                       
+  |======================                                           |  33%
+  |                                                                       
+  |======================                                           |  34%
+  |                                                                       
+  |======================                                           |  35%
+  |                                                                       
+  |=======================                                          |  35%
+  |                                                                       
+  |=======================                                          |  36%
+  |                                                                       
+  |========================                                         |  36%
+  |                                                                       
+  |========================                                         |  37%
+  |                                                                       
+  |========================                                         |  38%
+  |                                                                       
+  |=========================                                        |  38%
+  |                                                                       
+  |=========================                                        |  39%
+  |                                                                       
+  |==========================                                       |  39%
+  |                                                                       
+  |==========================                                       |  40%
+  |                                                                       
+  |==========================                                       |  41%
+  |                                                                       
+  |===========================                                      |  41%
+  |                                                                       
+  |===========================                                      |  42%
+  |                                                                       
+  |============================                                     |  42%
+  |                                                                       
+  |============================                                     |  43%
+  |                                                                       
+  |============================                                     |  44%
+  |                                                                       
+  |=============================                                    |  44%
+  |                                                                       
+  |=============================                                    |  45%
+  |                                                                       
+  |==============================                                   |  45%
+  |                                                                       
+  |==============================                                   |  46%
+  |                                                                       
+  |==============================                                   |  47%
+  |                                                                       
+  |===============================                                  |  47%
+  |                                                                       
+  |===============================                                  |  48%
+  |                                                                       
+  |================================                                 |  48%
+  |                                                                       
+  |================================                                 |  49%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================                                |  50%
+  |                                                                       
+  |=================================                                |  51%
+  |                                                                       
+  |=================================                                |  52%
+  |                                                                       
+  |==================================                               |  52%
+  |                                                                       
+  |==================================                               |  53%
+  |                                                                       
+  |===================================                              |  53%
+  |                                                                       
+  |===================================                              |  54%
+  |                                                                       
+  |===================================                              |  55%
+  |                                                                       
+  |====================================                             |  55%
+  |                                                                       
+  |====================================                             |  56%
+  |                                                                       
+  |=====================================                            |  56%
+  |                                                                       
+  |=====================================                            |  57%
+  |                                                                       
+  |=====================================                            |  58%
+  |                                                                       
+  |======================================                           |  58%
+  |                                                                       
+  |======================================                           |  59%
+  |                                                                       
+  |=======================================                          |  59%
+  |                                                                       
+  |=======================================                          |  60%
+  |                                                                       
+  |=======================================                          |  61%
+  |                                                                       
+  |========================================                         |  61%
+  |                                                                       
+  |========================================                         |  62%
+  |                                                                       
+  |=========================================                        |  62%
+  |                                                                       
+  |=========================================                        |  63%
+  |                                                                       
+  |=========================================                        |  64%
+  |                                                                       
+  |==========================================                       |  64%
+  |                                                                       
+  |==========================================                       |  65%
+  |                                                                       
+  |===========================================                      |  65%
+  |                                                                       
+  |===========================================                      |  66%
+  |                                                                       
+  |===========================================                      |  67%
+  |                                                                       
+  |============================================                     |  67%
+  |                                                                       
+  |============================================                     |  68%
+  |                                                                       
+  |=============================================                    |  68%
+  |                                                                       
+  |=============================================                    |  69%
+  |                                                                       
+  |=============================================                    |  70%
+  |                                                                       
+  |==============================================                   |  70%
+  |                                                                       
+  |==============================================                   |  71%
+  |                                                                       
+  |===============================================                  |  72%
+  |                                                                       
+  |===============================================                  |  73%
+  |                                                                       
+  |================================================                 |  73%
+  |                                                                       
+  |================================================                 |  74%
+  |                                                                       
+  |================================================                 |  75%
+  |                                                                       
+  |=================================================                |  75%
+  |                                                                       
+  |=================================================                |  76%
+  |                                                                       
+  |==================================================               |  76%
+  |                                                                       
+  |==================================================               |  77%
+  |                                                                       
+  |==================================================               |  78%
+  |                                                                       
+  |===================================================              |  78%
+  |                                                                       
+  |===================================================              |  79%
+  |                                                                       
+  |====================================================             |  79%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |====================================================             |  81%
+  |                                                                       
+  |=====================================================            |  81%
+  |                                                                       
+  |=====================================================            |  82%
+  |                                                                       
+  |======================================================           |  82%
+  |                                                                       
+  |======================================================           |  83%
+  |                                                                       
+  |======================================================           |  84%
+  |                                                                       
+  |=======================================================          |  84%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |========================================================         |  85%
+  |                                                                       
+  |========================================================         |  86%
+  |                                                                       
+  |========================================================         |  87%
+  |                                                                       
+  |=========================================================        |  87%
+  |                                                                       
+  |=========================================================        |  88%
+  |                                                                       
+  |==========================================================       |  89%
+  |                                                                       
+  |==========================================================       |  90%
+  |                                                                       
+  |===========================================================      |  90%
+  |                                                                       
+  |===========================================================      |  91%
+  |                                                                       
+  |============================================================     |  92%
+  |                                                                       
+  |============================================================     |  93%
+  |                                                                       
+  |=============================================================    |  93%
+  |                                                                       
+  |=============================================================    |  94%
+  |                                                                       
+  |=============================================================    |  95%
+  |                                                                       
+  |==============================================================   |  95%
+  |                                                                       
+  |==============================================================   |  96%
+  |                                                                       
+  |===============================================================  |  96%
+  |                                                                       
+  |===============================================================  |  97%
+  |                                                                       
+  |===============================================================  |  98%
+  |                                                                       
+  |================================================================ |  98%
+  |                                                                       
+  |================================================================ |  99%
+  |                                                                       
+  |=================================================================|  99%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre><code>## ... adding corpus positions to table 'metadata'</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">UNGA</a></code></pre></div>
+<pre><code>## chunktable: 2 columns / 1009 rows
+## tokenstream: 3 columns / 127082 rows
+## metadata: 21 columns / 1009 rows</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">UNGA<span class="op">$</span>tokenstream</a></code></pre></div>
+<pre><code>##           id   word   cpos
+##      1:    2      I      0
+##      2:    2 should      1
+##      3:    2   like      2
+##      4:    2     to      3
+##      5:    2 inform      4
+##     ---                   
+## 127078: 1148   rose 127077
+## 127079: 1148     at 127078
+## 127080: 1148      1 127079
+## 127081: 1148    p.m 127080
+## 127082: 1148      . 127081</code></pre>
+<p>The corpusdata object now includes a table with the token stream. We are ready to import the corpus into the CWB. We use the corpusdata_encode function for this purpose. It is a wrapper on the <code>p_attribute_encode</code> function (to encode the token stream), and the <code>s_attribute_encode</code> function (to encode the structural attributes / the metadata).</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">s_attrs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;who&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;role&quot;</span>, <span class="st">&quot;lp&quot;</span>, <span class="st">&quot;session&quot;</span>, <span class="st">&quot;date&quot;</span>)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">UNGA<span class="op">$</span><span class="kw">encode</span>(</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">  <span class="dt">registry_dir =</span> registry_tmp, <span class="dt">data_dir =</span> unga_data_dir_tmp,</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">  <span class="dt">corpus =</span> <span class="st">&quot;UNGA&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;utf8&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;R&quot;</span>,</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">  <span class="dt">p_attributes =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">s_attributes =</span> <span class="kw">character</span>(),</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6">  <span class="dt">compress =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">  )</a></code></pre></div>
+<pre><code>## Creating new corpus 'UNGA'</code></pre>
+<pre><code>## ... encoding p-attribute 'word'</code></pre>
+<pre><code>## ... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</code></pre>
+<pre><code>## ... creating indices (in memory)</code></pre>
+<pre><code>## ... writing file: word.corpus</code></pre>
+<pre><code>## ... writing file: word.lexicon</code></pre>
+<pre><code>## ... writing file: word.lexicon.idx</code></pre>
+<pre><code>## ... creating data for new registry file</code></pre>
+<pre><code>## ... writing registry file</code></pre>
+<pre><code>## ... calling cwb-makeall</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rdx</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rev</code></pre>
+<p>Note that we set the logical parameter compress as TRUE. This performs a so-called huffcode compression, which will reduce corpus size and speed up queries. For big corpora, the compression step can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be delayed. The indexed corpus has now been prepared.</p>
+<p>The corpus is now ready to be used with CQP (or CQPweb), or a more advanced and convenient environment for corpus analysis, such as ‘polmineR’. To gain a quick insight whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the RcppCWB package.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">library</span>(RcppCWB)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">id_peace &lt;-<span class="st"> </span><span class="kw">cl_str2id</span>(<span class="dt">corpus =</span> <span class="st">&quot;UNGA&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">str =</span> <span class="st">&quot;peace&quot;</span>, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">cpos_peace &lt;-<span class="st"> </span><span class="kw">cl_id2cpos</span>(<span class="dt">corpus =</span> <span class="st">&quot;UNGA&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">id =</span> id_peace, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">tab &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6">  <span class="dt">i =</span> <span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(cpos_peace), <span class="cf">function</span>(x) <span class="kw">rep</span>(x, <span class="dt">times =</span> <span class="dv">11</span>))),</a>
+<a class="sourceLine" id="cb33-7" data-line-number="7">  <span class="dt">cpos =</span> <span class="kw">unlist</span>(<span class="kw">lapply</span>(cpos_peace, <span class="cf">function</span>(x) (x <span class="op">-</span><span class="st"> </span><span class="dv">5</span>)<span class="op">:</span>(x <span class="op">+</span><span class="st"> </span><span class="dv">5</span>)))</a>
+<a class="sourceLine" id="cb33-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9">tab[[<span class="st">&quot;id&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">cl_cpos2id</span>(<span class="dt">corpus =</span> <span class="st">&quot;UNGA&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">cpos =</span> tab[[<span class="st">&quot;cpos&quot;</span>]], <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb33-10" data-line-number="10">tab[[<span class="st">&quot;str&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">cl_id2str</span>(<span class="dt">corpus =</span> <span class="st">&quot;UNGA&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">id =</span> tab[[<span class="st">&quot;id&quot;</span>]], <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb33-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb33-12" data-line-number="12">peace_context &lt;-<span class="st"> </span><span class="kw">split</span>(tab[[<span class="st">&quot;str&quot;</span>]], <span class="kw">as.factor</span>(tab[[<span class="st">&quot;i&quot;</span>]]))</a>
+<a class="sourceLine" id="cb33-13" data-line-number="13">peace_context &lt;-<span class="st"> </span><span class="kw">unname</span>(<span class="kw">sapply</span>(peace_context, <span class="cf">function</span>(x) <span class="kw">paste</span>(x, <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)))</a>
+<a class="sourceLine" id="cb33-14" data-line-number="14"><span class="kw">head</span>(peace_context)</a></code></pre></div>
+<pre><code>## [1] &quot;the breast of a tranquil peace for all of the world&quot;                         
+## [2] &quot;earth in the rapture of peace , justice and safety .&quot;                        
+## [3] &quot;community are committed to achieving peace , security and prosperity for&quot;    
+## [4] &quot;components of post - conflict peace - building , given the&quot;                  
+## [5] &quot;removal and the consolidation of peace and mutual trust between neighbouring&quot;
+## [6] &quot;and the promotion of durable peace and sustainable development in Africa&quot;</code></pre>
+<div id="scenario-2-tidytext-to-cwb" class="section level3">
+<h3>Scenario 2: Tidytext to CWB</h3>
+<p>In a second scenario, we create a corpus of Jane Austen’s books (included in the package janeaustenr).</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">Austen &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">austen_data_dir_tmp &lt;-<span class="st"> </span><span class="kw">file.path</span>(data_dir_tmp, <span class="st">&quot;austen&quot;</span>)</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(austen_data_dir_tmp)) <span class="kw">dir.create</span>(austen_data_dir_tmp)</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="kw">file.remove</span>(<span class="kw">list.files</span>(austen_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>## logical(0)</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">books &lt;-<span class="st"> </span>janeaustenr<span class="op">::</span><span class="kw">austen_books</span>()</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">tbl &lt;-<span class="st"> </span>tidytext<span class="op">::</span><span class="kw">unnest_tokens</span>(books, word, text, <span class="dt">to_lower =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">Austen<span class="op">$</span>tokenstream &lt;-<span class="st"> </span><span class="kw">as.data.table</span>(tbl)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">Austen<span class="op">$</span>tokenstream[, stem <span class="op">:</span><span class="er">=</span><span class="st"> </span>SnowballC<span class="op">::</span><span class="kw">wordStem</span>(tbl[[<span class="st">&quot;word&quot;</span>]], <span class="dt">language =</span> <span class="st">&quot;english&quot;</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">Austen<span class="op">$</span>tokenstream[, cpos <span class="op">:</span><span class="er">=</span><span class="st"> </span>0L<span class="op">:</span>(<span class="kw">nrow</span>(tbl) <span class="op">-</span><span class="st"> </span>1L)]</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">cpos_max_min &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">list</span>(<span class="dt">cpos_left =</span> <span class="kw">min</span>(x[[<span class="st">&quot;cpos&quot;</span>]]), <span class="dt">cpos_right =</span> <span class="kw">max</span>(x[[<span class="st">&quot;cpos&quot;</span>]]))</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">Austen<span class="op">$</span>metadata &lt;-<span class="st"> </span>Austen<span class="op">$</span>tokenstream[, <span class="kw">cpos_max_min</span>(.SD), by =<span class="st"> </span>book]</a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">Austen<span class="op">$</span>metadata[, book <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.character</span>(book)]</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="kw">setcolorder</span>(Austen<span class="op">$</span>metadata, <span class="kw">c</span>(<span class="st">&quot;cpos_left&quot;</span>, <span class="st">&quot;cpos_right&quot;</span>, <span class="st">&quot;book&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">Austen<span class="op">$</span>tokenstream[, book <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">setcolorder</span>(Austen<span class="op">$</span>tokenstream, <span class="kw">c</span>(<span class="st">&quot;cpos&quot;</span>, <span class="st">&quot;word&quot;</span>, <span class="st">&quot;stem&quot;</span>))</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">Austen<span class="op">$</span>tokenstream</a></code></pre></div>
+<pre><code>##           cpos        word        stem
+##      1:      0       SENSE       SENSE
+##      2:      1         AND         AND
+##      3:      2 SENSIBILITY SENSIBILITi
+##      4:      3          by          by
+##      5:      4        Jane        Jane
+##     ---                               
+## 725051: 725050          in          in
+## 725052: 725051         its          it
+## 725053: 725052    national      nation
+## 725054: 725053  importance      import
+## 725055: 725054       Finis        Fini</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">Austen<span class="op">$</span><span class="kw">encode</span>(</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">   <span class="dt">corpus =</span> <span class="st">&quot;AUSTEN&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;utf8&quot;</span>,</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">   <span class="dt">p_attributes =</span> <span class="kw">c</span>(<span class="st">&quot;word&quot;</span>, <span class="st">&quot;stem&quot;</span>), <span class="dt">s_attributes =</span> <span class="st">&quot;book&quot;</span>,</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">   <span class="dt">registry_dir =</span> registry_tmp, <span class="dt">data_dir =</span> austen_data_dir_tmp,</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">   <span class="dt">method =</span> <span class="st">&quot;R&quot;</span>, <span class="dt">compress =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6">)</a></code></pre></div>
+<pre><code>## Creating new corpus 'AUSTEN'</code></pre>
+<pre><code>## ... encoding p-attribute 'word'</code></pre>
+<pre><code>## ... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</code></pre>
+<pre><code>## ... creating indices (in memory)</code></pre>
+<pre><code>## ... writing file: word.corpus</code></pre>
+<pre><code>## ... writing file: word.lexicon</code></pre>
+<pre><code>## ... writing file: word.lexicon.idx</code></pre>
+<pre><code>## ... creating data for new registry file</code></pre>
+<pre><code>## ... writing registry file</code></pre>
+<pre><code>## ... calling cwb-makeall</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rdx</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rev</code></pre>
+<pre><code>## ... encoding p-attribute 'stem'</code></pre>
+<pre><code>## ... encoding s-attribute 'book'</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">corpus &lt;-<span class="st"> &quot;AUSTEN&quot;</span></a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">token &lt;-<span class="st"> &quot;pride&quot;</span></a>
+<a class="sourceLine" id="cb58-3" data-line-number="3">p_attr &lt;-<span class="st"> &quot;stem&quot;</span></a>
+<a class="sourceLine" id="cb58-4" data-line-number="4">id &lt;-<span class="st"> </span><span class="kw">cl_str2id</span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">str =</span> token, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb58-5" data-line-number="5">cpos &lt;-<span class="st"> </span><span class="kw">cl_id2cpos</span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb58-6" data-line-number="6">count &lt;-<span class="st"> </span><span class="kw">length</span>(cpos)</a>
+<a class="sourceLine" id="cb58-7" data-line-number="7">count</a></code></pre></div>
+<pre><code>## [1] 115</code></pre>
+</div>
+<div id="scenairo-3-from-tm-package-vcorpus-to-cwb" class="section level3">
+<h3>Scenairo 3: From tm-package VCorpus to CWB</h3>
+<p>Third, we will make the transition from a VCorpus (tm package) to a CWB indexed corpus. We use the Reuters corpus that is included as sample data in the tm package.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw">library</span>(tm)</a></code></pre></div>
+<pre><code>## Loading required package: NLP</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">reut21578 &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;texts&quot;</span>, <span class="st">&quot;crude&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;tm&quot;</span>)</a>
+<a class="sourceLine" id="cb62-2" data-line-number="2">reuters.tm &lt;-<span class="st"> </span><span class="kw">VCorpus</span>(<span class="kw">DirSource</span>(reut21578), <span class="kw">list</span>(<span class="dt">reader =</span> readReut21578XMLasPlain))</a>
+<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="kw">class</span>(reuters.tm)</a></code></pre></div>
+<pre><code>## [1] &quot;VCorpus&quot; &quot;Corpus&quot;</code></pre>
+<p>The easiest way to proceed to the data format we will require for the CorpusData class is to coerce the VCorpus to a tibble, using respective functionality of the tidytext package.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">library</span>(tidytext)</a>
+<a class="sourceLine" id="cb64-2" data-line-number="2">reuters.tbl &lt;-<span class="st"> </span><span class="kw">tidy</span>(reuters.tm)</a>
+<a class="sourceLine" id="cb64-3" data-line-number="3">reuters.tbl</a></code></pre></div>
+<pre><code>## # A tibble: 20 x 17
+##    author  datetimestamp       description heading   id    language origin
+##    &lt;chr&gt;   &lt;dttm&gt;              &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; 
+##  1 &lt;NA&gt;    1987-02-26 18:00:56 &quot;&quot;          DIAMOND … 127   en       Reute…
+##  2 BY TED… 1987-02-26 18:34:11 &quot;&quot;          OPEC MAY… 144   en       Reute…
+##  3 &lt;NA&gt;    1987-02-26 19:18:00 &quot;&quot;          TEXACO C… 191   en       Reute…
+##  4 &lt;NA&gt;    1987-02-26 19:21:01 &quot;&quot;          MARATHON… 194   en       Reute…
+##  5 &lt;NA&gt;    1987-02-26 20:00:57 &quot;&quot;          HOUSTON … 211   en       Reute…
+##  6 &lt;NA&gt;    NA                  &quot;&quot;          KUWAIT S… 236   en       Reute…
+##  7 By Jer… NA                  &quot;&quot;          INDONESI… 237   en       Reute…
+##  8 &lt;NA&gt;    NA                  &quot;&quot;          SAUDI RI… 242   en       Reute…
+##  9 &lt;NA&gt;    NA                  &quot;&quot;          QATAR UN… 246   en       Reute…
+## 10 &lt;NA&gt;    NA                  &quot;&quot;          SAUDI AR… 248   en       Reute…
+## 11 &lt;NA&gt;    NA                  &quot;&quot;          SAUDI FE… 273   en       Reute…
+## 12 &lt;NA&gt;    NA                  &quot;&quot;          GULF ARA… 349   en       Reute…
+## 13 &lt;NA&gt;    NA                  &quot;&quot;          SAUDI AR… 352   en       Reute…
+## 14 &lt;NA&gt;    NA                  &quot;&quot;          KUWAIT M… 353   en       Reute…
+## 15 &lt;NA&gt;    NA                  &quot;&quot;          PHILADEL… 368   en       Reute…
+## 16 &lt;NA&gt;    NA                  &quot;&quot;          STUDY GR… 489   en       Reute…
+## 17 &lt;NA&gt;    NA                  &quot;&quot;          STUDY GR… 502   en       Reute…
+## 18 &lt;NA&gt;    NA                  &quot;&quot;          UNOCAL &lt;… 543   en       Reute…
+## 19 By BER… NA                  &quot;&quot;          NYMEX WI… 704   en       Reute…
+## 20 &lt;NA&gt;    NA                  &quot;&quot;          ARGENTIN… 708   en       Reute…
+## # ... with 10 more variables: topics &lt;chr&gt;, lewissplit &lt;chr&gt;,
+## #   cgisplit &lt;chr&gt;, oldid &lt;chr&gt;, topics_cat &lt;list&gt;, places &lt;list&gt;,
+## #   people &lt;chr&gt;, orgs &lt;chr&gt;, exchanges &lt;chr&gt;, text &lt;chr&gt;</code></pre>
+<p>Columns we want to encode are still character vectors. We turn the columns with the topic categorizations and the places into a proper character vector.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1">reuters.tbl[[<span class="st">&quot;topics_cat&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">sapply</span>(</a>
+<a class="sourceLine" id="cb66-2" data-line-number="2">  reuters.tbl[[<span class="st">&quot;topics_cat&quot;</span>]],</a>
+<a class="sourceLine" id="cb66-3" data-line-number="3">  <span class="cf">function</span>(x) <span class="kw">paste</span>(x, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>)</a>
+<a class="sourceLine" id="cb66-4" data-line-number="4">  )</a>
+<a class="sourceLine" id="cb66-5" data-line-number="5">reuters.tbl[[<span class="st">&quot;places&quot;</span>]] &lt;-<span class="st"> </span><span class="kw">sapply</span>(</a>
+<a class="sourceLine" id="cb66-6" data-line-number="6">  reuters.tbl[[<span class="st">&quot;places&quot;</span>]],</a>
+<a class="sourceLine" id="cb66-7" data-line-number="7">  <span class="cf">function</span>(x) <span class="kw">paste</span>(x, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>)</a>
+<a class="sourceLine" id="cb66-8" data-line-number="8">  )</a></code></pre></div>
+<p>This is already the input we need. We instantiate a CorpusData object end make sure that a new data directory for the REUTERS corpus exists (and is empty) …</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">Reuters &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb67-2" data-line-number="2">reuters_data_dir_tmp &lt;-<span class="st"> </span><span class="kw">file.path</span>(data_dir_tmp, <span class="st">&quot;reuters&quot;</span>)</a>
+<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(reuters_data_dir_tmp)) <span class="kw">dir.create</span>(reuters_data_dir_tmp)</a>
+<a class="sourceLine" id="cb67-4" data-line-number="4"><span class="kw">file.remove</span>(<span class="kw">list.files</span>(reuters_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>## logical(0)</code></pre>
+<p>We assign the chunktable and the metadata, coerced to data.tables, to the object …</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1">Reuters<span class="op">$</span>chunktable &lt;-<span class="st"> </span><span class="kw">data.table</span>(reuters.tbl[, <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;text&quot;</span>)])</a>
+<a class="sourceLine" id="cb69-2" data-line-number="2">Reuters<span class="op">$</span>metadata &lt;-<span class="st"> </span><span class="kw">data.table</span>(reuters.tbl[,<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;topics_cat&quot;</span>, <span class="st">&quot;places&quot;</span>)])</a>
+<a class="sourceLine" id="cb69-3" data-line-number="3">Reuters</a></code></pre></div>
+<pre><code>## chunktable: 2 columns / 20 rows
+## tokenstream: NULL
+## metadata: 3 columns / 20 rows</code></pre>
+<p>… we tokenize the text to gain the token stream table …</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1">Reuters<span class="op">$</span><span class="kw">tokenize</span>()</a></code></pre></div>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |===                                                              |   5%
+  |                                                                       
+  |======                                                           |  10%
+  |                                                                       
+  |==========                                                       |  15%
+  |                                                                       
+  |=============                                                    |  20%
+  |                                                                       
+  |================                                                 |  25%
+  |                                                                       
+  |====================                                             |  30%
+  |                                                                       
+  |=======================                                          |  35%
+  |                                                                       
+  |==========================                                       |  40%
+  |                                                                       
+  |=============================                                    |  45%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |====================================                             |  55%
+  |                                                                       
+  |=======================================                          |  60%
+  |                                                                       
+  |==========================================                       |  65%
+  |                                                                       
+  |==============================================                   |  70%
+  |                                                                       
+  |=================================================                |  75%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |==========================================================       |  90%
+  |                                                                       
+  |==============================================================   |  95%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre><code>## ... adding corpus positions to table 'metadata'</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1">Reuters</a></code></pre></div>
+<pre><code>## chunktable: 2 columns / 20 rows
+## tokenstream: 3 columns / 4050 rows
+## metadata: 5 columns / 20 rows</code></pre>
+<p>… and we are ready to encode the corpus.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1">Reuters<span class="op">$</span><span class="kw">encode</span>(</a>
+<a class="sourceLine" id="cb76-2" data-line-number="2">   <span class="dt">corpus =</span> <span class="st">&quot;REUTERS&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;utf8&quot;</span>,</a>
+<a class="sourceLine" id="cb76-3" data-line-number="3">   <span class="dt">p_attributes =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">s_attributes =</span> <span class="kw">c</span>(<span class="st">&quot;topics_cat&quot;</span>, <span class="st">&quot;places&quot;</span>),</a>
+<a class="sourceLine" id="cb76-4" data-line-number="4">   <span class="dt">registry_dir =</span> registry_tmp,</a>
+<a class="sourceLine" id="cb76-5" data-line-number="5">   <span class="dt">data_dir =</span> data_dir_tmp,</a>
+<a class="sourceLine" id="cb76-6" data-line-number="6">   <span class="dt">method =</span> <span class="st">&quot;R&quot;</span>, <span class="dt">compress =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb76-7" data-line-number="7">)</a></code></pre></div>
+<pre><code>## Creating new corpus 'REUTERS'</code></pre>
+<pre><code>## ... encoding p-attribute 'word'</code></pre>
+<pre><code>## ... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</code></pre>
+<pre><code>## ... creating indices (in memory)</code></pre>
+<pre><code>## ... writing file: word.corpus</code></pre>
+<pre><code>## ... writing file: word.lexicon</code></pre>
+<pre><code>## ... writing file: word.lexicon.idx</code></pre>
+<pre><code>## ... creating data for new registry file</code></pre>
+<pre><code>## ... writing registry file</code></pre>
+<pre><code>## ... calling cwb-makeall</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rdx</code></pre>
+<pre><code>## ... file successfully removed: word.corpus.rev</code></pre>
+<pre><code>## ... encoding s-attribute 'topics_cat'</code></pre>
+<pre><code>## ... encoding s-attribute 'places'</code></pre>
+<p>The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word ’oil.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1">id &lt;-<span class="st"> </span><span class="kw">cl_str2id</span>(<span class="dt">corpus =</span> <span class="st">&quot;REUTERS&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">str =</span> <span class="st">&quot;oil&quot;</span>, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb91-2" data-line-number="2">cpos &lt;-<span class="st"> </span><span class="kw">cl_id2cpos</span>(<span class="dt">corpus =</span> <span class="st">&quot;REUTERS&quot;</span>, <span class="dt">p_attribute =</span> <span class="st">&quot;word&quot;</span>, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb91-3" data-line-number="3">count &lt;-<span class="st"> </span><span class="kw">length</span>(cpos)</a>
+<a class="sourceLine" id="cb91-4" data-line-number="4">count</a></code></pre></div>
+<pre><code>## [1] 86</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="kw">unlink</span>(tmpdir, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Hope everything works. Enjoy!</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

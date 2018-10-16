@@ -18,6 +18,8 @@ addons:
 before_install:
   - Rscript -e 'install.packages("rmarkdown")'
   - Rscript -e 'install.packages("devtools")'
+
+install:
   - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
 
 r_packages:
@@ -40,4 +42,4 @@ notifications:
   on_failure: change
 
 after_success:
-  - Rscript -e 'library(covr); codecov(token = "26677b57-5e66-44cd-ad0c-49957456a028")'
+  - Rscript -e 'library(covr); codecov(type = c("tests", "vignettes", "examples"), token = "cd301151-effc-4a75-9dc7-bb906dcf4edc")'
