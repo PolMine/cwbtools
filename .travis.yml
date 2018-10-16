@@ -7,7 +7,6 @@ matrix:
       dist: trusty
     - os: osx
       osx_image: xcode9.1
-      brew_packages: pkg-config glib pcre
 
 addons:
   apt:
@@ -16,10 +15,12 @@ addons:
       - libglib2.0-dev 
 
 before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update             ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pkg-config ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pcre       ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install glib       ; fi
   - Rscript -e 'install.packages("rmarkdown")'
   - Rscript -e 'install.packages("devtools")'
-
-install:
   - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
 
 r_packages:
