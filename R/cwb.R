@@ -15,7 +15,7 @@ cwb_install <- function(url_cwb = cwb_get_url()){
   download.file(url_cwb, destfile = file.path(tmp_dir, basename(url_cwb), fsep = "/"))
   
   if (.Platform$OS.type == "windows"){
-    unzip(file.path(tmp_dir, basename(url_cwb), fsep = "/"))
+    unzip(file.path(tmp_dir, basename(url_cwb), fsep = "/"), exdir = tmp_dir)
     install_script_file <- file.path(tmp_dir, subdir, "install-cwb-win.bat", fsep = "/")
     install_script <- readLines(install_script_file)
     cwbDir <- gsub("/", "\\\\", cwb_dir)
