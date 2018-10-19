@@ -101,10 +101,10 @@ CD <- CorpusData$new()
 CD$tokenstream <- as.data.table(tokenstream)
 CD$metadata <- as.data.table(s_attrs_places)
 
-tmpdir <- tempdir()
+tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-dir.create (registry_tmp <- file.path(tmpdir, "registry"))
-dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir"))
+dir.create (registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
+dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
 
 CD$encode(corpus = "REUTERS", encoding = "utf8",
           p_attributes = "word", s_attributes = "places",

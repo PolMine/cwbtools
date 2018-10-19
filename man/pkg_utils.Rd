@@ -87,7 +87,7 @@ the package defined by \code{pkg}.
   indexed corpus data.
 }
 \examples{
-y <- tempdir()
+y <- normalizePath(tempdir(), winslash = "/")
 pkg_create_cwb_dirs(pkg = y)
 pkg_add_description(pkg = y, package = "reuters", description = "Reuters data package")
 pkg_add_corpus(

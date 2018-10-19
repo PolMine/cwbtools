@@ -64,8 +64,8 @@ and will reset the encoding in the registry file.
 }
 \examples{
 require("RcppCWB")
-registry_tmp <- file.path(tempdir(), "cwb", "registry")
-data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", "reuters")
+registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
+data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", "reuters", fsep = "/")
 
 corpus_copy(
   corpus = "REUTERS",

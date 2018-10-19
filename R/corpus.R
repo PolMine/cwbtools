@@ -63,10 +63,10 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       }
     }
   } else {
-    cwbtools_tmpdir <- file.path(tempdir(), "cwbtools_tmpdir")
+    cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
-    corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball))
+    corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
     if (grepl("^http", tarball)){
       # if (!url.exists(tarball)) stop("tarball is not available")
       # download.file(url = tarball, destfile = corpus_tarball, ...)
@@ -89,13 +89,13 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     unlink(corpus_tarball)
     
-    tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry")
-    tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora")
+    tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
+    tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
     corpora <- list.files(tmp_registry_dir)
     for (corpus in corpora){
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
-      registry_data[["home"]] <- file.path(tmp_data_dir, tolower(registry_data[["id"]]))
-      registry_data[["info"]] <- file.path(registry_data[["home"]], basename(registry_data[["info"]]))
+      registry_data[["home"]] <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
+      registry_data[["info"]] <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)
@@ -149,7 +149,7 @@ corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
   # copy data directory
   message("copying data directory")
   regdata <- registry_file_parse(corpus = old, registry_dir = registry_dir)
-  data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new))
+  data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new), fsep = "/")
   if (file.exists(data_dir_new)){
     if (readline(prompt = "Data directory already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y")
       stop("Aborting the operation.")
@@ -169,7 +169,7 @@ corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
   
   # generate copy of registry file
   message("make copy of registry file")
-  registry_file_new <- file.path(registry_file_new, tolower(new))
+  registry_file_new <- file.path(registry_file_new, tolower(new), fsep = "/")
   if (file.exists(registry_file_new)){
     if (readline(prompt = "New registry file already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y"){
       file.remove(registry_file_new)
@@ -179,8 +179,8 @@ corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
       
   }
   success <- file.copy(
-    from = file.path(registry_dir, tolower(old)),
-    to = file.path(registry_dir, tolower(new))
+    from = file.path(registry_dir, tolower(old), fsep = "/"),
+    to = file.path(registry_dir, tolower(new), fsep = "/")
   )
   if (!success){
     stop("copying the registry file failed")
@@ -212,8 +212,8 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   
   # rename registry file
   message("renaming registry file")
-  registry_old <- file.path(registry_dir, tolower(old))
-  registry_new <- file.path(registry_dir, tolower(new))
+  registry_old <- file.path(registry_dir, tolower(old), fsep = "/")
+  registry_new <- file.path(registry_dir, tolower(new), fsep = "/")
   success <- file.rename(from = registry_old, to = registry_new)
   if (!success) stop("renaming the registry file failed")
   
@@ -221,7 +221,7 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   message("renaming data directory")
   regdata <- registry_file_parse(corpus = new, registry_dir = registry_dir)
   data_directory_old <- regdata[["home"]]
-  data_directory_new <- file.path(dirname(data_directory_old), tolower(new))
+  data_directory_new <- file.path(dirname(data_directory_old), tolower(new), fsep = "/")
   success <- file.rename(from = data_directory_old, to = data_directory_new)
   if (!success) stop("renaming the data directory failed")
   
@@ -247,7 +247,7 @@ corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
     file.remove(data_directory)
   }
   if (readline(prompt = sprintf("Are you sure you want to delete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)) != "Y"){
-    file.remove(file.path(registry_dir, tolower(x)))
+    file.remove(file.path(registry_dir, tolower(x), fsep = "/"))
   }
 }
 
@@ -259,7 +259,7 @@ corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
 #' @export corpus_as_tarball
 corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
   
-  registry_file <- file.path(registry_dir, tolower(corpus))
+  registry_file <- file.path(registry_dir, tolower(corpus), fsep = "/")
   if (!file.exists(registry_file))
     stop(
       sprintf("registry file for corpus '%s' does not exist in registry directory '%s'",
@@ -268,21 +268,21 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
   home_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
 
   if (verbose) message("... moving registry file and data files to temporary directory for creating tarball")
-  tmp_dir <- tempdir()
-  archive_dir <- file.path(tmp_dir, tolower(corpus))
+  tmp_dir <- normalizePath(tempdir(), winslash = "/")
+  archive_dir <- file.path(tmp_dir, tolower(corpus), fsep = "/")
   if (file.exists(archive_dir)) unlink(archive_dir, recursive = TRUE)
   dir.create(archive_dir)
 
-  archive_registry_dir <- file.path(archive_dir, "registry")
-  archive_data_dir <- file.path(archive_dir, "indexed_corpora")
-  archive_corpus_dir <- file.path(archive_dir, "indexed_corpora", tolower(corpus))
+  archive_registry_dir <- file.path(archive_dir, "registry", fsep = "/")
+  archive_data_dir <- file.path(archive_dir, "indexed_corpora", fsep = "/")
+  archive_corpus_dir <- file.path(archive_dir, "indexed_corpora", tolower(corpus), fsep = "/")
   dir.create(archive_registry_dir)
   dir.create(archive_data_dir)
   dir.create(archive_corpus_dir)
   
-  file.copy(from = registry_file, to = file.path(archive_registry_dir, tolower(corpus)))
+  file.copy(from = registry_file, to = file.path(archive_registry_dir, tolower(corpus), fsep = "/"))
   for (x in list.files(home_dir, full.names = TRUE)){
-    file.copy(from = x, to = file.path(archive_corpus_dir, basename(x)))
+    file.copy(from = x, to = file.path(archive_corpus_dir, basename(x), fsep = "/"))
   }
 
   old_wd <- setwd(archive_dir)
@@ -302,27 +302,27 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
 #' @export corpus_copy
 #' @rdname corpus_utils
 #' @examples
-#' registry_file_new <- file.path(tempdir(), "cwb", "registry", "reuters")
+#' registry_file_new <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", "reuters", fsep = "/")
 #' if (file.exists(registry_file_new)) file.remove(registry_file_new)
 #' corpus_copy(
 #'   corpus = "REUTERS",
 #'   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
 #'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
 #' )
-#' unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
+#' unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
 corpus_copy <- function(
   corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(tempdir(), "cwb", "registry"),
-  data_dir_new = file.path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
+  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/"),
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
   verbose = interactive(),
   progress = TRUE
   ){
   
-  registry_file_old <- file.path(registry_dir, tolower(corpus))
+  registry_file_old <- file.path(registry_dir, tolower(corpus), fsep = "/")
   if (!file.exists(registry_file_old)) stop(sprintf("Aborting - registry file %s does not exist.", registry_file_old))
   if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
   
-  registry_file_new <- file.path(registry_dir_new, tolower(corpus))
+  registry_file_new <- file.path(registry_dir_new, tolower(corpus), fsep = "/")
   if (file.exists(registry_file_new)) stop("Aborting - registry file %s already exists in target regsity", registry_file_new)
   
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
@@ -340,7 +340,7 @@ corpus_copy <- function(
     if (progress) setTxtProgressBar(pb, value = i)
     file.copy(
       from = data_files_to_copy[i],
-      to = file.path(data_dir_new, basename(data_files_to_copy[i]))
+      to = file.path(data_dir_new, basename(data_files_to_copy[i]), fsep = "/")
       )
   }
   if (progress) close(pb)
@@ -360,9 +360,9 @@ corpus_copy <- function(
 #' registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
 #' data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
 #' 
-#' registry_dir_tmp <- file.path(tempdir(), "cwb", "registry")
-#' registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus))
-#' data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", tolower(corpus))
+#' registry_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
+#' registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus), fsep = "/")
+#' data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/")
 #' 
 #' if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
 #' if (!dir.exists(data_dir_tmp)){
@@ -404,7 +404,7 @@ corpus_copy <- function(
 #' str <- RcppCWB::cl_id2str(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, id = ids)
 #' unique(str)
 #' 
-#' unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
+#' unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
 corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"), verbose = TRUE){
   
   if (to == "UTF-8") to <- "UTF8"

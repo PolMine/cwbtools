@@ -70,10 +70,10 @@ library(RcppCWB)
 if (!cwb_is_installed()) cwb_install()
 tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 
-tmpdir <- tempdir()
+tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-registry_tmp <- file.path(tmpdir, "registry")
-data_dir_tmp <- file.path(tmpdir, "data_dir")
+registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
+data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
 if (!file.exists(registry_tmp)) dir.create (registry_tmp)
 if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 

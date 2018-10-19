@@ -1,13 +1,11 @@
-# v0.0.10.9003
-  * drafted a function `s_attribute_recode()`, and supplementary `s_attributed_files()`.
-
-# v0.0.10.9002
+# v0.0.11
+  * New functions `p_attribute_recode()`, `s_attribute_recode()`, and supplementary `s_attributed_files()`, and `corpus_recode()`.
+  * Any call to `tempdir()` is now wrapped as `normalizePath(tempdir(), winslash = "/")` to avoid Problems on Windows, when different file seperators may be used.
+  * When calling `file.path()`, the argument `fsep` is "/" to prevent confusion of file seperators.
   * A new function `corpus_copy()` is available to create a copy a corpus.
   * Working example for `s_attribute_encode`().
+  * A call to `cl_delete_corpus()` from RcppCWB is added to `s_attribute_encode()`, so that newly added s-attributes can be used without restarting the R session.
 
-# v0.0.10.9001
-  * A call to `cl_delete_corpus()` from RcppCWB is added to `s_attribute_encode()`, so that 
-  newly added s-attributes can be used without restarting the R session.
 
 # v0.0.10
   * Missing documentation written for fields of class CorpusData.

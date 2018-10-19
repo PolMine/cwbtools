@@ -24,8 +24,8 @@
 #' @importFrom RcppCWB cl_delete_corpus
 #' @examples
 #' require("RcppCWB")
-#' registry_tmp <- file.path(tempdir(), "cwb", "registry")
-#' data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", "reuters")
+#' registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
+#' data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", "reuters", fsep = "/")
 #' 
 #' corpus_copy(
 #'   corpus = "REUTERS",
@@ -76,9 +76,9 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     region_matrix <- matrix(data = as.integer(as.vector(region_matrix)), ncol = 2)
   }
   if (method == "R"){
-    avs_file <- file.path(data_dir, paste(s_attribute, "avs", sep = ".")) # attribute values
-    avx_file <- file.path(data_dir, paste(s_attribute, "avx", sep = ".")) # attribute value index
-    rng_file <- file.path(data_dir, paste(s_attribute, "rng", sep = ".")) # ranges
+    avs_file <- file.path(data_dir, paste(s_attribute, "avs", sep = "."), fsep = "/") # attribute values
+    avx_file <- file.path(data_dir, paste(s_attribute, "avx", sep = "."), fsep = "/") # attribute value index
+    rng_file <- file.path(data_dir, paste(s_attribute, "rng", sep = "."), fsep = "/") # ranges
     
     # generate and write attrib.avs
     if (!is.character(values)) values <- as.character(values)
@@ -122,7 +122,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     
     if (verbose) message(sprintf("... running 'cwb-s-encode' to add structural annotation for attribute '%s'", s_attribute))
     cmd <- c(
-      file.path(cwb_get_bindir(), "cwb-s-encode"),
+      file.path(cwb_get_bindir(), "cwb-s-encode", fsep = "/"),
       "-d", data_dir,
       "-f", tmp_file,
       "-V", s_attribute
@@ -205,7 +205,7 @@ s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"
 s_attribute_files <- function(s_attribute, data_dir){
   sapply(
     c("avs", "avx", "rng"),
-    function(fileext) file.path(data_dir, paste(s_attribute, fileext, sep = "."))
+    function(fileext) file.path(data_dir, paste(s_attribute, fileext, sep = "."), fsep = "/")
   )
 }
 

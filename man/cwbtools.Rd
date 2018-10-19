@@ -35,8 +35,8 @@ cdata <- list(
   )
 cdata <- add_corpus_positions(cdata)
 
-registry_dir_tmp <- tempdir()
-data_dir_tmp <- tempdir()
+registry_dir_tmp <- normalizePath(tempdir(), winslash = "/")
+data_dir_tmp <- normalizePath(tempdir(), winslash = "/")
 
 encode_corpusdata(
   cdata, corpus = "REUTERS", encoding = "utf8",

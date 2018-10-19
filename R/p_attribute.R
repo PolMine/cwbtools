@@ -38,10 +38,10 @@
 #' if (!cwb_is_installed()) cwb_install()
 #' tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 #' 
-#' tmpdir <- tempdir()
+#' tmpdir <- normalizePath(tempdir(), winslash = "/")
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-#' registry_tmp <- file.path(tmpdir, "registry")
-#' data_dir_tmp <- file.path(tmpdir, "data_dir")
+#' registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
+#' data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
 #' if (!file.exists(registry_tmp)) dir.create (registry_tmp)
 #' if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 #' 
@@ -90,14 +90,14 @@ p_attribute_encode <- function(
   if (!file.exists(registry_dir)) stop("registry_dir does not exist")
   data_dir <- path.expand(data_dir)
   if (!file.exists(data_dir)) stop("data_dir does not exist")
-  registry_file <- file.path(registry_dir, tolower(corpus))
+  registry_file <- file.path(registry_dir, tolower(corpus), fsep = "/")
   
   if (method == "R"){
     
     if (verbose) message("... writing tokenstream to disk (directly from R, equivalent to cwb-encode)")
-    corpus_file <- file.path(data_dir, paste(p_attribute, "corpus", sep = "."))
-    lexicon_file <- file.path(data_dir, paste(p_attribute, "lexicon", sep = "."))
-    lexicon_index_file <- file.path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
+    corpus_file <- file.path(data_dir, paste(p_attribute, "corpus", sep = "."), fsep = "/")
+    lexicon_file <- file.path(data_dir, paste(p_attribute, "lexicon", sep = "."), fsep = "/")
+    lexicon_index_file <- file.path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."), fsep = "/")
     
     if (verbose) message("... creating indices (in memory)")
     tokenstream_factor <- factor(token_stream, levels = unique(token_stream))
@@ -135,10 +135,10 @@ p_attribute_encode <- function(
       df <- data.frame(id = ids, word = token_stream, stringsAsFactors = FALSE)
       df[["cpos"]] <- 0L:(nrow(df) - 1L)
       
-      corpus_cnt_file <- file.path(data_dir, paste(p_attribute, "corpus.cnt", sep = "."))
-      corpus_rev_file <- file.path(data_dir, paste(p_attribute, "corpus.rev", sep = "."))
-      corpus_rdx_file <- file.path(data_dir, paste(p_attribute, "corpus.rdx", sep = "."))
-      lexicon_srt_file <- file.path(data_dir, paste(p_attribute, "lexicon.srt", sep = "."))
+      corpus_cnt_file <- file.path(data_dir, paste(p_attribute, "corpus.cnt", sep = "."), fsep = "/")
+      corpus_rev_file <- file.path(data_dir, paste(p_attribute, "corpus.rev", sep = "."), fsep = "/")
+      corpus_rdx_file <- file.path(data_dir, paste(p_attribute, "corpus.rdx", sep = "."), fsep = "/")
+      lexicon_srt_file <- file.path(data_dir, paste(p_attribute, "lexicon.srt", sep = "."), fsep = "/")
       
       # generate cnt file
       cnt_array <- tapply(X = df[["cpos"]], INDEX = df[["id"]], FUN = length)
@@ -172,7 +172,7 @@ p_attribute_encode <- function(
     if (p_attribute == "word"){
       if (verbose) message("... running cwb-encode")
       system2(
-        command = file.path(cwb_get_bindir(), "cwb-encode"),
+        command = file.path(cwb_get_bindir(), "cwb-encode", fsep = "/"),
         args = c(sprintf("-d %s", data_dir), sprintf("-f %s", vrt_tmp_file), sprintf("-R %s", registry_file), sprintf("-c %s", encoding), "-v")
       )
     } else {
@@ -187,7 +187,7 @@ p_attribute_encode <- function(
       if (verbose) message("... calling cwb-encode")
       p_attrs_old <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attributes"]] # for checking later if anything is missing
       cwb_encode_cmd_vec <- c(
-        file.path(cwb_get_bindir(), "cwb-encode"),
+        file.path(cwb_get_bindir(), "cwb-encode", fsep = "/"),
         "-d", data_dir, "-f", vrt_tmp_file, "-R", registry_file,
         "-p", "-", "-P", p_attribute, "-c", encoding
       )
@@ -217,17 +217,17 @@ p_attribute_encode <- function(
   # create reverse index using cwb-makeall
   if (verbose) message("... calling cwb-makeall")
   system2(
-    command = file.path(cwb_get_bindir(), "cwb-makeall"),
+    command = file.path(cwb_get_bindir(), "cwb-makeall", fsep = "/"),
     args = c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), "-V", toupper(corpus))
   )
   
   if (compress){
     compression_cmd_args <- c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), toupper(corpus))
-    system2(command = file.path(cwb_get_bindir(), "cwb-huffcode"), args = compression_cmd_args, stdout = TRUE )
-    system2(command = file.path(cwb_get_bindir(), "cwb-compress-rdx"), args = compression_cmd_args, stdout = TRUE)
+    system2(command = file.path(cwb_get_bindir(), "cwb-huffcode", fsep = "/"), args = compression_cmd_args, stdout = TRUE )
+    system2(command = file.path(cwb_get_bindir(), "cwb-compress-rdx", fsep = "/"), args = compression_cmd_args, stdout = TRUE)
     files_to_remove <- c(
-      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute)),
-      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute))
+      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
+      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
     )
     for (x in files_to_remove){
       if (file.exists(x)) {
@@ -250,7 +250,7 @@ p_attribute_encode <- function(
 #' @rdname p_attribute
 p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
   
-  p_attr_lexicon_file <- file.path(data_dir, sprintf("%s.lexicon", p_attribute))
+  p_attr_lexicon_file <- file.path(data_dir, sprintf("%s.lexicon", p_attribute), fsep = "/")
   
   lexicon <- readBin(
     con = p_attr_lexicon_file,
@@ -266,7 +266,7 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
   writeBin(object = lexcion_hex_vec, con = p_attr_lexicon_file)
   
   # generate and write index file
-  p_attr_lexicon_index_file <- file.path(data_dir, sprintf("%s.lexicon.idx", p_attribute))
+  p_attr_lexicon_index_file <- file.path(data_dir, sprintf("%s.lexicon.idx", p_attribute), fsep = "/")
   
   index_new <- cumsum(sapply(lexicon_hex_list, length))
   index_new <- c(0L, index_new[1L:(length(index_new) - 1L)])

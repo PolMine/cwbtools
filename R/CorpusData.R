@@ -93,10 +93,10 @@
 #' CD$tokenstream <- as.data.table(tokenstream)
 #' CD$metadata <- as.data.table(s_attrs_places)
 #' 
-#' tmpdir <- tempdir()
+#' tmpdir <- normalizePath(tempdir(), winslash = "/")
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-#' dir.create (registry_tmp <- file.path(tmpdir, "registry"))
-#' dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir"))
+#' dir.create (registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
+#' dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
 #' 
 #' CD$encode(corpus = "REUTERS", encoding = "utf8",
 #'           p_attributes = "word", s_attributes = "places",
@@ -259,7 +259,7 @@ CorpusData <- R6::R6Class(
       if (file.exists(registry_dir))
         if (file.info(registry_dir)[["isdir"]] != TRUE)
           stop("registry_dir is not a directory")
-      registry_file <- file.path(registry_dir, tolower(corpus))
+      registry_file <- file.path(registry_dir, tolower(corpus), fsep = "/")
       
       if (file.exists(registry_file)){
         message(sprintf("registry file for corpus '%s' already exists - it should be removed", corpus))
@@ -270,7 +270,7 @@ CorpusData <- R6::R6Class(
         super_dir <- dirname(registry_dir)
         potential_data_dir <- grep("index", list.files(super_dir), value = TRUE, perl = TRUE)
         if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
-        data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus))
+        data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus), fsep = "/")
         message(sprintf("suggesting data_dir: %s\n", data_dir))
         feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
         if (feedback != "Y") stop("aborting")

@@ -18,9 +18,11 @@ corpus_install(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages",
 corpus_packages()
 
 corpus_copy(corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(tempdir(), "cwb", "registry"),
-  data_dir_new = file.path(tempdir(), "cwb", "indexed_corpora",
-  tolower(corpus)), verbose = interactive(), progress = TRUE)
+  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
+  "cwb", "registry", fsep = "/"),
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
+  "indexed_corpora", tolower(corpus), fsep = "/"), verbose = interactive(),
+  progress = TRUE)
 
 corpus_rename(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE)
@@ -30,9 +32,11 @@ corpus_remove(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 
 corpus_copy(corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(tempdir(), "cwb", "registry"),
-  data_dir_new = file.path(tempdir(), "cwb", "indexed_corpora",
-  tolower(corpus)), verbose = interactive(), progress = TRUE)
+  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
+  "cwb", "registry", fsep = "/"),
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
+  "indexed_corpora", tolower(corpus), fsep = "/"), verbose = interactive(),
+  progress = TRUE)
 
 corpus_recode(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"),
   verbose = TRUE)
@@ -116,14 +120,14 @@ A data package with a CWB corpus is assumed to include a directory
 \code{corpus_copy} will create a copy of a corpus.
 }
 \examples{
-registry_file_new <- file.path(tempdir(), "cwb", "registry", "reuters")
+registry_file_new <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", "reuters", fsep = "/")
 if (file.exists(registry_file_new)) file.remove(registry_file_new)
 corpus_copy(
   corpus = "REUTERS",
   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
 )
-unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
+unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
 corpus <- "REUTERS"
 pkg <- "RcppCWB"
 s_attr <- "places"
@@ -132,9 +136,9 @@ Q <- '"oil"'
 registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
 data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
 
-registry_dir_tmp <- file.path(tempdir(), "cwb", "registry")
-registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus))
-data_dir_tmp <- file.path(tempdir(), "cwb", "indexed_corpora", tolower(corpus))
+registry_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
+registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus), fsep = "/")
+data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/")
 
 if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
 if (!dir.exists(data_dir_tmp)){
@@ -176,7 +180,7 @@ ids <- RcppCWB::cl_cpos2id(corpus = corpus, p_attribute = "word", registry = reg
 str <- RcppCWB::cl_id2str(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, id = ids)
 unique(str)
 
-unlink(file.path(tempdir(), "cwb"), recursive = TRUE)
+unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
 }
 \seealso{
 For managing registry files, see \code{\link{registry_file_parse}}

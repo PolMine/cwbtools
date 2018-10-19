@@ -11,7 +11,7 @@ registry_file_parse(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 
 registry_file_compose(x)
 
-registry_data(name, id, home, info = file.path(home, ".info"),
+registry_data(name, id, home, info = file.path(home, ".info", fsep = "/"),
   properties = c(charset = "utf-8"), p_attributes,
   s_attributes = character())
 

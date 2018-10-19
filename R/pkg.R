@@ -8,7 +8,7 @@
 #' @param verbose Logical, whether to be verbose.
 #' 
 #' @examples 
-#' y <- tempdir()
+#' y <- normalizePath(tempdir(), winslash = "/")
 #' pkg_create_cwb_dirs(pkg = y)
 #' pkg_add_description(pkg = y, package = "reuters", description = "Reuters data package")
 #' pkg_add_corpus(
@@ -35,13 +35,13 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
     "R",
     "man",
     "inst",
-    file.path("inst", "extdata"),
-    file.path("inst", "extdata", "cwb"),
-    file.path("inst", "extdata", "cwb", "registry"),
-    file.path("inst", "extdata", "cwb", "indexed_corpora")
+    file.path("inst", "extdata", fsep = "/"),
+    file.path("inst", "extdata", "cwb", fsep = "/"),
+    file.path("inst", "extdata", "cwb", "registry", fsep = "/"),
+    file.path("inst", "extdata", "cwb", "indexed_corpora", fsep = "/")
   )
   for (dir in dirs_to_create) {
-    new_dir <- file.path(pkg, dir)
+    new_dir <- file.path(pkg, dir, fsep = "/")
     if (!file.exists(new_dir)){
       if (verbose) message("... creating directory: ", new_dir)
       dir.create(new_dir)
@@ -64,15 +64,15 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
   
   if (pkg %in% rownames(installed.packages())){
     pkg <- system.file(package = pkg)
-    dest_registry <- file.path(pkg, "extdata", "cwb", "registry")
-    data_dir <- file.path(pkg, "extdata", "cwb", "indexed_corpora")
+    dest_registry <- file.path(pkg, "extdata", "cwb", "registry", fsep = "/")
+    data_dir <- file.path(pkg, "extdata", "cwb", "indexed_corpora", fsep = "/")
   } else {
-    dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry")
-    data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora")
+    dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry", fsep = "/")
+    data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora", fsep = "/")
   }
   if (!file.exists(dest_registry)) stop(sprintf("registry directory '%s' does not exist", dest_registry))
   if (!file.exists(data_dir)) stop(sprintf("data directory '%s' does not exist", data_dir))
-  target_dir <- file.path(data_dir, tolower(corpus))
+  target_dir <- file.path(data_dir, tolower(corpus), fsep = "/")
   if (!file.exists(target_dir)){
     message("... directory for indexed corpus does not yet exist, creating: ", target_dir)
     dir.create(target_dir)
@@ -80,7 +80,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
 
   # copy registry file
   if (verbose) message("... copying registry file")
-  file.copy(from = file.path(registry, tolower(corpus)), to = dest_registry, overwrite = TRUE)
+  file.copy(from = file.path(registry, tolower(corpus), fsep = "/"), to = dest_registry, overwrite = TRUE)
   
   # copy files in dir for indexed corpora
   if (verbose) message("... copying data files")
@@ -94,7 +94,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
   if (verbose) message("... adjusting paths in registry file")
   regdata <- registry_file_parse(corpus = corpus, registry_dir = dest_registry)
   regdata[["home"]] <- target_dir
-  regdata[["info"]] <- file.path(target_dir, basename(regdata[["info"]]))
+  regdata[["info"]] <- file.path(target_dir, basename(regdata[["info"]]), fsep = "/")
   registry_file_write(data = regdata, corpus = corpus, registry_dir = dest_registry)
   invisible( TRUE )
 }
@@ -110,19 +110,19 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
 #' @export pkg_add_configure_scripts
 #' @rdname pkg_utils
 pkg_add_configure_scripts = function(pkg = "."){
-  tool_dir <- file.path(pkg, "tools")
+  tool_dir <- file.path(pkg, "tools", fsep = "/")
   if (!file.exists(tool_dir)) dir.create(tool_dir)
   file.copy(
     from = system.file(package = "cwbtools", "Rscript", "setpaths.R"),
-    to = file.path(tool_dir, "setpaths.R")
+    to = file.path(tool_dir, "setpaths.R", fsep = "/")
   )
   writeLines(
     text = c('#!/bin/bash', '${R_HOME}/bin/Rscript ./tools/setpaths.R --args "$R_PACKAGE_DIR"'),
-    con = file.path(pkg, "configure")
+    con = file.path(pkg, "configure", fsep = "/")
   )
   writeLines(
     text = c('#!/bin/sh', '${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe ./tools/setpaths.R --args "$R_PACKAGE_DIR"'),
-    con = file.path(pkg, "configure.win")
+    con = file.path(pkg, "configure.win", fsep = "/")
   )
   invisible( TRUE )
 }
@@ -140,7 +140,7 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @export pkg_add_description
 #' @rdname pkg_utils
 pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author = "", maintainer = NULL, description = "", license = "", verbose = TRUE){
-  if (file.exists(file.path(pkg, "DESCRIPTION"))){
+  if (file.exists(file.path(pkg, "DESCRIPTION"), fsep = "/")){
     user_input <- readline(prompt = "DESCRIPTION file already exists. Proceed anyway (Y / any other key to abort)?")
     if (user_input != "Y"){
       message("file DESCRIPTION is not generated anew")
@@ -174,7 +174,7 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
     License = license
   )
   desc <- paste0(names(description_list), ": ", unname(description_list))
-  writeLines(desc, con = file.path(pkg, "DESCRIPTION"))
+  writeLines(desc, con = file.path(pkg, "DESCRIPTION", fsep = "/"))
   invisible( TRUE )
 }
 
@@ -186,14 +186,14 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
 #' @export pkg_add_creativecommons_license
 #' @seealso \link[usethis]{use_mit_license}
 pkg_add_creativecommons_license = function(pkg = ".", license = "CC-BY-NC-SA", file = system.file(package = "cwbtools", "txt", "licenses", "CC_BY-NC-SA_3.0.txt")){
-  description_file <- file.path(pkg, "DESCRIPTION")
+  description_file <- file.path(pkg, "DESCRIPTION", fsep = "/")
   if (!file.exists(description_file)){
     stop("The DESCRIPTION file does exist - please generate it first using the add_description method")
   }
   desc <- readLines(description_file)
   desc[grep("^Licen[cs]e", desc)] <- paste("License:", license, "| file LICENSE", sep = " ")
-  writeLines(text = desc, con = file.path(pkg, "DESCRIPTION"))
-  file.copy(from = file, to = file.path(pkg, "LICENSE"))
+  writeLines(text = desc, con = file.path(pkg, "DESCRIPTION", fsep = "/"))
+  file.copy(from = file, to = file.path(pkg, "LICENSE", fsep = "/"))
   invisible( TRUE )
 }
 
@@ -213,7 +213,7 @@ pkg_add_gitattributes_file = function(pkg = "."){
   )
   writeLines(
     text = sprintf("*.%s filter=lfs diff=lfs merge=lfs -text", extensions),
-    con = file.path(pkg, ".gitattributes")
+    con = file.path(pkg, ".gitattributes", fsep = "/")
   )
   invisible( TRUE )
 }
