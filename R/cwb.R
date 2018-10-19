@@ -20,6 +20,11 @@ cwb_install <- function(url_cwb = cwb_get_url()){
     install_script <- readLines(install_script_file)
     cwbDir <- gsub("/", "\\\\", cwb_dir)
     install_script[grep("^set PREFIX=", install_script)] <- sprintf("set PREFIX=%s", cwb_dir)
+    if (!interactive()){
+      install_script[grep("^set\\schoice=.*?$", install_script)] <- ""
+      install_script[grep("^.*?Type\\sY\\sor\\sy.*?$", install_script)] <- ""
+      install_script[grep("^if\\s'%choice%'=='(Y|y)'.*?$", install_script)] <- ""
+    }
     cat(install_script, file = install_script_file, sep = "\n")
     # setwd(file.path(tmp_dir, subdir, fsep = "/"))
     shell(install_script_file)
