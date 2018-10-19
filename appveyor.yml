@@ -18,6 +18,10 @@ cache:
 
 # Adapt as necessary starting from here
 
+before_build:
+  - Rscript -e 'install.packages("devtools")'
+  - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
+
 build_script:
   - travis-tool.sh install_deps
 
