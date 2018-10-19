@@ -20,8 +20,7 @@ environment:
   USE_RTOOLS: true
 
 build_script:
-  - Rscript -e 'install.packages("devtools")'
-  - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
+  - Rscript -e 'install.packages("devtools"); devtools::install_github("PolMine/RcppCWB", ref = "dev")'
   - travis-tool.sh install_deps
 
 test_script:
