@@ -1,3 +1,6 @@
+# v0.0.11.9001
+  * New functions `s_atttribute_get_regions()` and `s_attribute_get_values()`.
+
 # v0.0.11
   * New functions `p_attribute_recode()`, `s_attribute_recode()`, and supplementary `s_attributed_files()`, and `corpus_recode()`.
   * Any call to `tempdir()` is now wrapped as `normalizePath(tempdir(), winslash = "/")` to avoid Problems on Windows, when different file seperators may be used.

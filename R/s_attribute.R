@@ -1,15 +1,12 @@
-#' Encode structural attribute.
+#' Read, process and write data on structural attributes.
 #' 
-#' Encode a structural attribute to an existing CWB corpus.
-#' 
-#' In addition to using CWB functionality, the \code{s_attribute_encode}
+#' @details In addition to using CWB functionality, the \code{s_attribute_encode}
 #' function includes a pure R implementation to add or modify structural attributes
 #' of an existing CWB corpus.
 #' 
 #' If the corpus has been loaded/used before,
 #' a new s-attribute may not be available unless \code{RcppCWB::cl_delete_corpus}
 #' has been called. Use the argument \code{delete} for calling this function.
-#' 
 #' @param values A character vector with the values of the structural attribute.
 #' @param data_dir The data directory where to write the files.
 #' @param s_attribute Atomic character vector, the name of the structural attribute.
@@ -208,4 +205,56 @@ s_attribute_files <- function(s_attribute, data_dir){
     function(fileext) file.path(data_dir, paste(s_attribute, fileext, sep = "."), fsep = "/")
   )
 }
+
+
+#' @details \code{s_attribute_get_values} is equivalent to performing the CL
+#'   function cl_struc2id for all strucs of a structural attribute. It is a
+#'   "pure R" operation that is faster than using CL, as it processes entire
+#'   files for the s-attribute directly. The return value is a character values
+#'   with all string values for the s-attribute.
+#' @examples
+#' avs <- s_attribute_get_values(
+#'   s_attribute = "id",
+#'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+#' )
+#' @export s_attribute_get_values
+#' @rdname s_attribute
+s_attribute_get_values <- function(s_attribute, data_dir){
+  
+  avs_file <- sprintf("%s/%s.avs", data_dir, s_attribute)
+  avs_size <- file.info(avs_file)$size
+  avs <- readBin(con = avs_file, what = character(), n = avs_size)
+  
+  offset <- cumsum(sapply(lapply(avs, charToRaw), length) + 1L)
+  offset <- c(0L, offset[1L:(length(offset) - 1L)])
+  
+  
+  avx_file <- sprintf("%s/%s.avx", data_dir, s_attribute)
+  avx_size <- file.info(avx_file)$size
+  avx_vector <- readBin(con = avx_file, what = integer(), size = 4L, n = avx_size, endian = "big")
+  avx_matrix <- matrix(data = avx_vector, ncol = 2, byrow = TRUE)
+  
+  avs[match(avx_matrix[,2], offset)]
+}
+
+#' @details \code{s_attribute_get_regions} will return a two-column integer
+#'   matrix with regions for the strucs of a given s-attribute. Left corpus
+#'   positions are in the first column, right corpus positions in the second
+#'   column. The result is equivalent to calling RcppCWB::get_region_matrix for
+#'   all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
+#'   function which is fast as it processes files entirely and directly.
+#' @examples
+#' rng <- s_attribute_get_regions(
+#'   s_attribute = "id",
+#'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+#' )
+#' @export s_attribute_get_regions
+#' @rdname s_attribute
+s_attribute_get_regions <- function(s_attribute, data_dir){
+  rng_file <- sprintf("%s/%s.rng", data_dir, s_attribute)
+  rng_size <- file.info(rng_file)$size
+  rng_vector <- readBin(con = rng_file, what = integer(), size = 4L, n = rng_size, endian = "big")
+  matrix(data = rng_vector, ncol = 2, byrow = TRUE)
+}
+
 
