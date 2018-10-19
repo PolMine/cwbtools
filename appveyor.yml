@@ -10,19 +10,18 @@ init:
 install:
   ps: Bootstrap
 
-environment:
-  USE_RTOOLS: true
 
 cache:
   - C:\RLibrary
 
 # Adapt as necessary starting from here
 
-before_build:
-  - Rscript -e 'install.packages("devtools")'
-  - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
+environment:
+  USE_RTOOLS: true
 
 build_script:
+  - Rscript -e 'install.packages("devtools")'
+  - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
   - travis-tool.sh install_deps
 
 test_script:
