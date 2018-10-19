@@ -4,7 +4,9 @@
 \alias{s_attribute_encode}
 \alias{s_attribute_recode}
 \alias{s_attribute_files}
-\title{Encode structural attribute.}
+\alias{s_attribute_get_values}
+\alias{s_attribute_get_regions}
+\title{Read, process and write data on structural attributes.}
 \usage{
 s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
   method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"),
@@ -14,6 +16,10 @@ s_attribute_recode(data_dir, s_attribute, from = c("UTF-8", "latin1"),
   to = c("UTF-8", "latin1"))
 
 s_attribute_files(s_attribute, data_dir)
+
+s_attribute_get_values(s_attribute, data_dir)
+
+s_attribute_get_regions(s_attribute, data_dir)
 }
 \arguments{
 \item{values}{A character vector with the values of the structural attribute.}
@@ -41,7 +47,7 @@ s_attribute_files(s_attribute, data_dir)
 \item{to}{Character string describing the target encoding of the attribute.}
 }
 \description{
-Encode a structural attribute to an existing CWB corpus.
+Read, process and write data on structural attributes.
 }
 \details{
 In addition to using CWB functionality, the \code{s_attribute_encode}
@@ -61,6 +67,19 @@ and will reset the encoding in the registry file.
 \code{s_attribute_files} will return a named character vector with
   the data files (extensions: "avs", "avx", "rng") in the directory indicated
   by \code{data_dir} for the structural attribute \code{s_attribute}.
+
+\code{s_attribute_get_values} is equivalent to performing the CL
+  function cl_struc2id for all strucs of a structural attribute. It is a
+  "pure R" operation that is faster than using CL, as it processes entire
+  files for the s-attribute directly. The return value is a character values
+  with all string values for the s-attribute.
+
+\code{s_attribute_get_regions} will return a two-column integer
+  matrix with regions for the strucs of a given s-attribute. Left corpus
+  positions are in the first column, right corpus positions in the second
+  column. The result is equivalent to calling RcppCWB::get_region_matrix for
+  all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
+  function which is fast as it processes files entirely and directly.
 }
 \examples{
 require("RcppCWB")
@@ -104,4 +123,12 @@ cl_struc2str("REUTERS", struc = 0L:(nrow(cpos_matrix) - 1L), s_attribute = "foo"
 
 unlink(registry_tmp, recursive = TRUE)
 unlink(data_dir_tmp, recursive = TRUE)
+avs <- s_attribute_get_values(
+  s_attribute = "id",
+  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+)
+rng <- s_attribute_get_regions(
+  s_attribute = "id",
+  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+)
 }
