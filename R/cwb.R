@@ -16,18 +16,26 @@ cwb_install <- function(url_cwb = cwb_get_url()){
   
   if (.Platform$OS.type == "windows"){
     unzip(file.path(tmp_dir, basename(url_cwb), fsep = "/"), exdir = tmp_dir)
-    install_script_file <- file.path(tmp_dir, subdir, "install-cwb-win.bat", fsep = "/")
-    install_script <- readLines(install_script_file)
-    cwbDir <- gsub("/", "\\\\", cwb_dir)
-    install_script[grep("^set PREFIX=", install_script)] <- sprintf("set PREFIX=%s", cwb_dir)
-    if (!interactive()){
-      install_script[grep("^set\\schoice=.*?$", install_script)] <- ""
-      install_script[grep("^.*?Type\\sY\\sor\\sy.*?$", install_script)] <- ""
-      install_script[grep("^if\\s'%choice%'=='(Y|y)'.*?$", install_script)] <- ""
+    bin_dir <- file.path(cwb_dir, "bin")
+    if (!dir.exists(bin_dir)) dir.create(bin_dir)
+    for (x in list.files(file.path(tmp_dir, subdir, "bin"), full.names = TRUE)){
+      file.copy(
+        from = x,
+        to = file.path(normalizePath(bin_dir, winslash = "/"), basename(x))
+        )
     }
-    cat(install_script, file = install_script_file, sep = "\n")
+    # install_script_file <- file.path(tmp_dir, subdir, "install-cwb-win.bat", fsep = "/")
+    # install_script <- readLines(install_script_file)
+    # cwb_dir <- gsub("/", "\\\\", cwb_dir)
+    # install_script[grep("^set PREFIX=", install_script)] <- sprintf("set PREFIX=%s", cwb_dir)
+    # if (!interactive()){
+    #  install_script[grep("^set\\schoice=.*?$", install_script)] <- ""
+    #  install_script[grep("^.*?Type\\sY\\sor\\sy.*?$", install_script)] <- ""
+    #  install_script[grep("^if\\s'%choice%'=='(Y|y)'.*?$", install_script)] <- ""
+    # }
+    # cat(install_script, file = install_script_file, sep = "\n")
     # setwd(file.path(tmp_dir, subdir, fsep = "/"))
-    shell(install_script_file)
+    # shell(install_script_file)
   } else {
     untar(file.path(tmp_dir, basename(url_cwb), fsep = "/"), exdir = tmp_dir)
     install_script_file <- file.path(tmp_dir, subdir, "install-cwb.sh", fsep = "/")

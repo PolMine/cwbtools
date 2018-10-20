@@ -184,7 +184,6 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
 #'   package.
 #' @rdname pkg_utils
 #' @export pkg_add_creativecommons_license
-#' @seealso \link[usethis]{use_mit_license}
 pkg_add_creativecommons_license = function(pkg = ".", license = "CC-BY-NC-SA", file = system.file(package = "cwbtools", "txt", "licenses", "CC_BY-NC-SA_3.0.txt")){
   description_file <- file.path(pkg, "DESCRIPTION", fsep = "/")
   if (!file.exists(description_file)){
