@@ -302,14 +302,23 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
 #' @export corpus_copy
 #' @rdname corpus_utils
 #' @examples
-#' registry_file_new <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", "reuters", fsep = "/")
+#' registry_file_new <- file.path(
+#'   normalizePath(tempdir(), winslash = "/"),
+#'   "cwb", "registry", "reuters", fsep = "/"
+#'   )
 #' if (file.exists(registry_file_new)) file.remove(registry_file_new)
 #' corpus_copy(
 #'   corpus = "REUTERS",
 #'   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
-#'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+#'   data_dir = system.file(
+#'     package = "RcppCWB",
+#'     "extdata", "cwb", "indexed_corpora", "reuters"
+#'   )
 #' )
-#' unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
+#' unlink(file.path(
+#'   normalizePath(tempdir(), winslash = "/"),
+#'   "cwb", fsep = "/"),
+#'   recursive = TRUE)
 corpus_copy <- function(
   corpus, registry_dir, data_dir = NULL,
   registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/"),
@@ -360,15 +369,22 @@ corpus_copy <- function(
 #' registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
 #' data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
 #' 
-#' registry_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
+#' registry_dir_tmp <- file.path(
+#'   normalizePath(tempdir(), winslash = "/"),
+#'   "cwb", "registry", fsep = "/"
+#' )
 #' registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus), fsep = "/")
-#' data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/")
+#' data_dir_tmp <- file.path(
+#'   normalizePath(tempdir(), winslash = "/"),
+#'   "cwb", "indexed_corpora", tolower(corpus), fsep = "/"
+#' )
 #' 
 #' if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
 #' if (!dir.exists(data_dir_tmp)){
 #'    dir.create(data_dir_tmp, recursive = TRUE)
 #' } else {
-#'   if (length(list.files(data_dir_tmp)) > 0L) file.remove(list.files(data_dir_tmp, full.names = TRUE))
+#'   if (length(list.files(data_dir_tmp)) > 0L)
+#'     file.remove(list.files(data_dir_tmp, full.names = TRUE))
 #' }
 #' 
 #' corpus_copy(
@@ -391,17 +407,25 @@ corpus_copy <- function(
 #' RcppCWB::cl_delete_corpus(corpus = corpus, registry = registry_dir_tmp)
 #' RcppCWB::cl_charset_name(corpus = corpus, registry = registry_dir_tmp)
 #' 
-#' n_strucs <- RcppCWB::cl_attribute_size(corpus = corpus, attribute = s_attr, attribute_type = "s", registry = registry_dir_tmp)
+#' n_strucs <- RcppCWB::cl_attribute_size(
+#'   corpus = corpus, attribute = s_attr, attribute_type = "s", registry = registry_dir_tmp
+#' )
 #' strucs <- 0L:(n_strucs - 1L)
-#' struc_values <- RcppCWB::cl_struc2str(corpus = corpus, s_attribute = s_attr, struc = strucs, registry = registry_dir_tmp)
+#' struc_values <- RcppCWB::cl_struc2str(
+#'   corpus = corpus, s_attribute = s_attr, struc = strucs, registry = registry_dir_tmp
+#' )
 #' speakers <- unique(struc_values)
 #' 
 #' Sys.setenv("CORPUS_REGISTRY" = registry_dir_tmp)
 #' if (RcppCWB::cqp_is_initialized()) RcppCWB::cqp_reset_registry() else RcppCWB::cqp_initialize()
 #' RcppCWB::cqp_query(corpus = corpus, query = Q)
 #' cpos <- RcppCWB::cqp_dump_subcorpus(corpus = corpus)
-#' ids <- RcppCWB::cl_cpos2id(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, cpos = cpos)
-#' str <- RcppCWB::cl_id2str(corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, id = ids)
+#' ids <- RcppCWB::cl_cpos2id(
+#'   corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, cpos = cpos
+#' )
+#' str <- RcppCWB::cl_id2str(
+#'   corpus = corpus, p_attribute = "word", registry = registry_dir_tmp, id = ids
+#' )
 #' unique(str)
 #' 
 #' unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)

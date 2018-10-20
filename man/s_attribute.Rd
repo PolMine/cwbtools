@@ -84,7 +84,10 @@ and will reset the encoding in the registry file.
 \examples{
 require("RcppCWB")
 registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
-data_dir_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", "reuters", fsep = "/")
+data_dir_tmp <- file.path(
+  normalizePath(tempdir(), winslash = "/"),
+  "cwb", "indexed_corpora", "reuters", fsep = "/"
+)
 
 corpus_copy(
   corpus = "REUTERS",
@@ -119,7 +122,9 @@ s_attribute_encode(
   delete = TRUE
 )
 
-cl_struc2str("REUTERS", struc = 0L:(nrow(cpos_matrix) - 1L), s_attribute = "foo", registry = registry_tmp)
+cl_struc2str(
+  "REUTERS", struc = 0L:(nrow(cpos_matrix) - 1L), s_attribute = "foo", registry = registry_tmp
+)
 
 unlink(registry_tmp, recursive = TRUE)
 unlink(data_dir_tmp, recursive = TRUE)
