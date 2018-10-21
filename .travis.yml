@@ -20,7 +20,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install glib       ; fi
   - Rscript -e 'install.packages("rmarkdown")'
   - Rscript -e 'install.packages("devtools")'
-  - Rscript -e 'devtools::install_github("PolMine/RcppCWB", ref = "dev")'
+  - Rscript -e 'install.packages("RcppCWB", repos = "https://polmine.github.io/drat")'
 
 r_packages:
   - data.table
