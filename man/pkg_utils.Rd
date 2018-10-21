@@ -100,6 +100,4 @@ pkg_add_creativecommons_license(pkg = y)
 }
 \seealso{
 The \code{\link[usethis]{use_description}} function in the usethis-package will also create a DESCRIPTION file.
-
-\link[usethis]{use_mit_license}
 }

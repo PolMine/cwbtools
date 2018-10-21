@@ -74,8 +74,10 @@ tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
 data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
-if (!file.exists(registry_tmp)) dir.create (registry_tmp)
-if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
+if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
+if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
+dir.create (registry_tmp)
+dir.create(data_dir_tmp)
 
 p_attribute_encode(
   corpus = "reuters",
