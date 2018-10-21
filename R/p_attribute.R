@@ -42,6 +42,8 @@
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 #' registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
 #' data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
+#' if (file.exists(file.path(data_dir_tmp, "word.corpus"))) # to avoid error on windows
+#'   file.remove(file.path(data_dir_tmp, "word.corpus))
 #' if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 #' if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
 #' dir.create (registry_tmp)
@@ -68,11 +70,14 @@
 #' 
 #' cqp_query(corpus = "REUTERS", query = '[]{3} "oil" []{3};')
 #' regions <- cqp_dump_subcorpus(corpus = "REUTERS")
-#' kwic <- apply(regions, 1, function(region){
-#'   ids <- cl_cpos2id("REUTERS", "word", registry_tmp, cpos = region[1]:region[2])
-#'   words <- cl_id2str(corpus = "REUTERS", p_attribute = "word", registry = registry_tmp, id = ids)
-#'   paste0(words, collapse = " ")
-#' })
+#' kwic <- apply(
+#'   regions, 1,
+#'   function(region){
+#'     ids <- cl_cpos2id("REUTERS", "word", registry_tmp, cpos = region[1]:region[2])
+#'     words <- cl_id2str(corpus = "REUTERS", p_attribute = "word", registry = registry_tmp, id = ids)
+#'     paste0(words, collapse = " ")
+#'   }
+#' )
 #' kwic[1:10]
 #' @export p_attribute_encode
 #' @importFrom RcppCWB cl_attribute_size
@@ -175,8 +180,12 @@ p_attribute_encode <- function(
       if (verbose) message("... running cwb-encode")
       executable <- if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
       system2(
-        command = file.path(cwb_get_bindir(), executable, fsep = "/"),
-        args = c(sprintf("-d %s", data_dir), sprintf("-f %s", vrt_tmp_file), sprintf("-R %s", registry_file), sprintf("-c %s", encoding), "-v")
+        command = normalizePath(file.path(cwb_get_bindir(), executable, fsep = "/")),
+        args = c(
+          sprintf("-d %s", normalizePath(data_dir)),
+          sprintf("-f %s", normalizePath(vrt_tmp_file)),
+          sprintf("-R %s", normalizePath(registry_file)),
+          sprintf("-c %s", encoding), "-v")
       )
     } else {
       # Add positional attribute to a corpus that already exists
@@ -192,8 +201,12 @@ p_attribute_encode <- function(
       executable <- if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
       cwb_encode_cmd_vec <- c(
         file.path(cwb_get_bindir(), executable, fsep = "/"),
-        "-d", data_dir, "-f", vrt_tmp_file, "-R", registry_file,
-        "-p", "-", "-P", p_attribute, "-c", encoding
+        "-d", normalizePath(data_dir),
+        "-f", normalizePath(vrt_tmp_file),
+        "-R", normalizePath(registry_file),
+        "-p", "-",
+        "-P", p_attribute,
+        "-c", encoding
       )
       system(paste0(cwb_encode_cmd_vec, collapse = " "))
     }
@@ -210,8 +223,10 @@ p_attribute_encode <- function(
   } else {
     if (verbose) message("... creating data for new registry file")
     regdata <- registry_data(
-      name = toupper(corpus), id = tolower(corpus),
-      home = data_dir, properties = c(charset = encoding),
+      name = toupper(corpus),
+      id = tolower(corpus),
+      home = data_dir,
+      properties = c(charset = encoding),
       p_attributes = p_attribute
     )
   }
@@ -226,24 +241,32 @@ p_attribute_encode <- function(
       if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall",
       fsep = "/"
       ),
-    args = c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), "-V", toupper(corpus))
+    args = c(
+      sprintf("-r %s", normalizePath(registry_dir)),
+      sprintf("-P %s", p_attribute),
+      "-V", toupper(corpus))
   )
   
   if (compress){
-    compression_cmd_args <- c(sprintf("-r %s", registry_dir), sprintf("-P %s", p_attribute), toupper(corpus))
+    compression_cmd_args <- c(
+      sprintf("-r %s", normalizePath(registry_dir)),
+      sprintf("-P %s", p_attribute),
+      toupper(corpus)
+      )
     system2(
-      command = file.path(
+      command = normalizePath(file.path(
         cwb_get_bindir(),
         if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode",
-        fsep = "/"),
+        fsep = "/")
+        ),
       args = compression_cmd_args, stdout = TRUE
       )
     system2(
-      command = file.path(
+      command = normalizePath(file.path(
         cwb_get_bindir(),
         if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx",
         fsep = "/"
-        ),
+        )),
       args = compression_cmd_args,
       stdout = TRUE
       )
