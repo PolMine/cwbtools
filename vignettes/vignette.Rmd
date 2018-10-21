@@ -111,7 +111,7 @@ UNGA$encode(
   registry_dir = registry_tmp, data_dir = unga_data_dir_tmp,
   corpus = "UNGA", encoding = "utf8", method = "R",
   p_attributes = "word", s_attributes = character(),
-  compress = TRUE
+  compress = FALSE
   )
 ```
 
@@ -183,7 +183,7 @@ Austen$encode(
    corpus = "AUSTEN", encoding = "utf8",
    p_attributes = c("word", "stem"), s_attributes = "book",
    registry_dir = registry_tmp, data_dir = austen_data_dir_tmp,
-   method = "R", compress = TRUE
+   method = "R", compress = FALSE
 )
 ```
 
@@ -262,7 +262,7 @@ Reuters$encode(
    p_attributes = "word", s_attributes = c("topics_cat", "places"),
    registry_dir = registry_tmp,
    data_dir = data_dir_tmp,
-   method = "R", compress = TRUE
+   method = "R", compress = FALSE
 )
 ```
 
