@@ -35,4 +35,5 @@ Collate:
     'CorpusData.R'
     'corpus.R'
     'cwb.R'
+    'ner.R'
 RoxygenNote: 6.0.1
