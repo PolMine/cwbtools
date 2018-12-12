@@ -38,8 +38,9 @@ corpus_copy(corpus, registry_dir, data_dir = NULL,
   "indexed_corpora", tolower(corpus), fsep = "/"), verbose = interactive(),
   progress = TRUE)
 
-corpus_recode(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"),
-  verbose = TRUE)
+corpus_recode(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
+  skip = character(), to = c("latin1", "UTF-8"), verbose = TRUE)
 }
 \arguments{
 \item{pkg}{Name of the data package.}
@@ -77,6 +78,8 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{new}{Name of the (new) corpus.}
 
 \item{tarfile}{Filename of tarball.}
+
+\item{skip}{A character vector with s_attributes to skip.}
 
 \item{to}{Character string describing the target encoding of the corpus.}
 }

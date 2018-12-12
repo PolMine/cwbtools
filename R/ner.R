@@ -1,11 +1,14 @@
 setOldClass("String")
 setOldClass("Annotation")
 
+#' Coerce I 
+#' 
 #' @examples
 #' library(polmineR)
 #' use("GermaParl")
 #' p <- partition("GERMAPARL", date = "2016-12-16")
 #' y <- as(p, "String")
+#' @name partition_to_string
 setAs(from = "partition", to = "String", def = function(from){
   word <- get_token_stream(from, p_attribute = "word")
   whitespace_after <- c(ifelse(word %in% c(".", ",", ":", "!", "?", "(", "["), FALSE, TRUE)[2L:length(word)], FALSE)
@@ -14,6 +17,8 @@ setAs(from = "partition", to = "String", def = function(from){
   NLP::String(y)
 })
 
+#' Coerce II 
+#' 
 #' @examples
 #' library(polmineR)
 #' use("UNGA")
@@ -34,6 +39,7 @@ setAs(from = "partition", to = "String", def = function(from){
 #' entity_annotator <- Maxent_Entity_Annotator(language = "en", kind = "organization")
 #' ner <- NLP::annotate(s, entity_annotator, a)
 #' s[ner[ner$type == "entity"]]
+#' @name partition_to_Annotation
 setAs(from = "partition", to = "Annotation", def = function(from){
   word <- get_token_stream(from, p_attribute = "word")
   whitespace_after <- c(ifelse(word %in% c(".", ",", ":", "!", "?", "(", "["), FALSE, TRUE)[2L:length(word)], FALSE)
@@ -70,6 +76,8 @@ setAs(from = "partition", to = "Annotation", def = function(from){
 })
 
 
+#' Coerce III
+#' 
 #' @examples
 #' library(polmineR)
 #' use("GermaParl")
@@ -90,6 +98,7 @@ setAs(from = "partition", to = "Annotation", def = function(from){
 #' ner <- annotate(s, entity_annotator, a1)
 #' s[ner]
 #' s[entity_annotator(s, a2)]
+#' @name as.Annotation
 as.Annotation <- function(x, type = c("word", "sentence")){
   if (type == "word"){
     word <- get_token_stream(x, p_attribute = "word")
