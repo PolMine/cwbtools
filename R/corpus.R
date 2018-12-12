@@ -358,6 +358,7 @@ corpus_copy <- function(
 
 
 #' @param to Character string describing the target encoding of the corpus.
+#' @param skip A character vector with s_attributes to skip.
 #' @export corpus_recode
 #' @rdname corpus_utils
 #' @examples 
@@ -429,7 +430,7 @@ corpus_copy <- function(
 #' unique(str)
 #' 
 #' unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
-corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-8"), verbose = TRUE){
+corpus_recode <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = registry_file_parse(corpus, registry_dir)[["home"]], skip = character(), to = c("latin1", "UTF-8"), verbose = TRUE){
   
   if (to == "UTF-8") to <- "UTF8"
   
@@ -437,13 +438,15 @@ corpus_recode <- function(corpus, registry_dir, data_dir, to = c("latin1", "UTF-
   if (regdata$properties[["charset"]] == to) stop("Aborting - target encoding identical with present encoding.")
   
   for (s_attr in regdata$s_attributes){
-    if (verbose) message("Recoding s-attribute: ", s_attr)
-    s_attribute_recode(
-      data_dir = data_dir,
-      s_attribute = s_attr,
-      from = regdata$properties[["charset"]],
-      to = toupper(to)
+    if (!s_attr %in% skip){
+      if (verbose) message("Recoding s-attribute: ", s_attr)
+      s_attribute_recode(
+        data_dir = data_dir,
+        s_attribute = s_attr,
+        from = regdata$properties[["charset"]],
+        to = toupper(to)
       )
+    }
   }
   
   for (p_attr in regdata$p_attributes){
