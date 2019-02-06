@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.12
-Date: 2018-10-22
+Version: 0.0.12.9001
+Date: 2019-02-06
 Authors@R: person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de")
 Description: Toolkit for Managing CWB Corpora.
 Imports:
@@ -12,7 +12,8 @@ Imports:
     stringi,
     curl,
     RcppCWB (>= 0.2.5.9002),
-    pbapply
+    pbapply,
+    methods
 Suggests:
     tm (>= 0.7.3),
     knitr,
@@ -20,7 +21,9 @@ Suggests:
     tidytext,
     SnowballC,
     janeaustenr,
-    devtools
+    devtools,
+    polmineR,
+    NLP
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3
@@ -35,5 +38,5 @@ Collate:
     'CorpusData.R'
     'corpus.R'
     'cwb.R'
-    'ner.R'
-RoxygenNote: 6.0.1
+    'decode.R'
+RoxygenNote: 6.1.1

@@ -42,8 +42,9 @@
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 #' registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
 #' data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
-#' if (file.exists(file.path(data_dir_tmp, "word.corpus"))) # to avoid error on windows
-#'   file.remove(file.path(data_dir_tmp, "word.corpus))
+#' if (file.exists(file.path(data_dir_tmp, "word.corpus"))){
+#'   file.remove(file.path(data_dir_tmp, "word.corpus"))
+#' }
 #' if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 #' if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
 #' dir.create (registry_tmp)

@@ -188,6 +188,7 @@ Austen$encode(
 ```
 
 ```{r}
+cqp_reset_registry(registry = registry_tmp)
 corpus <- "AUSTEN"
 token <- "pride"
 p_attr <- "stem"
@@ -269,6 +270,7 @@ Reuters$encode(
 The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word 'oil.
 
 ```{r}
+cqp_reset_registry(registry = registry_tmp)
 id <- cl_str2id(corpus = "REUTERS", p_attribute = "word", str = "oil", registry = registry_tmp)
 cpos <- cl_id2cpos(corpus = "REUTERS", p_attribute = "word", id = id, registry = registry_tmp)
 count <- length(cpos)

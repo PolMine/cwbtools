@@ -55,7 +55,7 @@ registry_file_parse <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGIST
 }
 
 
-#' @exportMethod print
+#' @export
 print.registry_data <- function(x, ...){
   cat("General Information\n")
   cat("-------------------\n")

@@ -4,7 +4,6 @@
 \name{cwbtools}
 \alias{cwbtools}
 \alias{cwbtools-package}
-\alias{cwbtools-package}
 \title{R-Package 'cwbtools'.}
 \description{
 Toolset to Manage CWB Corpora.

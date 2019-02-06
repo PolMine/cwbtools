@@ -5,8 +5,8 @@
 \alias{p_attribute_recode}
 \title{Encode Positional Attribute(s).}
 \usage{
-p_attribute_encode(token_stream, p_attribute = "word", registry_dir, corpus,
-  data_dir, method = c("R", "CWB"), verbose = TRUE,
+p_attribute_encode(token_stream, p_attribute = "word", registry_dir,
+  corpus, data_dir, method = c("R", "CWB"), verbose = TRUE,
   encoding = get_encoding(token_stream), compress = NULL)
 
 p_attribute_recode(data_dir, p_attribute, from = c("UTF-8", "latin1"),
@@ -64,4 +64,52 @@ the attribute value index in the avx file. The rng-file remains unchanged. The r
 file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
 as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 and will reset the encoding in the registry file.
+}
+\examples{
+library(RcppCWB)
+if (!cwb_is_installed()) cwb_install()
+tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
+
+tmpdir <- normalizePath(tempdir(), winslash = "/")
+if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
+registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
+data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
+if (file.exists(file.path(data_dir_tmp, "word.corpus"))){
+  file.remove(file.path(data_dir_tmp, "word.corpus"))
+}
+if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
+if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
+dir.create (registry_tmp)
+dir.create(data_dir_tmp)
+
+p_attribute_encode(
+  corpus = "reuters",
+  token_stream = tokens, p_attribute = "word",
+  data_dir = data_dir_tmp, method = "R",
+  registry_dir = registry_tmp,
+  compress = FALSE,
+  encoding = "utf8"
+  )
+
+regdata <- registry_data(
+  id = "REUTERS", name = "Reuters Sample Corpus", home = data_dir_tmp,
+  properties = c(encoding = "utf-8", language = "en"), p_attributes = "word"
+)
+regfile <- registry_file_write(
+  data = regdata, corpus = "REUTERS",
+  registry_dir = registry_tmp, data_dir = data_dir_tmp,
+)
+if (cqp_is_initialized()) cqp_reset_registry(registry_tmp) else cqp_initialize(registry_tmp)
+
+cqp_query(corpus = "REUTERS", query = '[]{3} "oil" []{3};')
+regions <- cqp_dump_subcorpus(corpus = "REUTERS")
+kwic <- apply(
+  regions, 1,
+  function(region){
+    ids <- cl_cpos2id("REUTERS", "word", registry_tmp, cpos = region[1]:region[2])
+    words <- cl_id2str(corpus = "REUTERS", p_attribute = "word", registry = registry_tmp, id = ids)
+    paste0(words, collapse = " ")
+  }
+)
+kwic[1:10]
 }

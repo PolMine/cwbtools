@@ -39,6 +39,7 @@
 #' @importFrom utils available.packages contrib.url install.packages
 #' @importFrom utils installed.packages tar
 #' @importFrom curl curl_download new_handle handle_setopt
+#' @importFrom stringi stri_enc_mark
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], verbose = TRUE, user = NULL, password = NULL, ...){
@@ -69,23 +70,42 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
     if (grepl("^http", tarball)){
       # if (!url.exists(tarball)) stop("tarball is not available")
-      # download.file(url = tarball, destfile = corpus_tarball, ...)
+      # download.file(url = tarball, destfile = corpus_tarball, method = "wget" extra = sprintf("--user %s --password %s"), user, password)
       if (is.null(user)){
-        curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+        if (.Platform$OS.type == "windows"){
+          # use download file because it is able to cope with murky user names / path names
+          download.file(url = tarball, destfile = corpus_tarball, quite = !verbose)
+        } else {
+          curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+        }
       } else {
         if (is.null(password)) stop("If user name is offered, a password needs to be specified as well.")
-        curl::curl_download(
-          url = tarball, destfile = corpus_tarball,
-          handle = handle_setopt(new_handle(), userpwd = sprintf("%s:%s", user, password)),
-          quiet = !verbose
-        )
+        if (.Platform$OS.type == "windows"){
+          # On Windows, download.file is used because curl will break if destfile includes
+          # special characters. The user and the password are passed in as follows
+          # "https://user:password@polmine.sowi.uni-due.de"
+          prefix <- gsub("^(https://|http://).*?$", "\\1", tarball)
+          tarball <- gsub("^(https://|http://)(.*?)$", "\\2", tarball)
+          download.file(
+            url = sprintf("%s%s:%s@%s", prefix, user, password, tarball),
+            destfile = corpus_tarball
+          )
+        } else {
+          curl::curl_download(
+            url = tarball, destfile = corpus_tarball,
+            handle = handle_setopt(new_handle(), userpwd = sprintf("%s:%s", user, password)),
+            quiet = !verbose
+          )
+        }
       }
     } else {
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' does not exist", tarball))
       file.copy(from = tarball, to = corpus_tarball)
     }
-    
+    if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII")
+      corpus_tarball <- shortPathName(corpus_tarball)
     if (verbose) message("... extracting tarball")
+    
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     unlink(corpus_tarball)
     
@@ -94,8 +114,14 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     corpora <- list.files(tmp_registry_dir)
     for (corpus in corpora){
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
-      registry_data[["home"]] <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
-      registry_data[["info"]] <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
+      home_dir <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
+      if (.Platform$OS.type == "windows" && stri_enc_mark(home_dir) != "ASCII")
+        home_dir <- shortPathName(home_dir)
+      registry_data[["home"]] <- home_dir
+      info_file <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
+      if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
+        home_dir <- shortPathName(info_file)
+      registry_data[["info"]] <- info_file
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)

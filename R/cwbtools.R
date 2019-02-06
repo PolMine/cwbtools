@@ -8,6 +8,7 @@
 #' @rdname cwbtools
 #' @author Andreas Blaette
 #' @import R6
+#' @import methods
 #' @examples
 #' \dontrun{
 #' library(tm)

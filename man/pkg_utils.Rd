@@ -12,14 +12,14 @@
 \usage{
 pkg_create_cwb_dirs(pkg = ".", verbose = TRUE)
 
-pkg_add_corpus(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGISTRY"),
-  verbose = TRUE)
+pkg_add_corpus(pkg = ".", corpus,
+  registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE)
 
 pkg_add_configure_scripts(pkg = ".")
 
 pkg_add_description(pkg = ".", package = NULL, version = "0.0.1",
-  date = Sys.Date(), author = "", maintainer = NULL, description = "",
-  license = "", verbose = TRUE)
+  date = Sys.Date(), author = "", maintainer = NULL,
+  description = "", license = "", verbose = TRUE)
 
 pkg_add_creativecommons_license(pkg = ".", license = "CC-BY-NC-SA",
   file = system.file(package = "cwbtools", "txt", "licenses",

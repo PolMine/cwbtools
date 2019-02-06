@@ -7,12 +7,12 @@
 \alias{corpus_rename}
 \alias{corpus_remove}
 \alias{corpus_as_tarball}
-\alias{corpus_copy}
 \alias{corpus_recode}
 \title{Install and manage corpora.}
 \usage{
-corpus_install(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages",
-  tarball = NULL, lib = .libPaths()[1], verbose = TRUE, user = NULL,
+corpus_install(pkg = NULL,
+  repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL,
+  lib = .libPaths()[1], verbose = TRUE, user = NULL,
   password = NULL, ...)
 
 corpus_packages()
@@ -20,9 +20,9 @@ corpus_packages()
 corpus_copy(corpus, registry_dir, data_dir = NULL,
   registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
   "cwb", "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
-  "indexed_corpora", tolower(corpus), fsep = "/"), verbose = interactive(),
-  progress = TRUE)
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
+  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
+  verbose = interactive(), progress = TRUE)
 
 corpus_rename(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE)
@@ -34,9 +34,9 @@ corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 corpus_copy(corpus, registry_dir, data_dir = NULL,
   registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
   "cwb", "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
-  "indexed_corpora", tolower(corpus), fsep = "/"), verbose = interactive(),
-  progress = TRUE)
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
+  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
+  verbose = interactive(), progress = TRUE)
 
 corpus_recode(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
