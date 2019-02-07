@@ -1,7 +1,7 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.12.9001
+Version: 0.0.12.9002
 Date: 2019-02-06
 Authors@R: person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de")
 Description: Toolkit for Managing CWB Corpora.
