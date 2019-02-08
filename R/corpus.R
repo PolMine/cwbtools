@@ -102,8 +102,12 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' does not exist", tarball))
       file.copy(from = tarball, to = corpus_tarball)
     }
-    if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII")
+    if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII"){
       corpus_tarball <- shortPathName(corpus_tarball)
+    }
+    if (.Platform$OS.type == "windows" && stri_enc_mark(cwbtools_tmpdir) != "ASCII"){
+      cwbtools_tmpdir <- shortPathName(cwbtools_tmpdir)
+    }
     if (verbose) message("... extracting tarball")
     
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)

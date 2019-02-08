@@ -19,6 +19,7 @@
 #' @param verbose logicalds
 #' @export s_attribute_encode
 #' @importFrom RcppCWB cl_delete_corpus
+#' @seealso To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.
 #' @examples
 #' require("RcppCWB")
 #' registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
@@ -261,5 +262,3 @@ s_attribute_get_regions <- function(s_attribute, data_dir){
   rng_vector <- readBin(con = rng_file, what = integer(), size = 4L, n = rng_size, endian = "big")
   matrix(data = rng_vector, ncol = 2, byrow = TRUE)
 }
-
-

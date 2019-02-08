@@ -70,3 +70,5 @@ decode <- function(x, type = c("word", "sentence")){
     return(y)
   }
 }
+
+
