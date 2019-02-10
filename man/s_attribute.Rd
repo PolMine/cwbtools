@@ -71,8 +71,8 @@ and will reset the encoding in the registry file.
 \code{s_attribute_get_values} is equivalent to performing the CL
   function cl_struc2id for all strucs of a structural attribute. It is a
   "pure R" operation that is faster than using CL, as it processes entire
-  files for the s-attribute directly. The return value is a character values
-  with all string values for the s-attribute.
+  files for the s-attribute directly. The return value is a \code{character}
+  vector with all string values for the s-attribute.
 
 \code{s_attribute_get_regions} will return a two-column integer
   matrix with regions for the strucs of a given s-attribute. Left corpus

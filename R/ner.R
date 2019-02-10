@@ -1,6 +1,8 @@
 #' Extract regions from NER annotations (CoNNL format).
 #' 
-#' @param x
+#' @param x A \code{data.frame}, a \code{data.table}, or any other object that
+#'   can be coerced to a \code{data.table}. The input table is expected to have
+#'   the columns "token" and "ner", and "cpos".
 #' @examples
 #' x <- data.frame(
 #'   token = c("Die", "Bundeskanzlerin", "Angela", "Merkel", "hält", "im", "Bundestag", "eine", "Rede", "."),
