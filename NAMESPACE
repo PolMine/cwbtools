@@ -2,6 +2,7 @@
 
 S3method(print,registry_data)
 export(CorpusData)
+export(conll_get_regions)
 export(corpus_as_tarball)
 export(corpus_copy)
 export(corpus_install)

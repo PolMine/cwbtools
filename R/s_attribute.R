@@ -216,8 +216,8 @@ s_attribute_files <- function(s_attribute, data_dir){
 #' @details \code{s_attribute_get_values} is equivalent to performing the CL
 #'   function cl_struc2id for all strucs of a structural attribute. It is a
 #'   "pure R" operation that is faster than using CL, as it processes entire
-#'   files for the s-attribute directly. The return value is a character values
-#'   with all string values for the s-attribute.
+#'   files for the s-attribute directly. The return value is a \code{character}
+#'   vector with all string values for the s-attribute.
 #' @examples
 #' avs <- s_attribute_get_values(
 #'   s_attribute = "id",

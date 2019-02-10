@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolkit for Managing CWB Corpora
-Version: 0.0.12.9002
-Date: 2019-02-06
+Version: 0.0.12.9003
+Date: 2019-02-10
 Authors@R: person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de")
 Description: Toolkit for Managing CWB Corpora.
 Imports:
@@ -39,4 +39,5 @@ Collate:
     'corpus.R'
     'cwb.R'
     'decode.R'
+    'ner.R'
 RoxygenNote: 6.1.1

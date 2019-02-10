@@ -137,3 +137,6 @@ rng <- s_attribute_get_regions(
   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
 )
 }
+\seealso{
+To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.
+}
