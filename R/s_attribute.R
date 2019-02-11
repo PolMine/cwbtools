@@ -262,3 +262,77 @@ s_attribute_get_regions <- function(s_attribute, data_dir){
   rng_vector <- readBin(con = rng_file, what = integer(), size = 4L, n = rng_size, endian = "big")
   matrix(data = rng_vector, ncol = 2, byrow = TRUE)
 }
+
+
+#' @details \code{s_attribute_merge} combines two tables with regions for
+#'   s-attributes checking for intersections that may cause problems. The
+#'   heuristic is to keep all non-intersecting annotations and those annotations
+#'   that define the same region in object \code{x} and object \code{y}.
+#'   Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
+#'   an identity of the left and the right corpus position ("cpos_left" /
+#'   "cpos_right") are dropped. The scenario for using the function is to decode
+#'   a s-attribute (using \code{s_attribute_decode}), mix in an additional
+#'   annotation, and to re-encode the enhanced s-attribute (using
+#'   \code{s_attribute_encode).
+#' @param x Data defining a first s-attribute, a \code{data.table} (or an object
+#'   coercible to a \code{data.table}) with three columns ("cpos_left",
+#'   "cpos_right", "value").
+#' @param y Data defining a second s-attribute, a \code{data.table} (or an
+#'   object coercible to a \code{data.table})with three columns ("cpos_left",
+#'   "cpos_right", "value").
+#' @export s_attribute_merge 
+#' @examples
+#' x <- data.frame(
+#'   cpos_left =  c(1L, 5L, 10L, 20L, 25L),
+#'   cpos_right = c(2L, 5L, 12L, 21L, 27L),
+#'   value = c("ORG", "LOC", "ORG", "PERS", "ORG"),
+#'   stringsAsFactors = FALSE
+#' )
+#' y <- data.frame(
+#'   cpos_left =  c(5, 11, 20, 25L, 30L),
+#'   cpos_right = c(5, 12, 22, 27L, 33L),
+#'   value = c("LOC", "ORG", "ORG", "ORG", "ORG"),
+#'   stringsAsFactors = FALSE
+#' )
+#' s_attribute_merge(x,y)
+#' @rdname s_attribute
+#' @importFrom data.table is.data.table dcast.data.table
+s_attribute_merge <- function(x, y){
+  if (!is.data.table(x)) x <- as.data.table(x)
+  if (!is.data.table(y)) y <- as.data.table(y)
+  x[, "s_attr" := "x"][, "region_no" := seq_len(nrow(x))]
+  y[, "s_attr" := "y"][, "region_no" := seq_len(nrow(y))]
+  dt <- rbindlist(lapply(
+    list(x, y),
+    function(dt){
+      dt[,
+         {list(cpos = seq.int(from = .SD[["cpos_left"]], to = .SD[["cpos_right"]]))},
+         by = "region_no"
+        ][, "s_attr" := dt[["s_attr"]][1]]
+    }
+  ))
+
+  overlaps <- dcast.data.table(data = dt, formula = cpos ~ s_attr, value.var = "region_no")
+  
+  # now we get the regions that overlap
+  regions <- overlaps[!is.na(x)][!is.na(y)][,{.SD[1L]}, by = c("x", "y")]
+  left_identical <- x[regions[["x"]]][["cpos_left"]] == y[regions[["y"]]][["cpos_left"]]
+  right_identical <- x[regions[["x"]]][["cpos_right"]] == y[regions[["y"]]][["cpos_right"]]
+  keep <- ifelse(left_identical == right_identical, TRUE, FALSE)
+  regions_to_drop_x <- regions[!keep][["x"]]
+  regions_to_drop_y <- regions[["y"]]
+  if (length(regions_to_drop_x) > 0) x <- x[-regions_to_drop_x]
+  if (length(regions_to_drop_y) > 0) y <- y[-regions_to_drop_y]
+  retval <- rbindlist(list(x,y))
+  setorderv(retval, cols = "cpos_left", order = 1L)
+  retval[, "s_attr" := NULL][, "region_no" := NULL]
+  as.data.frame(retval)
+}
+
+
+#' @details Function \code{s_attribute_delete} is not yet implemented.
+#' @export s_attribute_delete
+#' @rdname s_attribute
+s_attribute_delete <- function(corpus, s_attribute){
+  stop("function 's_attribute_delete' is not yet implemented")
+}

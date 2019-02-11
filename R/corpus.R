@@ -165,67 +165,6 @@ corpus_packages <- function(){
   M
 }
 
-#' @param data_dir The data directory where the files of the CWB corpus live.
-#' @param registry_dir_new Target directory with for (new) registry files.
-#' @param data_dir_new Target directory for corpus files.
-#' @param progress Logical, whether to show a progress bar.
-#' @details \code{corpus_copy} will create a copy of a corpus (useful for
-#'   experimental modifications, for instance).
-#' @rdname corpus_utils
-#' @export corpus_copy
-corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
-  stopifnot(tolower(old) %in% list.files(registry_dir))
-  
-  # copy data directory
-  message("copying data directory")
-  regdata <- registry_file_parse(corpus = old, registry_dir = registry_dir)
-  data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new), fsep = "/")
-  if (file.exists(data_dir_new)){
-    if (readline(prompt = "Data directory already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y")
-      stop("Aborting the operation.")
-  } else {
-    dir.create(data_dir_new)
-  }
-  files_to_copy <- list.files(regdata[["home"]], full.names = TRUE)
-  success <- pbapply::pblapply(
-    files_to_copy,
-    function(x) file.copy(from = x, to = data_dir_new, recursive = TRUE)
-    )
-  if (!all(unlist(success))){
-    stop("copying the data directory failed")
-  } else {
-    message("... copying data directory succeeded")
-  }
-  
-  # generate copy of registry file
-  message("make copy of registry file")
-  registry_file_new <- file.path(registry_file_new, tolower(new), fsep = "/")
-  if (file.exists(registry_file_new)){
-    if (readline(prompt = "New registry file already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y"){
-      file.remove(registry_file_new)
-    } else {
-      stop("Aborting the operation.")
-    }
-      
-  }
-  success <- file.copy(
-    from = file.path(registry_dir, tolower(old), fsep = "/"),
-    to = file.path(registry_dir, tolower(new), fsep = "/")
-  )
-  if (!success){
-    stop("copying the registry file failed")
-  } else {
-    message("... copying registry file succeeded")
-  }
-  
-  # modify the new registry file 
-  message("updating new registry file")
-  regdata <- registry_file_parse(corpus = new, registry_dir = registry_dir)
-  regdata[["id"]] <- tolower(new)
-  regdata[["home"]] <- data_dir_new
-  registry_file_write(data = regdata, corpus = tolower(new), registry_dir = registry_dir)
-  invisible(NULL)
-}
 
 #' @details \code{corpus_rename} will rename a corpus, affecting the name of the
 #'   registry file, the corpus id, and the name of the directory where data
@@ -327,8 +266,12 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
   invisible( NULL )
 }
 
-
-#' @details \code{corpus_copy} will create a copy of a corpus.
+#' @param data_dir The data directory where the files of the CWB corpus live.
+#' @param registry_dir_new Target directory with for (new) registry files.
+#' @param data_dir_new Target directory for corpus files.
+#' @param progress Logical, whether to show a progress bar.
+#' @details \code{corpus_copy} will create a copy of a corpus (useful for
+#'   experimental modifications, for instance).
 #' @export corpus_copy
 #' @rdname corpus_utils
 #' @examples
@@ -385,6 +328,62 @@ corpus_copy <- function(
   if (progress) close(pb)
   invisible(NULL)
 }
+
+
+# corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
+#   stopifnot(tolower(old) %in% list.files(registry_dir))
+#   
+#   # copy data directory
+#   message("copying data directory")
+#   regdata <- registry_file_parse(corpus = old, registry_dir = registry_dir)
+#   data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new), fsep = "/")
+#   if (file.exists(data_dir_new)){
+#     if (readline(prompt = "Data directory already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y")
+#       stop("Aborting the operation.")
+#   } else {
+#     dir.create(data_dir_new)
+#   }
+#   files_to_copy <- list.files(regdata[["home"]], full.names = TRUE)
+#   success <- pbapply::pblapply(
+#     files_to_copy,
+#     function(x) file.copy(from = x, to = data_dir_new, recursive = TRUE)
+#   )
+#   if (!all(unlist(success))){
+#     stop("copying the data directory failed")
+#   } else {
+#     message("... copying data directory succeeded")
+#   }
+#   
+#   # generate copy of registry file
+#   message("make copy of registry file")
+#   registry_file_new <- file.path(registry_file_new, tolower(new), fsep = "/")
+#   if (file.exists(registry_file_new)){
+#     if (readline(prompt = "New registry file already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y"){
+#       file.remove(registry_file_new)
+#     } else {
+#       stop("Aborting the operation.")
+#     }
+#     
+#   }
+#   success <- file.copy(
+#     from = file.path(registry_dir, tolower(old), fsep = "/"),
+#     to = file.path(registry_dir, tolower(new), fsep = "/")
+#   )
+#   if (!success){
+#     stop("copying the registry file failed")
+#   } else {
+#     message("... copying registry file succeeded")
+#   }
+#   
+#   # modify the new registry file 
+#   message("updating new registry file")
+#   regdata <- registry_file_parse(corpus = new, registry_dir = registry_dir)
+#   regdata[["id"]] <- tolower(new)
+#   regdata[["home"]] <- data_dir_new
+#   registry_file_write(data = regdata, corpus = tolower(new), registry_dir = registry_dir)
+#   invisible(NULL)
+# }
+
 
 
 #' @param to Character string describing the target encoding of the corpus.

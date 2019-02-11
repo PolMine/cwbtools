@@ -6,6 +6,8 @@
 \alias{s_attribute_files}
 \alias{s_attribute_get_values}
 \alias{s_attribute_get_regions}
+\alias{s_attribute_merge}
+\alias{s_attribute_delete}
 \title{Read, process and write data on structural attributes.}
 \usage{
 s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
@@ -20,6 +22,10 @@ s_attribute_files(s_attribute, data_dir)
 s_attribute_get_values(s_attribute, data_dir)
 
 s_attribute_get_regions(s_attribute, data_dir)
+
+s_attribute_merge(x, y)
+
+s_attribute_delete(corpus, s_attribute)
 }
 \arguments{
 \item{values}{A character vector with the values of the structural attribute.}
@@ -45,6 +51,14 @@ s_attribute_get_regions(s_attribute, data_dir)
 \item{from}{Character string describing the current encoding of the attribute.}
 
 \item{to}{Character string describing the target encoding of the attribute.}
+
+\item{x}{Data defining a first s-attribute, a \code{data.table} (or an object
+coercible to a \code{data.table}) with three columns ("cpos_left",
+"cpos_right", "value").}
+
+\item{y}{Data defining a second s-attribute, a \code{data.table} (or an
+object coercible to a \code{data.table})with three columns ("cpos_left",
+"cpos_right", "value").}
 }
 \description{
 Read, process and write data on structural attributes.
@@ -80,6 +94,8 @@ and will reset the encoding in the registry file.
   column. The result is equivalent to calling RcppCWB::get_region_matrix for
   all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
   function which is fast as it processes files entirely and directly.
+
+Function \code{s_attribute_delete} is not yet implemented.
 }
 \examples{
 require("RcppCWB")
@@ -136,6 +152,19 @@ rng <- s_attribute_get_regions(
   s_attribute = "id",
   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
 )
+x <- data.frame(
+  cpos_left =  c(1L, 5L, 10L, 20L, 25L),
+  cpos_right = c(2L, 5L, 12L, 21L, 27L),
+  value = c("ORG", "LOC", "ORG", "PERS", "ORG"),
+  stringsAsFactors = FALSE
+)
+y <- data.frame(
+  cpos_left =  c(5, 11, 20, 25L, 30L),
+  cpos_right = c(5, 12, 22, 27L, 33L),
+  value = c("LOC", "ORG", "ORG", "ORG", "ORG"),
+  stringsAsFactors = FALSE
+)
+s_attribute_merge(x,y)
 }
 \seealso{
 To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.

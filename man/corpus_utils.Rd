@@ -3,10 +3,10 @@
 \name{corpus_install}
 \alias{corpus_install}
 \alias{corpus_packages}
-\alias{corpus_copy}
 \alias{corpus_rename}
 \alias{corpus_remove}
 \alias{corpus_as_tarball}
+\alias{corpus_copy}
 \alias{corpus_recode}
 \title{Install and manage corpora.}
 \usage{
@@ -16,13 +16,6 @@ corpus_install(pkg = NULL,
   password = NULL, ...)
 
 corpus_packages()
-
-corpus_copy(corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
-  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
-  verbose = interactive(), progress = TRUE)
 
 corpus_rename(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE)
@@ -61,9 +54,15 @@ corpus_recode(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
 \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 or \code{download.file}, if \code{tarball} is specified.}
 
-\item{corpus}{A CWB corpus.}
+\item{old}{Name of the (old) corpus.}
+
+\item{new}{Name of the (new) corpus.}
 
 \item{registry_dir}{Directory of registry.}
+
+\item{corpus}{A CWB corpus.}
+
+\item{tarfile}{Filename of tarball.}
 
 \item{data_dir}{The data directory where the files of the CWB corpus live.}
 
@@ -72,12 +71,6 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{data_dir_new}{Target directory for corpus files.}
 
 \item{progress}{Logical, whether to show a progress bar.}
-
-\item{old}{Name of the (old) corpus.}
-
-\item{new}{Name of the (new) corpus.}
-
-\item{tarfile}{Filename of tarball.}
 
 \item{skip}{A character vector with s_attributes to skip.}
 
@@ -106,9 +99,6 @@ A data package with a CWB corpus is assumed to include a directory
 \code{corpus_packages} will detect the packages that include CWB
   corpora.
 
-\code{corpus_copy} will create a copy of a corpus (useful for
-  experimental modifications, for instance).
-
 \code{corpus_rename} will rename a corpus, affecting the name of the
   registry file, the corpus id, and the name of the directory where data
   files reside.
@@ -120,7 +110,8 @@ A data package with a CWB corpus is assumed to include a directory
   for the tarred corpus. The data files will be put in a subdirectory with
   the corpus name in the 'indexed_corpora' subdirectory.
 
-\code{corpus_copy} will create a copy of a corpus.
+\code{corpus_copy} will create a copy of a corpus (useful for
+  experimental modifications, for instance).
 }
 \examples{
 registry_file_new <- file.path(
