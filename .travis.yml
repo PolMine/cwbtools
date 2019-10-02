@@ -13,12 +13,8 @@ addons:
       - libglib2.0-dev 
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update             ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pkg-config ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install glib       ; fi
   - Rscript -e 'install.packages("rmarkdown")'
   - Rscript -e 'install.packages("devtools")'
-  - Rscript -e 'install.packages("RcppCWB", repos = "https://polmine.github.io/drat")'
 
 r_packages:
   - data.table
