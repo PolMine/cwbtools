@@ -74,25 +74,30 @@ library(data.table)
 if (!cwb_is_installed()) cwb_install()
 
 registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
+registry_tmp <- file.path(tempdir(), "registry")
+if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
+r <- registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)
+r[["home"]] <- system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+registry_file_write(r, corpus = "REUTERS", registry_dir = registry_tmp)
 
-s_attrs_places <- s_attribute_decode(
+s_attrs_places <- RcppCWB::s_attribute_decode(
   corpus = "REUTERS",
-  data_dir = registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)[["home"]],
+  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters"),
   s_attribute = "places", method = "R"
 )
-s_attrs_places[["id"]] <- 1:nrow(s_attrs_places)
+s_attrs_places[["id"]] <- 1L:nrow(s_attrs_places)
 setnames(s_attrs_places, old = "value", new = "places")
 
 tokens <- apply(s_attrs_places, 1, function(row){
   ids <- cl_cpos2id(
     corpus = "REUTERS", cpos = row[1]:row[2],
-    p_attribute = "word", registry = registry_rcppcwb
+    p_attribute = "word", registry = registry_tmp
   )
-  cl_id2str(corpus = "REUTERS", id = ids, p_attribute = "word", registry = registry_rcppcwb)
+  cl_id2str(corpus = "REUTERS", id = ids, p_attribute = "word", registry = registry_tmp)
 })
 tokenstream <- rbindlist(
 lapply(
-  1:length(tokens),
+  1L:length(tokens),
   function(i) data.table(id = i, word = tokens[[i]]))
   )
 tokenstream[["cpos"]] <- 1:nrow(tokenstream)
@@ -101,15 +106,23 @@ CD <- CorpusData$new()
 CD$tokenstream <- as.data.table(tokenstream)
 CD$metadata <- as.data.table(s_attrs_places)
 
+# Remove temporary registry with home dir still pointing to RcppCWB data dir
+# to prevent data from being deleted
+file.remove(file.path(registry_tmp, "reuters"))
+file.remove(registry_tmp, "reuters")
+
 tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-dir.create (registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
-dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
+registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
+data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
+if (!dir.exists(registry_tmp)) dir.create(registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
+if (!dir.exists(data_dir_tmp)) dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
 
-CD$encode(corpus = "REUTERS", encoding = "utf8",
-          p_attributes = "word", s_attributes = "places",
-          registry_dir = registry_tmp,
-          data_dir = data_dir_tmp, method = "R"
+CD$encode(
+  corpus = "REUTERS", encoding = "utf8",
+  p_attributes = "word", s_attributes = "places",
+  registry_dir = registry_tmp, data_dir = data_dir_tmp,
+  method = "R"
 )
 reg <- registry_data(name = "REUTERS", id = "REUTERS", home = data_dir_tmp, p_attributes = "word")
 registry_file_write(data = reg, corpus = "REUTERS", registry_dir = registry_tmp)

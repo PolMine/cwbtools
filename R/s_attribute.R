@@ -273,7 +273,7 @@ s_attribute_get_regions <- function(s_attribute, data_dir){
 #'   "cpos_right") are dropped. The scenario for using the function is to decode
 #'   a s-attribute (using \code{s_attribute_decode}), mix in an additional
 #'   annotation, and to re-encode the enhanced s-attribute (using
-#'   \code{s_attribute_encode).
+#'   \code{s_attribute_encode}).
 #' @param x Data defining a first s-attribute, a \code{data.table} (or an object
 #'   coercible to a \code{data.table}) with three columns ("cpos_left",
 #'   "cpos_right", "value").

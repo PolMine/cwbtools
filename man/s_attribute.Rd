@@ -95,6 +95,17 @@ and will reset the encoding in the registry file.
   all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
   function which is fast as it processes files entirely and directly.
 
+\code{s_attribute_merge} combines two tables with regions for
+  s-attributes checking for intersections that may cause problems. The
+  heuristic is to keep all non-intersecting annotations and those annotations
+  that define the same region in object \code{x} and object \code{y}.
+  Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
+  an identity of the left and the right corpus position ("cpos_left" /
+  "cpos_right") are dropped. The scenario for using the function is to decode
+  a s-attribute (using \code{s_attribute_decode}), mix in an additional
+  annotation, and to re-encode the enhanced s-attribute (using
+  \code{s_attribute_encode}).
+
 Function \code{s_attribute_delete} is not yet implemented.
 }
 \examples{

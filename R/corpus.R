@@ -211,11 +211,26 @@ corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
   
   reg <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
   data_directory <- reg[["home"]]
-  if (readline(prompt = sprintf("Are you sure you want to data files for corpus '%s'? ('Y' to continue, anything else to abort", corpus)) != "Y"){
+  if (interactive()){
+    instruction <- readline(
+      prompt = sprintf("Are you sure you want to delete data files for corpus '%s'? ('Y' to continue, anything else to abort", corpus)
+    )
+  } else {
+    instruction <- "Y"
+  }
+  if (instruction == "Y"){
     for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
     file.remove(data_directory)
   }
-  if (readline(prompt = sprintf("Are you sure you want to delete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)) != "Y"){
+  
+  if (interactive()){
+    instruction <- readline(
+      prompt = sprintf("Are you sure you want to delete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)
+    )
+  } else {
+    instruction <- "Y"
+  }
+  if (instruction == "Y"){
     file.remove(file.path(registry_dir, tolower(x), fsep = "/"))
   }
 }
@@ -435,6 +450,7 @@ corpus_copy <- function(
 #' )
 #' 
 #' RcppCWB::cl_delete_corpus(corpus = corpus, registry = registry_dir_tmp)
+#' RcppCWB::cqp_initialize(registry_dir_tmp)
 #' RcppCWB::cl_charset_name(corpus = corpus, registry = registry_dir_tmp)
 #' 
 #' n_strucs <- RcppCWB::cl_attribute_size(

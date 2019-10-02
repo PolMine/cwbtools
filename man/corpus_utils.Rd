@@ -175,6 +175,7 @@ corpus_recode(
 )
 
 RcppCWB::cl_delete_corpus(corpus = corpus, registry = registry_dir_tmp)
+RcppCWB::cqp_initialize(registry_dir_tmp)
 RcppCWB::cl_charset_name(corpus = corpus, registry = registry_dir_tmp)
 
 n_strucs <- RcppCWB::cl_attribute_size(

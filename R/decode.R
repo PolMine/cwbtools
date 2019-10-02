@@ -33,7 +33,7 @@ decode <- function(x, type = c("word", "sentence")){
     word_with_whitespace <- paste(word, ifelse(whitespace_after, " ", ""), sep = "")
     s <- paste(word_with_whitespace, collapse = "")
     word_length <- sapply(word, nchar)
-    left_offset <- c(1, (cumsum(sapply(word_with_whitespace, nchar)) + 1L)[1L:(length(word) - 1L)] )
+    left_offset <- c(1L, (cumsum(sapply(word_with_whitespace, nchar)) + 1L)[1L:(length(word) - 1L)] )
     names(left_offset) <- word
     right_offset <- left_offset + word_length - 1L
     names(right_offset) <- word

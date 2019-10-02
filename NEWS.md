@@ -1,3 +1,6 @@
+# v0.0.12.9005
+  * updated vignette so that annex explains installation of CoreNLP v3.9.2 (2018-10-05)
+
 # v0.0.12.9002
   * New functions `s_atttribute_get_regions()` and `s_attribute_get_values()`.
   * In `corpus_install()`, using `download.file()` replaces `curl::curl_download()` for Windows because curl apparantly is not able to process target filenames that include special characters.
