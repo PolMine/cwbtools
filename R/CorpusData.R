@@ -66,7 +66,7 @@
 #' if (!cwb_is_installed()) cwb_install()
 #' 
 #' registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
-#' registry_tmp <- file.path(tempdir(), "registry")
+#' registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "registry")
 #' if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
 #' r <- registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)
 #' r[["home"]] <- system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
