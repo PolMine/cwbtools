@@ -103,10 +103,10 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       file.copy(from = tarball, to = corpus_tarball)
     }
     if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII"){
-      corpus_tarball <- shortPathName(corpus_tarball)
+      corpus_tarball <- utils::shortPathName(corpus_tarball)
     }
     if (.Platform$OS.type == "windows" && stri_enc_mark(cwbtools_tmpdir) != "ASCII"){
-      cwbtools_tmpdir <- shortPathName(cwbtools_tmpdir)
+      cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
     if (verbose) message("... extracting tarball")
     
@@ -120,11 +120,11 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       home_dir <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(home_dir) != "ASCII")
-        home_dir <- shortPathName(home_dir)
+        home_dir <- utils::shortPathName(home_dir)
       registry_data[["home"]] <- home_dir
       info_file <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
-        home_dir <- shortPathName(info_file)
+        home_dir <- utils::shortPathName(info_file)
       registry_data[["info"]] <- info_file
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
       if (!is.null(pkg)){
