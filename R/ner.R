@@ -5,7 +5,18 @@
 #'   the columns "token" and "ner", and "cpos".
 #' @examples
 #' x <- data.frame(
-#'   token = c("Die", "Bundeskanzlerin", "Angela", "Merkel", "hält", "im", "Bundestag", "eine", "Rede", "."),
+#'   token = c(
+#'     "Die",
+#'     "Bundeskanzlerin",
+#'     "Angela",
+#'     "Merkel",
+#'     "hält",
+#'     "im",
+#'     "Bundestag",
+#'     "eine",
+#'     "Rede",
+#'     "."
+#'   ),
 #'   ne = c("O", "O", "B-PERS", "I-PERS", "O", "O", "B-ORG", "O", "O", "O"),
 #'   stringsAsFactors = FALSE
 #' )
