@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/aur/license/yaourt.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Travis-CI Build Status](https://api.travis-ci.org/PolMine/cwbtools.svg?branch=dev)](https://travis-ci.org/PolMine/cwbtools)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=dev&svg=true)](https://ci.appveyor.com/project/PolMine/cwbtools)
 [![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/dev/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/dev)
