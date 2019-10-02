@@ -74,7 +74,7 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       if (is.null(user)){
         if (.Platform$OS.type == "windows"){
           # use download file because it is able to cope with murky user names / path names
-          download.file(url = tarball, destfile = corpus_tarball, quite = !verbose)
+          download.file(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         } else {
           curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         }
