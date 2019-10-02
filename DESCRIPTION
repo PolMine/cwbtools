@@ -11,7 +11,7 @@ Imports:
     xml2,
     stringi,
     curl,
-    RcppCWB (>= 0.2.5.9002),
+    RcppCWB (>= 0.2.8),
     pbapply,
     methods
 Suggests:
