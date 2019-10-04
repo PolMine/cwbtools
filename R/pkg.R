@@ -8,16 +8,16 @@
 #' @param verbose Logical, whether to be verbose.
 #' 
 #' @examples 
-#' y <- normalizePath(tempdir(), winslash = "/")
-#' pkg_create_cwb_dirs(pkg = y)
-#' pkg_add_description(pkg = y, package = "reuters", description = "Reuters data package")
-#' pkg_add_corpus(
-#'   pkg = y, corpus = "REUTERS",
+#' pkgdir <- normalizePath(tempdir(), winslash = "/")
+#' pkg_create_cwb_dirs(pkg = pkgdir)
+#' pkg_add_description(pkg = pkgdir, package = "reuters", description = "Reuters data package")
+ #' pkg_add_corpus(
+#'   pkg = pkgdir, corpus = "REUTERS",
 #'   registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 #' )
-#' pkg_add_gitattributes_file(pkg = y)
-#' pkg_add_configure_scripts(pkg = y)
-#' pkg_add_creativecommons_license(pkg = y)
+#' pkg_add_gitattributes_file(pkg = pkgdir)
+#' pkg_add_configure_scripts(pkg = pkgdir)
+#' pkg_add_creativecommons_license(pkg = pkgdir)
 #' @rdname pkg_utils
 #' @name pkg_utils
 NULL
@@ -129,7 +129,8 @@ pkg_add_configure_scripts = function(pkg = "."){
 
 
 #' @details \code{pkg_add_description} will add a description file to the package.
-#' @param package The package name, may not include special chars, and no underscores ('_').
+#' @param package The package name (\code{character}), may not include special
+#'   chars, and no underscores ('_').
 #' @param author The author of the package, either character vector or object of class \code{person}.
 #' @param version The version number of the corpus (defaults to "0.0.1")
 #' @param date The date of creation, defaults to \code{Sys.Date()}.
@@ -140,7 +141,7 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @export pkg_add_description
 #' @rdname pkg_utils
 pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author = "", maintainer = NULL, description = "", license = "", verbose = TRUE){
-  if (file.exists(file.path(pkg, "DESCRIPTION"), fsep = "/")){
+  if (file.exists(file.path(pkg, "DESCRIPTION", fsep = "/"))){
     user_input <- readline(prompt = "DESCRIPTION file already exists. Proceed anyway (Y / any other key to abort)?")
     if (user_input != "Y"){
       message("file DESCRIPTION is not generated anew")
