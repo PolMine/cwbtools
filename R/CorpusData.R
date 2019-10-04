@@ -210,7 +210,12 @@ CorpusData <- R6::R6Class(
       }
       
       if (!all(file.exists(filenames))) stop("all files provided by x need to exist (not fulfilled)")
-      data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
+      if (is.null(mc) || mc == 1L){
+        data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
+      } else {
+        if (!is.numeric(mc))
+        data <- if (progress) pblapply(filenames, .xml_reader, cl = mc) else mclapply(filenames, .xml_reader, mc.cores = mc)
+      }
       self$chunktable <- rbindlist(lapply(data, function(x) x[["text"]]))
       self$chunktable[["id"]] <- 1L:nrow(self$chunktable)
       self$metadata <- rbindlist(lapply(data, function(x) x[["metadata"]]), fill = TRUE)

@@ -18,8 +18,8 @@ pkg_add_corpus(pkg = ".", corpus,
 pkg_add_configure_scripts(pkg = ".")
 
 pkg_add_description(pkg = ".", package = NULL, version = "0.0.1",
-  date = Sys.Date(), author = "", maintainer = NULL,
-  description = "", license = "", verbose = TRUE)
+  date = Sys.Date(), author, maintainer = NULL, description = "",
+  license = "", verbose = TRUE)
 
 pkg_add_creativecommons_license(pkg = ".", license = "CC-BY-NC-SA",
   file = system.file(package = "cwbtools", "txt", "licenses",
@@ -36,7 +36,8 @@ pkg_add_gitattributes_file(pkg = ".")
 
 \item{registry}{Registry directory.}
 
-\item{package}{The package name, may not include special chars, and no underscores ('_').}
+\item{package}{The package name (\code{character}), may not include special
+chars, and no underscores ('_').}
 
 \item{version}{The version number of the corpus (defaults to "0.0.1")}
 
@@ -87,16 +88,21 @@ the package defined by \code{pkg}.
   indexed corpus data.
 }
 \examples{
-y <- normalizePath(tempdir(), winslash = "/")
-pkg_create_cwb_dirs(pkg = y)
-pkg_add_description(pkg = y, package = "reuters", description = "Reuters data package")
+pkgdir <- normalizePath(tempdir(), winslash = "/")
+pkg_create_cwb_dirs(pkg = pkgdir)
+pkg_add_description(
+  pkg = pkgdir,
+  package = "reuters",
+  author = "cwbtools",
+  description = "Reuters data package"
+ )
 pkg_add_corpus(
-  pkg = y, corpus = "REUTERS",
+  pkg = pkgdir, corpus = "REUTERS",
   registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 )
-pkg_add_gitattributes_file(pkg = y)
-pkg_add_configure_scripts(pkg = y)
-pkg_add_creativecommons_license(pkg = y)
+pkg_add_gitattributes_file(pkg = pkgdir)
+pkg_add_configure_scripts(pkg = pkgdir)
+pkg_add_creativecommons_license(pkg = pkgdir)
 }
 \seealso{
 The \code{\link[usethis]{use_description}} function in the usethis-package will also create a DESCRIPTION file.

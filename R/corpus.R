@@ -272,12 +272,12 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
   old_wd <- setwd(archive_dir)
   
   if (verbose) message("... creating tarball")
-  tar(tarfile = tarfile)
+  tar(tarfile = tarfile, compression = "gzip")
   
   if (verbose) message("... cleaning up")
 
   unlink(archive_dir, recursive = TRUE)
-  setwd(old_wd)
+  setwd(path.expand(old_wd))
   invisible( NULL )
 }
 

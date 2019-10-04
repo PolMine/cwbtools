@@ -3,7 +3,9 @@ Type: Package
 Title: Toolkit for Managing CWB Corpora
 Version: 0.0.12.9007
 Date: 2019-10-04
-Authors@R: person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de")
+Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
+  person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
+  )
 Description: Toolkit for Managing CWB Corpora.
 Imports:
     data.table,

@@ -10,7 +10,12 @@
 #' @examples 
 #' pkgdir <- normalizePath(tempdir(), winslash = "/")
 #' pkg_create_cwb_dirs(pkg = pkgdir)
-#' pkg_add_description(pkg = pkgdir, package = "reuters", description = "Reuters data package")
+#' pkg_add_description(
+#'   pkg = pkgdir,
+#'   package = "reuters",
+#'   author = "cwbtools",
+#'   description = "Reuters data package"
+#'  )
  #' pkg_add_corpus(
 #'   pkg = pkgdir, corpus = "REUTERS",
 #'   registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
@@ -140,7 +145,10 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @seealso The \code{\link[usethis]{use_description}} function in the usethis-package will also create a DESCRIPTION file.
 #' @export pkg_add_description
 #' @rdname pkg_utils
-pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author = "", maintainer = NULL, description = "", license = "", verbose = TRUE){
+pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author, maintainer = NULL, description = "", license = "", verbose = TRUE){
+  
+  if (missing(author)) stop("Aborting, argument 'author' needs to be declared to generate a valid package.")
+  
   if (file.exists(file.path(pkg, "DESCRIPTION", fsep = "/"))){
     user_input <- readline(prompt = "DESCRIPTION file already exists. Proceed anyway (Y / any other key to abort)?")
     if (user_input != "Y"){
