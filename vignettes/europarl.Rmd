@@ -40,6 +40,8 @@ For the steps 1 through 5, we use a temporary directory. One precaution in advan
 tmp_dir <- tempdir()
 ```
 
+And because the whole operation is too much for an ordinary process to build R packages, we set an argument whether all the code is executed to `FALSE`.
+
 ```{r execute, eval = TRUE}
 exec <- FALSE
 ```
@@ -149,7 +151,7 @@ unlink(file.path(tmp_dir, "Europarl3-CWB"), recursive = TRUE)
 europarl_tarball <- build(pkg = europarl_pkg_dir, path = tmp_dir, vignettes = TRUE)
 ```
 
-There are large binary data in the package, so this may take a while. The return value of the `build`-function is the path to the tarball of the package that has been generated. The `instal.packages`-function can be used to install from a local file if we set the argument `param` to NULL.
+There are large binary data in the package, so this may take a while. The return value of the `build`-function is the path to the tarball of the package that has been generated. The `install.packages`-function can be used to install from a local file if we set the argument `param` to NULL.
 
 ```{r install_package, eval = exec}
 install.packages(pkgs = europarl_tarball, repos = NULL)

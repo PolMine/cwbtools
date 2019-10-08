@@ -1,12 +1,13 @@
 Package: cwbtools
 Type: Package
-Title: Toolkit for Managing CWB Corpora
+Title: Toolset for CWB Corpora
 Version: 0.0.12.9007
 Date: 2019-10-04
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
-Description: Toolkit for Managing CWB Corpora.
+Description: Toolset to create, modify and manage corpora to be queried with the Corpus
+  Workbench (CWB) using R.
 Imports:
     data.table,
     R6,

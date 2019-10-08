@@ -4,14 +4,14 @@
 [![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/dev/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/dev)
 
 
-# Tools to Create, Manipulate and Manage Corpora for the Corpus Workbench (CWB)
+# Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)
 
-The Corpus Workbench (CWB) is a indexing and query engine to efficiently work with large, linguistically annotated corpora. The 'cwbtools' package offers a set of tools to create, manipulate and manage CWB indexed corpora from within R in a convenient fashion. It complements packages that use the CWB as a backend for text mining with R, namely the packages 'rcqp' and 'RcppCWB' for low-level access to CWB indexed corpora, and 'polmineR' as a toolset to implement common text mining workflows.
+The [Corpus Workbench (CWB)](http://cwb.sourceforge.net/) is a classic indexing and query engine to efficiently work with large, linguistically annotated corpora. The *cwbtools* package offers a set of tools to conveniently create, modify and manage CWB indexed corpora from within R. It complements R packages that use the CWB as a backend for text mining with R, namely the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package for low-level access to CWB indexed corpora, and [polmineR](https://CRAN.R-project.org/package=polmineR) as a toolset to implement common text mining workflows.
 
 
 ## Installation
 
-The package is 'GitHub only' package so far. The most convenient way to install it will be to use an installation mechanism offered by the devtools package. The procedure is the same for Windows, Linux, and macOS. On Windows, having [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed on your system may be necessary to use the full functionality of 'devtools'.
+The package is a "GitHub only"" package at this stage. The easiest way to install the package is to use an installation mechanism offered by the [devtools](https://CRAN.R-project.org/package=devtools) package. The procedure is the same for Windows, Linux, and macOS. On Windows, having [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed on your system may be necessary to use the full functionality of 'devtools'.
 
 First, check that devtools is installed ...
 
@@ -27,5 +27,5 @@ devtools::install_github("PolMine/cwbtools")
 
 ## Acknowledgements
 
-The CWB is a classical indexing and query engine. Its character as an open source project is of great value. The enduring effort of the CWB developers is gratefully acknowledged.
+The CWB is a classical indexing and query engine. Its character as an open source project is of great value for the community working with corpora. The enduring effort of the developers of the CWB is gratefully acknowledged!
 

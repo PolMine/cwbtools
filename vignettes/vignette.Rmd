@@ -13,22 +13,30 @@ editor_options:
 
 # Using the 'cwbtools' package
 
-The 'cwbtools' package offers functionality to create corpora to be used with the Corpus Workbench (CWB), or tools building on the CWB from R. It makes the transition from data formats known from well-known R packages such as tm, quanteda or tidytext to an indexed corpus as smooth as possible.
+The *cwbtools* package offers a toolset to create, modify and manage corpora to be used with the Corpus Workbench (CWB) from within R. It supports the transition from data formats established by well-known R packages such as [tm](https://CRAN.R-project.org/package=tm), [quanteda](https://CRAN.R-project.org/package=quanteda) or [tidytext]( https://CRAN.R-project.org/package=tidytext) to a CWB corpus, so that the efficiency of an query system using indexed corpora (i.e. CWB) can be used.
 
-The core tool of the cwbtools package is the 'CorpusData'-Class. It incorporates a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a R6 class, using the reference semantics of the R6 class system. This means, that copying the object can be omitted during different processing steps, handling memory parsimoniously when data are large.
+Moving to CWB indexed corpora is worth considering when working with large corpora. The *cwbtools* package is designed to be able to work with large data. The core tool of the cwbtools package is the `CorpusData`-Class. It offers a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a [R6 class](https://adv-r.hadley.nz/r6.html). The advantage of using the reference semantics of the R6 class system is that there is minimal copying of the data. Handling memory parsimoniously is necessary when working with large corpora.
+
+Further functions of the package support the creation, modification and management of structural and positional attributes of a corpus, and of registry files. See the manual to learn more about these functions. To learn more about the data structure of the CWB and the CWB jargon, the [IMS Open Corpus Workbench (CWB) Corpus Encoding Tutorial](http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf) is recommended as a point of entry.
+
+The focus of this vignette is the creation of CWB indexed corpora. We present three scenarios: Creating a corpus (a) from XML, (b) from a `tibble` and (c) from the `VCorpus` used by the tm package.
+
+A few preliminary preparations are necessary, however.
 
 
-## The CWB directory structure
+## Getting Started
 
-The CWB stores indexed corpora in individual data directories for each corpus. Corresponding so-called registry files in a 'registry directory', or 'registry' in short describe the corpora.
+The CWB stores each indexed corpora in an individual data directory. Registry files in a 'registry directory' (or 'registry' in short) describe the indexed corpora and include the path to the data directory.
 
-For the following examples, we create a temporary directory structure for registry files, and indexed corpora.
+For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.
 
 ```{r}
 tmpdir <- tempdir()
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
+
 registry_tmp <- file.path(tmpdir, "registry")
 data_dir_tmp <- file.path(tmpdir, "data_dir")
+
 if (!file.exists(registry_tmp)){
   dir.create (registry_tmp)
 } else {
@@ -37,18 +45,23 @@ if (!file.exists(registry_tmp)){
 if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 ```
 
-Trying to keep installation requirements at minimum, we only rely on cwbtools, and the data.table package. Note that the data.table package is used because of its efficiency to handle large data. In addition to speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.
+In addition to *cwbtools*, we rely extensively on the [data.table](https://CRAN.R-project.org/package=data.table) package. It is a good companion to *cwbtools* because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.
 
 ```{r}
 library(cwbtools)
-if (!cwb_is_installed()) cwb_install()
 library(data.table)
 ```
 
+Core operations on structural and positional attributes are implemented in "pure R", but the CWB can be downloaded and stored within the package.
 
-## Scenario 1: From XML to CWB - Indexing the UN General Assembly Corpus
+```{r}
+if (!cwb_is_installed()) cwb_install()
+```
 
-The first example is a small sample corpus of debates in the UN General Assembly. The package includes some XML files (TEI standardization).
+
+## Scenario 1: From XML to CWB - UN General Assembly Corpus
+
+The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the [Text Encoding Initiative (TEI)](https://tei-c.org/).
 
 ```{r}
 teidir <- system.file(package = "cwbtools", "xml", "UNGA")
@@ -56,19 +69,22 @@ teifiles <- list.files(teidir, full.names = TRUE)
 list.files(teidir)
 ```
 
-We create a CorpusData object that will serve as a processor for these files and storage facility for the corpus data. The `chunktable`, `tokenstream` and `metadata`. When we inspect the new object at the outset, we will see that these fields are not filled initially.
+For our example, we need an (empty) data directory for the UNGA corpus.
 
-```{r unga_instantiate_cd}
+```{r unga_create_dirs, message = FALSE,  results = FALSE}
 unga_data_dir_tmp <- file.path(data_dir_tmp, "unga")
-unga_registry_dir <- file.path(registry_tmp, "unga")
 if (!file.exists(unga_data_dir_tmp)) dir.create(unga_data_dir_tmp)
 file.remove(list.files(unga_data_dir_tmp, full.names = TRUE))
-if (file.exists(unga_registry_dir)) file.remove(unga_registry_dir)
+```
+
+The point of departure then is to create a `CorpusData` object that will serve as a processor for these files and storage facility for the corpus data. The central fields of the class are named `chunktable`, `tokenstream` and `metadata`. When we inspect the new object at the outset, we will see that these fields are not filled initially.
+
+```{r unga_instantiate_cd}
 UNGA <- CorpusData$new()
 UNGA
 ```
 
-To turn the XML files into the corpusdata object, we use the method `$import_xml`. To be able to add metadata from the header to the metadata table, it requires a named vector of XPath expressions.
+To turn the XML files into the `CorpusData object, we use the method `$import_xml()`. To be able to add metadata from the header to the metadata table, the method requires a named vector of XPath expressions used to find the metadata within the XML document.
 
 ```{r basetable, eval = TRUE}
 metadata <- c(
@@ -80,7 +96,7 @@ UNGA$import_xml(filenames = teifiles, meta = metadata)
 UNGA
 ```
 
-The input XML files are TEI files. Speaker information is included in the attributes of a tag 'sp'. To maintain the original content, there is a element 'speaker' in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we need to consider it as noise to be removed.
+The input XML files are TEI files. Speaker information is included in the attributes of a tag named 'sp'. To maintain the original content, there is a element 'speaker' in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we consider it as noise to be removed.
 
 ```{r cleaning, eval = TRUE}
 to_keep <- which(is.na(UNGA$metadata[["speaker"]]))
@@ -88,26 +104,28 @@ UNGA$chunktable <- UNGA$chunktable[to_keep]
 UNGA$metadata <- UNGA$metadata[to_keep][, speaker := NULL]
 ```
 
-Let us assign nicer column names ... 
+We assign more telling column names ... 
 
 ```{r}
 setnames(UNGA$metadata, old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
 ```
 
-The CWB requires a tokenstream as input to generate positional attributes. Standard NLP tools will offer lemmatization, part-of-speech-recognition and more at this stage. To keep things simple, we perform a very simple tokenization using the tokenizers pacakge.
+The CWB requires a tokenstream as input to generate positional attributes. NLP tools will offer lemmatization, part-of-speech-recognition and more. To keep things simple, we perform a very simple tokenization that relies on the [tokenizers](https://CRAN.R-project.org/package=tokenizers) package.
 
-```{r dissect, eval = TRUE}
+```{r dissect, eval = TRUE, message = FALSE, results = FALSE}
 UNGA$tokenize(lowercase = FALSE, strip_punct = FALSE)
 UNGA
 ```
+
+Let us see how it looks like now ...
 
 ```{r}
 UNGA$tokenstream
 ```
 
-The corpusdata object now includes a table with the token stream. We are ready to import the corpus into the CWB. We use the corpusdata_encode function for this purpose. It is a wrapper on the `p_attribute_encode` function (to encode the token stream), and the `s_attribute_encode` function (to encode the structural attributes / the metadata).
+The `CorpusData` object now includes a table with the token stream, and we are ready to import the corpus into the CWB. We use the `$encode()` method for this purpose. Note that the workers are the `p_attribute_encode` function (to encode the token stream), and the `s_attribute_encode` function (to encode the structural attributes / the metadata).
 
-```{r}
+```{r, message = FALSE}
 s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
 UNGA$encode(
   registry_dir = registry_tmp, data_dir = unga_data_dir_tmp,
@@ -117,21 +135,33 @@ UNGA$encode(
   )
 ```
 
-Note that we set the logical parameter compress as TRUE. This performs a so-called huffcode compression, which will reduce corpus size and speed up queries. For big corpora, the compression step can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be delayed. The indexed corpus has now been prepared. 
+In this example, the logical parameter `compress` is `TRUE. This triggers a so-called "huffcode"" compression, which will reduce corpus size and speed up queries. For big corpora, compression certainly makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
 
-The corpus is now ready to be used with CQP (or CQPweb), or a more advanced and convenient environment for corpus analysis, such as 'polmineR'. To gain a quick insight whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the RcppCWB package. 
+The indexed corpus has now been prepared and can be used with CQP, CQPweb, or -- if you like R -- with a package such as [polmineR](https://CRAN.R-project.org/package=polmineR). To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package. 
 
 ```{r check_use, eval = TRUE}
 library(RcppCWB)
-id_peace <- cl_str2id(corpus = "UNGA", p_attribute = "word", str = "peace", registry = registry_tmp)
-cpos_peace <- cl_id2cpos(corpus = "UNGA", p_attribute = "word", id = id_peace, registry = registry_tmp)
+id_peace <- cl_str2id(
+  corpus = "UNGA", p_attribute = "word",
+  str = "peace", registry = registry_tmp
+)
+cpos_peace <- cl_id2cpos(
+  corpus = "UNGA", p_attribute = "word",
+  id = id_peace, registry = registry_tmp
+)
 
 tab <- data.frame(
   i = unlist(lapply(1:length(cpos_peace), function(x) rep(x, times = 11))),
   cpos = unlist(lapply(cpos_peace, function(x) (x - 5):(x + 5)))
   )
-tab[["id"]] <- cl_cpos2id(corpus = "UNGA", p_attribute = "word", cpos = tab[["cpos"]], registry = registry_tmp)
-tab[["str"]] <- cl_id2str(corpus = "UNGA", p_attribute = "word", id = tab[["id"]], registry = registry_tmp)
+tab[["id"]] <- cl_cpos2id(
+  corpus = "UNGA", p_attribute = "word",
+  cpos = tab[["cpos"]], registry = registry_tmp
+)
+tab[["str"]] <- cl_id2str(
+  corpus = "UNGA", p_attribute = "word",
+  id = tab[["id"]], registry = registry_tmp
+)
 
 peace_context <- split(tab[["str"]], as.factor(tab[["i"]]))
 peace_context <- unname(sapply(peace_context, function(x) paste(x, collapse = " ")))
@@ -141,15 +171,21 @@ head(peace_context)
 
 ### Scenario 2: Tidytext to CWB 
 
-In a second scenario, we create a corpus of Jane Austen's books (included in the package janeaustenr). 
+In a second scenario, we create a corpus of Jane Austen's books (included in the package [janeaustenr](https://CRAN.R-project.org/package=janeaustenr)).  Again, we start by preparing an (empty) data directory ...
 
-```{r}
-Austen <- CorpusData$new()
+```{r, message = FALSE, results = FALSE}
 austen_data_dir_tmp <- file.path(data_dir_tmp, "austen")
 if (!file.exists(austen_data_dir_tmp)) dir.create(austen_data_dir_tmp)
 file.remove(list.files(austen_data_dir_tmp, full.names = TRUE))
 ```
 
+... and instantiating a `CorpusData` object.
+
+```{r}
+Austen <- CorpusData$new()
+```
+
+The `tidytext` package offers an efficient workflow to create the token stream we can assign to the `CorpusData` object.
 
 ```{r}
 books <- janeaustenr::austen_books()
@@ -157,13 +193,19 @@ tbl <- tidytext::unnest_tokens(books, word, text, to_lower = FALSE)
 Austen$tokenstream <- as.data.table(tbl)
 ```
 
+To demonstrate that we can use an additional positional attribute, we stem the tokens using the [SnowballC](https://CRAN.R-project.org/package=SnowballC) package.
+
 ```{r}
 Austen$tokenstream[, stem := SnowballC::wordStem(tbl[["word"]], language = "english")]
 ```
 
+In this case, (zero-based!) corpus positions need to be assigned explicitly. 
+
 ```{r}
 Austen$tokenstream[, cpos := 0L:(nrow(tbl) - 1L)]
 ```
+
+We can now create the table with the structural attributes.
 
 ```{r}
 cpos_max_min <- function(x) list(cpos_left = min(x[["cpos"]]), cpos_right = max(x[["cpos"]]))
@@ -172,6 +214,7 @@ Austen$metadata[, book := as.character(book)]
 setcolorder(Austen$metadata, c("cpos_left", "cpos_right", "book"))
 ```
 
+A few finishing touches and we have the token stream ready to be encoded: We remove the metadata from the table in the `tokenstream` field and order the columns nicely. 
 
 ```{r}
 Austen$tokenstream[, book := NULL]
@@ -179,8 +222,9 @@ setcolorder(Austen$tokenstream, c("cpos", "word", "stem"))
 Austen$tokenstream
 ```
 
+Ready to encode the corpus!
 
-```{r}
+```{r, message = FALSE}
 Austen$encode(
    corpus = "AUSTEN", encoding = "utf8",
    p_attributes = c("word", "stem"), s_attributes = "book",
@@ -189,8 +233,15 @@ Austen$encode(
 )
 ```
 
+The new corpus will not be available unless we trigger that files in the registry directory are re-read.
+
 ```{r}
 cqp_reset_registry(registry = registry_tmp)
+```
+
+This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token "pride" occurr?
+
+```{r}
 corpus <- "AUSTEN"
 token <- "pride"
 p_attr <- "stem"
@@ -201,18 +252,17 @@ count
 ```
 
 
-### Scenairo 3: From tm-package VCorpus to CWB
+### Scenario 3: From tm-package VCorpus to CWB
 
-Third, we will make the transition from a VCorpus (tm package) to a CWB indexed corpus. We use the Reuters corpus that is included as sample data in the tm package.
+In the third scenario, we will make the transition from a `VCorpus` (tm package) to a CWB indexed corpus. We use the Reuters corpus that is included as sample data in the tm package.
 
-```{r}
+```{r, message = FALSE, results = FALSE}
 library(tm)
 reut21578 <- system.file("texts", "crude", package = "tm")
 reuters.tm <- VCorpus(DirSource(reut21578), list(reader = readReut21578XMLasPlain))
-class(reuters.tm)
 ```
 
-The easiest way to proceed to the data format we will require for the CorpusData class is to coerce the VCorpus to a tibble, using respective functionality of the tidytext package.
+A quick way to attain the data format required for the `CorpusData` class is to coerce the `VCorpus` to a `tibble`, using respective functionality of the [tidytext](https://CRAN.R-project.org/package=tidytext) package.
 
 ```{r}
 library(tidytext)
@@ -220,7 +270,7 @@ reuters.tbl <- tidy(reuters.tm)
 reuters.tbl
 ```
 
-Columns we want to encode are still character vectors. We turn the columns with the topic categorizations and the places into a proper character vector.
+Columns with the metadata we may want to encode are still character vectors (length > 1). We turn the columns with the topic categorizations and the places into length-one character vectors.
 
 ```{r}
 reuters.tbl[["topics_cat"]] <- sapply(
@@ -233,16 +283,16 @@ reuters.tbl[["places"]] <- sapply(
   )
 ```
 
-This is already the input we need. We instantiate a CorpusData object end make sure that a new data directory for the REUTERS corpus exists (and is empty) ...
+This is the input we need. We instantiate a `CorpusData` object end make sure that a new data directory for the REUTERS corpus exists (and is empty) ...
 
-```{r}
+```{r, results = FALSE}
 Reuters <- CorpusData$new()
 reuters_data_dir_tmp <- file.path(data_dir_tmp, "reuters")
 if (!file.exists(reuters_data_dir_tmp)) dir.create(reuters_data_dir_tmp)
 file.remove(list.files(reuters_data_dir_tmp, full.names = TRUE))
 ```
 
-We assign the chunktable and the metadata, coerced to data.tables, to the object ... 
+We assign the chunktable and the metadata, coerced to a `data.table`, to the object ... 
 
 ```{r}
 Reuters$chunktable <- data.table(reuters.tbl[, c("id", "text")])
@@ -252,14 +302,19 @@ Reuters
 
 ... we tokenize the text to gain the token stream table ... 
 
-```{r}
+```{r, message = FALSE, results = FALSE}
 Reuters$tokenize()
-Reuters
 ```
 
-... and we are ready to encode the corpus.
+... we have a look at the token strem ... 
 
 ```{r}
+Reuters$tokenstream
+```
+
+It seems that we can encode the corpus.
+
+```{r, message = FALSE}
 Reuters$encode(
    corpus = "REUTERS", encoding = "utf8",
    p_attributes = "word", s_attributes = c("topics_cat", "places"),
@@ -269,18 +324,27 @@ Reuters$encode(
 )
 ```
 
-The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word 'oil.
+The corpus will not be available unless we call `cqp_reset_registry()` so that files in the registry directory are reloaded.
+
+```{r, message = FALSE, results = FALSE}
+cqp_reset_registry(registry = registry_tmp)
+```
+
+The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word "oil".
 
 ```{r}
-cqp_reset_registry(registry = registry_tmp)
 id <- cl_str2id(corpus = "REUTERS", p_attribute = "word", str = "oil", registry = registry_tmp)
 cpos <- cl_id2cpos(corpus = "REUTERS", p_attribute = "word", id = id, registry = registry_tmp)
 count <- length(cpos)
 count
 ```
 
+### Final Deeds and Words
+
+As a matter of housekeeping, we remove the temporary directory.
+
 ```{r}
 unlink(tmpdir, recursive = TRUE)
 ```
 
-Hope everything works. Enjoy!
+Hope everything works! Enjoy! Feedback is welcome! 

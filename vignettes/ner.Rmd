@@ -13,7 +13,7 @@ vignette: >
 
 ```{r, eval = FALSE}
 use("RcppCWB")
-p <- partition("UNGA", date = "2018-03-20", who = "Al Hussein")
+p <- partition("UNGA", date = "2018-03-20", speaker = "Al Hussein")
 s <- NLP::String(as.String(p))
 a <- as.Annotation(p, type = "word")
 sent <- as.Annotation(p, type = "sentence")
