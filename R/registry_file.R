@@ -7,18 +7,21 @@
 #' See the appendix to the 'Corpus Encoding Tutorial'
 #' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
 #' explanation of the registry file format.
-#' @param data registry_data
-#' @param corpus a CWB corpus
-#' @param registry_dir directory with registry files
-#' @param x an object of class \code{registry_data}
+#' @param data A \code{registry_data} object.
+#' @param corpus A CWB corpus indicated by a length-one \code{character} vector.
+#' @param registry_dir Directory with registry files.
+#' @param x An object of class \code{registry_data}.
 #' @param ... further parameters
-#' @param name long descriptive name of corpus
-#' @param id short name of corpus
-#' @param home data directory for indexed corpus
-#' @param info filename of info file
-#' @param properties named character vector with corpus properties, should include 'charset'
-#' @param p_attributes positional attributes to declare
-#' @param s_attributes structural attributes to declare
+#' @param name Long descriptive name of corpus (\code{character} vector).
+#' @param id Short name of corpus (\code{character} vector).
+#' @param home Path with data directory for indexed corpus.
+#' @param info A \code{character} vector containing path name of info file.
+#' @param properties Named \code{character} vector with corpus properties,
+#'   should at least include 'charset'.
+#' @param p_attributes A \code{character} vector with positional attributes to
+#'   declare.
+#' @param s_attributes A \code{character} vector with structural attributes to
+#'   declare.
 #' @rdname registry_file
 #' @importFrom stringi stri_match_all_regex
 #' @export registry_file_parse

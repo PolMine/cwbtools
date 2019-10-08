@@ -6,7 +6,7 @@ setOldClass("Annotation")
 #' 
 #' @param x An object that can be processed by \code{polmineR::get_token_stream}.
 #' @param type Either "word" or "sentence".
-#' @return A \code{Annotation} object.
+#' @return An \code{Annotation} object.
 #' @examples
 #' \dontrun{
 #' use("RcppCWB")

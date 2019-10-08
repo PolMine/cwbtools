@@ -34,19 +34,19 @@ s_attribute_delete(corpus, s_attribute)
 
 \item{s_attribute}{Atomic character vector, the name of the structural attribute.}
 
-\item{corpus}{the CWB corpus}
+\item{corpus}{A CWB corpus.}
 
-\item{region_matrix}{two-column matrix with corpus positions}
+\item{region_matrix}{A two-column \code{matrix} with corpus positions.}
 
-\item{method}{either 'R' or 'CWB'}
+\item{method}{EWither 'R' or 'CWB'.}
 
-\item{registry_dir}{registry directory}
+\item{registry_dir}{Path name of the registry directory.}
 
-\item{encoding}{encoding of the data}
+\item{encoding}{Encoding of the data.}
 
 \item{delete}{Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.}
 
-\item{verbose}{logicalds}
+\item{verbose}{Logical.}
 
 \item{from}{Character string describing the current encoding of the attribute.}
 

@@ -13,7 +13,7 @@ decode(x, type = c("word", "sentence"))
 \item{type}{Either "word" or "sentence".}
 }
 \value{
-A \code{Annotation} object.
+An \code{Annotation} object.
 }
 \description{
 Decode Corpus as Annotation Object.

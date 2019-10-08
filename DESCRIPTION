@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Toolset for CWB Corpora
-Version: 0.0.12.9007
-Date: 2019-10-04
+Version: 0.1.0
+Date: 2019-10-08
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -30,6 +30,7 @@ Suggests:
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3
+Language: en-US
 Encoding: UTF-8
 Collate:
     'cwbtools.R'

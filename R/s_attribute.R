@@ -10,13 +10,13 @@
 #' @param values A character vector with the values of the structural attribute.
 #' @param data_dir The data directory where to write the files.
 #' @param s_attribute Atomic character vector, the name of the structural attribute.
-#' @param region_matrix two-column matrix with corpus positions
-#' @param corpus the CWB corpus
-#' @param method either 'R' or 'CWB'
-#' @param encoding encoding of the data
-#' @param registry_dir registry directory
+#' @param region_matrix A two-column \code{matrix} with corpus positions.
+#' @param corpus A CWB corpus.
+#' @param method EWither 'R' or 'CWB'.
+#' @param encoding Encoding of the data.
+#' @param registry_dir Path name of the registry directory.
 #' @param delete Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.
-#' @param verbose logicalds
+#' @param verbose Logical.
 #' @export s_attribute_encode
 #' @importFrom RcppCWB cl_delete_corpus
 #' @seealso To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.

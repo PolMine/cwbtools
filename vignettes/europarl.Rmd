@@ -100,7 +100,7 @@ if (!file.exists(europarl_pkg_dir)) dir.create(europarl_pkg_dir)
 pkg_create_cwb_dirs(pkg = europarl_pkg_dir)
 ```
 
-To acknowledge authorshop for the Europarl corpus, we use some information in the readme.txt that is included in the Europarl tarball.
+To acknowledge authorship for the Europarl corpus, we use some information in the readme.txt that is included in the Europarl tarball.
 
 ```{r create_description, eval = exec}
 europarl_desc <- paste0(

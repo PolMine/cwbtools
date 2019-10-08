@@ -19,27 +19,30 @@ registry_file_write(data, corpus,
   registry_dir = Sys.getenv("CORPUS_REGISTRY"), ...)
 }
 \arguments{
-\item{corpus}{a CWB corpus}
+\item{corpus}{A CWB corpus indicated by a length-one \code{character} vector.}
 
-\item{registry_dir}{directory with registry files}
+\item{registry_dir}{Directory with registry files.}
 
-\item{x}{an object of class \code{registry_data}}
+\item{x}{An object of class \code{registry_data}.}
 
-\item{name}{long descriptive name of corpus}
+\item{name}{Long descriptive name of corpus (\code{character} vector).}
 
-\item{id}{short name of corpus}
+\item{id}{Short name of corpus (\code{character} vector).}
 
-\item{home}{data directory for indexed corpus}
+\item{home}{Path with data directory for indexed corpus.}
 
-\item{info}{filename of info file}
+\item{info}{A \code{character} vector containing path name of info file.}
 
-\item{properties}{named character vector with corpus properties, should include 'charset'}
+\item{properties}{Named \code{character} vector with corpus properties,
+should at least include 'charset'.}
 
-\item{p_attributes}{positional attributes to declare}
+\item{p_attributes}{A \code{character} vector with positional attributes to
+declare.}
 
-\item{s_attributes}{structural attributes to declare}
+\item{s_attributes}{A \code{character} vector with structural attributes to
+declare.}
 
-\item{data}{registry_data}
+\item{data}{A \code{registry_data} object.}
 
 \item{...}{further parameters}
 }
