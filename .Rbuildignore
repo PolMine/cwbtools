@@ -5,3 +5,4 @@
 ^docs$
 ^appveyor.yml$
 ^README.md$
+^CRAN-RELEASE$
