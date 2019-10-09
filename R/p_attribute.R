@@ -146,6 +146,9 @@ p_attribute_encode <- function(
     ### equivalent to cwb-makeall (build index files)
     
     if (FALSE){
+      # this is an old approach to generate the reverse index in a "pure R" 
+      # manner. It has been superseded by including the function cwb_makeall 
+      # in the RcppCWB package 
       df <- data.frame(id = ids, word = token_stream, stringsAsFactors = FALSE)
       df[["cpos"]] <- 0L:(nrow(df) - 1L)
       
@@ -279,19 +282,25 @@ p_attribute_encode <- function(
         args = compression_cmd_args,
         stdout = TRUE
       )
-      files_to_remove <- c(
-        rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
-        rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
-      )
-      for (x in files_to_remove){
-        if (file.exists(x)) {
-          if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
-        }
-      }
     }
-    
   } else if (method == "R"){
     cwb_makeall(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
+    if (compress){
+      cwb_huffcode(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
+      cwb_compress_rdx(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
+    }
+  }
+  
+  if (compress){
+    files_to_remove <- c(
+      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
+      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
+    )
+    for (x in files_to_remove){
+      if (file.exists(x)) {
+        if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
+      }
+    }
   }
   
   
