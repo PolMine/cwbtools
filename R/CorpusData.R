@@ -115,7 +115,7 @@
 #' # Remove temporary registry with home dir still pointing to RcppCWB data dir
 #' # to prevent data from being deleted
 #' file.remove(file.path(registry_tmp, "reuters"))
-#' file.remove(registry_tmp, "reuters")
+#' file.remove(registry_tmp)
 #' 
 #' # create temporary directories (registry directory and one for indexed corpora)
 #' 

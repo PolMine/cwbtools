@@ -35,8 +35,14 @@
 #' @rdname p_attribute_encode
 #' @examples
 #' library(RcppCWB)
+#' \dontrun{
+#' # downloading the binaries of the CWB is optional - not necessary here, because
+#' # we pursue a "pure R" approach
 #' if (!cwb_is_installed()) cwb_install()
+#' }
 #' tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
+#' 
+#' # create new (and empty) directory structure
 #' 
 #' tmpdir <- normalizePath(tempdir(), winslash = "/")
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
@@ -81,7 +87,7 @@
 #' )
 #' kwic[1:10]
 #' @export p_attribute_encode
-#' @importFrom RcppCWB cl_attribute_size
+#' @importFrom RcppCWB cl_attribute_size cwb_makeall
 #' @importFrom stringi stri_detect_regex stri_replace_all
 p_attribute_encode <- function(
   token_stream, p_attribute = "word", registry_dir, corpus, data_dir, method = c("R", "CWB"),
@@ -235,52 +241,59 @@ p_attribute_encode <- function(
   registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
   
   # create reverse index using cwb-makeall
-  if (verbose) message("... calling cwb-makeall")
-  system2(
-    command = file.path(
-      cwb_get_bindir(),
-      if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall",
-      fsep = "/"
-      ),
-    args = c(
-      sprintf("-r %s", normalizePath(registry_dir)),
-      sprintf("-P %s", p_attribute),
-      "-V", toupper(corpus))
-  )
   
-  if (compress){
-    compression_cmd_args <- c(
-      sprintf("-r %s", normalizePath(registry_dir)),
-      sprintf("-P %s", p_attribute),
-      toupper(corpus)
-      )
+  if (method == "CWB"){
+    if (verbose) message("... calling cwb-makeall")
     system2(
-      command = normalizePath(file.path(
+      command = file.path(
         cwb_get_bindir(),
-        if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode",
-        fsep = "/")
-        ),
-      args = compression_cmd_args, stdout = TRUE
-      )
-    system2(
-      command = normalizePath(file.path(
-        cwb_get_bindir(),
-        if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx",
+        if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall",
         fsep = "/"
-        )),
-      args = compression_cmd_args,
-      stdout = TRUE
-      )
-    files_to_remove <- c(
-      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
-      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
+      ),
+      args = c(
+        sprintf("-r %s", normalizePath(registry_dir)),
+        sprintf("-P %s", p_attribute),
+        "-V", toupper(corpus))
     )
-    for (x in files_to_remove){
-      if (file.exists(x)) {
-        if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
+    
+    if (compress){
+      compression_cmd_args <- c(
+        sprintf("-r %s", normalizePath(registry_dir)),
+        sprintf("-P %s", p_attribute),
+        toupper(corpus)
+      )
+      system2(
+        command = normalizePath(file.path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode",
+          fsep = "/")
+        ),
+        args = compression_cmd_args, stdout = TRUE
+      )
+      system2(
+        command = normalizePath(file.path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx",
+          fsep = "/"
+        )),
+        args = compression_cmd_args,
+        stdout = TRUE
+      )
+      files_to_remove <- c(
+        rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
+        rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
+      )
+      for (x in files_to_remove){
+        if (file.exists(x)) {
+          if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
+        }
       }
     }
+    
+  } else if (method == "R"){
+    cwb_makeall(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
   }
+  
   
 }
 

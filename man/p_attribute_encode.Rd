@@ -67,8 +67,14 @@ and will reset the encoding in the registry file.
 }
 \examples{
 library(RcppCWB)
+\dontrun{
+# downloading the binaries of the CWB is optional - not necessary here, because
+# we pursue a "pure R" approach
 if (!cwb_is_installed()) cwb_install()
+}
 tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
+
+# create new (and empty) directory structure
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")

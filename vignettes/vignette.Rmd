@@ -30,7 +30,7 @@ The CWB stores each indexed corpora in an individual data directory. Registry fi
 
 For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.
 
-```{r}
+```{r create_tmp_dirs}
 tmpdir <- tempdir()
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 
@@ -47,7 +47,7 @@ if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 
 In addition to *cwbtools*, we rely extensively on the [data.table](https://CRAN.R-project.org/package=data.table) package. It is a good companion to *cwbtools* because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.
 
-```{r}
+```{r load_pkgs}
 library(cwbtools)
 library(data.table)
 ```
@@ -63,7 +63,7 @@ if (!cwb_is_installed()) cwb_install()
 
 The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the [Text Encoding Initiative (TEI)](https://tei-c.org/).
 
-```{r}
+```{r get_unga_teifiles}
 teidir <- system.file(package = "cwbtools", "xml", "UNGA")
 teifiles <- list.files(teidir, full.names = TRUE)
 list.files(teidir)
@@ -106,7 +106,7 @@ UNGA$metadata <- UNGA$metadata[to_keep][, speaker := NULL]
 
 We assign more telling column names ... 
 
-```{r}
+```{r unga_expressive_colnames}
 setnames(UNGA$metadata, old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
 ```
 
@@ -227,7 +227,7 @@ Ready to encode the corpus!
 ```{r, message = FALSE}
 Austen$encode(
    corpus = "AUSTEN", encoding = "utf8",
-   p_attributes = c("word", "stem"), s_attributes = "book",
+   p_attributes = "word", s_attributes = "book",
    registry_dir = registry_tmp, data_dir = austen_data_dir_tmp,
    method = "R", compress = FALSE
 )
@@ -244,7 +244,7 @@ This is a rudimentary check (using low-level RcppCWB functions) whether to corpu
 ```{r}
 corpus <- "AUSTEN"
 token <- "pride"
-p_attr <- "stem"
+p_attr <- "word"
 id <- cl_str2id(corpus = corpus, p_attribute = p_attr, str = token, registry = registry_tmp)
 cpos <- cl_id2cpos(corpus = corpus, p_attribute = p_attr, id = id, registry = registry_tmp)
 count <- length(cpos)
