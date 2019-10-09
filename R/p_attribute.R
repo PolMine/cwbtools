@@ -87,7 +87,7 @@
 #' )
 #' kwic[1:10]
 #' @export p_attribute_encode
-#' @importFrom RcppCWB cl_attribute_size cwb_makeall
+#' @importFrom RcppCWB cl_attribute_size cwb_makeall cwb_huffcode cwb_compress_rdx
 #' @importFrom stringi stri_detect_regex stri_replace_all
 p_attribute_encode <- function(
   token_stream, p_attribute = "word", registry_dir, corpus, data_dir, method = c("R", "CWB"),

@@ -14,9 +14,7 @@ The 'cwbtools' package concentrates and consolidates a set of functions and clas
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs on the Linux / macOS environments I used. 
-
-I see a NOTE that the examples for CorpusData class have an elapsed time > 5s. These examples concern the core of the package so I would not want to cut them to a minimum or wrapping them in a dontrun section, unless you advise to do so.
+There were no ERRORs, WARNINGs or NOTEs on the Linux / macOS environments I used. 
 
 
 ## Downstream dependencies
