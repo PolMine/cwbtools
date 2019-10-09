@@ -54,7 +54,7 @@ library(data.table)
 
 Core operations on structural and positional attributes are implemented in "pure R", but the CWB can be downloaded and stored within the package.
 
-```{r}
+```{r, eval = FALSE}
 if (!cwb_is_installed()) cwb_install()
 ```
 

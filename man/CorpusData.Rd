@@ -71,7 +71,15 @@ Manage Corpus Data and Encode CWB Corpus.
 \examples{
 library(RcppCWB)
 library(data.table)
-if (!cwb_is_installed()) cwb_install()
+
+# this example relies on the R method to write data to disk, there is also a method "CWB"
+# that relies on CWB tools to generate the indexed corpus
+\dontrun{
+  if (!cwb_is_installed()) cwb_install()
+}
+
+
+# create temporary registry file so that data in RcppCWB package can be used
 
 registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "registry")
@@ -80,6 +88,8 @@ r <- registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)
 r[["home"]] <- system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
 registry_file_write(r, corpus = "REUTERS", registry_dir = registry_tmp)
 
+# decode structural attribute 'places'
+
 s_attrs_places <- RcppCWB::s_attribute_decode(
   corpus = "REUTERS",
   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters"),
@@ -87,6 +97,8 @@ s_attrs_places <- RcppCWB::s_attribute_decode(
 )
 s_attrs_places[["id"]] <- 1L:nrow(s_attrs_places)
 setnames(s_attrs_places, old = "value", new = "places")
+
+# decode positional attribute 'word'
 
 tokens <- apply(s_attrs_places, 1, function(row){
   ids <- cl_cpos2id(
@@ -100,7 +112,9 @@ lapply(
   1L:length(tokens),
   function(i) data.table(id = i, word = tokens[[i]]))
   )
-tokenstream[["cpos"]] <- 1:nrow(tokenstream)
+tokenstream[["cpos"]] <- 0L:(nrow(tokenstream) - 1L)
+
+# create CorpusData object (see vignette for further explanation)
 
 CD <- CorpusData$new()
 CD$tokenstream <- as.data.table(tokenstream)
@@ -110,6 +124,8 @@ CD$metadata <- as.data.table(s_attrs_places)
 # to prevent data from being deleted
 file.remove(file.path(registry_tmp, "reuters"))
 file.remove(registry_tmp, "reuters")
+
+# create temporary directories (registry directory and one for indexed corpora)
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
@@ -126,6 +142,9 @@ CD$encode(
 )
 reg <- registry_data(name = "REUTERS", id = "REUTERS", home = data_dir_tmp, p_attributes = "word")
 registry_file_write(data = reg, corpus = "REUTERS", registry_dir = registry_tmp)
+
+# see whether it works
+
 cl_cpos2id(corpus = "REUTERS", p_attribute = "word", cpos = 0L:4049L, registry = registry_tmp)
 }
 \keyword{datasets}
