@@ -65,11 +65,8 @@
 #' library(data.table)
 #' 
 #' # this example relies on the R method to write data to disk, there is also a method "CWB"
-#' # that relies on CWB tools to generate the indexed corpus
-#' \dontrun{
-#'   if (!cwb_is_installed()) cwb_install()
-#' }
-#' 
+#' # that relies on CWB tools to generate the indexed corpus. The CWB can downloaded
+#' # and installed within the package by calling cwb_install()
 #' 
 #' # create temporary registry file so that data in RcppCWB package can be used
 #' 

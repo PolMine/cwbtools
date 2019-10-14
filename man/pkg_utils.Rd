@@ -28,9 +28,9 @@ pkg_add_creativecommons_license(pkg = ".", license = "CC-BY-NC-SA",
 pkg_add_gitattributes_file(pkg = ".")
 }
 \arguments{
-\item{pkg}{Path to directory of data package.}
+\item{pkg}{Path to directory of data package or package name.}
 
-\item{verbose}{Logical, whether to be verbose.}
+\item{verbose}{A \code{logical} value, whether to be verbose.}
 
 \item{corpus}{Name of the CWB corpus to insert into the package.}
 

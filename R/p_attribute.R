@@ -35,11 +35,11 @@
 #' @rdname p_attribute_encode
 #' @examples
 #' library(RcppCWB)
-#' \dontrun{
-#' # downloading the binaries of the CWB is optional - not necessary here, because
-#' # we pursue a "pure R" approach
-#' if (!cwb_is_installed()) cwb_install()
-#' }
+#' 
+#' # In this example, we pursue a "pure R" approach. To rely on the "CWB"
+#' # method, you can use the cwb_install() function, which will download and
+#' # install the CWB command line # tools within the package.
+#' 
 #' tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 #' 
 #' # create new (and empty) directory structure

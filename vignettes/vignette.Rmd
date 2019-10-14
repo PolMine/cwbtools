@@ -52,11 +52,7 @@ library(cwbtools)
 library(data.table)
 ```
 
-Core operations on structural and positional attributes are implemented in "pure R", but the CWB can be downloaded and stored within the package.
-
-```{r, eval = FALSE}
-if (!cwb_is_installed()) cwb_install()
-```
+Core operations on structural and positional attributes are implemented in "pure R", but the CWB can be downloaded and stored within the package using the `cwb_install()` function. In the following examples, we will rely on the "pure R" approach.
 
 
 ## Scenario 1: From XML to CWB - UN General Assembly Corpus

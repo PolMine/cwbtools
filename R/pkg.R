@@ -4,8 +4,8 @@
 #' and share corpora, and to keep documentation and supplementary functionality
 #' with the data.
 #' 
-#' @param pkg Path to directory of data package.
-#' @param verbose Logical, whether to be verbose.
+#' @param pkg Path to directory of data package or package name.
+#' @param verbose A \code{logical} value, whether to be verbose.
 #' 
 #' @examples 
 #' pkgdir <- normalizePath(tempdir(), winslash = "/")
@@ -16,7 +16,7 @@
 #'   author = "cwbtools",
 #'   description = "Reuters data package"
 #'  )
- #' pkg_add_corpus(
+#' pkg_add_corpus(
 #'   pkg = pkgdir, corpus = "REUTERS",
 #'   registry = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 #' )
@@ -66,11 +66,14 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
 #' @export pkg_add_corpus
 #' @importFrom pbapply pblapply
 pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
-  
-  if (pkg %in% rownames(installed.packages())){
+  if (!file.exists(pkg)){
     pkg <- system.file(package = pkg)
-    dest_registry <- file.path(pkg, "extdata", "cwb", "registry", fsep = "/")
-    data_dir <- file.path(pkg, "extdata", "cwb", "indexed_corpora", fsep = "/")
+    if (pkg != ""){
+      dest_registry <- file.path(pkg, "extdata", "cwb", "registry", fsep = "/")
+      data_dir <- file.path(pkg, "extdata", "cwb", "indexed_corpora", fsep = "/")
+    } else {
+      stop("pkg is neither an existing directory nor the name of an installed package")
+    }
   } else {
     dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry", fsep = "/")
     data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora", fsep = "/")

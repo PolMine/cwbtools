@@ -140,7 +140,8 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
 }
 
 #' @details \code{corpus_packages} will detect the packages that include CWB
-#'   corpora.
+#'   corpora. Note that the directory structure of all installed packages is
+#'   evaluated which may be slow on network-mounted file systems.
 #' @rdname corpus_utils
 #' @export corpus_packages
 corpus_packages <- function(){
@@ -148,12 +149,13 @@ corpus_packages <- function(){
     .libPaths(),
     function(lib){
       vectors <- lapply(
-        installed.packages(lib.loc = lib)[,"Package"],
-        function(package){
+        list.files(path = lib),
+        function(pkg){
+          pkgdir <- file.path(lib, pkg)
           c(
-            package = package,
+            package = pkgdir,
             lib = lib,
-            registry = system.file(package = package, "extdata", "cwb", "registry")
+            registry = system.file(package = pkg, "extdata", "cwb", "registry", lib.loc = lib)
           )
         }
       )
@@ -269,15 +271,16 @@ corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
     file.copy(from = x, to = file.path(archive_corpus_dir, basename(x), fsep = "/"))
   }
 
-  old_wd <- setwd(archive_dir)
-  
   if (verbose) message("... creating tarball")
+  old_wd <- getwd()
+  on.exit(setwd(path.expand(old_wd)))
+  setwd(archive_dir)
   tar(tarfile = tarfile, compression = "gzip")
   
   if (verbose) message("... cleaning up")
-
-  unlink(archive_dir, recursive = TRUE)
   setwd(path.expand(old_wd))
+  unlink(archive_dir, recursive = TRUE)
+  
   invisible( NULL )
 }
 

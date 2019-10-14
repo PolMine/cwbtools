@@ -1,7 +1,45 @@
 #' R-Package 'cwbtools'.
 #'
-#' Toolset to Manage CWB Corpora.
+#' Tools to Create, Modify and Manage CWB Corpora.
 #'
+#' The \href{http://cwb.sourceforge.net/}{\emph{Corpus Workbench}} (CWB) offers
+#' a classic approach for working with large, linguistically and
+#' structurally annotated corpora that ensures memory efficiency and makes
+#' running  queries fast (Evert and Hardie 2011). Technically, indexing and
+#' compressing corpora as suggested by Witten et al. (1999) is the approach
+#' implemented in the design of the CWB (Christ 1994).
+#' 
+#' The maturity of the CWB and the efficiency of the original C implementation
+#' notwithstanding, the flexibility of traditional CWB command line tools is
+#' both limited. Restrictions to the portability of code across platforms
+#' inhibits the ideal of reproducible research.
+#'  
+#' The 'cwbtools' package combines portable pure R tools to create indexed
+#' corpus files and convenience wrappers for the original C implementation of
+#' CWB as exposed by the
+#' \href{https://CRAN.R-project.org/package=RcppCWB}{RcppCWB} package.
+#' Additional functionality to add and modify annotations of corpora from within
+#' R bring flexibility to working with CWB indexed corpora. "Pure R" workflows
+#' to enrich corpora with annotations using standard NLP tools or generated
+#' manually can be implemented seamlessly and conventiently.
+#' 
+#' The \emph{cwbtools} package is a companion of the
+#' \href{https://CRAN.R-project.org/package=RcppCWB}{RcppCWB} and the
+#' \href{https://CRAN.R-project.org/package=polmineR}{polmineR} package and is a
+#' building block of an infrastructure to support the combination of
+#' quantitative and qualitative approaches when working with textual data.
+#'
+#' @references Christ, Oliver (1994): "A Modular and Flexible Architecture for
+#'   an Integrated Corpus Query System". \emph{Proceedings of COMPLEX'94},
+#'   pp.23-32. \href{https://arxiv.org/pdf/cmp-lg/9408005.pdf}{(available online here)}
+#' @references Evert, Stefan and Andrew Hardie (2011): "Twenty-first
+#'   century Corpus Workbench: Updating a query architecture for the new
+#'   millennium." In: \emph{Proceedings of the Corpus Linguistics 2011 conference},
+#'   University of Birmingham, UK.
+#'   \href{https://www.birmingham.ac.uk/documents/college-artslaw/corpus/conference-archives/2011/Paper-153.pdf}{(available online here)}
+#' @references Witten, Ian H., Alistair Moffat and Timothy C. Bell (1999):
+#'   \emph{Managing Gigabytes: Compressing and Indexing Documents and Images.}
+#'   2nd edition. San Francisco et al.: Morgan Kaufmann.
 #' @aliases cwbtools-package cwbtools
 #' @docType package
 #' @name cwbtools

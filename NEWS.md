@@ -16,6 +16,8 @@
   * Working example for `s_attribute_encode`().
   * A call to `cl_delete_corpus()` from RcppCWB is added to `s_attribute_encode()`, so that newly added s-attributes can be used without restarting the R session.
   * The `corpus_copy()` was defined (and documented) twice in a confusing manner. This is cleaned up.
+  * Calls to `installed.packages()` were replaced to meet an advice of the CRAN team in the submission process.
+  * 
 
 
 # v0.0.10

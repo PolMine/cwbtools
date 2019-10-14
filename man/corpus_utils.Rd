@@ -97,7 +97,8 @@ A data package with a CWB corpus is assumed to include a directory
   See examples how to check whether the directory has been set correctly.
 
 \code{corpus_packages} will detect the packages that include CWB
-  corpora.
+  corpora. Note that the directory structure of all installed packages is
+  evaluated which may be slow on network-mounted file systems.
 
 \code{corpus_rename} will rename a corpus, affecting the name of the
   registry file, the corpus id, and the name of the directory where data
