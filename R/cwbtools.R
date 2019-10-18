@@ -1,4 +1,4 @@
-#' R-Package 'cwbtools'.
+#' cwbtools-package
 #'
 #' Tools to Create, Modify and Manage CWB Corpora.
 #'
@@ -10,18 +10,18 @@
 #' implemented in the design of the CWB (Christ 1994).
 #' 
 #' The maturity of the CWB and the efficiency of the original C implementation
-#' notwithstanding, the flexibility of traditional CWB command line tools is
-#' both limited. Restrictions to the portability of code across platforms
-#' inhibits the ideal of reproducible research.
+#' notwithstanding, both the convenience and the flexibility of traditional CWB
+#' command line tools is limited. Restrictions to the portability of code across
+#' platforms inhibits the ideal of reproducible research.
 #'  
 #' The 'cwbtools' package combines portable pure R tools to create indexed
 #' corpus files and convenience wrappers for the original C implementation of
 #' CWB as exposed by the
 #' \href{https://CRAN.R-project.org/package=RcppCWB}{RcppCWB} package.
 #' Additional functionality to add and modify annotations of corpora from within
-#' R bring flexibility to working with CWB indexed corpora. "Pure R" workflows
+#' R makes working with CWB indexed corpora much more flexible. "Pure R" workflows
 #' to enrich corpora with annotations using standard NLP tools or generated
-#' manually can be implemented seamlessly and conventiently.
+#' manually can be implemented seamlessly and conveniently.
 #' 
 #' The \emph{cwbtools} package is a companion of the
 #' \href{https://CRAN.R-project.org/package=RcppCWB}{RcppCWB} and the
@@ -42,8 +42,9 @@
 #'   2nd edition. San Francisco et al.: Morgan Kaufmann.
 #' @aliases cwbtools-package cwbtools
 #' @docType package
-#' @name cwbtools
-#' @rdname cwbtools
+#' @keywords package
+#' @name cwbtools-package
+#' @rdname cwbtools-package
 #' @author Andreas Blaette
 #' @import R6
 #' @import methods

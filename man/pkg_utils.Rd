@@ -104,6 +104,12 @@ pkg_add_gitattributes_file(pkg = pkgdir)
 pkg_add_configure_scripts(pkg = pkgdir)
 pkg_add_creativecommons_license(pkg = pkgdir)
 }
+\references{
+Blätte, Andreas (2018). "Using Data Packages to Ship Annotated
+  Corpora of Parliamentary Protocols: The GermaParl R Package",
+  \emph{ParlaCLARIN 2018 Workshop Proceedings}, available online
+  \href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
+}
 \seealso{
 The \code{\link[usethis]{use_description}} function in the usethis-package will also create a DESCRIPTION file.
 }

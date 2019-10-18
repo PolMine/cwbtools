@@ -6,16 +6,19 @@ Date: 2019-10-09
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
-Description: The 'Corpus Workbench' ('CWB', <http://cwb.sourceforge.net/>) offers a classic and mature 
-  approach for working with large, linguistically and structurally annotated corpora that ensures memory
-  efficiency and makes runningqueries fast (Evert and Hardie 2011, <http://www.stefan-evert.de/PUB/EvertHardie2011.pdf>).
-  The 'cwbtools' package combines pure R tools to create indexed corpus files and convenience wrappers for
-  the original C implementation of CWB as exposed by the 'RcppCWB' package <https://CRAN.R-project.org/package=RcppCWB>.
-  Additional functionality to add and modify annotations of corpora from within R bring flexibility to working with CWB 
-  indexed corpora. 'Pure R' workflows to enrich corpora with annotations using standard NLP tools or generated
-  manually can be implemented seamlessly and conventiently. The 'cwbtools' package is a building block of an
-  infrastructure to support the combination of quantitative and qualitative approaches when working with
-  textual data.
+Description: The 'Corpus Workbench' ('CWB', <http://cwb.sourceforge.net/>) offers a classic and mature
+ approach for working with large, linguistically and structurally annotated corpora. The 'CWB'
+ is memory efficient and its design makes running queries fast (Evert and Hardie 2011,
+ <http://www.stefan-evert.de/PUB/EvertHardie2011.pdf>). The 'cwbtools' package offers
+ pure R tools to create indexed corpus files as well as high-level wrappers for the original C
+ implementation of CWB as exposed by the 'RcppCWB' package
+ <https://CRAN.R-project.org/package=RcppCWB>. Additional functionality to add and
+ modify annotations of corpora from within R makes working with CWB indexed corpora
+ much more flexible and convenient. The 'cwbtools' package in combination with the R packages
+ 'RcppCWB' (<https://CRAN.R-project.org/package=RcppCWB>) and 'polmineR'
+ (<https://CRAN.R-project.org/package=polmineR>) offers a leightweight infrastructure
+ to support the combination of quantitative and qualitative approaches for working
+ with textual data.
 Imports:
     data.table,
     R6,
@@ -50,6 +53,5 @@ Collate:
     'CorpusData.R'
     'corpus.R'
     'cwb.R'
-    'decode.R'
     'ner.R'
 RoxygenNote: 6.1.1

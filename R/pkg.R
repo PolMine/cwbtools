@@ -6,6 +6,10 @@
 #' 
 #' @param pkg Path to directory of data package or package name.
 #' @param verbose A \code{logical} value, whether to be verbose.
+#' @references Blätte, Andreas (2018). "Using Data Packages to Ship Annotated
+#'   Corpora of Parliamentary Protocols: The GermaParl R Package",
+#'   \emph{ParlaCLARIN 2018 Workshop Proceedings}, available online
+#'   \href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
 #' 
 #' @examples 
 #' pkgdir <- normalizePath(tempdir(), winslash = "/")
