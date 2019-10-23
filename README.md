@@ -11,21 +11,19 @@ The [Corpus Workbench (CWB)](http://cwb.sourceforge.net/) is a classic indexing 
 
 ## Installation
 
-The package is a "GitHub only"" package at this stage. The easiest way to install the package is to use an installation mechanism offered by the [devtools](https://CRAN.R-project.org/package=devtools) package. The procedure is the same for Windows, Linux, and macOS. On Windows, having [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed on your system may be necessary to use the full functionality of 'devtools'.
+The package is available via CRAN and can be installed as follows on Windows, macOS and Linux.
 
-First, check that devtools is installed ...
+```{r}
+install.packages("cwbtools")
+```
+
+To install the development version of the package, use the installation mechanism offered by the [devtools](https://CRAN.R-project.org/package=devtools) package. On Windows, an installation of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) may be necessary.
 
 ```{r}
 if (!"devtools" %in% installed.packages()[,"Package"]) install.packages("devtools")
-```
-
-Then install the cwbtools package.
-
-```{r}
 devtools::install_github("PolMine/cwbtools")
 ```
 
 ## Acknowledgements
 
 The CWB is a classical indexing and query engine. Its character as an open source project is of great value for the community working with corpora. The enduring effort of the developers of the CWB is gratefully acknowledged!
-
