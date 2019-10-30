@@ -81,7 +81,7 @@
       <h1>Introducing ‘cwbtools’</h1>
                         <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2019-10-08</h4>
+            <h4 class="date">2019-10-30</h4>
       
       
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -118,50 +118,49 @@
 <p>In addition to <em>cwbtools</em>, we rely extensively on the <a href="https://CRAN.R-project.org/package=data.table">data.table</a> package. It is a good companion to <em>cwbtools</em> because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(cwbtools)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(data.table)</a></code></pre></div>
-<p>Core operations on structural and positional attributes are implemented in “pure R”, but the CWB can be downloaded and stored within the package.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="../reference/cwb.html">cwb_is_installed</a></span>()) <span class="kw"><a href="../reference/cwb.html">cwb_install</a></span>()</a></code></pre></div>
+<p>Core operations on structural and positional attributes are implemented in “pure R”, but the CWB can be downloaded and stored within the package using the <code><a href="../reference/cwb.html">cwb_install()</a></code> function. In the following examples, we will rely on the “pure R” approach.</p>
 </div>
 <div id="scenario-1-from-xml-to-cwb---un-general-assembly-corpus" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scenario-1-from-xml-to-cwb---un-general-assembly-corpus" class="anchor"></a>Scenario 1: From XML to CWB - UN General Assembly Corpus</h2>
 <p>The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the <a href="https://tei-c.org/">Text Encoding Initiative (TEI)</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">teidir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package =</span> <span class="st">"cwbtools"</span>, <span class="st">"xml"</span>, <span class="st">"UNGA"</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">teifiles &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(teidir, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(teidir)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">teidir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package =</span> <span class="st">"cwbtools"</span>, <span class="st">"xml"</span>, <span class="st">"UNGA"</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2">teifiles &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(teidir, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(teidir)</a></code></pre></div>
 <pre><code>## [1] "N9986497.xml" "N9986515.xml" "N9986521.xml" "N9986551.xml"
 ## [5] "N9986557.xml" "N9986569.xml" "N9986587.xml"</code></pre>
 <p>For our example, we need an (empty) data directory for the UNGA corpus.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">unga_data_dir_tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(data_dir_tmp, <span class="st">"unga"</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(unga_data_dir_tmp)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(unga_data_dir_tmp)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(unga_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">unga_data_dir_tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(data_dir_tmp, <span class="st">"unga"</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(unga_data_dir_tmp)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(unga_data_dir_tmp)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(unga_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
 <p>The point of departure then is to create a <code>CorpusData</code> object that will serve as a processor for these files and storage facility for the corpus data. The central fields of the class are named <code>chunktable</code>, <code>tokenstream</code> and <code>metadata</code>. When we inspect the new object at the outset, we will see that these fields are not filled initially.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">UNGA &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb7-2" title="2">UNGA</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">UNGA &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb6-2" title="2">UNGA</a></code></pre></div>
 <pre><code>## chunktable: NULL
 ## tokenstream: NULL
 ## metadata: NULL</code></pre>
 <p>To turn the XML files into the <code>CorpusData object, we use the method</code>$import_xml()`. To be able to add metadata from the header to the metadata table, the method requires a named vector of XPath expressions used to find the metadata within the XML document.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">metadata &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
-<a class="sourceLine" id="cb9-2" title="2">  <span class="dt">lp =</span> <span class="st">"//legislativePeriod"</span>, <span class="dt">session =</span> <span class="st">"//titleStmt/sessionNo"</span>,</a>
-<a class="sourceLine" id="cb9-3" title="3">  <span class="dt">date =</span> <span class="st">"//publicationStmt/date"</span>, <span class="dt">url =</span> <span class="st">"//sourceDesc/url"</span>,</a>
-<a class="sourceLine" id="cb9-4" title="4">  <span class="dt">src =</span> <span class="st">"//sourceDesc/filetype"</span></a>
-<a class="sourceLine" id="cb9-5" title="5">)</a>
-<a class="sourceLine" id="cb9-6" title="6">UNGA<span class="op">$</span><span class="kw">import_xml</span>(<span class="dt">filenames =</span> teifiles, <span class="dt">meta =</span> metadata)</a>
-<a class="sourceLine" id="cb9-7" title="7">UNGA</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">metadata &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
+<a class="sourceLine" id="cb8-2" title="2">  <span class="dt">lp =</span> <span class="st">"//legislativePeriod"</span>, <span class="dt">session =</span> <span class="st">"//titleStmt/sessionNo"</span>,</a>
+<a class="sourceLine" id="cb8-3" title="3">  <span class="dt">date =</span> <span class="st">"//publicationStmt/date"</span>, <span class="dt">url =</span> <span class="st">"//sourceDesc/url"</span>,</a>
+<a class="sourceLine" id="cb8-4" title="4">  <span class="dt">src =</span> <span class="st">"//sourceDesc/filetype"</span></a>
+<a class="sourceLine" id="cb8-5" title="5">)</a>
+<a class="sourceLine" id="cb8-6" title="6">UNGA<span class="op">$</span><span class="kw">import_xml</span>(<span class="dt">filenames =</span> teifiles, <span class="dt">meta =</span> metadata)</a>
+<a class="sourceLine" id="cb8-7" title="7">UNGA</a></code></pre></div>
 <pre><code>## chunktable: 2 columns / 1148 rows
 ## tokenstream: NULL
 ## metadata: 20 columns / 1148 rows</code></pre>
 <p>The input XML files are TEI files. Speaker information is included in the attributes of a tag named ‘sp’. To maintain the original content, there is a element ‘speaker’ in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we consider it as noise to be removed.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">to_keep &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(UNGA<span class="op">$</span>metadata[[<span class="st">"speaker"</span>]]))</a>
-<a class="sourceLine" id="cb11-2" title="2">UNGA<span class="op">$</span>chunktable &lt;-<span class="st"> </span>UNGA<span class="op">$</span>chunktable[to_keep]</a>
-<a class="sourceLine" id="cb11-3" title="3">UNGA<span class="op">$</span>metadata &lt;-<span class="st"> </span>UNGA<span class="op">$</span>metadata[to_keep][, speaker <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">to_keep &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(UNGA<span class="op">$</span>metadata[[<span class="st">"speaker"</span>]]))</a>
+<a class="sourceLine" id="cb10-2" title="2">UNGA<span class="op">$</span>chunktable &lt;-<span class="st"> </span>UNGA<span class="op">$</span>chunktable[to_keep]</a>
+<a class="sourceLine" id="cb10-3" title="3">UNGA<span class="op">$</span>metadata &lt;-<span class="st"> </span>UNGA<span class="op">$</span>metadata[to_keep][, speaker <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</a></code></pre></div>
 <p>We assign more telling column names …</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/setattr.html">setnames</a></span>(UNGA<span class="op">$</span>metadata, <span class="dt">old =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sp_who"</span>, <span class="st">"sp_state"</span>, <span class="st">"sp_role"</span>), <span class="dt">new =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/setattr.html">setnames</a></span>(UNGA<span class="op">$</span>metadata, <span class="dt">old =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sp_who"</span>, <span class="st">"sp_state"</span>, <span class="st">"sp_role"</span>), <span class="dt">new =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>))</a></code></pre></div>
 <p>The CWB requires a tokenstream as input to generate positional attributes. NLP tools will offer lemmatization, part-of-speech-recognition and more. To keep things simple, we perform a very simple tokenization that relies on the <a href="https://CRAN.R-project.org/package=tokenizers">tokenizers</a> package.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">UNGA<span class="op">$</span><span class="kw">tokenize</span>(<span class="dt">lowercase =</span> <span class="ot">FALSE</span>, <span class="dt">strip_punct =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb13-2" title="2">UNGA</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">UNGA<span class="op">$</span><span class="kw">tokenize</span>(<span class="dt">lowercase =</span> <span class="ot">FALSE</span>, <span class="dt">strip_punct =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2">UNGA</a></code></pre></div>
 <p>Let us see how it looks like now …</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">UNGA<span class="op">$</span>tokenstream</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">UNGA<span class="op">$</span>tokenstream</a></code></pre></div>
 <pre><code>##           id   word   cpos
 ##      1:    2      I      0
 ##      2:    2 should      1
@@ -175,13 +174,26 @@
 ## 127081: 1148    p.m 127080
 ## 127082: 1148      . 127081</code></pre>
 <p>The <code>CorpusData</code> object now includes a table with the token stream, and we are ready to import the corpus into the CWB. We use the <code>$encode()</code> method for this purpose. Note that the workers are the <code>p_attribute_encode</code> function (to encode the token stream), and the <code>s_attribute_encode</code> function (to encode the structural attributes / the metadata).</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">s_attrs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>, <span class="st">"lp"</span>, <span class="st">"session"</span>, <span class="st">"date"</span>)</a>
-<a class="sourceLine" id="cb16-2" title="2">UNGA<span class="op">$</span><span class="kw">encode</span>(</a>
-<a class="sourceLine" id="cb16-3" title="3">  <span class="dt">registry_dir =</span> registry_tmp, <span class="dt">data_dir =</span> unga_data_dir_tmp,</a>
-<a class="sourceLine" id="cb16-4" title="4">  <span class="dt">corpus =</span> <span class="st">"UNGA"</span>, <span class="dt">encoding =</span> <span class="st">"utf8"</span>, <span class="dt">method =</span> <span class="st">"R"</span>,</a>
-<a class="sourceLine" id="cb16-5" title="5">  <span class="dt">p_attributes =</span> <span class="st">"word"</span>, <span class="dt">s_attributes =</span> <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),</a>
-<a class="sourceLine" id="cb16-6" title="6">  <span class="dt">compress =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb16-7" title="7">  )</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">s_attrs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>, <span class="st">"lp"</span>, <span class="st">"session"</span>, <span class="st">"date"</span>)</a>
+<a class="sourceLine" id="cb15-2" title="2">UNGA<span class="op">$</span><span class="kw">encode</span>(</a>
+<a class="sourceLine" id="cb15-3" title="3">  <span class="dt">registry_dir =</span> registry_tmp, <span class="dt">data_dir =</span> unga_data_dir_tmp,</a>
+<a class="sourceLine" id="cb15-4" title="4">  <span class="dt">corpus =</span> <span class="st">"UNGA"</span>, <span class="dt">encoding =</span> <span class="st">"utf8"</span>, <span class="dt">method =</span> <span class="st">"R"</span>,</a>
+<a class="sourceLine" id="cb15-5" title="5">  <span class="dt">p_attributes =</span> <span class="st">"word"</span>, <span class="dt">s_attributes =</span> <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),</a>
+<a class="sourceLine" id="cb15-6" title="6">  <span class="dt">compress =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb15-7" title="7">  )</a></code></pre></div>
+<pre><code>## === Makeall: processing corpus UNGA ===
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpnlfUkV/registry
+## ATTRIBUTE word
+##  + creating LEXSRT ... OK
+##  - lexicon      OK
+##  + creating FREQS ... OK
+##  - frequencies  OK
+##  - token stream OK
+##  + creating REVCIDX ... OK
+##  + creating REVCORP ... OK
+##  ? validating REVCORP ... OK
+##  - index        OK
+## ========================================</code></pre>
 <p>In this example, the logical parameter <code>compress</code> is `TRUE. This triggers a so-called “huffcode”" compression, which will reduce corpus size and speed up queries. For big corpora, compression certainly makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.</p>
 <p>The indexed corpus has now been prepared and can be used with CQP, CQPweb, or – if you like R – with a package such as <a href="https://CRAN.R-project.org/package=polmineR">polmineR</a>. To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the <a href="https://CRAN.R-project.org/package=RcppCWB">RcppCWB</a> package.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RcppCWB)</a>
@@ -257,34 +269,47 @@
 <p>Ready to encode the corpus!</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">Austen<span class="op">$</span><span class="kw">encode</span>(</a>
 <a class="sourceLine" id="cb27-2" title="2">   <span class="dt">corpus =</span> <span class="st">"AUSTEN"</span>, <span class="dt">encoding =</span> <span class="st">"utf8"</span>,</a>
-<a class="sourceLine" id="cb27-3" title="3">   <span class="dt">p_attributes =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"word"</span>, <span class="st">"stem"</span>), <span class="dt">s_attributes =</span> <span class="st">"book"</span>,</a>
+<a class="sourceLine" id="cb27-3" title="3">   <span class="dt">p_attributes =</span> <span class="st">"word"</span>, <span class="dt">s_attributes =</span> <span class="st">"book"</span>,</a>
 <a class="sourceLine" id="cb27-4" title="4">   <span class="dt">registry_dir =</span> registry_tmp, <span class="dt">data_dir =</span> austen_data_dir_tmp,</a>
 <a class="sourceLine" id="cb27-5" title="5">   <span class="dt">method =</span> <span class="st">"R"</span>, <span class="dt">compress =</span> <span class="ot">FALSE</span></a>
 <a class="sourceLine" id="cb27-6" title="6">)</a></code></pre></div>
+<pre><code>## === Makeall: processing corpus AUSTEN ===
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpnlfUkV/registry
+## ATTRIBUTE word
+##  + creating LEXSRT ... OK
+##  - lexicon      OK
+##  + creating FREQS ... OK
+##  - frequencies  OK
+##  - token stream OK
+##  + creating REVCIDX ... OK
+##  + creating REVCORP ... OK
+##  ? validating REVCORP ... OK
+##  - index        OK
+## ========================================</code></pre>
 <p>The new corpus will not be available unless we trigger that files in the registry directory are re-read.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_reset_registry</a></span>(<span class="dt">registry =</span> registry_tmp)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_reset_registry</a></span>(<span class="dt">registry =</span> registry_tmp)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token “pride” occurr?</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">corpus &lt;-<span class="st"> "AUSTEN"</span></a>
-<a class="sourceLine" id="cb30-2" title="2">token &lt;-<span class="st"> "pride"</span></a>
-<a class="sourceLine" id="cb30-3" title="3">p_attr &lt;-<span class="st"> "stem"</span></a>
-<a class="sourceLine" id="cb30-4" title="4">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">str =</span> token, <span class="dt">registry =</span> registry_tmp)</a>
-<a class="sourceLine" id="cb30-5" title="5">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
-<a class="sourceLine" id="cb30-6" title="6">count &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos)</a>
-<a class="sourceLine" id="cb30-7" title="7">count</a></code></pre></div>
-<pre><code>## [1] 115</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">corpus &lt;-<span class="st"> "AUSTEN"</span></a>
+<a class="sourceLine" id="cb31-2" title="2">token &lt;-<span class="st"> "pride"</span></a>
+<a class="sourceLine" id="cb31-3" title="3">p_attr &lt;-<span class="st"> "word"</span></a>
+<a class="sourceLine" id="cb31-4" title="4">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">str =</span> token, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb31-5" title="5">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">p_attribute =</span> p_attr, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb31-6" title="6">count &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos)</a>
+<a class="sourceLine" id="cb31-7" title="7">count</a></code></pre></div>
+<pre><code>## [1] 113</code></pre>
 </div>
 <div id="scenario-3-from-tm-package-vcorpus-to-cwb" class="section level3">
 <h3 class="hasAnchor">
 <a href="#scenario-3-from-tm-package-vcorpus-to-cwb" class="anchor"></a>Scenario 3: From tm-package VCorpus to CWB</h3>
 <p>In the third scenario, we will make the transition from a <code>VCorpus</code> (tm package) to a CWB indexed corpus. We use the Reuters corpus that is included as sample data in the tm package.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tm)</a>
-<a class="sourceLine" id="cb32-2" title="2">reut21578 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"texts"</span>, <span class="st">"crude"</span>, <span class="dt">package =</span> <span class="st">"tm"</span>)</a>
-<a class="sourceLine" id="cb32-3" title="3">reuters.tm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/tm/man/VCorpus.html">VCorpus</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/tm/man/DirSource.html">DirSource</a></span>(reut21578), <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">reader =</span> readReut21578XMLasPlain))</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tm)</a>
+<a class="sourceLine" id="cb33-2" title="2">reut21578 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"texts"</span>, <span class="st">"crude"</span>, <span class="dt">package =</span> <span class="st">"tm"</span>)</a>
+<a class="sourceLine" id="cb33-3" title="3">reuters.tm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/tm/man/VCorpus.html">VCorpus</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/tm/man/DirSource.html">DirSource</a></span>(reut21578), <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">reader =</span> readReut21578XMLasPlain))</a></code></pre></div>
 <p>A quick way to attain the data format required for the <code>CorpusData</code> class is to coerce the <code>VCorpus</code> to a <code>tibble</code>, using respective functionality of the <a href="https://CRAN.R-project.org/package=tidytext">tidytext</a> package.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidytext)</a>
-<a class="sourceLine" id="cb33-2" title="2">reuters.tbl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/tidytext/man/reexports.html">tidy</a></span>(reuters.tm)</a>
-<a class="sourceLine" id="cb33-3" title="3">reuters.tbl</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidytext)</a>
+<a class="sourceLine" id="cb34-2" title="2">reuters.tbl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/tidytext/man/reexports.html">tidy</a></span>(reuters.tm)</a>
+<a class="sourceLine" id="cb34-3" title="3">reuters.tbl</a></code></pre></div>
 <pre><code>## # A tibble: 20 x 17
 ##    author datetimestamp       description heading id    language origin
 ##    &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; 
@@ -312,30 +337,30 @@
 ## #   cgisplit &lt;chr&gt;, oldid &lt;chr&gt;, topics_cat &lt;named list&gt;, places &lt;named
 ## #   list&gt;, people &lt;chr&gt;, orgs &lt;chr&gt;, exchanges &lt;chr&gt;, text &lt;chr&gt;</code></pre>
 <p>Columns with the metadata we may want to encode are still character vectors (length &gt; 1). We turn the columns with the topic categorizations and the places into length-one character vectors.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">reuters.tbl[[<span class="st">"topics_cat"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(</a>
-<a class="sourceLine" id="cb35-2" title="2">  reuters.tbl[[<span class="st">"topics_cat"</span>]],</a>
-<a class="sourceLine" id="cb35-3" title="3">  <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">"|"</span>)</a>
-<a class="sourceLine" id="cb35-4" title="4">  )</a>
-<a class="sourceLine" id="cb35-5" title="5">reuters.tbl[[<span class="st">"places"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(</a>
-<a class="sourceLine" id="cb35-6" title="6">  reuters.tbl[[<span class="st">"places"</span>]],</a>
-<a class="sourceLine" id="cb35-7" title="7">  <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">"|"</span>)</a>
-<a class="sourceLine" id="cb35-8" title="8">  )</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">reuters.tbl[[<span class="st">"topics_cat"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(</a>
+<a class="sourceLine" id="cb36-2" title="2">  reuters.tbl[[<span class="st">"topics_cat"</span>]],</a>
+<a class="sourceLine" id="cb36-3" title="3">  <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">"|"</span>)</a>
+<a class="sourceLine" id="cb36-4" title="4">  )</a>
+<a class="sourceLine" id="cb36-5" title="5">reuters.tbl[[<span class="st">"places"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(</a>
+<a class="sourceLine" id="cb36-6" title="6">  reuters.tbl[[<span class="st">"places"</span>]],</a>
+<a class="sourceLine" id="cb36-7" title="7">  <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">"|"</span>)</a>
+<a class="sourceLine" id="cb36-8" title="8">  )</a></code></pre></div>
 <p>This is the input we need. We instantiate a <code>CorpusData</code> object end make sure that a new data directory for the REUTERS corpus exists (and is empty) …</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">Reuters &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
-<a class="sourceLine" id="cb36-2" title="2">reuters_data_dir_tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(data_dir_tmp, <span class="st">"reuters"</span>)</a>
-<a class="sourceLine" id="cb36-3" title="3"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(reuters_data_dir_tmp)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(reuters_data_dir_tmp)</a>
-<a class="sourceLine" id="cb36-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(reuters_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">Reuters &lt;-<span class="st"> </span>CorpusData<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb37-2" title="2">reuters_data_dir_tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(data_dir_tmp, <span class="st">"reuters"</span>)</a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(reuters_data_dir_tmp)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(reuters_data_dir_tmp)</a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(reuters_data_dir_tmp, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
 <p>We assign the chunktable and the metadata, coerced to a <code>data.table</code>, to the object …</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">Reuters<span class="op">$</span>chunktable &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/data.table.html">data.table</a></span>(reuters.tbl[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"text"</span>)])</a>
-<a class="sourceLine" id="cb37-2" title="2">Reuters<span class="op">$</span>metadata &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/data.table.html">data.table</a></span>(reuters.tbl[,<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"topics_cat"</span>, <span class="st">"places"</span>)])</a>
-<a class="sourceLine" id="cb37-3" title="3">Reuters</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">Reuters<span class="op">$</span>chunktable &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/data.table.html">data.table</a></span>(reuters.tbl[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"text"</span>)])</a>
+<a class="sourceLine" id="cb38-2" title="2">Reuters<span class="op">$</span>metadata &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/data.table/man/data.table.html">data.table</a></span>(reuters.tbl[,<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"id"</span>, <span class="st">"topics_cat"</span>, <span class="st">"places"</span>)])</a>
+<a class="sourceLine" id="cb38-3" title="3">Reuters</a></code></pre></div>
 <pre><code>## chunktable: 2 columns / 20 rows
 ## tokenstream: NULL
 ## metadata: 3 columns / 20 rows</code></pre>
 <p>… we tokenize the text to gain the token stream table …</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">Reuters<span class="op">$</span><span class="kw">tokenize</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">Reuters<span class="op">$</span><span class="kw">tokenize</span>()</a></code></pre></div>
 <p>… we have a look at the token strem …</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">Reuters<span class="op">$</span>tokenstream</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">Reuters<span class="op">$</span>tokenstream</a></code></pre></div>
 <pre><code>##        id         word cpos
 ##    1: 127      diamond    0
 ##    2: 127     shamrock    1
@@ -349,27 +374,40 @@
 ## 4049: 708        added 4048
 ## 4050: 708       reuter 4049</code></pre>
 <p>It seems that we can encode the corpus.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">Reuters<span class="op">$</span><span class="kw">encode</span>(</a>
-<a class="sourceLine" id="cb42-2" title="2">   <span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">encoding =</span> <span class="st">"utf8"</span>,</a>
-<a class="sourceLine" id="cb42-3" title="3">   <span class="dt">p_attributes =</span> <span class="st">"word"</span>, <span class="dt">s_attributes =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"topics_cat"</span>, <span class="st">"places"</span>),</a>
-<a class="sourceLine" id="cb42-4" title="4">   <span class="dt">registry_dir =</span> registry_tmp,</a>
-<a class="sourceLine" id="cb42-5" title="5">   <span class="dt">data_dir =</span> data_dir_tmp,</a>
-<a class="sourceLine" id="cb42-6" title="6">   <span class="dt">method =</span> <span class="st">"R"</span>, <span class="dt">compress =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb42-7" title="7">)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">Reuters<span class="op">$</span><span class="kw">encode</span>(</a>
+<a class="sourceLine" id="cb43-2" title="2">   <span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">encoding =</span> <span class="st">"utf8"</span>,</a>
+<a class="sourceLine" id="cb43-3" title="3">   <span class="dt">p_attributes =</span> <span class="st">"word"</span>, <span class="dt">s_attributes =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"topics_cat"</span>, <span class="st">"places"</span>),</a>
+<a class="sourceLine" id="cb43-4" title="4">   <span class="dt">registry_dir =</span> registry_tmp,</a>
+<a class="sourceLine" id="cb43-5" title="5">   <span class="dt">data_dir =</span> data_dir_tmp,</a>
+<a class="sourceLine" id="cb43-6" title="6">   <span class="dt">method =</span> <span class="st">"R"</span>, <span class="dt">compress =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb43-7" title="7">)</a></code></pre></div>
+<pre><code>## === Makeall: processing corpus REUTERS ===
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpnlfUkV/registry
+## ATTRIBUTE word
+##  + creating LEXSRT ... OK
+##  - lexicon      OK
+##  + creating FREQS ... OK
+##  - frequencies  OK
+##  - token stream OK
+##  + creating REVCIDX ... OK
+##  + creating REVCORP ... OK
+##  ? validating REVCORP ... OK
+##  - index        OK
+## ========================================</code></pre>
 <p>The corpus will not be available unless we call <code><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_reset_registry()</a></code> so that files in the registry directory are reloaded.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_reset_registry</a></span>(<span class="dt">registry =</span> registry_tmp)</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_reset_registry</a></span>(<span class="dt">registry =</span> registry_tmp)</a></code></pre></div>
 <p>The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word “oil”.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(<span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">str =</span> <span class="st">"oil"</span>, <span class="dt">registry =</span> registry_tmp)</a>
-<a class="sourceLine" id="cb44-2" title="2">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(<span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
-<a class="sourceLine" id="cb44-3" title="3">count &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos)</a>
-<a class="sourceLine" id="cb44-4" title="4">count</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(<span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">str =</span> <span class="st">"oil"</span>, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb46-2" title="2">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(<span class="dt">corpus =</span> <span class="st">"REUTERS"</span>, <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">id =</span> id, <span class="dt">registry =</span> registry_tmp)</a>
+<a class="sourceLine" id="cb46-3" title="3">count &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos)</a>
+<a class="sourceLine" id="cb46-4" title="4">count</a></code></pre></div>
 <pre><code>## [1] 86</code></pre>
 </div>
 <div id="final-deeds-and-words" class="section level3">
 <h3 class="hasAnchor">
 <a href="#final-deeds-and-words" class="anchor"></a>Final Deeds and Words</h3>
 <p>As a matter of housekeeping, we remove the temporary directory.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(tmpdir, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(tmpdir, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Hope everything works! Enjoy! Feedback is welcome!</p>
 </div>
 </div>

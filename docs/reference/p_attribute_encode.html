@@ -211,8 +211,14 @@ and will reset the encoding in the registry file.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RcppCWB</span>)
-<span class='kw'>if</span> (!<span class='fu'><a href='cwb.html'>cwb_is_installed</a></span>()) <span class='fu'><a href='cwb.html'>cwb_install</a></span>()
+
+<span class='co'># In this example, we pursue a "pure R" approach. To rely on the "CWB"</span>
+<span class='co'># method, you can use the cwb_install() function, which will download and</span>
+<span class='co'># install the CWB command line # tools within the package.</span>
+
 <span class='no'>tokens</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RcppCWB"</span>, <span class='st'>"extdata"</span>, <span class='st'>"examples"</span>, <span class='st'>"reuters.txt"</span>))
+
+<span class='co'># create new (and empty) directory structure</span>
 
 <span class='no'>tmpdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
 <span class='kw'>if</span> (<span class='no'>.Platform</span>$<span class='no'>OS.type</span> <span class='kw'>==</span> <span class='st'>"windows"</span>) <span class='no'>tmpdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='no'>tmpdir</span>, <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
@@ -232,7 +238,14 @@ and will reset the encoding in the registry file.</p>
   <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='no'>registry_tmp</span>,
   <span class='kw'>compress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='st'>"utf8"</span>
-  )</div><div class='output co'>#&gt; <span class='message'>... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span></div><div class='output co'>#&gt; <span class='message'>... creating indices (in memory)</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.corpus</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon.idx</span></div><div class='output co'>#&gt; <span class='message'>... creating data for new registry file</span></div><div class='output co'>#&gt; <span class='message'>... writing registry file</span></div><div class='output co'>#&gt; <span class='message'>... calling cwb-makeall</span></div><div class='input'>
+  )</div><div class='output co'>#&gt; <span class='message'>... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span></div><div class='output co'>#&gt; <span class='message'>... creating indices (in memory)</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.corpus</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon.idx</span></div><div class='output co'>#&gt; <span class='message'>... creating data for new registry file</span></div><div class='output co'>#&gt; <span class='message'>... writing registry file</span></div><div class='output co'>#&gt; === Makeall: processing corpus reuters ===
+#&gt; Registry directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpNmvKhi/registry
+#&gt; ATTRIBUTE word
+#&gt;  - lexicon      OK
+#&gt;  - frequencies  OK
+#&gt;  - token stream OK (COMPRESSED)
+#&gt;  - index        OK (COMPRESSED)
+#&gt; ========================================</div><div class='input'>
 <span class='no'>regdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='registry_file.html'>registry_data</a></span>(
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"REUTERS"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"Reuters Sample Corpus"</span>, <span class='kw'>home</span> <span class='kw'>=</span> <span class='no'>data_dir_tmp</span>,
   <span class='kw'>properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>encoding</span> <span class='kw'>=</span> <span class='st'>"utf-8"</span>, <span class='kw'>language</span> <span class='kw'>=</span> <span class='st'>"en"</span>), <span class='kw'>p_attributes</span> <span class='kw'>=</span> <span class='st'>"word"</span>

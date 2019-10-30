@@ -254,7 +254,8 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
   might add <code>method = "wget" extra = "--user donald --password duck"</code>.
   See examples how to check whether the directory has been set correctly.</p>
 <p><code>corpus_packages</code> will detect the packages that include CWB
-  corpora.</p>
+  corpora. Note that the directory structure of all installed packages is
+  evaluated which may be slow on network-mounted file systems.</p>
 <p><code>corpus_rename</code> will rename a corpus, affecting the name of the
   registry file, the corpus id, and the name of the directory where data
   files reside.</p>

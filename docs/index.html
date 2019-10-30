@@ -5,14 +5,25 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toolset for CWB Corpora • cwbtools</title>
+<title>Tools to create, modify and manage CWB Corpora • cwbtools</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Toolset for CWB Corpora">
-<meta property="og:description" content="Toolset to create, modify and manage corpora to be queried with the Corpus
-  Workbench (CWB) using R.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Tools to create, modify and manage CWB Corpora">
+<meta property="og:description" content="The Corpus Workbench (CWB, &lt;http://cwb.sourceforge.net/&gt;) offers a classic and mature
+ approach for working with large, linguistically and structurally annotated corpora. The CWB
+ is memory efficient and its design makes running queries fast (Evert and Hardie 2011,
+ &lt;http://www.stefan-evert.de/PUB/EvertHardie2011.pdf&gt;). The cwbtools package offers
+ pure R tools to create indexed corpus files as well as high-level wrappers for the original C
+ implementation of CWB as exposed by the RcppCWB package
+ &lt;https://CRAN.R-project.org/package=RcppCWB&gt;. Additional functionality to add and
+ modify annotations of corpora from within R makes working with CWB indexed corpora
+ much more flexible and convenient. The cwbtools package in combination with the R packages
+ RcppCWB (&lt;https://CRAN.R-project.org/package=RcppCWB&gt;) and polmineR
+ (&lt;https://CRAN.R-project.org/package=polmineR&gt;) offers a leightweight infrastructure
+ to support the combination of quantitative and qualitative approaches for working
+ with textual data.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -87,11 +98,11 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package is a “GitHub only”" package at this stage. The easiest way to install the package is to use an installation mechanism offered by the <a href="https://CRAN.R-project.org/package=devtools">devtools</a> package. The procedure is the same for Windows, Linux, and macOS. On Windows, having <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> installed on your system may be necessary to use the full functionality of ‘devtools’.</p>
-<p>First, check that devtools is installed …</p>
-<pre class="{r}"><code>if (!"devtools" %in% installed.packages()[,"Package"]) install.packages("devtools")</code></pre>
-<p>Then install the cwbtools package.</p>
-<pre class="{r}"><code><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">devtools::install_github("PolMine/cwbtools")</a></code></pre>
+<p>The package is available via CRAN and can be installed as follows on Windows, macOS and Linux.</p>
+<pre class="{r}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("cwbtools")</a></code></pre>
+<p>To install the development version of the package, use the installation mechanism offered by the <a href="https://CRAN.R-project.org/package=devtools">devtools</a> package. On Windows, an installation of <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> may be necessary.</p>
+<pre class="{r}"><code>if (!"devtools" %in% installed.packages()[,"Package"]) install.packages("devtools")
+devtools::install_github("PolMine/cwbtools")</code></pre>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2 class="hasAnchor">
@@ -103,10 +114,23 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=cwbtools">https://​cloud.r-project.org/​package=cwbtools</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+</ul>
+</div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing cwbtools</a></li>
 </ul>
 </div>
 <div class="developers">
@@ -124,6 +148,7 @@
 <li><a href="https://travis-ci.org/PolMine/cwbtools"><img src="https://api.travis-ci.org/PolMine/cwbtools.svg?branch=dev" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/PolMine/cwbtools"><img src="https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=dev&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/gh/PolMine/cwbtools/branch/dev"><img src="https://codecov.io/gh/PolMine/cwbtools/branch/dev/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.3516719"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3516719.svg" alt="DOI"></a></li>
 </ul>
 </div>
 </div>
