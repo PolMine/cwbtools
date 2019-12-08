@@ -1,4 +1,21 @@
-# v0.1.0
+cwbtools 0.1.1
+===============
+
+## MINOR IMPROVEMENTS
+
+  * The `pkg_add_corpus()` function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from droping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (#11).
+
+## BUG FIXES
+
+  * In the upcoming R version 4.0, the `matrix` class will inherit from class `array`. The new package version now takes into account that `length(class(matrix(1:4,2,2)))` will return the value 2.
+ 
+## DOCUMENTATION FIXES
+
+  * The NEWS file now follows the styleguide such that `pkgdown::build_site()` will generate a proper changelog page.
+
+
+cwbtools 0.1.0
+==============
   * updated vignette so that annex explains installation of CoreNLP v3.9.2 (2018-10-05)
   * New functions `s_atttribute_get_regions()` and `s_attribute_get_values()`.
   * In `corpus_install()`, using `download.file()` replaces `curl::curl_download()` for Windows because curl apparantly is not able to process target filenames that include special characters.
@@ -8,7 +25,9 @@
   * A new `conll_get_regions()`-function will turn an CoNLL-style annotated token stream into a table with regions that can be encoded using `s_attribute_encode()`.
   * A new function `s_attribute_merge()` will merge two `data.table` objects defining s-attributes, checking for overlaps.
 
-# v0.0.11
+cwbtools 0.0.11
+===============
+
   * New functions `p_attribute_recode()`, `s_attribute_recode()`, and supplementary `s_attributed_files()`, and `corpus_recode()`.
   * Any call to `tempdir()` is now wrapped as `normalizePath(tempdir(), winslash = "/")` to avoid Problems on Windows, when different file seperators may be used.
   * When calling `file.path()`, the argument `fsep` is "/" to prevent confusion of file seperators.
@@ -20,12 +39,17 @@
   * 
 
 
-# v0.0.10
+cwbtools 0.0.10
+===============
+
   * Missing documentation written for fields of class CorpusData.
   * New fiels 'sentences' and 'named_entities' added to class CorpusData, as a basis
   for encoding annotation of sentences and named entities.
 
-# v0.0.9
+
+cwbtools 0.0.9
+==============
+
   * issue with parsing path correctly in registry_file_path when path is in inverted commas solved (adjusted regex)
   * issue with ALTREP vector for corpus positions resolved
   * layout of progress bars consistently using pbapply package
@@ -38,12 +62,18 @@
   * Minimal rework of progress bar in `CorpusData$add_corpus_positions()` (helper function .fn)
   * Three dots (...) are passed into `download.file()` by `install_corpus()`, if argument tarball is specified. This is a precondition for passing arguments to download password-protected corpora.
 
-# v0.0.8
+
+cwbtools 0.0.8
+==============
+
   * major bug removed when writing regions to disk (s_attribute_encode) with R
   * when creating/removing files in p_attribute_encode, only basenames of filenames are outputted
   * for CorpusData$encode(), an already existing corpus will be removed
 
-# v0.0.7
+
+cwbtools 0.0.7
+==============
+
   * bug removed in function pkg_create_cwb_dirs causing error when a directory already exists
   * new vignette 'europarl': sample workflow for putting indexed corpus into package
   * for $tokenize()-method of CorpusData: stricter requirement that chunkdata is data.table
@@ -63,12 +93,21 @@
   * writing hex for content of s_attributes to cope with encoding issues
   * values coerced to character
 
-# v0.0.6
+
+cwbtools 0.0.6
+==============
+
   * DataPackage class turned into pkg_*-functions
   * first version that passes all tests
 
-# v0.0.5
+
+cwbtools 0.0.5
+==============
+
   * undocumented
 
-# v0.0.4
+
+cwbtools 0.0.4
+==============
+
   * askYesNo function has been replaced by readlines(), to ensure compatibility with R versions < 3.5

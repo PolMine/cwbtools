@@ -39,7 +39,9 @@ NULL
 #' @export pkg_create_cwb_dirs
 #' @rdname pkg_utils
 pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
-  .check_pkg_dir(pkg)
+  if (!file.exists(pkg)) stop("directory does not exist")
+  if (!file.info(pkg)$isdir) stop("dir exists, but is not a directory")
+  
   dirs_to_create <- c(
     "R",
     "man",
@@ -82,8 +84,11 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
     dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry", fsep = "/")
     data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora", fsep = "/")
   }
-  if (!file.exists(dest_registry)) stop(sprintf("registry directory '%s' does not exist", dest_registry))
-  if (!file.exists(data_dir)) stop(sprintf("data directory '%s' does not exist", data_dir))
+  
+  # Create cwb directories within package if they do not exist yet
+  if (!file.exists(dest_registry)) dir.create(dest_registry, recursive = TRUE)
+  if (!file.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
+  
   target_dir <- file.path(data_dir, tolower(corpus), fsep = "/")
   if (!file.exists(target_dir)){
     message("... directory for indexed corpus does not yet exist, creating: ", target_dir)
@@ -231,10 +236,4 @@ pkg_add_gitattributes_file = function(pkg = "."){
     con = file.path(pkg, ".gitattributes", fsep = "/")
   )
   invisible( TRUE )
-}
-
-
-.check_pkg_dir <- function(pkg){
-  if (!file.exists(pkg)) stop("directory does not exist")
-  if (!file.info(pkg)$isdir) stop("dir exists, but is not a directory")
 }

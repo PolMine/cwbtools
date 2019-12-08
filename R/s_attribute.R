@@ -70,8 +70,8 @@
 #' @rdname s_attribute
 s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, delete = FALSE, verbose = TRUE){
   stopifnot(
-    class(region_matrix) == "matrix",
-    ncol(region_matrix) == 2,
+    class(region_matrix)[1] == "matrix",
+    ncol(region_matrix) == 2L,
     is.character(values),
     length(values) == nrow(region_matrix)
     )
