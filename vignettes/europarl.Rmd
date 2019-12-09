@@ -77,7 +77,7 @@ corpora <- list.files(europarl_registry_dir)
 corpora
 ```
 
-So these are the corpora. We iterate throught the registry files and adjust the path to the data directories.
+So these are the corpora. We iterate through the registry files and adjust the path to the data directories.
 
 ```{r adjust_home_dirs, eval = exec}
 for (corpus in corpora){

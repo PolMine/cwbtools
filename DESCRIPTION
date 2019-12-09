@@ -2,7 +2,7 @@ Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
 Version: 0.1.1
-Date: 2019-12-08
+Date: 2019-12-09
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -16,7 +16,7 @@ Description: The 'Corpus Workbench' ('CWB', <http://cwb.sourceforge.net/>) offer
  modify annotations of corpora from within R makes working with CWB indexed corpora
  much more flexible and convenient. The 'cwbtools' package in combination with the R packages
  'RcppCWB' (<https://CRAN.R-project.org/package=RcppCWB>) and 'polmineR'
- (<https://CRAN.R-project.org/package=polmineR>) offers a leightweight infrastructure
+ (<https://CRAN.R-project.org/package=polmineR>) offers a lightweight infrastructure
  to support the combination of quantitative and qualitative approaches for working
  with textual data.
 Imports:

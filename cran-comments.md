@@ -1,27 +1,10 @@
 ## General remarks
 
-This is the third initial submit of cwbtools (v0.1.0. I am reallygrateful 
-for your  scrutiny and advice. Martina Schmirl alerted me on two matters ...
+This is a maintenance release, following a notification by Email by Kurt Hornik that the in the upcoming R version (4.0), the 'matrix' class will inherit from the 'array' class, thus causing a error when running for instance: class(matrix(1 : 4, 2, 2)) == "matrix"
 
+I modified the code such that it will comply with the upcoming changes in R-devel / R 4.0. 
 
-### issue 1
-
-My usage of single quotes in the DESCRIPTION was not in line with standards. I corrected this to the
-best of my knowledge ("Pure R workflows" without single quotes / abbreviation NLP, which 
-does not refer to software is omitted).
-
-
-### issue 2
-
-Martina observed: "You have examples for unexported functions which cannot run in this way.
-Please either add packagename::: to the function calls in the examples,
-omit these examples or export these functions in as.Annotation.Rd"
-
-Reconsidering the function, I dropped it and its documentation from the package
-entirely, because I realized that there is already a better implementation
-in the polmineR package anyway. 
-
-Thanks for your feedback and care!
+I am grateful for the foresight of the CRAN team and the precise advice I received!
 
 
 ## Test environments
@@ -30,7 +13,8 @@ Thanks for your feedback and care!
 * Ubuntu 14.04 (on travis-ci), R 3.6.1
 * Ubuntu 14.04 (project server), R 3.4.3
 * win-builder (devel and release), R. 3.6.1
-* Windows/AppVeyor, R 3.5.0
+* Windows/AppVeyor, R 3.6.1 Patched
+* Debian Linux, R-devel, GCC
 
 
 ## R CMD check results

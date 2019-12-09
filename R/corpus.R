@@ -1,12 +1,12 @@
 #' Install and manage corpora. 
 #' 
-#' Utitlity functions to keep the installation of indexed CWB corpora wrapped
+#' Utility functions to keep the installation of indexed CWB corpora wrapped
 #' into R data packages simple. 
 #' 
 #' 
 #' @details A data package with a CWB corpus is assumed to include a directory
 #'   \code{/extdata/cwb/registry} for registry files and a directory
-#'   \code{/extdata/cwb/indexed_corpora} for the inexed corpus files. The
+#'   \code{/extdata/cwb/indexed_corpora} for the indexed corpus files. The
 #'   \code{corpus_install} function combines two steps necessary to install a
 #'   CWB corpus. First, it calls \code{install.packages}, then it resets the
 #'   path pointing to the directory with the indexed corpus files in the

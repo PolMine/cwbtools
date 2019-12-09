@@ -235,7 +235,7 @@ The new corpus will not be available unless we trigger that files in the registr
 cqp_reset_registry(registry = registry_tmp)
 ```
 
-This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token "pride" occurr?
+This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token "pride" occur?
 
 ```{r}
 corpus <- "AUSTEN"
@@ -302,7 +302,7 @@ Reuters
 Reuters$tokenize()
 ```
 
-... we have a look at the token strem ... 
+... we have a look at the token stream ... 
 
 ```{r}
 Reuters$tokenstream

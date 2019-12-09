@@ -19,7 +19,7 @@
 #'   \item{\code{progress}}{Logical, whether to show progress bar.}
 #' }
 #' 
-#' @section Fiels:
+#' @section Fields:
 #' \describe{
 #'   \item{\code{chunktable}}{A \code{data.table} with column "id" (unique values), columns with metadata,
 #'   and a column with text chunks.}
