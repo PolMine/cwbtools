@@ -1,8 +1,8 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Travis-CI Build Status](https://api.travis-ci.org/PolMine/cwbtools.svg?branch=master)](https://travis-ci.org/PolMine/cwbtools)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=master&svg=true)](https://ci.appveyor.com/project/PolMine/cwbtools)
-[![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/master)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3568819.svg)](https://doi.org/10.5281/zenodo.3568819)
+[![Travis-CI Build Status](https://api.travis-ci.org/PolMine/cwbtools.svg?branch=dev)](https://travis-ci.org/PolMine/cwbtools)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=dev&svg=true)](https://ci.appveyor.com/project/PolMine/cwbtools)
+[![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/dev/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/dev)
+
 
 # Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)
 
