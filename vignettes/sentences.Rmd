@@ -84,7 +84,7 @@ s_attribute_encode(
 
 ## Checking the result
 
-```{r}
+```{r, eval = FALSE}
 k <- kwic("GERMAPARL", query = "Integration", left = 30, right = 30, boundary = "s")
 ```
 
