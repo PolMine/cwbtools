@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -120,9 +120,21 @@
       
     </div>
 
-    <div id="cwbtools-0-1-1" class="section level1">
+    <div id="cwbtools-012" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-1-1" class="anchor"></a>cwbtools 0.1.1<small> 2019-12-09 </small>
+<a href="#cwbtools-012" class="anchor"></a>cwbtools 0.1.2<small> Unreleased </small>
+</h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Trying to remove the entire temporary session directory at the end of the package vignettes caused problems to build the package documentation. A more limited approach to clean up temporary files after build the vignettes will omit this problem.</li>
+</ul>
+</div>
+</div>
+    <div id="cwbtools-011" class="section level1">
+<h1 class="page-header">
+<a href="#cwbtools-011" class="anchor"></a>cwbtools 0.1.1<small> 2019-12-09 </small>
 </h1>
 <div id="minor-improvements" class="section level2">
 <h2 class="hasAnchor">
@@ -131,9 +143,9 @@
 <li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (#11).</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code><a href="https://rdrr.io/r/base/length.html">length(class(matrix(1:4,2,2)))</a></code> will return the value 2.</li>
 </ul>
@@ -146,9 +158,9 @@
 </ul>
 </div>
 </div>
-    <div id="cwbtools-0-1-0" class="section level1">
+    <div id="cwbtools-010" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-1-0" class="anchor"></a>cwbtools 0.1.0<small> 2019-10-21 </small>
+<a href="#cwbtools-010" class="anchor"></a>cwbtools 0.1.0<small> 2019-10-21 </small>
 </h1>
 <ul>
 <li>updated vignette so that annex explains installation of CoreNLP v3.9.2 (2018-10-05)</li>
@@ -161,9 +173,9 @@
 <li>A new function <code><a href="../reference/s_attribute.html">s_attribute_merge()</a></code> will merge two <code>data.table</code> objects defining s-attributes, checking for overlaps.</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-11" class="section level1">
+    <div id="cwbtools-0011" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-11" class="anchor"></a>cwbtools 0.0.11<small> Unreleased </small>
+<a href="#cwbtools-0011" class="anchor"></a>cwbtools 0.0.11<small> Unreleased </small>
 </h1>
 <ul>
 <li>New functions <code><a href="../reference/p_attribute_encode.html">p_attribute_recode()</a></code>, <code><a href="../reference/s_attribute.html">s_attribute_recode()</a></code>, and supplementary <code>s_attributed_files()</code>, and <code><a href="../reference/corpus_utils.html">corpus_recode()</a></code>.</li>
@@ -178,18 +190,18 @@
 </li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-10" class="section level1">
+    <div id="cwbtools-0010" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-10" class="anchor"></a>cwbtools 0.0.10<small> Unreleased </small>
+<a href="#cwbtools-0010" class="anchor"></a>cwbtools 0.0.10<small> Unreleased </small>
 </h1>
 <ul>
 <li>Missing documentation written for fields of class CorpusData.</li>
 <li>New fields ‘sentences’ and ‘named_entities’ added to class CorpusData, as a basis for encoding annotation of sentences and named entities.</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-9" class="section level1">
+    <div id="cwbtools-009" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-9" class="anchor"></a>cwbtools 0.0.9<small> Unreleased </small>
+<a href="#cwbtools-009" class="anchor"></a>cwbtools 0.0.9<small> Unreleased </small>
 </h1>
 <ul>
 <li>issue with parsing path correctly in registry_file_path when path is in inverted commas solved (adjusted regex)</li>
@@ -205,9 +217,9 @@
 <li>Three dots (…) are passed into <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> by <code>install_corpus()</code>, if argument tarball is specified. This is a precondition for passing arguments to download password-protected corpora.</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-8" class="section level1">
+    <div id="cwbtools-008" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-8" class="anchor"></a>cwbtools 0.0.8<small> Unreleased </small>
+<a href="#cwbtools-008" class="anchor"></a>cwbtools 0.0.8<small> Unreleased </small>
 </h1>
 <ul>
 <li>major bug removed when writing regions to disk (s_attribute_encode) with R</li>
@@ -215,9 +227,9 @@
 <li>for CorpusData$encode(), an already existing corpus will be removed</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-7" class="section level1">
+    <div id="cwbtools-007" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-7" class="anchor"></a>cwbtools 0.0.7<small> Unreleased </small>
+<a href="#cwbtools-007" class="anchor"></a>cwbtools 0.0.7<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug removed in function pkg_create_cwb_dirs causing error when a directory already exists</li>
@@ -236,26 +248,26 @@
 <li>values coerced to character</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-6" class="section level1">
+    <div id="cwbtools-006" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-6" class="anchor"></a>cwbtools 0.0.6<small> Unreleased </small>
+<a href="#cwbtools-006" class="anchor"></a>cwbtools 0.0.6<small> Unreleased </small>
 </h1>
 <ul>
 <li>DataPackage class turned into pkg_*-functions</li>
 <li>first version that passes all tests</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-5" class="section level1">
+    <div id="cwbtools-005" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-5" class="anchor"></a>cwbtools 0.0.5<small> Unreleased </small>
+<a href="#cwbtools-005" class="anchor"></a>cwbtools 0.0.5<small> Unreleased </small>
 </h1>
 <ul>
 <li>undocumented</li>
 </ul>
 </div>
-    <div id="cwbtools-0-0-4" class="section level1">
+    <div id="cwbtools-004" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-0-0-4" class="anchor"></a>cwbtools 0.0.4<small> Unreleased </small>
+<a href="#cwbtools-004" class="anchor"></a>cwbtools 0.0.4<small> Unreleased </small>
 </h1>
 <ul>
 <li>askYesNo function has been replaced by readlines(), to ensure compatibility with R versions &lt; 3.5</li>
@@ -267,16 +279,17 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#cwbtools-0-1-1">0.1.1</a></li>
-        <li><a href="#cwbtools-0-1-0">0.1.0</a></li>
-        <li><a href="#cwbtools-0-0-11">0.0.11</a></li>
-        <li><a href="#cwbtools-0-0-10">0.0.10</a></li>
-        <li><a href="#cwbtools-0-0-9">0.0.9</a></li>
-        <li><a href="#cwbtools-0-0-8">0.0.8</a></li>
-        <li><a href="#cwbtools-0-0-7">0.0.7</a></li>
-        <li><a href="#cwbtools-0-0-6">0.0.6</a></li>
-        <li><a href="#cwbtools-0-0-5">0.0.5</a></li>
-        <li><a href="#cwbtools-0-0-4">0.0.4</a></li>
+        <li><a href="#cwbtools-012">0.1.2</a></li>
+        <li><a href="#cwbtools-011">0.1.1</a></li>
+        <li><a href="#cwbtools-010">0.1.0</a></li>
+        <li><a href="#cwbtools-0011">0.0.11</a></li>
+        <li><a href="#cwbtools-0010">0.0.10</a></li>
+        <li><a href="#cwbtools-009">0.0.9</a></li>
+        <li><a href="#cwbtools-008">0.0.8</a></li>
+        <li><a href="#cwbtools-007">0.0.7</a></li>
+        <li><a href="#cwbtools-006">0.0.6</a></li>
+        <li><a href="#cwbtools-005">0.0.5</a></li>
+        <li><a href="#cwbtools-004">0.0.4</a></li>
       </ul>
     </div>
   </div>

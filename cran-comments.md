@@ -1,10 +1,11 @@
 ## General remarks
 
-This is a maintenance release, following a notification by Email by Kurt Hornik that the in the upcoming R version (4.0), the 'matrix' class will inherit from the 'array' class, thus causing a error when running for instance: class(matrix(1 : 4, 2, 2)) == "matrix"
+Package version 0.1.1 has just been released a few day ago. A somewhat embarrassing
+line of code in the package vignette tried to remove the whole temporary session
+directory, causing warnings on a few machines (R-devel-linux, R-release-linux,
+R-patched-linux). The code in the vignettes has been adapted to remove this issue. 
 
-I modified the code such that it will comply with the upcoming changes in R-devel / R 4.0. 
-
-I am grateful for the foresight of the CRAN team and the precise advice I received!
+Thanks to Kurt Hornik for helping me to understand the problem.
 
 
 ## Test environments

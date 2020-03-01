@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -79,9 +79,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Creating a Corpus Data Package: Wrapping Europarl</h1>
-                        <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de">andreas.blaette@uni-due.de</a>)</h4>
+                        <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2019-12-10</h4>
+            <h4 class="date">2019-12-17</h4>
       
       
       <div class="hidden name"><code>europarl.Rmd</code></div>
@@ -98,8 +98,8 @@
 <h2 class="hasAnchor">
 <a href="#preparations" class="anchor"></a>Preparations</h2>
 <p>The example keeps the number of dependencies to a minimum, so we only need to load the <em>cwbtools</em> package.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(cwbtools)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(devtools)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(cwbtools)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(devtools)</a></code></pre></div>
 <pre><code>## Lade nötiges Paket: usethis</code></pre>
 <p>The procedure will be as follow:</p>
 <ul>
@@ -112,80 +112,81 @@
 </ul>
 <p>We then conclude the example by running a simple test whether the corpora can be used.</p>
 <p>For the steps 1 through 5, we use a temporary directory. One precaution in advance: The files that will be downloaded are large (~ 2 GB). So it will be important to remove the temporary data at the end.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">tmp_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">tmp_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>()</a></code></pre></div>
 <p>And because the whole operation is too much for an ordinary process to build R packages, we set an argument whether all the code is executed to <code>FALSE</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">exec &lt;-<span class="st"> </span><span class="ot">FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">exec &lt;-<span class="st"> </span><span class="ot">FALSE</span></a></code></pre></div>
 </div>
 <div id="downloading-the-cwb-version-of-europarl" class="section level2">
 <h2 class="hasAnchor">
 <a href="#downloading-the-cwb-version-of-europarl" class="anchor"></a>Downloading the CWB version of Europarl</h2>
 <p>The OPUS project offers a tarball with the Europarl corpus in English, French, German, Dutch, Spanish and Italian. The download may take a while. Take care that you have a good internet connection!</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">europarl_url &lt;-<span class="st"> "http://corpora.linguistik.uni-erlangen.de/demos/download/Europarl3-CWB-2010-02-28.tar.gz"</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">europarl_tarball &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(europarl_url))</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="dt">url =</span> europarl_url, <span class="dt">destfile =</span> europarl_tarball)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">europarl_url &lt;-<span class="st"> "http://corpora.linguistik.uni-erlangen.de/demos/download/Europarl3-CWB-2010-02-28.tar.gz"</span></a>
+<a class="sourceLine" id="cb5-2" title="2">europarl_tarball &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(europarl_url))</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="dt">url =</span> europarl_url, <span class="dt">destfile =</span> europarl_tarball)</a></code></pre></div>
 </div>
 <div id="extract-the-compressed-file" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extract-the-compressed-file" class="anchor"></a>Extract the compressed file</h2>
 <p>The tarball is large, so please do not be surprised that extracting it may take a while.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/untar.html">untar</a></span>(<span class="dt">tarfile =</span> europarl_tarball, <span class="dt">exdir =</span> tmp_dir)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/untar.html">untar</a></span>(<span class="dt">tarfile =</span> europarl_tarball, <span class="dt">exdir =</span> tmp_dir)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(europarl_tarball)</a></code></pre></div>
 </div>
 <div id="adjust-paths" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adjust-paths" class="anchor"></a>Adjust paths</h2>
 <p>The directory with the extracted files includes a directory <em>registry</em> and <em>data</em>. To be able to move the corpora later on, the paths in the registry files need to point to the correct directories in the data directory.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">europarl_registry_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"registry"</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">europarl_data_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"data"</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">corpora &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(europarl_registry_dir)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">corpora</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">europarl_registry_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"registry"</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2">europarl_data_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"data"</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">corpora &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(europarl_registry_dir)</a>
+<a class="sourceLine" id="cb7-4" title="4">corpora</a></code></pre></div>
 <p>So these are the corpora. We iterate through the registry files and adjust the path to the data directories.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="cf">for</span> (corpus <span class="cf">in</span> corpora){</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  registry &lt;-<span class="st"> </span><span class="kw"><a href="../reference/registry_file.html">registry_file_parse</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">registry_dir =</span> europarl_registry_dir)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  registry[[<span class="st">"home"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(europarl_data_dir, <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"^europarl-(.*)$"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">1"</span>, corpus))</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="kw"><a href="../reference/registry_file.html">registry_file_write</a></span>(<span class="dt">data =</span> registry, <span class="dt">corpus =</span> corpus, <span class="dt">registry_dir =</span> europarl_registry_dir)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">for</span> (corpus <span class="cf">in</span> corpora){</a>
+<a class="sourceLine" id="cb8-2" title="2">  registry &lt;-<span class="st"> </span><span class="kw"><a href="../reference/registry_file.html">registry_file_parse</a></span>(<span class="dt">corpus =</span> corpus, <span class="dt">registry_dir =</span> europarl_registry_dir)</a>
+<a class="sourceLine" id="cb8-3" title="3">  registry[[<span class="st">"home"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(europarl_data_dir, <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"^europarl-(.*)$"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">1"</span>, corpus))</a>
+<a class="sourceLine" id="cb8-4" title="4">  <span class="kw"><a href="../reference/registry_file.html">registry_file_write</a></span>(<span class="dt">data =</span> registry, <span class="dt">corpus =</span> corpus, <span class="dt">registry_dir =</span> europarl_registry_dir)</a>
+<a class="sourceLine" id="cb8-5" title="5">}</a></code></pre></div>
 <p>You now already have working, albeit temporary installation of Europarl on your system. But we want to move things into a data package.</p>
 </div>
 <div id="create-data-package" class="section level2">
 <h2 class="hasAnchor">
 <a href="#create-data-package" class="anchor"></a>Create data package</h2>
 <p>We create a directory for the package and generate the directory structure required to put CWB indexed corpus in there.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">europarl_pkg_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"europarl"</span>)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(europarl_pkg_dir)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(europarl_pkg_dir)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="../reference/pkg_utils.html">pkg_create_cwb_dirs</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">europarl_pkg_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"europarl"</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(europarl_pkg_dir)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(europarl_pkg_dir)</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/pkg_utils.html">pkg_create_cwb_dirs</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir)</a></code></pre></div>
 <p>To acknowledge authorship for the Europarl corpus, we use some information in the readme.txt that is included in the Europarl tarball.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">europarl_desc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"readme.txt"</span>)),</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">collapse =</span> <span class="st">" "</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  )</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">europarl_desc</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">europarl_desc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(</a>
+<a class="sourceLine" id="cb10-2" title="2">  <span class="kw"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>, <span class="st">"readme.txt"</span>)),</a>
+<a class="sourceLine" id="cb10-3" title="3">  <span class="dt">collapse =</span> <span class="st">" "</span></a>
+<a class="sourceLine" id="cb10-4" title="4">  )</a>
+<a class="sourceLine" id="cb10-5" title="5">europarl_desc</a></code></pre></div>
 <p>The package might include much more, so we choose a version for the package indicating infancy.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">pkg_version &lt;-<span class="st"> "0.0.2"</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">pkg_version &lt;-<span class="st"> "0.0.2"</span></a></code></pre></div>
 <p>So we generate the DESCRIPTION file …</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/pkg_utils.html">pkg_add_description</a></span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">package =</span> <span class="st">"europarl"</span>, <span class="dt">version =</span> pkg_version,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(),</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">author =</span> <span class="st">"cwbtools"</span>,</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="dt">maintainer =</span> <span class="st">"Andreas Blaette &lt;andreas.blaette@uni-due.de&gt;"</span>,</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  <span class="dt">description =</span> europarl_desc</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">  )</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw"><a href="../reference/pkg_utils.html">pkg_add_configure_scripts</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="../reference/pkg_utils.html">pkg_add_description</a></span>(</a>
+<a class="sourceLine" id="cb12-2" title="2">  <span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">package =</span> <span class="st">"europarl"</span>, <span class="dt">version =</span> pkg_version,</a>
+<a class="sourceLine" id="cb12-3" title="3">  <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span>(),</a>
+<a class="sourceLine" id="cb12-4" title="4">  <span class="dt">author =</span> <span class="st">"cwbtools"</span>,</a>
+<a class="sourceLine" id="cb12-5" title="5">  <span class="dt">maintainer =</span> <span class="st">"Andreas Blaette &lt;andreas.blaette@uni-due.de&gt;"</span>,</a>
+<a class="sourceLine" id="cb12-6" title="6">  <span class="dt">description =</span> europarl_desc</a>
+<a class="sourceLine" id="cb12-7" title="7">  )</a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="kw"><a href="../reference/pkg_utils.html">pkg_add_configure_scripts</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir)</a></code></pre></div>
 </div>
 <div id="moving-corpora" class="section level2">
 <h2 class="hasAnchor">
 <a href="#moving-corpora" class="anchor"></a>Moving corpora</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="cf">for</span> (corpus <span class="cf">in</span> corpora){</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw"><a href="../reference/pkg_utils.html">pkg_add_corpus</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">corpus =</span> corpus, <span class="dt">registry =</span> europarl_registry_dir)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="cf">for</span> (corpus <span class="cf">in</span> corpora){</a>
+<a class="sourceLine" id="cb13-2" title="2">  <span class="kw"><a href="../reference/pkg_utils.html">pkg_add_corpus</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">corpus =</span> corpus, <span class="dt">registry =</span> europarl_registry_dir)</a>
+<a class="sourceLine" id="cb13-3" title="3">}</a></code></pre></div>
 <p>The untarred corpus will not be needed at this stage. We remove it, so that we do not waste disk space.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>), <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"Europarl3-CWB"</span>), <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="create-and-install-package-tarball" class="section level2">
 <h2 class="hasAnchor">
 <a href="#create-and-install-package-tarball" class="anchor"></a>Create and install package tarball</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">europarl_tarball &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/build.html">build</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">path =</span> tmp_dir, <span class="dt">vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">europarl_tarball &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/build.html">build</a></span>(<span class="dt">pkg =</span> europarl_pkg_dir, <span class="dt">path =</span> tmp_dir, <span class="dt">vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>There are large binary data in the package, so this may take a while. The return value of the <code>build</code>-function is the path to the tarball of the package that has been generated. The <code>install.packages</code>-function can be used to install from a local file if we set the argument <code>param</code> to NULL.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="dt">pkgs =</span> europarl_tarball, <span class="dt">repos =</span> <span class="ot">NULL</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="dt">pkgs =</span> europarl_tarball, <span class="dt">repos =</span> <span class="ot">NULL</span>)</a></code></pre></div>
 </div>
 <div id="does-it-work" class="section level2">
 <h2 class="hasAnchor">
@@ -193,39 +194,40 @@
 <p>The more convenient way to work with the corpora in the package is to use the <em>polmineR</em>-package. You would load the package (<code><a href="https://rdrr.io/r/base/library.html">library(polmineR)</a></code>), activate the corpora in the <em>europarl</em>-package (<code>use("europarl")</code>), check which corpora are present (<code>corpus()</code>), and perform some simple query (<code>kwic("EUROPARL-EN", query = "Europe")</code>).</p>
 <p>To keep installation requirements to a minimum, the <em>cwbtools</em>-package does not make <em>polmineR</em> a dependency, so we use the low-level functionality of <em>RcppCWB</em> to check whether everything works.</p>
 <p>The first question is: Which corpora do we have in the <em>europarl</em> package?</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RcppCWB)</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">europarl_pkg_registry &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package =</span> <span class="st">"europarl"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span>)</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="dt">CORPUS_REGISTRY =</span> europarl_pkg_registry)</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_initialize</a></span>()</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_list_corpora.html">cqp_list_corpora</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RcppCWB)</a>
+<a class="sourceLine" id="cb17-2" title="2">europarl_pkg_registry &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="dt">package =</span> <span class="st">"europarl"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span>)</a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="dt">CORPUS_REGISTRY =</span> europarl_pkg_registry)</a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html">cqp_initialize</a></span>()</a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_list_corpora.html">cqp_list_corpora</a></span>()</a></code></pre></div>
 <p>Second, we want to have a look at the concordances of ‘Europe’ in the English version of Europarl.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">query &lt;-<span class="st"> "Europe"</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  <span class="dt">str =</span> query, <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  )</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">  <span class="dt">id =</span> id, <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb18-10" data-line-number="10">tab &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">  <span class="dt">i =</span> <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos), <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(x, <span class="dt">times =</span> <span class="dv">11</span>))),</a>
-<a class="sourceLine" id="cb18-12" data-line-number="12">  <span class="dt">cpos =</span> <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(cpos, <span class="cf">function</span>(x) (x <span class="op">-</span><span class="st"> </span><span class="dv">5</span>)<span class="op">:</span>(x <span class="op">+</span><span class="st"> </span><span class="dv">5</span>)))</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">  )</a>
-<a class="sourceLine" id="cb18-14" data-line-number="14">tab[[<span class="st">"id"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_cpos2id</a></span>(</a>
-<a class="sourceLine" id="cb18-15" data-line-number="15">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
-<a class="sourceLine" id="cb18-16" data-line-number="16">  <span class="dt">cpos =</span> tab[[<span class="st">"cpos"</span>]], <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17">  )</a>
-<a class="sourceLine" id="cb18-18" data-line-number="18">tab[[<span class="st">"str"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2str</a></span>(</a>
-<a class="sourceLine" id="cb18-19" data-line-number="19">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
-<a class="sourceLine" id="cb18-20" data-line-number="20">  <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">id =</span> tab[[<span class="st">"id"</span>]]</a>
-<a class="sourceLine" id="cb18-21" data-line-number="21">  )</a>
-<a class="sourceLine" id="cb18-22" data-line-number="22">concordances_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/split.html">split</a></span>(tab[[<span class="st">"str"</span>]], <span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(tab[[<span class="st">"i"</span>]]))</a>
-<a class="sourceLine" id="cb18-23" data-line-number="23">concordances &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unname.html">unname</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(concordances_list, <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">" "</span>)))</a>
-<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(concordances)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">query &lt;-<span class="st"> "Europe"</span></a>
+<a class="sourceLine" id="cb18-2" title="2">id &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span>(</a>
+<a class="sourceLine" id="cb18-3" title="3">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
+<a class="sourceLine" id="cb18-4" title="4">  <span class="dt">str =</span> query, <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
+<a class="sourceLine" id="cb18-5" title="5">  )</a>
+<a class="sourceLine" id="cb18-6" title="6">cpos &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span>(</a>
+<a class="sourceLine" id="cb18-7" title="7">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
+<a class="sourceLine" id="cb18-8" title="8">  <span class="dt">id =</span> id, <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
+<a class="sourceLine" id="cb18-9" title="9">)</a>
+<a class="sourceLine" id="cb18-10" title="10">tab &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb18-11" title="11">  <span class="dt">i =</span> <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(cpos), <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(x, <span class="dt">times =</span> <span class="dv">11</span>))),</a>
+<a class="sourceLine" id="cb18-12" title="12">  <span class="dt">cpos =</span> <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(cpos, <span class="cf">function</span>(x) (x <span class="op">-</span><span class="st"> </span><span class="dv">5</span>)<span class="op">:</span>(x <span class="op">+</span><span class="st"> </span><span class="dv">5</span>)))</a>
+<a class="sourceLine" id="cb18-13" title="13">  )</a>
+<a class="sourceLine" id="cb18-14" title="14">tab[[<span class="st">"id"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_cpos2id</a></span>(</a>
+<a class="sourceLine" id="cb18-15" title="15">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
+<a class="sourceLine" id="cb18-16" title="16">  <span class="dt">cpos =</span> tab[[<span class="st">"cpos"</span>]], <span class="dt">p_attribute =</span> <span class="st">"word"</span></a>
+<a class="sourceLine" id="cb18-17" title="17">  )</a>
+<a class="sourceLine" id="cb18-18" title="18">tab[[<span class="st">"str"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2str</a></span>(</a>
+<a class="sourceLine" id="cb18-19" title="19">  <span class="dt">corpus =</span> <span class="st">"europarl-en"</span>, <span class="dt">registry =</span> europarl_pkg_registry,</a>
+<a class="sourceLine" id="cb18-20" title="20">  <span class="dt">p_attribute =</span> <span class="st">"word"</span>, <span class="dt">id =</span> tab[[<span class="st">"id"</span>]]</a>
+<a class="sourceLine" id="cb18-21" title="21">  )</a>
+<a class="sourceLine" id="cb18-22" title="22">concordances_list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/split.html">split</a></span>(tab[[<span class="st">"str"</span>]], <span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(tab[[<span class="st">"i"</span>]]))</a>
+<a class="sourceLine" id="cb18-23" title="23">concordances &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unname.html">unname</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(concordances_list, <span class="cf">function</span>(x) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(x, <span class="dt">collapse =</span> <span class="st">" "</span>)))</a>
+<a class="sourceLine" id="cb18-24" title="24"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(concordances)</a></code></pre></div>
 <p>As mentioned before: Using <em>polmineR</em> is what we recommend for working with CWB corpora from R.</p>
 <p>Finally, time to clean up. There are some large files in the temporary directory that has been used. It should be deleted to avoid wasting space on your disk.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(tmp_dir, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(tmp_dir, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(tmp_dir, <span class="st">"europarl"</span>))</a></code></pre></div>
 <p>Enjoy!</p>
 </div>
 </div>

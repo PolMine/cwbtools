@@ -1,3 +1,20 @@
+cwbtools 0.1.2.9001
+===================
+
+* Added a (preliminary) vignette that explains how to add a sentence annotation to an indexed corpus.
+
+
+cwbtools 0.1.2
+==============
+
+## BUG FIXES
+
+  * Trying to remove the entire temporary session directory at the end of the package 
+    vignettes caused problems to build the package documentation. A more limited 
+    approach to clean up temporary files after build the vignettes will omit 
+    this problem.
+
+
 cwbtools 0.1.1
 ===============
 
@@ -12,6 +29,8 @@ cwbtools 0.1.1
 ## DOCUMENTATION FIXES
 
   * The NEWS file now follows the styleguide such that `pkgdown::build_site()` will generate a proper changelog page.
+
+
 
 
 cwbtools 0.1.0

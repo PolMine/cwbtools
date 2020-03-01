@@ -1,0 +1,95 @@
+---
+title: "How to add a sentence annotation to an indexed corpus"
+author: "Andreas Blätte (andreas.blaette@uni-due.de)"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sentence Annotation}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+## About
+
+There are many reasons why encoding an annotation of sentences as a structural attribute may be valuable. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParl corpus serves as an example.
+
+
+## Getting started
+
+In addition to the cwbtools package, we use some functionality of the polmineR package.
+
+```{r, eval = FALSE}
+library(cwbtools)
+library(polmineR)
+use("polmineR")
+```
+
+Adding an s-attribute is not a risky operation. The attribute can be removed again. Nevertheless, we use a temporary copy here.
+
+```{r, eval = FALSE}
+# Yet to be written
+```
+
+
+## Recipe
+
+We generate the data for the sentence annotation from the part-of-speech annotation that is already present.
+
+```{r, eval = FALSE}
+pos <- corpus("GERMAPARL") %>% 
+  get_token_stream(p_attribute = "pos")
+
+sentence_end <- grep("\\$\\.", pos)
+
+cpos_sentences <- cut(
+  x = seq.int(from = 0L, to = length(pos) - 1L),
+  breaks = c(0L, sentence_end),
+  include.lowest = TRUE,
+  right = FALSE
+)
+
+df <- split(x = cpos, f = cpos_sentences) %>%
+  lapply(function(cpos) c(cpos[1L], cpos[length(cpos)])) %>%
+  unlist() %>%
+  matrix(ncol = 2L, byrow = TRUE) %>%
+  data.frame()
+
+colnames(df) <- c("cpos_left", "cpos_right")
+df[["sentence"]] <- seq.int(from = 0L, to = nrow(df) - 1L)
+```
+
+So let us see what we have ...
+
+```{r, eval = FALSE}
+head(df)
+```
+
+And this is how the new annotation layer is written back to the corpus.
+
+```{r, eval = FALSE}
+s_attribute_encode(
+  values = as.character(df[["sentence"]]),
+  data_dir = cwbtools::registry_file_parse(corpus = "GERMAPARL")[["home"]],
+  s_attribute = "s",
+  corpus = "GERMAPARL",
+  region_matrix = as.matrix(df[,c("cpos_left", "cpos_right")]),
+  method = "R",
+  registry_dir = registry(pkg = "GERMAPARL"),
+  encoding = cwbtools::registry_file_parse(corpus = "GERMAPARL")[["properties"]][["charset"]],
+  delete = TRUE,
+  verbose = TRUE
+)
+```
+
+
+## Checking the result
+
+```{r}
+k <- kwic("GERMAPARL", query = "Integration", left = 30, right = 30, boundary = "s")
+```
+
+
+## Next Steps
+
+Using the part-of-speech annotation is a basic approach to obtain the data for annotation sentences. An alternative would be to use the NLP annotation machinery of an integrated tool such as Stanford CoreNLP, or OpenNLP. But that's a different story to be told.
+

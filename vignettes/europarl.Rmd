@@ -64,7 +64,9 @@ The tarball is large, so please do not be surprised that extracting it may take 
 
 ```{r untar_europarl_tarball, eval = exec}
 untar(tarfile = europarl_tarball, exdir = tmp_dir)
+unlink(europarl_tarball)
 ```
+
 
 ## Adjust paths
 
@@ -209,6 +211,7 @@ Finally, time to clean up. There are some large files in the temporary directory
 
 ```{r unlink_things, eval = exec}
 unlink(tmp_dir, recursive = TRUE)
+unlink(file.path(tmp_dir, "europarl"))
 ```
 
 Enjoy!

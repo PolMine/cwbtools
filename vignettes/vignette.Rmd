@@ -340,7 +340,8 @@ count
 As a matter of housekeeping, we remove the temporary directory.
 
 ```{r}
-unlink(tmpdir, recursive = TRUE)
+unlink(registry_tmp, recursive = TRUE)
+unlink(data_dir_tmp, recursive = TRUE)
 ```
 
 Hope everything works! Enjoy! Feedback is welcome! 

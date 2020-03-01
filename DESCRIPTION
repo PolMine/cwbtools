@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.1.1
-Date: 2019-12-09
+Version: 0.1.2.9001
+Date: 2020-03-01
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -43,6 +43,8 @@ LazyData: yes
 License: GPL-3
 Language: en-US
 Encoding: UTF-8
+URL: https://www.github.com/URL/cwbtools
+BugReports: https://github.com/PolMine/cwbtools/issues
 Collate:
     'cwbtools.R'
     'pkg.R'
