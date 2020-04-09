@@ -315,7 +315,6 @@ p_attribute_encode <- function(
 #' @param from Character string describing the current encoding of the attribute.
 #' @param to Character string describing the target encoding of the attribute.
 #' @rdname p_attribute_encode
-#' @rdname p_attribute
 p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
   
   p_attr_lexicon_file <- file.path(data_dir, sprintf("%s.lexicon", p_attribute), fsep = "/")

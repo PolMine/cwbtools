@@ -28,6 +28,8 @@
 #' @param registry_dir Directory of registry.
 #' @param corpus A CWB corpus.
 #' @param tarfile Filename of tarball.
+#' @param corpus_dir The directory that contains the data directories of indexed
+#'   corpora.
 #' @param ... Further parameters that will be passed into
 #'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 #'   or \code{download.file}, if \code{tarball} is specified.
@@ -42,7 +44,7 @@
 #' @importFrom stringi stri_enc_mark
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], registry_dir = NULL, corpus_dir = cwb_corpus_dir(registry_dir), verbose = TRUE, user = NULL, password = NULL, ...){
   if (is.null(tarball)){
     if (!pkg %in% utils::available.packages(utils::contrib.url(repos = repo))) {
       stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
@@ -70,10 +72,9 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
     if (grepl("^http", tarball)){
       # if (!url.exists(tarball)) stop("tarball is not available")
-      # download.file(url = tarball, destfile = corpus_tarball, method = "wget" extra = sprintf("--user %s --password %s"), user, password)
       if (is.null(user)){
         if (.Platform$OS.type == "windows"){
-          # use download file because it is able to cope with murky user names / path names
+          # use download.file because it is able to cope with murky user names / path names
           download.file(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         } else {
           curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
@@ -116,21 +117,33 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
     tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
     tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
     corpora <- list.files(tmp_registry_dir)
+    
     for (corpus in corpora){
+      
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
+      
       home_dir <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(home_dir) != "ASCII")
         home_dir <- utils::shortPathName(home_dir)
       registry_data[["home"]] <- home_dir
+      
       info_file <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
         home_dir <- utils::shortPathName(info_file)
       registry_data[["info"]] <- info_file
+      
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
+      
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)
       } else {
-        stop("installation of a tarred corpus to general corpus storage is not yet implemented")
+        if (is.null(registry_dir)) stop("Argument 'registry_dir' may not be NULL if argument 'pkg' is NULL.")
+        if (is.null(corpus_dir)) stop("Argument 'corpus_dir' may not be NULL if argument 'pkg' is NULL.")
+        corpus_copy(
+          corpus = corpus,
+          registry_dir = tmp_registry_dir, data_dir = home_dir, # the temporary place
+          registry_dir_new = registry_dir, data_dir_new = file.path(corpus_dir, tolower(corpus), fsep = "/") # final location
+        )
       }
       
     }

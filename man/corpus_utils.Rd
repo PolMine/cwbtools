@@ -10,30 +10,52 @@
 \alias{corpus_recode}
 \title{Install and manage corpora.}
 \usage{
-corpus_install(pkg = NULL,
-  repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL,
-  lib = .libPaths()[1], verbose = TRUE, user = NULL,
-  password = NULL, ...)
+corpus_install(
+  pkg = NULL,
+  repo = "http://polmine.sowi.uni-due.de/packages",
+  tarball = NULL,
+  lib = .libPaths()[1],
+  registry_dir = NULL,
+  corpus_dir = cwb_corpus_dir(registry_dir),
+  verbose = TRUE,
+  user = NULL,
+  password = NULL,
+  ...
+)
 
 corpus_packages()
 
-corpus_rename(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
-  verbose = TRUE)
+corpus_rename(
+  old,
+  new,
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  verbose = TRUE
+)
 
 corpus_remove(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 
 corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 
-corpus_copy(corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"),
-  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
-  verbose = interactive(), progress = TRUE)
+corpus_copy(
+  corpus,
+  registry_dir,
+  data_dir = NULL,
+  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
+    "registry", fsep = "/"),
+  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
+    "indexed_corpora", tolower(corpus), fsep = "/"),
+  verbose = interactive(),
+  progress = TRUE
+)
 
-corpus_recode(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+corpus_recode(
+  corpus,
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
-  skip = character(), to = c("latin1", "UTF-8"), verbose = TRUE)
+  skip = character(),
+  to = c("latin1", "UTF-8"),
+  verbose = TRUE
+)
 }
 \arguments{
 \item{pkg}{Name of the data package.}
@@ -43,6 +65,11 @@ corpus_recode(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"),
 \item{tarball}{The URL or local path to a tarball with a CWB indexed corpus.}
 
 \item{lib}{Directory for R packages, defaults to \code{.libPaths()[1]}.}
+
+\item{registry_dir}{Directory of registry.}
+
+\item{corpus_dir}{The directory that contains the data directories of indexed
+corpora.}
 
 \item{verbose}{Logical, whether to be verbose.}
 
@@ -57,8 +84,6 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{old}{Name of the (old) corpus.}
 
 \item{new}{Name of the (new) corpus.}
-
-\item{registry_dir}{Directory of registry.}
 
 \item{corpus}{A CWB corpus.}
 
@@ -77,13 +102,13 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{to}{Character string describing the target encoding of the corpus.}
 }
 \description{
-Utitlity functions to keep the installation of indexed CWB corpora wrapped
+Utility functions to keep the installation of indexed CWB corpora wrapped
 into R data packages simple.
 }
 \details{
 A data package with a CWB corpus is assumed to include a directory
   \code{/extdata/cwb/registry} for registry files and a directory
-  \code{/extdata/cwb/indexed_corpora} for the inexed corpus files. The
+  \code{/extdata/cwb/indexed_corpora} for the indexed corpus files. The
   \code{corpus_install} function combines two steps necessary to install a
   CWB corpus. First, it calls \code{install.packages}, then it resets the
   path pointing to the directory with the indexed corpus files in the

@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.1.2.9001
-Date: 2020-03-01
+Version: 0.1.2.9002
+Date: 2020-04-08
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -27,7 +27,8 @@ Imports:
     curl,
     RcppCWB (>= 0.2.8),
     pbapply,
-    methods
+    methods,
+    usethis
 Suggests:
     tm (>= 0.7.3),
     knitr,
@@ -56,4 +57,4 @@ Collate:
     'corpus.R'
     'cwb.R'
     'ner.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

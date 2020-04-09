@@ -10,12 +10,25 @@
 \alias{s_attribute_delete}
 \title{Read, process and write data on structural attributes.}
 \usage{
-s_attribute_encode(values, data_dir, s_attribute, corpus, region_matrix,
-  method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"),
-  encoding, delete = FALSE, verbose = TRUE)
+s_attribute_encode(
+  values,
+  data_dir,
+  s_attribute,
+  corpus,
+  region_matrix,
+  method = c("R", "CWB"),
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  encoding,
+  delete = FALSE,
+  verbose = TRUE
+)
 
-s_attribute_recode(data_dir, s_attribute, from = c("UTF-8", "latin1"),
-  to = c("UTF-8", "latin1"))
+s_attribute_recode(
+  data_dir,
+  s_attribute,
+  from = c("UTF-8", "latin1"),
+  to = c("UTF-8", "latin1")
+)
 
 s_attribute_files(s_attribute, data_dir)
 

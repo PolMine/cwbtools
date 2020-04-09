@@ -1,3 +1,14 @@
+cwbtools 0.1.2.9002
+===================
+
+* An new function `suggest_corpus_dir()` suggests a corpus directory where the 
+data directories reside based on the registry directory.
+* `use_corpus_registry_envvar()`, `cwb_corpus_dir_create()`, `cwb_registry_dir_create()`,
+`cwb_directories()`, `cwb_registry_dir()`, `cwb_corpus_dir()` 
+* Implemented functionality to download and install corpus into system registry.
+* New Roxygen documentation of R6 used for `CorpusData` class.
+
+
 cwbtools 0.1.2.9001
 ===================
 

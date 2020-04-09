@@ -1,55 +1,34 @@
 #' Manage Corpus Data and Encode CWB Corpus.
 #' 
-#' @section Arguments:
-#' \describe{
-#'   \item{\code{x}}{A single filename, a character vector of filenames, or a directory with XML files.}
-#'   \item{\code{body}}{An xpath expression defining the body of the xml document.}
-#'   \item{\code{meta}}{A named character vector with xpath expressions.}
-#'   \item{\code{mc}}{A numeric/integer value, number of cores to use.}
-#'   \item{\code{compress}}{Logical, whether to compress corpus.}
-#'   \item{\code{encoding}}{Encoding/charset of the CWB corpus.}
-#'   \item{\code{registry_dir}}{Corpus registry, the directory where registry files are stored.}
-#'   \item{\code{corpus}}{The name of the CWB corpus.}
-#'   \item{\code{p_attributes}}{Positional attributes.}
-#'   \item{\code{s_attributes}}{Columns that will be encoded as structural attributes.}
-#'   \item{\code{data_dir}}{Directory where to create directory for indexed corpus files.}
-#'   \item{\code{method}}{Either "R" or "CWB".}
-#'   \item{\code{...}}{Arguments that are passed into \code{tokenizers::tokenize_words()}.}
-#'   \item{\code{verbose}}{Logical, whether to be verbose.}
-#'   \item{\code{progress}}{Logical, whether to show progress bar.}
-#' }
+#' @param x A single filename, a character vector of filenames, or a directory with XML files.
+#' @param body An xpath expression defining the body of the xml document.
+#' @param verbose Logical, whether to be verbose.
+#' @param progress Logical, whether to show progress bar.
+#' @param meta A named character vector with xpath expressions.
+#' @param mc A numeric/integer value, number of cores to use.
+#' @param compress Logical, whether to compress corpus.
+#' @param encoding Encoding/charset of the CWB corpus.
+#' @param registry_dir Corpus registry, the directory where registry files are stored.
+#' @param corpus The name of the CWB corpus.
+#' @param p_attributes Positional attributes.
+#' @param s_attributes Columns that will be encoded as structural attributes.
+#' @param data_dir Directory where to create directory for indexed corpus files.
+#' @param method Either "R" or "CWB".
+#' @param filenames XXX
+#' @param replacements XXX
+#' @param ... Arguments that are passed into \code{tokenizers::tokenize_words()}.
 #' 
-#' @section Fields:
-#' \describe{
-#'   \item{\code{chunktable}}{A \code{data.table} with column "id" (unique values), columns with metadata,
-#'   and a column with text chunks.}
-#'   \item{\code{tokenstream}}{A \code{data.table} with a column "cpos" (corpus position), and columns
-#'   with positional attributes, such as "word", "lemma", "pos", "stem".}
-#'   \item{\code{metadata}}{A \code{data.table} with a column "id", to link data with chunks/tokenstream,
+#' @field chunktable A \code{data.table} with column "id" (unique values),
+#'   columns with metadata, and a column with text chunks.
+#' @field tokenstream A \code{data.table} with a column "cpos" (corpus position), and columns
+#'   with positional attributes, such as "word", "lemma", "pos", "stem".
+#'   
+#' @field metadata A \code{data.table} with a column "id", to link data with chunks/tokenstream,
 #'   columns with document-level metadata, and a column "cpos_left" and "cpos_right", which can
-#'   be generated using method \code{$add_corpus_positions()}.}
-#'   \item{\code{sentences}}{A \code{data.table}.}
-#'   \item{\code{named_entities}}{A code \code{data.table}}
-#' }
+#'   be generated using method \code{$add_corpus_positions()}.
+#' @field sentences A \code{data.table}.
+#' @field named_entities A \code{data.table}.
 #' 
-#' @section Methods:
-#' \describe{
-#'   \item{\code{$new()}}{Initialize a new instance of class \code{CorpusData}.}
-#'   \item{\code{$print()}}{Print summary of \code{CorpusData} object.}
-#'   \item{\code{$purge(replacements = list(c("^\\s*<.*?>\\s*$", ""),
-#'   c("\u2019", "'")))}}{Remove patterns from chunkdata that are known to cause
-#'   problems. This is done most efficiently at the chunkdata level of data
-#'   preparation as the length of the character vector to handle is much smaller
-#'   than when tokenization/annotation has been performed.}
-#'   \item{\code{$tokenize(verbose = TRUE)}}{Simple tokenization of text in chunktable.}
-#'   \item{\code{$add_corpus_positions(verbose = TRUE)}}{Add column \code{cpos} to tokenstream and
-#'   columns \code{cpos_left} and \code{cpos_right} to metadata.}
-#'   \item{\code{$encode(corpus, p_attributes = "word", s_attributes = NULL,
-#'   encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL,
-#'   method = c("R", "CWB"), verbose = TRUE, compress = FALSE)}}{Encode corpus.
-#'   If the corpus already exists, it will be removed.}
-#'   \item{\code{$import_xml(filenames, body = "//body", meta = NULL, mc = NULL, progress = TRUE)}}{}
-#' }
 #' @export CorpusData
 #' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv as.data.table data.table
 #' @importFrom data.table uniqueN setkeyv
@@ -147,10 +126,15 @@ CorpusData <- R6::R6Class(
     sentences = NULL, # a data.table
     named_entities = NULL, # a data.table
     
+    #' @description 
+    #' Initialize a new instance of class \code{CorpusData}.
+    #' @return A class \code{CorpusData} object.
     initialize = function(){
       self
     },
     
+    #' @description
+    #' Print summary of \code{CorpusData} object.
     print = function(){
       if (is.null(self$chunktable)){
         cat("chunktable: NULL\n")
@@ -171,6 +155,8 @@ CorpusData <- R6::R6Class(
       }
     },
     
+    #' @description 
+    #' Simple tokenization of text in chunktable.
     tokenize = function(..., verbose = TRUE, progress = TRUE){
       if (requireNamespace("tokenizers", quietly = TRUE)){
         if (class(self$chunktable)[1] != "data.table")
@@ -191,6 +177,9 @@ CorpusData <- R6::R6Class(
       self$add_corpus_positions(verbose = verbose)
     },
     
+    #' @details 
+    #' Import XML files.
+    #' @return The \code{CorpusData} object is returned invisibly.
     import_xml = function(filenames, body = "//body", meta = NULL, mc = NULL, progress = TRUE){
       .xml_reader <- function(x){
         doc <- xml2::read_xml(x)
@@ -239,7 +228,9 @@ CorpusData <- R6::R6Class(
       invisible(self)
     },
     
-    
+    #' @description 
+    #' Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
+    #' \code{cpos_right} to metadata.
     add_corpus_positions = function(verbose = TRUE){
       
       if (!"id" %in% colnames(self$metadata)) stop("id column required")
@@ -261,6 +252,11 @@ CorpusData <- R6::R6Class(
       invisible(self)
     },
     
+    #' @description
+    #' Remove patterns from chunkdata that are known to cause problems. This is
+    #' done most efficiently at the chunkdata level of data preparation as the
+    #' length of the character vector to handle is much smaller than when
+    #' tokenization/annotation has been performed.
     purge = function(replacements = list(c("^\\s*<.*?>\\s*$", ""), c("\u2019", "'"))){
       for (i in 1L:length(replacements)){
         if (verbose) message("... checking for presence of regex: ", replacements[[i]][1])
@@ -276,18 +272,8 @@ CorpusData <- R6::R6Class(
       invisible(self)
     },
     
-    check_encodings = function(){
-      # adjust encoding, if necessary
-      # if (verbose) message("... checking encoding of input vector")
-      # input_enc <- get_encoding(token_stream)
-      # if (input_enc == "UTF-8") input_enc <- "utf8" # different capitalization in registry format
-      # if (input_enc != encoding){
-      #   if (verbose) message(sprintf("... encoding of input vector is '%s', adjusting to '%s'", input_enc, encoding))
-      #   token_stream <- iconv(token_stream, from = input_enc, to = encoding)
-      #   Encoding(token_stream) <- encoding
-      # }
-    },
-    
+    #' @description 
+    #' Encode corpus. If the corpus already exists, it will be removed.
     encode = function(corpus, p_attributes = "word", s_attributes = NULL, encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL, method = c("R", "CWB"), verbose = TRUE, compress = FALSE){
       
       if (file.exists(registry_dir))

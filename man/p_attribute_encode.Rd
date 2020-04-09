@@ -5,12 +5,24 @@
 \alias{p_attribute_recode}
 \title{Encode Positional Attribute(s).}
 \usage{
-p_attribute_encode(token_stream, p_attribute = "word", registry_dir,
-  corpus, data_dir, method = c("R", "CWB"), verbose = TRUE,
-  encoding = get_encoding(token_stream), compress = NULL)
+p_attribute_encode(
+  token_stream,
+  p_attribute = "word",
+  registry_dir,
+  corpus,
+  data_dir,
+  method = c("R", "CWB"),
+  verbose = TRUE,
+  encoding = get_encoding(token_stream),
+  compress = NULL
+)
 
-p_attribute_recode(data_dir, p_attribute, from = c("UTF-8", "latin1"),
-  to = c("UTF-8", "latin1"))
+p_attribute_recode(
+  data_dir,
+  p_attribute,
+  from = c("UTF-8", "latin1"),
+  to = c("UTF-8", "latin1")
+)
 }
 \arguments{
 \item{token_stream}{A character vector with the tokens of the corpus.}

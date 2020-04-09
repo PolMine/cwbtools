@@ -11,12 +11,22 @@ registry_file_parse(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 
 registry_file_compose(x)
 
-registry_data(name, id, home, info = file.path(home, ".info", fsep =
-  "/"), properties = c(charset = "utf-8"), p_attributes,
-  s_attributes = character())
+registry_data(
+  name,
+  id,
+  home,
+  info = file.path(home, ".info", fsep = "/"),
+  properties = c(charset = "utf-8"),
+  p_attributes,
+  s_attributes = character()
+)
 
-registry_file_write(data, corpus,
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"), ...)
+registry_file_write(
+  data,
+  corpus,
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  ...
+)
 }
 \arguments{
 \item{corpus}{A CWB corpus indicated by a length-one \code{character} vector.}
