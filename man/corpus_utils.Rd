@@ -32,7 +32,7 @@ corpus_rename(
   verbose = TRUE
 )
 
-corpus_remove(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
+corpus_remove(corpus, registry_dir = cwb_registry_dir())
 
 corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 

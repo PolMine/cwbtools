@@ -139,10 +139,12 @@ corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/pa
       } else {
         if (is.null(registry_dir)) stop("Argument 'registry_dir' may not be NULL if argument 'pkg' is NULL.")
         if (is.null(corpus_dir)) stop("Argument 'corpus_dir' may not be NULL if argument 'pkg' is NULL.")
+        data_dir <- file.path(corpus_dir, tolower(corpus), fsep = "/")
+        if (!file.exists(data_dir)) dir.create(data_dir)
         corpus_copy(
           corpus = corpus,
           registry_dir = tmp_registry_dir, data_dir = home_dir, # the temporary place
-          registry_dir_new = registry_dir, data_dir_new = file.path(corpus_dir, tolower(corpus), fsep = "/") # final location
+          registry_dir_new = registry_dir, data_dir_new = data_dir # final location
         )
       }
       
@@ -220,34 +222,23 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
 #' @details \code{corpus_remove} can be used to drop a corpus.
 #' @rdname corpus_utils
 #' @export corpus_remove
-corpus_remove <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
+corpus_remove <- function(corpus, registry_dir = cwb_registry_dir()){
   
   stopifnot(tolower(corpus) %in% list.files(registry_dir)) # check that corpus exists
   
   reg <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
   data_directory <- reg[["home"]]
   if (interactive()){
-    instruction <- readline(
-      prompt = sprintf("Are you sure you want to delete data files for corpus '%s'? ('Y' to continue, anything else to abort", corpus)
+    userinput <- menu(
+      choices = c("Yes / continue", "No / abort"),
+      title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", corpus)
     )
-  } else {
-    instruction <- "Y"
+    if (userinput != 1L) stop("Aborting")
   }
-  if (instruction == "Y"){
-    for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
-    file.remove(data_directory)
-  }
-  
-  if (interactive()){
-    instruction <- readline(
-      prompt = sprintf("Are you sure you want to delete the corpus '%s'? ('Y' to continue, anything else to abort)", corpus)
-    )
-  } else {
-    instruction <- "Y"
-  }
-  if (instruction == "Y"){
-    file.remove(file.path(registry_dir, tolower(x), fsep = "/"))
-  }
+  for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
+  file.remove(data_directory)
+  file.remove(file.path(registry_dir, tolower(corpus), fsep = "/"))
+  TRUE
 }
 
 #' @details \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
@@ -336,7 +327,7 @@ corpus_copy <- function(
   if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
   
   registry_file_new <- file.path(registry_dir_new, tolower(corpus), fsep = "/")
-  if (file.exists(registry_file_new)) stop("Aborting - registry file %s already exists in target regsity", registry_file_new)
+  if (file.exists(registry_file_new)) stop(sprintf("Aborting - registry file %s already exists in target regsity", registry_file_new))
   
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
