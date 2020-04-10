@@ -32,7 +32,7 @@ corpus_rename(
   verbose = TRUE
 )
 
-corpus_remove(corpus, registry_dir = cwb_registry_dir())
+corpus_remove(corpus, registry_dir = cwb_registry_dir(), ask = interactive())
 
 corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
 
@@ -86,6 +86,9 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{new}{Name of the (new) corpus.}
 
 \item{corpus}{A CWB corpus.}
+
+\item{ask}{A \code{logical} value, whether to ask user for confirmation
+before removing a corpus.}
 
 \item{tarfile}{Filename of tarball.}
 

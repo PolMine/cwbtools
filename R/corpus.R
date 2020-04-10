@@ -219,16 +219,18 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   invisible(NULL)
 }
 
+#' @param ask A \code{logical} value, whether to ask user for confirmation
+#'   before removing a corpus.
 #' @details \code{corpus_remove} can be used to drop a corpus.
 #' @rdname corpus_utils
 #' @export corpus_remove
-corpus_remove <- function(corpus, registry_dir = cwb_registry_dir()){
+corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = interactive()){
   
   stopifnot(tolower(corpus) %in% list.files(registry_dir)) # check that corpus exists
   
   reg <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
   data_directory <- reg[["home"]]
-  if (interactive()){
+  if (ask){
     userinput <- menu(
       choices = c("Yes / continue", "No / abort"),
       title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", corpus)
