@@ -12,11 +12,13 @@
 \usage{
 corpus_install(
   pkg = NULL,
-  repo = "http://polmine.sowi.uni-due.de/packages",
+  repo = "https://PolMine.github.io/drat/",
   tarball = NULL,
+  doi = NULL,
   lib = .libPaths()[1],
-  registry_dir = NULL,
+  registry_dir = cwbtools::cwb_registry_dir(),
   corpus_dir = cwb_corpus_dir(registry_dir),
+  ask = interactive(),
   verbose = TRUE,
   user = NULL,
   password = NULL,
@@ -64,12 +66,19 @@ corpus_recode(
 
 \item{tarball}{The URL or local path to a tarball with a CWB indexed corpus.}
 
+\item{doi}{The DOI (Digital Object Identifier) of the corpus tarball at
+zenodo, presented as a hyperlink. (For testing purposes, use
+("https://doi.org/10.5281/zenodo.3748858".)}
+
 \item{lib}{Directory for R packages, defaults to \code{.libPaths()[1]}.}
 
 \item{registry_dir}{Directory of registry.}
 
 \item{corpus_dir}{The directory that contains the data directories of indexed
 corpora.}
+
+\item{ask}{A \code{logical} value, whether to ask user for confirmation
+before removing a corpus.}
 
 \item{verbose}{Logical, whether to be verbose.}
 
@@ -87,9 +96,6 @@ or \code{download.file}, if \code{tarball} is specified.}
 
 \item{corpus}{A CWB corpus.}
 
-\item{ask}{A \code{logical} value, whether to ask user for confirmation
-before removing a corpus.}
-
 \item{tarfile}{Filename of tarball.}
 
 \item{data_dir}{The data directory where the files of the CWB corpus live.}
@@ -103,6 +109,9 @@ before removing a corpus.}
 \item{skip}{A character vector with s_attributes to skip.}
 
 \item{to}{Character string describing the target encoding of the corpus.}
+}
+\value{
+Logical value \code{TRUE} if installation has been successful.
 }
 \description{
 Utility functions to keep the installation of indexed CWB corpora wrapped

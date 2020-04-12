@@ -12,7 +12,7 @@ cwb_corpus_dir(registry_dir)
 
 cwb_registry_dir()
 
-cwb_directories()
+cwb_directories(registry_dir = NULL, corpus_dir = NULL)
 
 create_cwb_directories(prefix = "~/cwb", ask = interactive())
 
@@ -20,6 +20,8 @@ use_corpus_registry_envvar(registry_dir)
 }
 \arguments{
 \item{registry_dir}{Path to the directory with registry files.}
+
+\item{corpus_dir}{Path to the directory with data directories for corpora.}
 
 \item{prefix}{The base path that will be prefixed}
 

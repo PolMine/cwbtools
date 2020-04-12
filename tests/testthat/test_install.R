@@ -31,3 +31,18 @@ test_that(
     expect_true(corpus()[["corpus"]] == "REUTERS")
   }
 )
+
+
+test_that(
+  "download and install UNGAMINI",
+  {
+    skip_on_cran()
+    Sys.setenv(CORPUS_REGISTRY = "")
+    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE)
+    Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+    
+    corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858", registry_dir = cwb_dirs[["registry_dir"]])
+    library(polmineR)
+    expect_true("UNGAMINI" %in% corpus()[["corpus"]])
+  }
+)

@@ -1,7 +1,7 @@
 cwbtools 0.1.2.9003
 ===================
 
-* 
+* The default value of the argument "repo" that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account ("https://PolMine.github.io/drat/").
 
 cwbtools 0.1.2.9002
 ===================

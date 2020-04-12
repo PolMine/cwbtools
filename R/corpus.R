@@ -23,8 +23,13 @@
 #' @param pkg Name of the data package.
 #' @param repo URL of the repository.
 #' @param tarball The URL or local path to a tarball with a CWB indexed corpus.
+#' @param doi The DOI (Digital Object Identifier) of the corpus tarball at
+#'   zenodo, presented as a hyperlink. (For testing purposes, use
+#'   ("https://doi.org/10.5281/zenodo.3748858".)
 #' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
 #' @param verbose Logical, whether to be verbose.
+#' @param ask A \code{logical} value, whether to ask for user input when
+#'   choices are required.
 #' @param registry_dir Directory of registry.
 #' @param corpus A CWB corpus.
 #' @param tarfile Filename of tarball.
@@ -36,18 +41,22 @@
 #' @param user A user name that can be specified to download a corpus from a password protected site.
 #' @param password A password that can be specified to download a corpus from a password protected site. 
 #' @name corpus_install
+#' @return Logical value \code{TRUE} if installation has been successful.
 #' @seealso For managing registry files, see \code{\link{registry_file_parse}}
 #' for switching to a packaged corpus. 
 #' @importFrom utils available.packages contrib.url install.packages
 #' @importFrom utils installed.packages tar
 #' @importFrom curl curl_download new_handle handle_setopt
+#' @importFrom RCurl url.exists getURL
+#' @importFrom jsonlite fromJSON
+#' @importFrom utils menu
 #' @importFrom stringi stri_enc_mark
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, lib = .libPaths()[1], registry_dir = NULL, corpus_dir = cwb_corpus_dir(registry_dir), verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
   if (is.null(tarball)){
     if (isFALSE(is.null(pkg))){
-      if (!pkg %in% utils::available.packages(utils::contrib.url(repos = repo))) {
+      if (!pkg %in% utils::available.packages(contriburl = utils::contrib.url(repos = repo))) {
         stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
       }
       
@@ -65,16 +74,103 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           regdata[["home"]] <- data_dir
           registry_file_write(data = regdata, corpus = corpus, registry_dir = pkg_registry)
         }
+      }
+      return(invisible(TRUE))
+    } else {
+      # Turn DOI into tarball
+      
+      if (is.null(doi)) stop("If argument 'tarball' is NULL, either argument 'pkg' or argument 'doi' are required.")
+      if (isFALSE(grepl("^.*?10\\.5281/zenodo\\.\\d+$", doi))){
+        stop("Argument 'doi' is expected to offer a DOI (Digital Object Identifier) that refers to data",
+             "hosted with zenodo, i.e. starting with 10.5281/zenodo.")
+      }
+      zenodo_info <- .zenodo_info(doi = doi)
+      tarball <- grep(
+        "^.*?_v\\d+\\.\\d+\\.\\d+\\.tar\\.gz$",
+        zenodo_info[["files"]][["links"]][["self"]],
+        value = TRUE
+      )
+      if (length(tarball) > 1L && isTRUE(ask)){
+        userchoice <- utils::menu(
+          choices = basename(tarball),
+          title = "Several tarballs assumed to contain an indexed corpus are available. Which tarball shall be downloaded?"
+        )
+        tarball <- tarball[userchoice]
+      }
     }
+  }
+  
+  # Create CWB directory structure if necessary --------------
+  
+  cwb_dirs <- cwb_directories(registry_dir = registry_dir, corpus_dir = corpus_dir)
+  if (any(is.null(cwb_dirs))) cwb_dirs <- create_cwb_directories() # will trigger interactive dialogue
+
+  if (length(tarball) == 1L){
+    
+    # Ask user before overwriting existing corpus ----------------
+    corpus <- gsub("^(.*?)(_v\\d+\\.\\d+\\.\\d+|)\\.tar\\.gz$", "\\1", basename(tarball))
+    version <- if (exists("zenodo_info")){
+      zenodo_info[["metadata"]][["version"]]
+    } else {
+      if (grepl("^.*?_v\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(tarball))){
+        gsub("^.*?_(v\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "\\1", basename(tarball))
+      } else {
+        "unknown"
+      }
     }
-  } else {
+    if (tolower(corpus) %in% list.files(cwb_dirs[["registry_dir"]])){
+      regdata <- registry_file_parse(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]])
+      version_old <- if ("version" %in% names(regdata[["properties"]])){
+        regdata[["properties"]][["version"]]
+      } else {
+        "unknown"
+      }
+      if (ask){
+        if (version_old == version){
+          userinput <- menu(
+            choices = c("Yes / continue", "No / abort"), 
+            title = sprintf(
+              paste(
+                "Local %s version and the version of %s to be downloaded are identical (%s).",
+                "Are you sure you want to proceed and to replace the local corpus by a fresh download?"
+              ),
+              toupper(corpus), toupper(corpus), version
+            )
+          )
+          if (userinput != 1L){
+            stop(sprintf("Aborting - existing version of %s remains unchanged. ", toupper(corpus)))
+          }
+        } else {
+          userinput <- menu(
+            choices = c("Yes / continue", "No / abort"), 
+            title = sprintf(
+              "Corpus %s (version: %s) is already installed. Do you want to replace it by version %s?",
+              toupper(corpus), version_old, version
+            )
+          )
+          if (userinput != 1L){
+            stop(
+              sprintf(paste("Aborting - existing version of %s remains unchanged. ",
+                            "If you want to keep the existing version (%s), rename corpus using cwbtools::corpus_rename(), ",
+                            "and call corpus_install() again."
+              ),
+              toupper(corpus), version
+              )
+            ) 
+          }
+        }
+      }
+      corpus_remove(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]], ask = ask)
+    }
+    
+    # Now download corpus -------------------
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
     corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
     if (grepl("^http", tarball)){
-      # if (!url.exists(tarball)) stop("tarball is not available")
       if (is.null(user)){
+        if (!RCurl::url.exists(tarball)) stop("tarball is not available")
         if (.Platform$OS.type == "windows"){
           # use download.file because it is able to cope with murky user names / path names
           download.file(url = tarball, destfile = corpus_tarball, quiet = !verbose)
@@ -102,7 +198,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         }
       }
     } else {
-      if (!file.exists(tarball)) stop(sprintf("tarball '%s' does not exist", tarball))
+      # If tqrball is not a URL, it is assumed to be present on the local machine
+      if (!file.exists(tarball)) stop(sprintf("tarball '%s' not found locally", tarball))
       file.copy(from = tarball, to = corpus_tarball)
     }
     if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII"){
@@ -121,7 +218,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     corpora <- list.files(tmp_registry_dir)
     
     for (corpus in corpora){
-      
+
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
       home_dir <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
@@ -133,14 +230,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
         home_dir <- utils::shortPathName(info_file)
       registry_data[["info"]] <- info_file
-      
+      if (!is.null(doi)) registry_data[["properties"]][["doi"]] <- doi
+      if (!"version" %in% names(registry_data[["properties"]])){
+        registry_data[["properties"]][["version"]] <- version
+      }
+
       registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
       
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)
       } else {
-        if (is.null(registry_dir)) stop("Argument 'registry_dir' may not be NULL if argument 'pkg' is NULL.")
-        if (is.null(corpus_dir)) stop("Argument 'corpus_dir' may not be NULL if argument 'pkg' is NULL.")
+        if (is.null(cwb_dirs[["registry_dir"]])) stop("Could not determine registry directory.")
+        if (is.null(cwb_dirs[["corpus_dir"]])) stop("Could not determine corpus directory.")
         data_dir <- file.path(corpus_dir, tolower(corpus), fsep = "/")
         if (!file.exists(data_dir)) dir.create(data_dir)
         corpus_copy(
@@ -150,10 +251,34 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       }
       
+      # Resetting registry and copying registry file to polmineR's temporary registry, 
+      # if polmineR is loaded necessary
+      if (isNamespaceLoaded("polmineR")){
+        file.copy(
+          from = file.path(cwb_dirs[["registry_dir"]], tolower(corpus)),
+          to = file.path(polmineR::registry(), tolower(corpus)),
+          overwrite = TRUE
+        )
+        polmineR::registry_reset(registryDir = polmineR::registry())
+      }
+
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
+    return(invisible(NULL))
+  } else {
+    for (tarfile in tarball){
+      corpus_install(
+        tarball = tarfile,
+        registry_dir = registry_dir,
+        corpus_dir = corpus_dir,
+        ask = ask,
+        verbose = verbose,
+        user = user,
+        password = password,
+        ...
+      )
+    }
   }
-  invisible(NULL)
 }
 
 #' @details \code{corpus_packages} will detect the packages that include CWB
@@ -331,7 +456,7 @@ corpus_copy <- function(
   if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
   
   registry_file_new <- file.path(registry_dir_new, tolower(corpus), fsep = "/")
-  if (file.exists(registry_file_new)) stop(sprintf("Aborting - registry file %s already exists in target regsity", registry_file_new))
+  if (file.exists(registry_file_new)) stop(sprintf("Aborting - registry file %s already exists in target registy", registry_file_new))
   
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)

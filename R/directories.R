@@ -26,6 +26,7 @@
 #'   suggested corpus directory, or \code{NULL} if the heuristic does not yield
 #'   a result.
 #' @param registry_dir Path to the directory with registry files.
+#' @param corpus_dir Path to the directory with data directories for corpora.
 #' @export cwb_corpus_dir
 #' @rdname directories
 cwb_corpus_dir <- function(registry_dir){
@@ -106,9 +107,12 @@ cwb_registry_dir <- function(){
 #' @export cwb_directories
 #' @importFrom utils menu
 #' @importFrom rstudioapi getSourceEditorContext
-cwb_directories <- function(){
-  regdir <- cwb_registry_dir()
-  c(registry_dir = regdir, corpus_dir = cwb_corpus_dir(regdir))
+cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
+  registry_dir <- if (is.null(registry_dir)) cwb_registry_dir() else registry_dir
+  c(
+    registry_dir = registry_dir, 
+    corpus_dir = if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir) else corpus_dir
+  )
 }
 
 #' @details \code{create_cwb_directories} will create a 'registry' and an
