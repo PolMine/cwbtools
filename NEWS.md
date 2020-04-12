@@ -1,3 +1,8 @@
+cwbtools 0.1.2.9003
+===================
+
+* 
+
 cwbtools 0.1.2.9002
 ===================
 
@@ -7,6 +12,7 @@ data directories reside based on the registry directory.
 `cwb_directories()`, `cwb_registry_dir()`, `cwb_corpus_dir()` 
 * Implemented functionality to download and install corpus into system registry.
 * New Roxygen documentation of R6 used for `CorpusData` class.
+
 
 
 cwbtools 0.1.2.9001

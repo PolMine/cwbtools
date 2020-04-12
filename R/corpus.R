@@ -44,26 +44,28 @@
 #' @importFrom stringi stri_enc_mark
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "http://polmine.sowi.uni-due.de/packages", tarball = NULL, lib = .libPaths()[1], registry_dir = NULL, corpus_dir = cwb_corpus_dir(registry_dir), verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, lib = .libPaths()[1], registry_dir = NULL, corpus_dir = cwb_corpus_dir(registry_dir), verbose = TRUE, user = NULL, password = NULL, ...){
   if (is.null(tarball)){
-    if (!pkg %in% utils::available.packages(utils::contrib.url(repos = repo))) {
-      stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
-    }
-    
-    if (file.access(lib, "6") == -1){
-      stop("You do not have write permissions for directory ", lib,
-           ". Please run R with the required privileges, or provide another directory (param 'lib').")
-    }
-    install.packages(pkgs = pkg, repos = repo, lib = lib, ...)
-    pkg_registry <- system.file(package = pkg, "extdata", "cwb", "registry")
-    corpora <- list.files(pkg_registry)
-    for (corpus in corpora){
-      regdata <- registry_file_parse(corpus = corpus, registry_dir = pkg_registry)
-      data_dir <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", corpus)
-      if (regdata[["home"]] != data_dir){
-        regdata[["home"]] <- data_dir
-        registry_file_write(data = regdata, corpus = corpus, registry_dir = pkg_registry)
+    if (isFALSE(is.null(pkg))){
+      if (!pkg %in% utils::available.packages(utils::contrib.url(repos = repo))) {
+        stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
       }
+      
+      if (file.access(lib, "6") == -1){
+        stop("You do not have write permissions for directory ", lib,
+             ". Please run R with the required privileges, or provide another directory (param 'lib').")
+      }
+      install.packages(pkgs = pkg, repos = repo, lib = lib, ...)
+      pkg_registry <- system.file(package = pkg, "extdata", "cwb", "registry")
+      corpora <- list.files(pkg_registry)
+      for (corpus in corpora){
+        regdata <- registry_file_parse(corpus = corpus, registry_dir = pkg_registry)
+        data_dir <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", corpus)
+        if (regdata[["home"]] != data_dir){
+          regdata[["home"]] <- data_dir
+          registry_file_write(data = regdata, corpus = corpus, registry_dir = pkg_registry)
+        }
+    }
     }
   } else {
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
@@ -354,59 +356,6 @@ corpus_copy <- function(
 }
 
 
-# corpus_copy <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
-#   stopifnot(tolower(old) %in% list.files(registry_dir))
-#   
-#   # copy data directory
-#   message("copying data directory")
-#   regdata <- registry_file_parse(corpus = old, registry_dir = registry_dir)
-#   data_dir_new <- file.path(dirname(regdata[["home"]]), tolower(new), fsep = "/")
-#   if (file.exists(data_dir_new)){
-#     if (readline(prompt = "Data directory already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y")
-#       stop("Aborting the operation.")
-#   } else {
-#     dir.create(data_dir_new)
-#   }
-#   files_to_copy <- list.files(regdata[["home"]], full.names = TRUE)
-#   success <- pbapply::pblapply(
-#     files_to_copy,
-#     function(x) file.copy(from = x, to = data_dir_new, recursive = TRUE)
-#   )
-#   if (!all(unlist(success))){
-#     stop("copying the data directory failed")
-#   } else {
-#     message("... copying data directory succeeded")
-#   }
-#   
-#   # generate copy of registry file
-#   message("make copy of registry file")
-#   registry_file_new <- file.path(registry_file_new, tolower(new), fsep = "/")
-#   if (file.exists(registry_file_new)){
-#     if (readline(prompt = "New registry file already exists. Proceed anyway? (type 'Y' to continue, anything else to abort)") != "Y"){
-#       file.remove(registry_file_new)
-#     } else {
-#       stop("Aborting the operation.")
-#     }
-#     
-#   }
-#   success <- file.copy(
-#     from = file.path(registry_dir, tolower(old), fsep = "/"),
-#     to = file.path(registry_dir, tolower(new), fsep = "/")
-#   )
-#   if (!success){
-#     stop("copying the registry file failed")
-#   } else {
-#     message("... copying registry file succeeded")
-#   }
-#   
-#   # modify the new registry file 
-#   message("updating new registry file")
-#   regdata <- registry_file_parse(corpus = new, registry_dir = registry_dir)
-#   regdata[["id"]] <- tolower(new)
-#   regdata[["home"]] <- data_dir_new
-#   registry_file_write(data = regdata, corpus = tolower(new), registry_dir = registry_dir)
-#   invisible(NULL)
-# }
 
 
 
