@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.1.2.9002
-Date: 2020-04-10
+Version: 0.1.2.9003
+Date: 2020-04-12
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -29,7 +29,9 @@ Imports:
     pbapply,
     methods,
     usethis,
-    rstudioapi
+    rstudioapi,
+    jsonlite,
+    RCurl
 Suggests:
     tm (>= 0.7.3),
     knitr,
@@ -49,15 +51,16 @@ Encoding: UTF-8
 URL: https://www.github.com/URL/cwbtools
 BugReports: https://github.com/PolMine/cwbtools/issues
 Collate:
-    'cwbtools.R'
-    'pkg.R'
-    'encoding.R'
-    'p_attribute.R'
-    's_attribute.R'
-    'registry_file.R'
     'CorpusData.R'
     'corpus.R'
     'cwb.R'
-    'ner.R'
+    'cwbtools.R'
     'directories.R'
+    'encoding.R'
+    'ner.R'
+    'p_attribute.R'
+    'pkg.R'
+    'registry_file.R'
+    's_attribute.R'
+    'zenodo.R'
 RoxygenNote: 7.0.2
