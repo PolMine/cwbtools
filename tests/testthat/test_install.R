@@ -1,7 +1,7 @@
 testthat::context("install")
 
 test_that(
-  "corpus_install",
+  "corpus_install from tarball",
   {
     library(polmineR)
     file.remove(list.files(registry(), full.names = TRUE))
@@ -20,7 +20,7 @@ test_that(
     if (!dir.exists(prefix)) dir.create(prefix)
     cwb_dirs <- create_cwb_directories(prefix = prefix, ask = FALSE)
     
-    corpus_install(tarball = tmp_tarball, registry_dir = cwb_dirs[["registry_dir"]])
+    corpus_install(tarball = tmp_tarball, registry_dir = cwb_dirs[["registry_dir"]], corpus_dir = cwb_dirs[["registry_dir"]])
     
     file.copy(
       from = file.path(cwb_dirs[["registry_dir"]], "reuters"),
