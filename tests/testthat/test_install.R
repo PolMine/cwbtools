@@ -70,7 +70,7 @@ test_that(
     options(polmineR.corpus_registry = cwb_dirs[["registry_dir"]])
     Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
     
-    corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858", registry_dir = cwb_dirs[["registry_dir"]])
+    corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858", registry_dir = cwb_dirs[["registry_dir"]], corpus_dir = cwb_dirs[["corpus_dir"]])
     # library(polmineR)
     # options("")
     # registry_reset(registryDir = registry())

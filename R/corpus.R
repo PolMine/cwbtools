@@ -262,16 +262,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
-      home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
-      if (.Platform$OS.type == "windows" && stri_enc_mark(home_dir) != "ASCII")
-        home_dir <- utils::shortPathName(home_dir)
-      registry_data[["home"]] <- home_dir
+      tmp_home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
+      if (.Platform$OS.type == "windows" && stri_enc_mark(tmp_home_dir) != "ASCII")
+        tmp_home_dir <- utils::shortPathName(tmp_home_dir)
+      registry_data[["home"]] <- tmp_home_dir
       
       info_file <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
-        home_dir <- utils::shortPathName(info_file)
+        info_file <- utils::shortPathName(info_file)
       registry_data[["info"]] <- info_file
+      
       if (!is.null(doi)) registry_data[["properties"]][["doi"]] <- doi
+      
       if (!"version" %in% names(registry_data[["properties"]])){
         registry_data[["properties"]][["version"]] <- version
       }
@@ -283,14 +285,14 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       } else {
         if (is.null(cwb_dirs[["registry_dir"]])) stop("Could not determine registry directory.")
         if (is.null(cwb_dirs[["corpus_dir"]])) stop("Could not determine corpus directory.")
-        data_dir <- file.path(corpus_dir, tolower(corpus), fsep = "/")
-        if (!file.exists(data_dir)) dir.create(data_dir)
+        data_dir_target <- file.path(cwb_dirs[["corpus_dir"]], tolower(corpus), fsep = "/")
+        if (!file.exists(data_dir_target)) dir.create(data_dir_target)
         corpus_copy(
           corpus = corpus,
           registry_dir = tmp_registry_dir, 
-          data_dir = home_dir, # the temporary place
+          data_dir = tmp_home_dir, # the temporary place
           registry_dir_new = registry_dir, 
-          data_dir_new = data_dir # final location
+          data_dir_new = data_dir_target # final location
         )
       }
       

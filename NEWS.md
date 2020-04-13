@@ -3,35 +3,33 @@ cwbtools 0.2.0
 
 ## NEW FEATURES
 
-Functionality to install corpora into system 
-An new function `suggest_corpus_dir()` suggests a corpus directory where the 
-data directories reside based on the registry directory.
-* `use_corpus_registry_envvar()`, `cwb_corpus_dir_create()`, `cwb_registry_dir_create()`,
-`cwb_directories()`, `cwb_registry_dir()`, `cwb_corpus_dir()` 
-* Implemented functionality to download and install corpus into system registry.
-
+* The `install_corpus()` function has been reworked thoroughly. Using system directories
+  for the registry and the corpus directory is now supported. This is a prerequisite that
+  corpora can be installed outside of R packages, which is not allowed by CRAN.
+* A set of new auxiliary functions will get the whereabouts of the registry directory and 
+  the corpus directory (`cwb_directories()`, `cwb_registry_dir()`, `cwb_corpus_dir()`). 
+  In particular, they consider that the polmineR package may have generated a temporary
+  corpus registry, resetting the CORPUS_REGISTRY environment variable.
+* The `install_corpus()` function accepts an argument `doi` to provide a Document Object 
+  Identifier (DOI). At this stage, the DOI is assumed to be awarded by Zenodo. Information
+  available at the Zenodo site will be resolved to get the URL of a corpus tarball that
+  can be downloaded. Upon installing a corpus from Zenodo, the DOI and the version number
+  will be written as corpus properties into the registry file.
+* To avoid removing corpora accidentaly, the `corpus_install()` function will ask the user
+  for feedback if a corpus shall be installed that is already present.
+* New auxiliary functions `create_cwb_directories` and `use_corpus_registry_envvar()`
+  will assist users to create the required directory structure for CWB indexed corpora.
 
 
 ## MINOR IMPROVEMENTS
 
-* The default value of the argument "repo" that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account ("https://PolMine.github.io/drat/").
+* The default value of the argument "repo" that defines the repository for packaged corpora 
+  is now the drat repository of the PolMine GitHub account ("https://PolMine.github.io/drat/").
 
-## BUG FIXES
 
 ## DOCUMENTATION FIXES
 
-
-
-cwbtools 0.1.2.9002
-===================
-
 * New Roxygen documentation of R6 used for `CorpusData` class.
-
-
-
-cwbtools 0.1.2.9001
-===================
-
 * Added a (preliminary) vignette that explains how to add a sentence annotation to an indexed corpus.
 
 
