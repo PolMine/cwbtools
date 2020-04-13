@@ -262,7 +262,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
-      home_dir <- file.path(tmp_data_dir, tolower(registry_data[["id"]]), fsep = "/")
+      home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
       if (.Platform$OS.type == "windows" && stri_enc_mark(home_dir) != "ASCII")
         home_dir <- utils::shortPathName(home_dir)
       registry_data[["home"]] <- home_dir
@@ -287,8 +287,10 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if (!file.exists(data_dir)) dir.create(data_dir)
         corpus_copy(
           corpus = corpus,
-          registry_dir = tmp_registry_dir, data_dir = home_dir, # the temporary place
-          registry_dir_new = registry_dir, data_dir_new = data_dir # final location
+          registry_dir = tmp_registry_dir, 
+          data_dir = home_dir, # the temporary place
+          registry_dir_new = registry_dir, 
+          data_dir_new = data_dir # final location
         )
       }
       

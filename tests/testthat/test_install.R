@@ -25,13 +25,36 @@ test_that(
     file.copy(
       from = file.path(cwb_dirs[["registry_dir"]], "reuters"),
       to = file.path(registry(), "reuters")
-      )
+    )
     registry_reset(registryDir = registry())
     
     expect_true(corpus()[["corpus"]] == "REUTERS")
   }
 )
 
+
+test_that(
+  "",
+  {
+    doi <- "https://doi.org/10.5281/zenodo.3748858"
+    record_id <- gsub("^.*?10\\.5281/zenodo\\.(\\d+)$", "\\1", doi)
+    zenodo_api_url <- sprintf("https://zenodo.org/api/records/%d", as.integer(record_id))
+    zenodo_data <- jsonlite::fromJSON(RCurl::getURL(zenodo_api_url))
+    tarball <- grep("\\.tar\\.gz$", zenodo_data[["files"]][["links"]][["self"]], value = TRUE)
+    
+    cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
+    dir.create(cwbtools_tmpdir)
+    corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
+    curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = FALSE)
+    untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
+    tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
+    tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
+    home_dir <- file.path(tmp_data_dir, tolower("ungamini"), fsep = "/")
+    files <- list.files(home_dir)
+    
+    expect_identical(length(files), 64L)
+  }
+)
 
 test_that(
   "download and install UNGAMINI",
@@ -43,6 +66,7 @@ test_that(
     
     corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858", registry_dir = cwb_dirs[["registry_dir"]])
     library(polmineR)
+    registry_reset(registryDir = registry())
     expect_true("UNGAMINI" %in% corpus()[["corpus"]])
   }
 )
