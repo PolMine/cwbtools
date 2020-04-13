@@ -36,7 +36,7 @@ corpus_rename(
 
 corpus_remove(corpus, registry_dir = cwb_registry_dir(), ask = interactive())
 
-corpus_as_tarball(corpus, registry_dir, tarfile, verbose = TRUE)
+corpus_as_tarball(corpus, registry_dir, data_dir, tarfile, verbose = TRUE)
 
 corpus_copy(
   corpus,
@@ -66,8 +66,8 @@ corpus_recode(
 
 \item{tarball}{The URL or local path to a tarball with a CWB indexed corpus.}
 
-\item{doi}{The DOI (Digital Object Identifier) of the corpus tarball at
-zenodo, presented as a hyperlink. (For testing purposes, use
+\item{doi}{The DOI (Digital Object Identifier) of a corpus deposited at
+Zenodo, presented as a hyperlink. (For testing purposes, use
 ("https://doi.org/10.5281/zenodo.3748858".)}
 
 \item{lib}{Directory for R packages, defaults to \code{.libPaths()[1]}.}
@@ -96,9 +96,9 @@ or \code{download.file}, if \code{tarball} is specified.}
 
 \item{corpus}{A CWB corpus.}
 
-\item{tarfile}{Filename of tarball.}
-
 \item{data_dir}{The data directory where the files of the CWB corpus live.}
+
+\item{tarfile}{Filename of tarball.}
 
 \item{registry_dir_new}{Target directory with for (new) registry files.}
 
@@ -153,14 +153,28 @@ The \code{corpus_install} function will assist the installation of a
   \item{If \code{tarball} is a URL, the tarball will be downloaded from
   the online location. It is possible to state user credentials using the
   arguments \code{user} and \code{password}. Then the aformementioned
-  installation (scenario 1) is executed.}
-  \item{If argument \code{doi} is Document Object Identifier (DOI), the
-  URL from which a corpus tarball can be downloaded is derived from that
-  information, the tarball is downloaded and the corpus installed. Note that
-  at this stage, it is assumed that the DOI has been awarded by
-  \href{Zenodo}{https://zenodo.org/}}
-  \item{}
-}
+  installation (scenario 1) is executed. If argument \code{pkg} is the
+  name of an installed package, corpus files will be moved into this 
+  package.}
+  \item{If argument \code{doi} is Document Object Identifier (DOI), the URL
+  from which a corpus tarball can be downloaded is derived from the
+  information available at that location. The tarball is downloaded and the
+  corpus installed. If argument \code{pkg} is defined, files will be moved
+  into a R package, the syste registry and corpus directories are used
+  otherwise. Note that at this stage, it is assumed that the DOI has been
+  awarded by \href{Zenodo}{https://zenodo.org/}}
+  \item{If argument \code{pkg} is provided and specifies an R package (and
+  \code{tarball} is \code{NULL}), the corpus package available at a
+  CRAN-style repository specified by argument \code{repo} will be installed.
+  Internally, the \code{install.packages} function is called and further
+  arguments can be passed into this function call. This can be used to pass
+  user credentials, e.g. by adding \code{method = "wget" extra = "--user
+  donald --password duck"}.
+  }
+}   
+If the corpus to be installed is already available, a dialogue will ask the
+user whether an existing corpus shall be deleted and installed anew, if
+argument \code{ask} is \code{TRUE}.
 
 \code{corpus_packages} will detect the packages that include CWB
   corpora. Note that the directory structure of all installed packages is

@@ -12,6 +12,7 @@ test_that(
     cwbtools::corpus_as_tarball(
       corpus = "REUTERS",
       registry_dir = polmineR_registry,
+      data_dir <- system.file(package = "polmineR", "extdata", "cwb", "indexed_corpora", "reuters"),
       tarfile = tmp_tarball,
       verbose = TRUE
     )

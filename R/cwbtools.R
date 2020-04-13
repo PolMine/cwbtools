@@ -3,16 +3,16 @@
 #' Tools to Create, Modify and Manage CWB Corpora.
 #'
 #' The \href{http://cwb.sourceforge.net/}{\emph{Corpus Workbench}} (CWB) offers
-#' a classic approach for working with large, linguistically and
-#' structurally annotated corpora that ensures memory efficiency and makes
-#' running  queries fast (Evert and Hardie 2011). Technically, indexing and
-#' compressing corpora as suggested by Witten et al. (1999) is the approach
-#' implemented in the design of the CWB (Christ 1994).
+#' a classic approach for working with large, linguistically and structurally
+#' annotated corpora. Its design ensures memory efficiency and makes running
+#' queries fast (Evert and Hardie 2011). Technically, indexing and compressing
+#' corpora as suggested by Witten et al. (1999) is the approach implemented by
+#' the CWB (Christ 1994).
 #' 
-#' The maturity of the CWB and the efficiency of the original C implementation
-#' notwithstanding, both the convenience and the flexibility of traditional CWB
-#' command line tools is limited. Restrictions to the portability of code across
-#' platforms inhibits the ideal of reproducible research.
+#' The C implementation of the CWB is mature and efficient. However, the
+#' convenience and flexibility of traditional CWB command line tools is limited.
+#' These tools are not portable across platforms, inhibiting the ideal of
+#' reproducible research.
 #'  
 #' The 'cwbtools' package combines portable pure R tools to create indexed
 #' corpus files and convenience wrappers for the original C implementation of

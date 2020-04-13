@@ -421,15 +421,22 @@ corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = inter
 #'   the corpus name in the 'indexed_corpora' subdirectory.
 #' @rdname corpus_utils
 #' @export corpus_as_tarball
-corpus_as_tarball <- function(corpus, registry_dir, tarfile, verbose = TRUE){
+corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose = TRUE){
   
   registry_file <- file.path(registry_dir, tolower(corpus), fsep = "/")
-  if (!file.exists(registry_file))
+  if (!file.exists(registry_file)){
     stop(
-      sprintf("registry file for corpus '%s' does not exist in registry directory '%s'",
-              corpus, registry_dir)
-      )
-  home_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
+      sprintf(
+        "registry file for corpus '%s' does not exist in registry directory '%s'",
+        corpus, registry_dir)
+    )
+  }
+  
+  home_dir <- if (missing(data_dir)){
+    registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
+  } else {
+    data_dir
+  }
 
   if (verbose) message("... moving registry file and data files to temporary directory for creating tarball")
   tmp_dir <- normalizePath(tempdir(), winslash = "/")
