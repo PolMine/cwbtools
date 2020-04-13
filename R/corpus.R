@@ -1,8 +1,6 @@
 #' Install and manage corpora. 
 #' 
-#' Utility functions to keep the installation of indexed CWB corpora wrapped
-#' into R data packages simple. 
-#' 
+#' Utility functions to assist the installation of indexed CWB corpora. 
 #' 
 #' @details A data package with a CWB corpus is assumed to include a directory
 #'   \code{/extdata/cwb/registry} for registry files and a directory
@@ -18,6 +16,24 @@
 #'   repository. Further parameters are handed over to install.packages, so you
 #'   might add \code{method = "wget" extra = "--user donald --password duck"}.
 #'   See examples how to check whether the directory has been set correctly.
+#' @details 
+#' \preformatted{
+#'   .
+#'   |- registry/
+#'   |  |- corpus1 
+#'   |  +- corpus2
+#'   |
+#'   + indexed_corpora/
+#'     |- corpus1/
+#'     |  |- file1
+#'     |  |- file2
+#'     |  +- file3
+#'     |
+#'     +- corpus2/
+#'        |- file1
+#'        |- file2
+#'        +- file3
+#' }
 #' @param old Name of the (old) corpus.
 #' @param new Name of the (new) corpus.
 #' @param pkg Name of the data package.

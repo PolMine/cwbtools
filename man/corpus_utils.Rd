@@ -114,8 +114,7 @@ or \code{download.file}, if \code{tarball} is specified.}
 Logical value \code{TRUE} if installation has been successful.
 }
 \description{
-Utility functions to keep the installation of indexed CWB corpora wrapped
-into R data packages simple.
+Utility functions to assist the installation of indexed CWB corpora.
 }
 \details{
 A data package with a CWB corpus is assumed to include a directory
@@ -132,6 +131,24 @@ A data package with a CWB corpus is assumed to include a directory
   repository. Further parameters are handed over to install.packages, so you
   might add \code{method = "wget" extra = "--user donald --password duck"}.
   See examples how to check whether the directory has been set correctly.
+
+\preformatted{
+  .
+  |- registry/
+  |  |- corpus1 
+  |  +- corpus2
+  |
+  + indexed_corpora/
+    |- corpus1/
+    |  |- file1
+    |  |- file2
+    |  +- file3
+    |
+    +- corpus2/
+       |- file1
+       |- file2
+       +- file3
+}
 
 \code{corpus_packages} will detect the packages that include CWB
   corpora. Note that the directory structure of all installed packages is
