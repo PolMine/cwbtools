@@ -114,7 +114,8 @@ or \code{download.file}, if \code{tarball} is specified.}
 Logical value \code{TRUE} if installation has been successful.
 }
 \description{
-Utility functions to assist the installation of indexed CWB corpora.
+Utility functions to assist the installation and management of indexed CWB
+corpora.
 }
 \details{
 A CWB corpus consists a set of binary files with corpus data 
@@ -144,17 +145,22 @@ A CWB corpus consists a set of binary files with corpus data
        +- file3
 }
 
-The \code{corpus_install} function combines two steps necessary to install a
-  CWB corpus. First, it calls \code{install.packages}, then it resets the
-  path pointing to the directory with the indexed corpus files in the
-  registry file. The package will be installed to the standard library
-  directory for installing R packages (\code{.libPaths()[1]}). Another
-  location can be used by stating the param 'lib' explicitly (see
-  documentation for \code{\link{install.packages}}).
-  The function can also be used to install a corpus from a password protected
-  repository. Further parameters are handed over to install.packages, so you
-  might add \code{method = "wget" extra = "--user donald --password duck"}.
-  See examples how to check whether the directory has been set correctly.
+The \code{corpus_install} function will assist the installation of a
+  corpus. The following scenarios are offered: 
+\itemize{
+  \item{If argument \code{tarball} is a local tarball, the tarball will
+  be extracted and files will be moved.}
+  \item{If \code{tarball} is a URL, the tarball will be downloaded from
+  the online location. It is possible to state user credentials using the
+  arguments \code{user} and \code{password}. Then the aformementioned
+  installation (scenario 1) is executed.}
+  \item{If argument \code{doi} is Document Object Identifier (DOI), the
+  URL from which a corpus tarball can be downloaded is derived from that
+  information, the tarball is downloaded and the corpus installed. Note that
+  at this stage, it is assumed that the DOI has been awarded by
+  \href{Zenodo}{https://zenodo.org/}}
+  \item{}
+}
 
 \code{corpus_packages} will detect the packages that include CWB
   corpora. Note that the directory structure of all installed packages is

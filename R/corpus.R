@@ -29,18 +29,33 @@
 #'        |- file2
 #'        +- file3
 #' }
-#' @details The \code{corpus_install} function 
-#' 
-#' Further parameters are handed over to install.packages, so you
-#'   might add \code{method = "wget" extra = "--user donald --password duck"}.
-#'   See examples how to check whether the directory has been set correctly.
+#' @details The \code{corpus_install} function will assist the installation of a
+#'   corpus. The following scenarios are offered: 
+#' \itemize{
+#'   \item{If argument \code{tarball} is a local tarball, the tarball will
+#'   be extracted and files will be moved.}
+#'   \item{If \code{tarball} is a URL, the tarball will be downloaded from
+#'   the online location. It is possible to state user credentials using the
+#'   arguments \code{user} and \code{password}. Then the aformementioned
+#'   installation (scenario 1) is executed.}
+#'   \item{If argument \code{doi} is Document Object Identifier (DOI), the URL
+#'   from which a corpus tarball can be downloaded is derived from the
+#'   information available at that location. The tarball is downloaded and the
+#'   corpus installed. Note that at this stage, it is assumed that the DOI has
+#'   been awarded by \href{Zenodo}{https://zenodo.org/}}
+#'   \item{If argument \code{pkg} is provided (a length-one \code{character} vector
+#'   that specifies a package) and \code{tarball} is \code{NULL}, }
+#' }   
+#' If the corpus to be installed is already available, a dialogue will ask the
+#' user whether an existing corpus shall be deleted and installed anew, if
+#' argument \code{ask} is \code{TRUE}.
 #' @param old Name of the (old) corpus.
 #' @param new Name of the (new) corpus.
 #' @param pkg Name of the data package.
 #' @param repo URL of the repository.
 #' @param tarball The URL or local path to a tarball with a CWB indexed corpus.
-#' @param doi The DOI (Digital Object Identifier) of the corpus tarball at
-#'   zenodo, presented as a hyperlink. (For testing purposes, use
+#' @param doi The DOI (Digital Object Identifier) of a corpus deposited at
+#'   Zenodo, presented as a hyperlink. (For testing purposes, use
 #'   ("https://doi.org/10.5281/zenodo.3748858".)
 #' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
 #' @param verbose Logical, whether to be verbose.
