@@ -152,7 +152,7 @@ The \code{corpus_install} function will assist the installation of a
   be extracted and files will be moved.}
   \item{If \code{tarball} is a URL, the tarball will be downloaded from
   the online location. It is possible to state user credentials using the
-  arguments \code{user} and \code{password}. Then the aformementioned
+  arguments \code{user} and \code{password}. Then the aforementioned
   installation (scenario 1) is executed. If argument \code{pkg} is the
   name of an installed package, corpus files will be moved into this 
   package.}

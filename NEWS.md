@@ -16,7 +16,7 @@ cwbtools 0.2.0
   to get the URL of a corpus tarball that can be downloaded. Upon installing a corpus
   from Zenodo, the DOI and the version number will be written as corpus properties into 
   the registry file.
-* To avoid removing corpora accidentaly, the `corpus_install()` function will ask the user
+* To avoid removing corpora accidentally, the `corpus_install()` function will ask the user
   for feedback if a corpus would be installed that is already present and that would be 
   deleted or overwritten.
 * New auxiliary functions `create_cwb_directories` and `use_corpus_registry_envvar()`

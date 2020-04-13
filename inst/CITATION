@@ -3,8 +3,8 @@ citHeader("To cite cwbtools in publications use:")
 citEntry(entry = "Manual",
     title = "cwbtools: Tools to create, modify and manage CWB Corpora",
     author = "Andreas Blätte",
-    year = "2019",
-    note = "R package version 0.1.0",
+    year = "2020",
+    note = "R package version 0.2.0",
     url = "https://CRAN.R-project.org/package=cwbtools",
-    textVersion = "Blätte, Andreas (2019). cwbtools: Tools to create, modify and manage CWB Corpora. R package version 0.1.0. https://CRAN.R-project.org/package=cwbtools"
+    textVersion = "Blätte, Andreas (2020). cwbtools: Tools to create, modify and manage CWB Corpora. R package version 0.2.0. https://CRAN.R-project.org/package=cwbtools"
 )

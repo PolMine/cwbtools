@@ -162,7 +162,7 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive()){
       if (grepl("\\.Renviron$", rstudioapi::getSourceEditorContext()[["path"]])){
         message(
           "The '.Renviron' file is still open. Insert definition of CORPUS_REGISTRY environment variable",
-          "as a line into the document, save and close the document to make the registry directory available accross sessions."
+          "as a line into the document, save and close the document to make the registry directory available across sessions."
           )
         readline(prompt = "Hit any key to proceed.")
       }
@@ -217,7 +217,7 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive()){
 
 #' @details \code{use_corpus_registry_envvar} is an convenience function that
 #'   will assist users to define the environment variable CORPUS_REGSITRY in the
-#'   .Renviron-file, so that it will be available accross sessions.
+#'   .Renviron-file, so that it will be available across sessions.
 #' @export use_corpus_registry_envvar
 #' @importFrom usethis edit_r_environ ui_todo ui_code_block ui_value ui_field
 #' @rdname directories

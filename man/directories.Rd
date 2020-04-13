@@ -77,5 +77,5 @@ The Corpus Workbench (CWB) stores the binary files for
 
 \code{use_corpus_registry_envvar} is an convenience function that
   will assist users to define the environment variable CORPUS_REGSITRY in the
-  .Renviron-file, so that it will be available accross sessions.
+  .Renviron-file, so that it will be available across sessions.
 }
