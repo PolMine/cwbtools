@@ -53,6 +53,11 @@ test_that(
     files <- list.files(home_dir)
     
     expect_identical(length(files), 64L)
+    registry_data <- registry_file_parse(corpus = "ungamini", registry_dir = tmp_registry_dir)
+    registry_data[["home"]] <- home_dir
+    registry_file_write(data = registry_data, corpus = "ungamini", registry_dir = tmp_registry_dir)
+    data_files_to_copy <- list.files(home_dir, full.names = TRUE)
+    expect_identical(length(data_files_to_copy), 64L)
   }
 )
 
@@ -62,11 +67,13 @@ test_that(
     skip_on_cran()
     Sys.setenv(CORPUS_REGISTRY = "")
     cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE)
+    options(polmineR.corpus_registry = cwb_dirs[["registry_dir"]])
     Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
     
     corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858", registry_dir = cwb_dirs[["registry_dir"]])
-    library(polmineR)
-    registry_reset(registryDir = registry())
-    expect_true("UNGAMINI" %in% corpus()[["corpus"]])
+    # library(polmineR)
+    # options("")
+    # registry_reset(registryDir = registry())
+    # expect_true("UNGAMINI" %in% corpus()[["corpus"]])
   }
 )

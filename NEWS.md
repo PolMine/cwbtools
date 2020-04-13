@@ -1,16 +1,30 @@
-cwbtools 0.1.2.9003
-===================
+cwbtools 0.2.0
+==============
 
-* The default value of the argument "repo" that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account ("https://PolMine.github.io/drat/").
+## NEW FEATURES
 
-cwbtools 0.1.2.9002
-===================
-
-* An new function `suggest_corpus_dir()` suggests a corpus directory where the 
+Functionality to install corpora into system 
+An new function `suggest_corpus_dir()` suggests a corpus directory where the 
 data directories reside based on the registry directory.
 * `use_corpus_registry_envvar()`, `cwb_corpus_dir_create()`, `cwb_registry_dir_create()`,
 `cwb_directories()`, `cwb_registry_dir()`, `cwb_corpus_dir()` 
 * Implemented functionality to download and install corpus into system registry.
+
+
+
+## MINOR IMPROVEMENTS
+
+* The default value of the argument "repo" that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account ("https://PolMine.github.io/drat/").
+
+## BUG FIXES
+
+## DOCUMENTATION FIXES
+
+
+
+cwbtools 0.1.2.9002
+===================
+
 * New Roxygen documentation of R6 used for `CorpusData` class.
 
 
