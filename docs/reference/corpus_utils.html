@@ -36,8 +36,8 @@
 
 
 <meta property="og:title" content="Install and manage corpora. — corpus_install" />
-<meta property="og:description" content="Utitlity functions to keep the installation of indexed CWB corpora wrapped
-into R data packages simple." />
+<meta property="og:description" content="Utility functions to assist the installation and management of indexed CWB
+corpora." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +70,7 @@ into R data packages simple." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -94,6 +94,9 @@ into R data packages simple." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -125,34 +128,58 @@ into R data packages simple." />
     </div>
 
     <div class="ref-description">
-    <p>Utitlity functions to keep the installation of indexed CWB corpora wrapped
-into R data packages simple.</p>
+    <p>Utility functions to assist the installation and management of indexed CWB
+corpora.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>corpus_install</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"http://polmine.sowi.uni-due.de/packages"</span>, <span class='kw'>tarball</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lib</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths</a></span>()[<span class='fl'>1</span>], <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>corpus_install</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>repo</span> <span class='kw'>=</span> <span class='st'>"https://PolMine.github.io/drat/"</span>,
+  <span class='kw'>tarball</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>doi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lib</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths</a></span>()[<span class='fl'>1</span>],
+  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='kw pkg'>cwbtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/cwbtools/man/directories.html'>cwb_registry_dir</a></span>(),
+  <span class='kw'>corpus_dir</span> <span class='kw'>=</span> <span class='fu'><a href='directories.html'>cwb_corpus_dir</a></span>(<span class='no'>registry_dir</span>),
+  <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)
 
 <span class='fu'>corpus_packages</span>()
 
-<span class='fu'>corpus_rename</span>(<span class='no'>old</span>, <span class='no'>new</span>, <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>corpus_rename</span>(
+  <span class='no'>old</span>,
+  <span class='no'>new</span>,
+  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
-<span class='fu'>corpus_remove</span>(<span class='no'>corpus</span>, <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>))
+<span class='fu'>corpus_remove</span>(<span class='no'>corpus</span>, <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='directories.html'>cwb_registry_dir</a></span>(), <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>())
 
-<span class='fu'>corpus_as_tarball</span>(<span class='no'>corpus</span>, <span class='no'>registry_dir</span>, <span class='no'>tarfile</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>corpus_as_tarball</span>(<span class='no'>corpus</span>, <span class='no'>registry_dir</span>, <span class='no'>data_dir</span>, <span class='no'>tarfile</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>corpus_copy</span>(<span class='no'>corpus</span>, <span class='no'>registry_dir</span>, <span class='kw'>data_dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>registry_dir_new</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
-  <span class='st'>"cwb"</span>, <span class='st'>"registry"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
-  <span class='kw'>data_dir_new</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
-  <span class='st'>"cwb"</span>, <span class='st'>"indexed_corpora"</span>, <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>corpus</span>), <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(), <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>corpus_copy</span>(
+  <span class='no'>corpus</span>,
+  <span class='no'>registry_dir</span>,
+  <span class='kw'>data_dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>registry_dir_new</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>), <span class='st'>"cwb"</span>,
+    <span class='st'>"registry"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
+  <span class='kw'>data_dir_new</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>), <span class='st'>"cwb"</span>,
+    <span class='st'>"indexed_corpora"</span>, <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span>(<span class='no'>corpus</span>), <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
-<span class='fu'>corpus_recode</span>(<span class='no'>corpus</span>, <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
+<span class='fu'>corpus_recode</span>(
+  <span class='no'>corpus</span>,
+  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
   <span class='kw'>data_dir</span> <span class='kw'>=</span> <span class='fu'><a href='registry_file.html'>registry_file_parse</a></span>(<span class='no'>corpus</span>, <span class='no'>registry_dir</span>)<span class='kw'>[[</span><span class='st'>"home"</span>]],
-  <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(), <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"latin1"</span>, <span class='st'>"UTF-8"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(),
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"latin1"</span>, <span class='st'>"UTF-8"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,8 +197,28 @@ into R data packages simple.</p>
       <td><p>The URL or local path to a tarball with a CWB indexed corpus.</p></td>
     </tr>
     <tr>
+      <th>doi</th>
+      <td><p>The DOI (Digital Object Identifier) of a corpus deposited at
+Zenodo, presented as a hyperlink. (For testing purposes, use
+("https://doi.org/10.5281/zenodo.3748858".)</p></td>
+    </tr>
+    <tr>
       <th>lib</th>
       <td><p>Directory for R packages, defaults to <code>.libPaths()[1]</code>.</p></td>
+    </tr>
+    <tr>
+      <th>registry_dir</th>
+      <td><p>Directory of registry.</p></td>
+    </tr>
+    <tr>
+      <th>corpus_dir</th>
+      <td><p>The directory that contains the data directories of indexed
+corpora.</p></td>
+    </tr>
+    <tr>
+      <th>ask</th>
+      <td><p>A <code>logical</code> value, whether to ask user for confirmation
+before removing a corpus.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -200,20 +247,16 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
       <td><p>Name of the (new) corpus.</p></td>
     </tr>
     <tr>
-      <th>registry_dir</th>
-      <td><p>Directory of registry.</p></td>
-    </tr>
-    <tr>
       <th>corpus</th>
       <td><p>A CWB corpus.</p></td>
     </tr>
     <tr>
-      <th>tarfile</th>
-      <td><p>Filename of tarball.</p></td>
-    </tr>
-    <tr>
       <th>data_dir</th>
       <td><p>The data directory where the files of the CWB corpus live.</p></td>
+    </tr>
+    <tr>
+      <th>tarfile</th>
+      <td><p>Filename of tarball.</p></td>
     </tr>
     <tr>
       <th>registry_dir_new</th>
@@ -237,22 +280,64 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Logical value <code>TRUE</code> if installation has been successful.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A data package with a CWB corpus is assumed to include a directory
-  <code>/extdata/cwb/registry</code> for registry files and a directory
-  <code>/extdata/cwb/indexed_corpora</code> for the inexed corpus files. The
-  <code>corpus_install</code> function combines two steps necessary to install a
-  CWB corpus. First, it calls <code>install.packages</code>, then it resets the
-  path pointing to the directory with the indexed corpus files in the
-  registry file. The package will be installed to the standard library
-  directory for installing R packages (<code>.libPaths()[1]</code>). Another
-  location can be used by stating the param 'lib' explicitly (see
-  documentation for <code><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></code>).
-  The function can also be used to install a corpus from a password protected
-  repository. Further parameters are handed over to install.packages, so you
-  might add <code>method = "wget" extra = "--user donald --password duck"</code>.
-  See examples how to check whether the directory has been set correctly.</p>
+    <p>A CWB corpus consists a set of binary files with corpus data 
+  kept together in a data directory, and a registry file, which is a
+  plain test file that details the corpus id, corpus properties, 
+  structural and positional attributes. The registry file also specifies
+  the path to the corpus data directory. Typically, the registry directory
+  and a corpus directory with the data directories for individual corpora
+  are within one parent folder (which might be called "cwb" by default).
+  See the following stylized directory structure.</p>
+<pre>
+  .
+  |- registry/
+  |  |- corpus1 
+  |  +- corpus2
+  |
+  + indexed_corpora/
+    |- corpus1/
+    |  |- file1
+    |  |- file2
+    |  +- file3
+    |
+    +- corpus2/
+       |- file1
+       |- file2
+       +- file3
+</pre>
+
+<p>The <code>corpus_install</code> function will assist the installation of a
+  corpus. The following scenarios are offered:</p><ul>
+<li><p>If argument <code>tarball</code> is a local tarball, the tarball will
+  be extracted and files will be moved.</p></li>
+<li><p>If <code>tarball</code> is a URL, the tarball will be downloaded from
+  the online location. It is possible to state user credentials using the
+  arguments <code>user</code> and <code>password</code>. Then the aforementioned
+  installation (scenario 1) is executed. If argument <code>pkg</code> is the
+  name of an installed package, corpus files will be moved into this 
+  package.</p></li>
+<li><p>If argument <code>doi</code> is Document Object Identifier (DOI), the URL
+  from which a corpus tarball can be downloaded is derived from the
+  information available at that location. The tarball is downloaded and the
+  corpus installed. If argument <code>pkg</code> is defined, files will be moved
+  into a R package, the syste registry and corpus directories are used
+  otherwise. Note that at this stage, it is assumed that the DOI has been
+  awarded by <a href='Zenodo'>https://zenodo.org/</a></p></li>
+<li><p>If argument <code>pkg</code> is provided and specifies an R package (and
+  <code>tarball</code> is <code>NULL</code>), the corpus package available at a
+  CRAN-style repository specified by argument <code>repo</code> will be installed.
+  Internally, the <code>install.packages</code> function is called and further
+  arguments can be passed into this function call. This can be used to pass
+  user credentials, e.g. by adding <code>method = "wget" extra = "--user
+  donald --password duck"</code>.</p></li>
+</ul><p>If the corpus to be installed is already available, a dialogue will ask the
+user whether an existing corpus shall be deleted and installed anew, if
+argument <code>ask</code> is <code>TRUE</code>.</p>
 <p><code>corpus_packages</code> will detect the packages that include CWB
   corpora. Note that the directory structure of all installed packages is
   evaluated which may be slow on network-mounted file systems.</p>
@@ -356,6 +441,7 @@ for switching to a packaged corpus.</p></div>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>

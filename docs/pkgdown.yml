@@ -3,5 +3,6 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   europarl: europarl.html
+  sentences: sentences.html
   vignette: vignette.html
 

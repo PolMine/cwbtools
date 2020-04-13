@@ -70,7 +70,7 @@ tokens (the token stream)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -94,6 +94,9 @@ tokens (the token stream)." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -129,12 +132,24 @@ tokens (the token stream)." />
 tokens (the token stream).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>p_attribute_encode</span>(<span class='no'>token_stream</span>, <span class='kw'>p_attribute</span> <span class='kw'>=</span> <span class='st'>"word"</span>, <span class='no'>registry_dir</span>,
-  <span class='no'>corpus</span>, <span class='no'>data_dir</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"R"</span>, <span class='st'>"CWB"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='fu'><a href='get_encoding.html'>get_encoding</a></span>(<span class='no'>token_stream</span>), <span class='kw'>compress</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>p_attribute_encode</span>(
+  <span class='no'>token_stream</span>,
+  <span class='kw'>p_attribute</span> <span class='kw'>=</span> <span class='st'>"word"</span>,
+  <span class='no'>registry_dir</span>,
+  <span class='no'>corpus</span>,
+  <span class='no'>data_dir</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"R"</span>, <span class='st'>"CWB"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='fu'><a href='get_encoding.html'>get_encoding</a></span>(<span class='no'>token_stream</span>),
+  <span class='kw'>compress</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
-<span class='fu'>p_attribute_recode</span>(<span class='no'>data_dir</span>, <span class='no'>p_attribute</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"UTF-8"</span>, <span class='st'>"latin1"</span>),
-  <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"UTF-8"</span>, <span class='st'>"latin1"</span>))</pre>
+<span class='fu'>p_attribute_recode</span>(
+  <span class='no'>data_dir</span>,
+  <span class='no'>p_attribute</span>,
+  <span class='kw'>from</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"UTF-8"</span>, <span class='st'>"latin1"</span>),
+  <span class='kw'>to</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"UTF-8"</span>, <span class='st'>"latin1"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -239,7 +254,7 @@ and will reset the encoding in the registry file.</p>
   <span class='kw'>compress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='st'>"utf8"</span>
   )</div><div class='output co'>#&gt; <span class='message'>... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span></div><div class='output co'>#&gt; <span class='message'>... creating indices (in memory)</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.corpus</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon.idx</span></div><div class='output co'>#&gt; <span class='message'>... creating data for new registry file</span></div><div class='output co'>#&gt; <span class='message'>... writing registry file</span></div><div class='output co'>#&gt; === Makeall: processing corpus reuters ===
-#&gt; Registry directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/registry
+#&gt; Registry directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/registry
 #&gt; ATTRIBUTE word
 #&gt;  - lexicon      OK
 #&gt;  - frequencies  OK

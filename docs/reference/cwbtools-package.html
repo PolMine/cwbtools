@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -93,6 +93,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -132,15 +135,15 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <a href='http://cwb.sourceforge.net/'><em>Corpus Workbench</em></a> (CWB) offers
-a classic approach for working with large, linguistically and
-structurally annotated corpora that ensures memory efficiency and makes
-running  queries fast (Evert and Hardie 2011). Technically, indexing and
-compressing corpora as suggested by Witten et al. (1999) is the approach
-implemented in the design of the CWB (Christ 1994).</p>
-<p>The maturity of the CWB and the efficiency of the original C implementation
-notwithstanding, both the convenience and the flexibility of traditional CWB
-command line tools is limited. Restrictions to the portability of code across
-platforms inhibits the ideal of reproducible research.</p> 
+a classic approach for working with large, linguistically and structurally
+annotated corpora. Its design ensures memory efficiency and makes running
+queries fast (Evert and Hardie 2011). Technically, indexing and compressing
+corpora as suggested by Witten et al. (1999) is the approach implemented by
+the CWB (Christ 1994).</p>
+<p>The C implementation of the CWB is mature and efficient. However, the
+convenience and flexibility of traditional CWB command line tools is limited.
+These tools are not portable across platforms, inhibiting the ideal of
+reproducible research.</p> 
 <p>The 'cwbtools' package combines portable pure R tools to create indexed
 corpus files and convenience wrappers for the original C implementation of
 CWB as exposed by the

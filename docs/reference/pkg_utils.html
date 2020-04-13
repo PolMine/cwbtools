@@ -71,7 +71,7 @@ with the data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -95,6 +95,9 @@ with the data." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -133,18 +136,32 @@ with the data.</p>
 
     <pre class="usage"><span class='fu'>pkg_create_cwb_dirs</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>pkg_add_corpus</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='no'>corpus</span>,
-  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>pkg_add_corpus</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='no'>corpus</span>,
+  <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='fu'>pkg_add_configure_scripts</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>)
 
-<span class='fu'>pkg_add_description</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"0.0.1"</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(), <span class='no'>author</span>, <span class='kw'>maintainer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>license</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>pkg_add_description</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"0.0.1"</span>,
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span>(),
+  <span class='no'>author</span>,
+  <span class='kw'>maintainer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>license</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
-<span class='fu'>pkg_add_creativecommons_license</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>license</span> <span class='kw'>=</span> <span class='st'>"CC-BY-NC-SA"</span>,
-  <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"cwbtools"</span>, <span class='st'>"txt"</span>, <span class='st'>"licenses"</span>,
-  <span class='st'>"CC_BY-NC-SA_3.0.txt"</span>))
+<span class='fu'>pkg_add_creativecommons_license</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='kw'>license</span> <span class='kw'>=</span> <span class='st'>"CC-BY-NC-SA"</span>,
+  <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"cwbtools"</span>, <span class='st'>"txt"</span>, <span class='st'>"licenses"</span>, <span class='st'>"CC_BY-NC-SA_3.0.txt"</span>)
+)
 
 <span class='fu'>pkg_add_gitattributes_file</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
 
@@ -238,7 +255,7 @@ the package defined by <code>pkg</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>pkgdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
-<span class='fu'>pkg_create_cwb_dirs</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)</div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/R</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/man</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst/extdata</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst/extdata/cwb</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst/extdata/cwb/registry</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst/extdata/cwb/indexed_corpora</span></div><div class='input'><span class='fu'>pkg_add_description</span>(
+<span class='fu'>pkg_create_cwb_dirs</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)</div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/R</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/man</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst/extdata</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst/extdata/cwb</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst/extdata/cwb/registry</span></div><div class='output co'>#&gt; <span class='message'>... creating directory: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst/extdata/cwb/indexed_corpora</span></div><div class='input'><span class='fu'>pkg_add_description</span>(
   <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>,
   <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"reuters"</span>,
   <span class='kw'>author</span> <span class='kw'>=</span> <span class='st'>"cwbtools"</span>,
@@ -246,7 +263,7 @@ the package defined by <code>pkg</code>.</p>
  )</div><div class='output co'>#&gt; <span class='message'>... creating DESCRIPTION file</span></div><div class='input'><span class='fu'>pkg_add_corpus</span>(
   <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='st'>"REUTERS"</span>,
   <span class='kw'>registry</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RcppCWB"</span>, <span class='st'>"extdata"</span>, <span class='st'>"cwb"</span>, <span class='st'>"registry"</span>)
-)</div><div class='output co'>#&gt; <span class='message'>... directory for indexed corpus does not yet exist, creating: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpJ2Ebt6/inst/extdata/cwb/indexed_corpora/reuters</span></div><div class='output co'>#&gt; <span class='message'>... copying registry file</span></div><div class='output co'>#&gt; <span class='message'>... copying data files</span></div><div class='output co'>#&gt; <span class='message'>... adjusting paths in registry file</span></div><div class='input'><span class='fu'>pkg_add_gitattributes_file</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)
+)</div><div class='output co'>#&gt; <span class='message'>... directory for indexed corpus does not yet exist, creating: /private/var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T/RtmpLexl5z/inst/extdata/cwb/indexed_corpora/reuters</span></div><div class='output co'>#&gt; <span class='message'>... copying registry file</span></div><div class='output co'>#&gt; <span class='message'>... copying data files</span></div><div class='output co'>#&gt; <span class='message'>... adjusting paths in registry file</span></div><div class='input'><span class='fu'>pkg_add_gitattributes_file</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)
 <span class='fu'>pkg_add_configure_scripts</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)
 <span class='fu'>pkg_add_creativecommons_license</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='no'>pkgdir</span>)</div></pre>
   </div>

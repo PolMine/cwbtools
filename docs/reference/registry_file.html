@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -93,6 +93,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -131,12 +134,22 @@
 
 <span class='fu'>registry_file_compose</span>(<span class='no'>x</span>)
 
-<span class='fu'>registry_data</span>(<span class='no'>name</span>, <span class='no'>id</span>, <span class='no'>home</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>home</span>, <span class='st'>".info"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span>
-  <span class='st'>"/"</span>), <span class='kw'>properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>charset</span> <span class='kw'>=</span> <span class='st'>"utf-8"</span>), <span class='no'>p_attributes</span>,
-  <span class='kw'>s_attributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+<span class='fu'>registry_data</span>(
+  <span class='no'>name</span>,
+  <span class='no'>id</span>,
+  <span class='no'>home</span>,
+  <span class='kw'>info</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>home</span>, <span class='st'>".info"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
+  <span class='kw'>properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>charset</span> <span class='kw'>=</span> <span class='st'>"utf-8"</span>),
+  <span class='no'>p_attributes</span>,
+  <span class='kw'>s_attributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>registry_file_write</span>(<span class='no'>data</span>, <span class='no'>corpus</span>,
-  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>), <span class='no'>...</span>)</pre>
+<span class='fu'>registry_file_write</span>(
+  <span class='no'>data</span>,
+  <span class='no'>corpus</span>,
+  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"CORPUS_REGISTRY"</span>),
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

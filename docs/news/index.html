@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -91,6 +91,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
     </li>
     <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
@@ -120,9 +123,40 @@
       
     </div>
 
+    <div id="cwbtools-020" class="section level1">
+<h1 class="page-header">
+<a href="#cwbtools-020" class="anchor"></a>cwbtools 0.2.0<small> Unreleased </small>
+</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>The <code>install_corpus()</code> function has been reworked thoroughly. Using system directories for the registry and the corpus directory is now supported. This is a prerequisite that corpora can be installed outside of R packages Installing corpora within corpora is not allowed by CRAN.</li>
+<li>A set of new auxiliary functions (<code><a href="../reference/directories.html">cwb_directories()</a></code>, <code><a href="../reference/directories.html">cwb_registry_dir()</a></code>, <code><a href="../reference/directories.html">cwb_corpus_dir()</a></code>) will get the whereabouts of the registry directory and the corpus directory. In particular, they consider that the polmineR package may have generated a temporary corpus registry, resetting the CORPUS_REGISTRY environment variable.</li>
+<li>The <code>install_corpus()</code> function accepts an argument <code>doi</code> to provide a Document Object Identifier (DOI). At this stage, the DOI is assumed to be awarded by <a href="https://zenodo.org/">Zenodo</a>. Information available at the Zenodo site will be resolved to get the URL of a corpus tarball that can be downloaded. Upon installing a corpus from Zenodo, the DOI and the version number will be written as corpus properties into the registry file.</li>
+<li>To avoid removing corpora accidentally, the <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function will ask the user for feedback if a corpus would be installed that is already present and that would be deleted or overwritten.</li>
+<li>New auxiliary functions <code>create_cwb_directories</code> and <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> will assist users to create the required directory structure for CWB indexed corpora.</li>
+</ul>
+</div>
+<div id="minor-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<ul>
+<li>The default value of the argument “repo” that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account (“<a href="https://PolMine.github.io/drat/" class="uri">https://PolMine.github.io/drat/</a>”).</li>
+</ul>
+</div>
+<div id="documentation-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation-fixes" class="anchor"></a>DOCUMENTATION FIXES</h2>
+<ul>
+<li>New R6 Roxygen documentation used for documenting the <code>CorpusData</code> class.</li>
+<li>A (preliminary) vignette has been added that explains how to add a sentence annotation can be added to an existing indexed corpus.</li>
+</ul>
+</div>
+</div>
     <div id="cwbtools-012" class="section level1">
 <h1 class="page-header">
-<a href="#cwbtools-012" class="anchor"></a>cwbtools 0.1.2<small> Unreleased </small>
+<a href="#cwbtools-012" class="anchor"></a>cwbtools 0.1.2<small> 2019-12-17 </small>
 </h1>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
@@ -136,9 +170,9 @@
 <h1 class="page-header">
 <a href="#cwbtools-011" class="anchor"></a>cwbtools 0.1.1<small> 2019-12-09 </small>
 </h1>
-<div id="minor-improvements" class="section level2">
+<div id="minor-improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
 <li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (#11).</li>
 </ul>
@@ -150,9 +184,9 @@
 <li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code><a href="https://rdrr.io/r/base/length.html">length(class(matrix(1:4,2,2)))</a></code> will return the value 2.</li>
 </ul>
 </div>
-<div id="documentation-fixes" class="section level2">
+<div id="documentation-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-fixes" class="anchor"></a>DOCUMENTATION FIXES</h2>
+<a href="#documentation-fixes-1" class="anchor"></a>DOCUMENTATION FIXES</h2>
 <ul>
 <li>The NEWS file now follows the styleguide such that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code> will generate a proper changelog page.</li>
 </ul>
@@ -279,6 +313,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#cwbtools-020">0.2.0</a></li>
         <li><a href="#cwbtools-012">0.1.2</a></li>
         <li><a href="#cwbtools-011">0.1.1</a></li>
         <li><a href="#cwbtools-010">0.1.0</a></li>
