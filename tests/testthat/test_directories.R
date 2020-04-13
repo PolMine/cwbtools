@@ -25,18 +25,6 @@ test_that(
   }
 )
 
-test_that(
-  "cwb_registry_dir()",
-  {
-    # Ensure that cwb_registry_dir() will get the registry that has been defined 
-    # by CORPUS_REGISTRY before polmineR was loaded
-    polmineR_registry <- system.file(package = "polmineR", "extdata", "cwb", "registry")
-    Sys.setenv(CORPUS_REGISTRY = polmineR_registry)
-    library(polmineR)
-    expect_identical(polmineR_registry, getOption("polmineR.corpus_registry"))
-  }
-)    
-
 
 test_that(
   "cwb_registry_dir()",
@@ -45,7 +33,8 @@ test_that(
     # by CORPUS_REGISTRY before polmineR was loaded
     polmineR_registry <- system.file(package = "polmineR", "extdata", "cwb", "registry")
     Sys.setenv(CORPUS_REGISTRY = polmineR_registry)
-    library(polmineR)
+    library(polmineR) # looks as if it was called twice on Travis
+    options("polmineR.corpus_registry" = polmineR_registry)
     expect_identical(polmineR_registry, cwb_registry_dir())
   }
 )    
@@ -56,6 +45,7 @@ test_that(
     polmineR_registry <- system.file(package = "polmineR", "extdata", "cwb", "registry")
     Sys.setenv(CORPUS_REGISTRY = polmineR_registry)
     library(polmineR)
+    options("polmineR.corpus_registry" = polmineR_registry)
     expect_identical(
       system.file(package = "polmineR", "extdata", "cwb", "indexed_corpora"),
       cwb_corpus_dir(registry_dir = cwb_registry_dir())

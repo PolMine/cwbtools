@@ -37,14 +37,24 @@
 #'   \item{If \code{tarball} is a URL, the tarball will be downloaded from
 #'   the online location. It is possible to state user credentials using the
 #'   arguments \code{user} and \code{password}. Then the aformementioned
-#'   installation (scenario 1) is executed.}
+#'   installation (scenario 1) is executed. If argument \code{pkg} is the
+#'   name of an installed package, corpus files will be moved into this 
+#'   package.}
 #'   \item{If argument \code{doi} is Document Object Identifier (DOI), the URL
 #'   from which a corpus tarball can be downloaded is derived from the
 #'   information available at that location. The tarball is downloaded and the
-#'   corpus installed. Note that at this stage, it is assumed that the DOI has
-#'   been awarded by \href{Zenodo}{https://zenodo.org/}}
-#'   \item{If argument \code{pkg} is provided (a length-one \code{character} vector
-#'   that specifies a package) and \code{tarball} is \code{NULL}, }
+#'   corpus installed. If argument \code{pkg} is defined, files will be moved
+#'   into a R package, the syste registry and corpus directories are used
+#'   otherwise. Note that at this stage, it is assumed that the DOI has been
+#'   awarded by \href{Zenodo}{https://zenodo.org/}}
+#'   \item{If argument \code{pkg} is provided and specifies an R package (and
+#'   \code{tarball} is \code{NULL}), the corpus package available at a
+#'   CRAN-style repository specified by argument \code{repo} will be installed.
+#'   Internally, the \code{install.packages} function is called and further
+#'   arguments can be passed into this function call. This can be used to pass
+#'   user credentials, e.g. by adding \code{method = "wget" extra = "--user
+#'   donald --password duck"}.
+#'   }
 #' }   
 #' If the corpus to be installed is already available, a dialogue will ask the
 #' user whether an existing corpus shall be deleted and installed anew, if
