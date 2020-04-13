@@ -1,21 +1,16 @@
 #' Install and manage corpora. 
 #' 
-#' Utility functions to assist the installation of indexed CWB corpora. 
+#' Utility functions to assist the installation and management of indexed CWB
+#' corpora.
 #' 
-#' @details A data package with a CWB corpus is assumed to include a directory
-#'   \code{/extdata/cwb/registry} for registry files and a directory
-#'   \code{/extdata/cwb/indexed_corpora} for the indexed corpus files. The
-#'   \code{corpus_install} function combines two steps necessary to install a
-#'   CWB corpus. First, it calls \code{install.packages}, then it resets the
-#'   path pointing to the directory with the indexed corpus files in the
-#'   registry file. The package will be installed to the standard library
-#'   directory for installing R packages (\code{.libPaths()[1]}). Another
-#'   location can be used by stating the param 'lib' explicitly (see
-#'   documentation for \code{\link{install.packages}}).
-#'   The function can also be used to install a corpus from a password protected
-#'   repository. Further parameters are handed over to install.packages, so you
-#'   might add \code{method = "wget" extra = "--user donald --password duck"}.
-#'   See examples how to check whether the directory has been set correctly.
+#' @details A CWB corpus consists a set of binary files with corpus data 
+#'   kept together in a data directory, and a registry file, which is a
+#'   plain test file that details the corpus id, corpus properties, 
+#'   structural and positional attributes. The registry file also specifies
+#'   the path to the corpus data directory. Typically, the registry directory
+#'   and a corpus directory with the data directories for individual corpora
+#'   are within one parent folder (which might be called "cwb" by default).
+#'   See the following stylized directory structure.
 #' @details 
 #' \preformatted{
 #'   .
@@ -34,6 +29,11 @@
 #'        |- file2
 #'        +- file3
 #' }
+#' @details The \code{corpus_install} function 
+#' 
+#' Further parameters are handed over to install.packages, so you
+#'   might add \code{method = "wget" extra = "--user donald --password duck"}.
+#'   See examples how to check whether the directory has been set correctly.
 #' @param old Name of the (old) corpus.
 #' @param new Name of the (new) corpus.
 #' @param pkg Name of the data package.

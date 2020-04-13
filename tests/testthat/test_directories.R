@@ -1,6 +1,13 @@
 testthat::context("create CWB directories")
 
 test_that(
+  "is polmineR loaded?",
+  {
+    expect_null(getOption("polmineR.corpus_registry"))
+  }
+)
+
+test_that(
   "cwb_registry_dir() - NULL if CORPUS_REGISTRY unset",
   {
     Sys.setenv(CORPUS_REGISTRY = "")
