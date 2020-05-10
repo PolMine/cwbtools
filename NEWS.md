@@ -1,3 +1,19 @@
+cwbtools 0.2.0.9001
+===================
+
+## MINOR IMPROVEMENTS
+
+* Extracting the version number from the corpus tarball is somewhat more forgiving if the
+version number does not start with "v".
+
+## BUG FIXES
+
+* The json string returned from Zenodo may include newline strings that are escaped such
+that they cannot be processed by `jsonlite::fromJSON()`. The auxiliary function to get and 
+process information from Zenodo now ensures that newline characters are escaped such that 
+they can be processed.
+
+
 cwbtools 0.2.0
 ==============
 

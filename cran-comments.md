@@ -4,6 +4,7 @@ New auxiliary functionality to download corpus data from open archives and
 to install it locally. This release will be a prerequisite for other packages
 that provide access to corpus data at open science repositories. 
 
+Update: A remaining invalid URL in a man page has been corrected.
 
 ## Test environments
 

@@ -162,7 +162,7 @@ The \code{corpus_install} function will assist the installation of a
   corpus installed. If argument \code{pkg} is defined, files will be moved
   into a R package, the syste registry and corpus directories are used
   otherwise. Note that at this stage, it is assumed that the DOI has been
-  awarded by \href{Zenodo}{https://zenodo.org/}}
+  awarded by \href{https://zenodo.org/}{Zenodo}}
   \item{If argument \code{pkg} is provided and specifies an R package (and
   \code{tarball} is \code{NULL}), the corpus package available at a
   CRAN-style repository specified by argument \code{repo} will be installed.

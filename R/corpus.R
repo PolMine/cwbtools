@@ -46,7 +46,7 @@
 #'   corpus installed. If argument \code{pkg} is defined, files will be moved
 #'   into a R package, the syste registry and corpus directories are used
 #'   otherwise. Note that at this stage, it is assumed that the DOI has been
-#'   awarded by \href{Zenodo}{https://zenodo.org/}}
+#'   awarded by \href{https://zenodo.org/}{Zenodo}}
 #'   \item{If argument \code{pkg} is provided and specifies an R package (and
 #'   \code{tarball} is \code{NULL}), the corpus package available at a
 #'   CRAN-style repository specified by argument \code{repo} will be installed.
@@ -127,7 +127,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       }
       zenodo_info <- .zenodo_info(doi = doi)
       tarball <- grep(
-        "^.*?_v\\d+\\.\\d+\\.\\d+\\.tar\\.gz$",
+        "^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$",
         zenodo_info[["files"]][["links"]][["self"]],
         value = TRUE
       )
@@ -149,12 +149,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
   if (length(tarball) == 1L){
     
     # Ask user before overwriting existing corpus ----------------
-    corpus <- gsub("^(.*?)(_v\\d+\\.\\d+\\.\\d+|)\\.tar\\.gz$", "\\1", basename(tarball))
+    corpus <- gsub("^(.*?)_(v|)(\\d+\\.\\d+\\.\\d+|)\\.tar\\.gz$", "\\1", basename(tarball))
     version <- if (exists("zenodo_info")){
       zenodo_info[["metadata"]][["version"]]
     } else {
-      if (grepl("^.*?_v\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(tarball))){
-        gsub("^.*?_(v\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "\\1", basename(tarball))
+      if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(tarball))){
+        gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "v\\2", basename(tarball))
       } else {
         "unknown"
       }
@@ -205,6 +205,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
     
     # Now download corpus -------------------
+    if (verbose) message(sprintf("... downloading corpus tarball: %s", tarball))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
