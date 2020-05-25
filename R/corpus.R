@@ -300,11 +300,11 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       # Resetting registry and copying registry file to polmineR's temporary registry, 
       # if polmineR is loaded necessary
       if (isNamespaceLoaded("polmineR")){
-        file.copy(
-          from = file.path(cwb_dirs[["registry_dir"]], tolower(corpus)),
-          to = file.path(polmineR::registry(), tolower(corpus)),
-          overwrite = TRUE
-        )
+        destfile <- file.path(cwb_dirs[["registry_dir"]], tolower(corpus))
+        targetfile <- file.path(polmineR::registry(), tolower(corpus))
+        if (destfile != targetfile){
+          file.copy(from = destfile, to = targetfile, overwrite = TRUE)
+        }
         polmineR::registry_reset(registryDir = polmineR::registry())
       }
 

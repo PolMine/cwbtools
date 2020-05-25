@@ -5,6 +5,7 @@ cwbtools 0.2.0.9001
 
 * Extracting the version number from the corpus tarball is somewhat more forgiving if the
 version number does not start with "v".
+* The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.
 
 ## BUG FIXES
 
