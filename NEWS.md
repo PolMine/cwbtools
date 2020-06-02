@@ -17,6 +17,7 @@ The initial usage is to generate info files that include an updated DOI.
 * Extracting the version number from the corpus tarball is somewhat more forgiving if the
 version number does not start with "v".
 * The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.
+* To remedy the fairly common error that the path to the info file is not stated correctly in the registry file, a fallback mechanism will look up potential alternatives to an info file stated wrongly. 
 
 ## BUG FIXES
 

@@ -55,16 +55,13 @@ as_bibentry <- function (x) UseMethod("as_bibentry", x)
 as_bibentry.zenodo_record_metadata <- function(x){
   
   # Extract information from incoming object
-  authors <- paste(
-    apply(
-      do.call(rbind, strsplit(x[["metadata"]][["creators"]][["name"]], split = "\\s*,\\s*"))[,c(2,1)],
-      1,
-      function(x) paste(x, collapse = " ")
-    ), collapse = " and ")
+  authors_raw <- do.call(rbind, strsplit(x[["metadata"]][["creators"]][["name"]], split = "\\s*,\\s*"))[,c(2,1)]
+  if (!is.matrix(authors_raw)) authors_raw <- matrix(authors_raw, ncol = 2)
+  authors <- paste(apply(authors_raw, 1, function(x) paste(x, collapse = " ")), collapse = " and ")
   year <- format(as.Date(x[["metadata"]][["publication_date"]]), "%Y")
   title <- x[["metadata"]][["title"]]
   version <- x[["metadata"]][["version"]]
-  doi_http <- x[["links"]][["self"]]
+  doi_http <- x[["links"]][["doi"]]
   
   txt_version <- sprintf(
     "%s (%s): %s (%s) [Data set]. Zenodo. %s.",

@@ -542,7 +542,28 @@ corpus_copy <- function(
   if (verbose) message(sprintf("... creating copy of adjusted registry file"))
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   rf[["home"]] <- data_dir_new
+  
+  
+  # It is a common mistake that the info file is not stated correctly in the registry file,
+  # so this is a forgiving solution to remedy errors
+  info_file_old <- file.path(data_dir, basename(rf[["info"]]))
+  if (!file.exists(info_file_old)){
+    info_file_guessed <- grep(
+      "^.*?/(|\\.)info(\\.md|)$",
+      list.files(data_dir, full.names = TRUE),
+      value = TRUE
+    )[1]
+    if (verbose){
+      message(
+        "... info file stated in registry does not exist, ",
+        "using the following file which likely to be an info file: ",
+        info_file_guessed
+      )
+    }
+    rf[["info"]] <- info_file_guessed
+  }
   rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
+  
   registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
   
   if (verbose) message(sprintf("... copying data files"))
