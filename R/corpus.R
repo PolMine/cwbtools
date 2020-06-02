@@ -92,6 +92,7 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils menu
 #' @importFrom stringi stri_enc_mark
+#' @importFrom tools file_path_sans_ext
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
@@ -125,7 +126,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         stop("Argument 'doi' is expected to offer a DOI (Digital Object Identifier) that refers to data",
              "hosted with zenodo, i.e. starting with 10.5281/zenodo.")
       }
-      zenodo_info <- .zenodo_info(doi = doi)
+      zenodo_info <- get_zenodo_record_metadata(doi = doi)
       tarball <- grep(
         "^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$",
         zenodo_info[["files"]][["links"]][["self"]],
@@ -264,6 +265,30 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
       tmp_home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
+      
+      
+      # The primary purpose of 
+      rmd_files <- Sys.glob(paths = file.path(tmp_home_dir, "*.Rmd"))
+      if (length(rmd_files) > 0L){
+        if (requireNamespace(package = "rmarkdown")){
+          for (rmd_file in rmd_files){
+            if (isTRUE(verbose)) message("... rendering Rmarkdown file: ", basename(rmd_file))
+            rmarkdown::render(
+              input = rmd_file,
+              output_file = paste(tools::file_path_sans_ext(rmd_file), "md", sep = "."),
+              output_format = rmarkdown::md_document(preserve_yaml = FALSE),
+              params = list(doi = doi)
+            )
+          }
+        } else {
+          warning(
+            "Rmarkdown files present in the home directory of the corpus, but package 'rmarkdown' ",
+            "is not installed. Cannot render the Rmarkdown files."
+          )
+        }
+      }
+      
+      
       if (.Platform$OS.type == "windows" && stri_enc_mark(tmp_home_dir) != "ASCII")
         tmp_home_dir <- utils::shortPathName(tmp_home_dir)
       registry_data[["home"]] <- tmp_home_dir
@@ -517,6 +542,7 @@ corpus_copy <- function(
   if (verbose) message(sprintf("... creating copy of adjusted registry file"))
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   rf[["home"]] <- data_dir_new
+  rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
   registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
   
   if (verbose) message(sprintf("... copying data files"))

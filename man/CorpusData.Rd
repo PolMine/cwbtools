@@ -118,6 +118,7 @@ be generated using method \code{$add_corpus_positions()}.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a new instance of class \code{CorpusData}.
 \subsection{Usage}{
@@ -130,6 +131,7 @@ A class \code{CorpusData} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print summary of \code{CorpusData} object.
 \subsection{Usage}{
@@ -139,6 +141,7 @@ Print summary of \code{CorpusData} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-tokenize"></a>}}
+\if{latex}{\out{\hypertarget{method-tokenize}{}}}
 \subsection{Method \code{tokenize()}}{
 Simple tokenization of text in chunktable.
 \subsection{Usage}{
@@ -159,6 +162,7 @@ Simple tokenization of text in chunktable.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-import_xml"></a>}}
+\if{latex}{\out{\hypertarget{method-import_xml}{}}}
 \subsection{Method \code{import_xml()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CorpusData$import_xml(
@@ -195,6 +199,7 @@ The \code{CorpusData} object is returned invisibly.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_corpus_positions"></a>}}
+\if{latex}{\out{\hypertarget{method-add_corpus_positions}{}}}
 \subsection{Method \code{add_corpus_positions()}}{
 Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
 \code{cpos_right} to metadata.
@@ -212,6 +217,7 @@ Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-purge"></a>}}
+\if{latex}{\out{\hypertarget{method-purge}{}}}
 \subsection{Method \code{purge()}}{
 Remove patterns from chunkdata that are known to cause problems. This is
 done most efficiently at the chunkdata level of data preparation as the
@@ -233,6 +239,7 @@ tokenization/annotation has been performed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-encode"></a>}}
+\if{latex}{\out{\hypertarget{method-encode}{}}}
 \subsection{Method \code{encode()}}{
 Encode corpus. If the corpus already exists, it will be removed.
 \subsection{Usage}{
@@ -275,6 +282,7 @@ Encode corpus. If the corpus already exists, it will be removed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

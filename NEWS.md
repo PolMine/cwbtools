@@ -1,5 +1,16 @@
-cwbtools 0.2.0.9001
+cwbtools 0.2.0.9003
 ===================
+
+## NEW FEATURES
+
+* A new function `get_zenodo_record_metadata()` will get information available for a 
+Zenodo record and return a `zenodo_record_metadata` object. A `as_bibentry()` method 
+is available to turn this information into a `bibentry`-class object which can be used
+easily to generate a recommended citation.
+* When performing updates on a downloaded corpus, the `corpus_install()` function will 
+look for Rmarkdown files (file extension .Rmd) in the home directory and render the files.
+The initial usage is to generate info files that include an updated DOI.
+
 
 ## MINOR IMPROVEMENTS
 
@@ -13,6 +24,7 @@ version number does not start with "v".
 that they cannot be processed by `jsonlite::fromJSON()`. The auxiliary function to get and 
 process information from Zenodo now ensures that newline characters are escaped such that 
 they can be processed.
+* The `corpus_copy()` function did not set the path to the info file to the new data directory - corrected.
 
 
 cwbtools 0.2.0
