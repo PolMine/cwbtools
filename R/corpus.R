@@ -65,8 +65,7 @@
 #' @param repo URL of the repository.
 #' @param tarball The URL or local path to a tarball with a CWB indexed corpus.
 #' @param doi The DOI (Digital Object Identifier) of a corpus deposited at
-#'   Zenodo, presented as a hyperlink. (For testing purposes, use
-#'   ("https://doi.org/10.5281/zenodo.3748858".)
+#'   Zenodo (e.g. "10.5281/zenodo.3748858".)
 #' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
 #' @param verbose Logical, whether to be verbose.
 #' @param ask A \code{logical} value, whether to ask for user input when
@@ -93,6 +92,7 @@
 #' @importFrom utils menu
 #' @importFrom stringi stri_enc_mark
 #' @importFrom tools file_path_sans_ext
+#' @importFrom zen4R ZenodoManager
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
@@ -122,16 +122,15 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       # Turn DOI into tarball
       
       if (is.null(doi)) stop("If argument 'tarball' is NULL, either argument 'pkg' or argument 'doi' are required.")
+      if (grepl("https://doi.org/", doi)) doi <- gsub("https://doi.org/", "", doi)
       if (isFALSE(grepl("^.*?10\\.5281/zenodo\\.\\d+$", doi))){
         stop("Argument 'doi' is expected to offer a DOI (Digital Object Identifier) that refers to data",
              "hosted with zenodo, i.e. starting with 10.5281/zenodo.")
       }
-      zenodo_info <- get_zenodo_record_metadata(doi = doi)
-      tarball <- grep(
-        "^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$",
-        zenodo_info[["files"]][["links"]][["self"]],
-        value = TRUE
-      )
+      zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi)
+      zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
+      tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
+      
       if (length(tarball) > 1L && isTRUE(ask)){
         userchoice <- utils::menu(
           choices = basename(tarball),
@@ -151,8 +150,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     
     # Ask user before overwriting existing corpus ----------------
     corpus <- gsub("^(.*?)_(v|)(\\d+\\.\\d+\\.\\d+|)\\.tar\\.gz$", "\\1", basename(tarball))
-    version <- if (exists("zenodo_info")){
-      zenodo_info[["metadata"]][["version"]]
+    version <- if (exists("zenodo_record")){
+      zenodo_record[["metadata"]][["version"]]
     } else {
       if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(tarball))){
         gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "v\\2", basename(tarball))
@@ -206,7 +205,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
     
     # Now download corpus -------------------
-    if (verbose) message(sprintf("... downloading corpus tarball: %s", tarball))
+    if (verbose) message(sprintf("... downloading corpus tarball (%s)", basename(tarball)))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
@@ -265,29 +264,6 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
       tmp_home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
-      
-      
-      # The primary purpose of 
-      rmd_files <- Sys.glob(paths = file.path(tmp_home_dir, "*.Rmd"))
-      if (length(rmd_files) > 0L){
-        if (requireNamespace(package = "rmarkdown")){
-          for (rmd_file in rmd_files){
-            if (isTRUE(verbose)) message("... rendering Rmarkdown file: ", basename(rmd_file))
-            rmarkdown::render(
-              input = rmd_file,
-              output_file = paste(tools::file_path_sans_ext(rmd_file), "md", sep = "."),
-              output_format = rmarkdown::md_document(preserve_yaml = FALSE),
-              params = list(doi = doi)
-            )
-          }
-        } else {
-          warning(
-            "Rmarkdown files present in the home directory of the corpus, but package 'rmarkdown' ",
-            "is not installed. Cannot render the Rmarkdown files."
-          )
-        }
-      }
-      
       
       if (.Platform$OS.type == "windows" && stri_enc_mark(tmp_home_dir) != "ASCII")
         tmp_home_dir <- utils::shortPathName(tmp_home_dir)
