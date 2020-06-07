@@ -29,6 +29,11 @@ they can be processed.
 * The `corpus_install()` function failed when the `registry_dir` got a `NULL` value from the default call to `cwbtools::cwb_registry_dir()`. But if the directories are created, the registry directory is there. Fixed.
 
 
+## DOCUMENTATION FIXES
+
+* A problem with updating the `curl` dependency of `cwbtools` that may arise when `devtools::install_github()` is used is addressed in an extended explanation in the README.md file how to install the development version of `cwbtools` using `remotes::install_github()` (#21).
+
+
 cwbtools 0.2.0
 ==============
 

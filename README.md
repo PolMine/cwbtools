@@ -17,12 +17,21 @@ The package is available via CRAN and can be installed as follows on Windows, ma
 install.packages("cwbtools")
 ```
 
-To install the development version of the package, use the installation mechanism offered by the [devtools](https://CRAN.R-project.org/package=devtools) package. On Windows, an installation of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) may be necessary.
+To install the development version of the package, use the installation mechanism offered by the [remotes](https://cran.r-project.org/package=remotes) package. On Windows, an installation of [Rtools](https://cran.r-project.org/bin/windows/Rtools/) may be necessary.
 
 ```{r}
-if (!"devtools" %in% installed.packages()[,"Package"]) install.packages("devtools")
-devtools::install_github("PolMine/cwbtools")
+# Make sure the remotes package is present
+if (!"remotes" %in% installed.packages()[,"Package"]) install.packages("remotes")
+Sys.setenv(R_REMOTES_STANDALONE = "true")
+remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)
 ```
+
+**Explanatory note:**
+
+The default approach to install the development version `cwbtools` from GitHub would be `devtools::install_github("PolMine/cwbtools", ref = "dev")`. However, the concurrent dependency of `devtools` and of `cwbtools` on the `curl` package may cause nerve-wrecking problems if `curl` can be updated: If a newer version of `curl` is available, the user will be prompted whether this update is desired. Most users will agree. However, this update will fail because `curl` is loaded by `devtools`, and parts of the `curl` package cannot be deleted/updated (the dynamic library that is loaded). 
+
+To avoid having to perform manual updates in the correct order, using the original `install_github()` function of the `remotes` package is recommended. When setting the environment variable `R_REMOTES_STANDALONE` to `true`, the `remotes` package will rely on a minimal set of additional packages. The aforementioned situation that may make the installation of `cwbtools` difficult for most users is omitted.
+
 
 ## Acknowledgements
 

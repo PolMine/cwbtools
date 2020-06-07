@@ -183,7 +183,7 @@ argument \code{ask} is \code{TRUE}.
   registry file, the corpus id, and the name of the directory where data
   files reside.
 
-\code{corpus_remove} can be used to drop a corpus.
+\code{corpus_remove} can be used to delete a corpus.
 
 \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
   two subdirectories. The 'registry' subdirectory will host the registry file

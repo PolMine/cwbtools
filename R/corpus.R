@@ -94,6 +94,7 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom zen4R ZenodoManager
 #' @importFrom usethis ui_info ui_done ui_yeah ui_oops ui_code ui_todo ui_path
+#' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
@@ -174,13 +175,14 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         "unknown"
       }
       if (ask){
+        cli_rule("Remove existing corpus")
         if (version_old == version){
           userinput <- menu(
-            choices = c("Yes / continue", "No / abort"), 
+            choices = c("Yes", "No"), 
             title = sprintf(
               paste(
                 "Local %s version and the version of %s to be downloaded are identical (%s).",
-                "Are you sure you want to proceed and to replace the local corpus by a fresh download?"
+                "Do you want to proceed and to replace the local corpus by a fresh download?"
               ),
               toupper(corpus), toupper(corpus), version
             )
@@ -190,7 +192,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           }
         } else {
           userinput <- menu(
-            choices = c("Yes / continue", "No / abort"), 
+            choices = c("Yes", "No"), 
             title = sprintf(
               "Corpus %s (version: %s) is already installed. Do you want to replace it by version %s?",
               toupper(corpus), version_old, version
@@ -259,11 +261,13 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     if (.Platform$OS.type == "windows" && stri_enc_mark(cwbtools_tmpdir) != "ASCII"){
       cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
-    if (verbose) ui_info("extracting tarball")
-    
+    # if (verbose) ui_info("extracting tarball")
+    if (verbose) cli_process_start("extracting tarball")
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
+    if (verbose) cli_process_done()
+
     unlink(corpus_tarball)
-    if (verbose) ui_done("tarball has been extracted and removed")
+    if (verbose) cli_alert_success("tarball has been removed")
     
     tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
     tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
@@ -430,8 +434,9 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
 
 #' @param ask A \code{logical} value, whether to ask user for confirmation
 #'   before removing a corpus.
-#' @details \code{corpus_remove} can be used to drop a corpus.
+#' @details \code{corpus_remove} can be used to delete a corpus.
 #' @rdname corpus_utils
+#' @importFrom cli cli_alert_success
 #' @export corpus_remove
 corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = interactive()){
   
@@ -441,7 +446,7 @@ corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = inter
   data_directory <- reg[["home"]]
   if (ask){
     userinput <- menu(
-      choices = c("Yes / continue", "No / abort"),
+      choices = c("Yes", "No"),
       title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", corpus)
     )
     if (userinput != 1L) stop("Aborting")
@@ -449,7 +454,8 @@ corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = inter
   for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
   file.remove(data_directory)
   file.remove(file.path(registry_dir, tolower(corpus), fsep = "/"))
-  TRUE
+  cli_alert_success("corpus has been removed (registry and data files)")
+  invisible(TRUE)
 }
 
 #' @details \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
@@ -512,6 +518,7 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 #' @param progress Logical, whether to show a progress bar.
 #' @details \code{corpus_copy} will create a copy of a corpus (useful for
 #'   experimental modifications, for instance).
+#' @importFrom cli make_spinner ansi_with_hidden_cursor cli_alert_success
 #' @export corpus_copy
 #' @rdname corpus_utils
 #' @examples
@@ -581,20 +588,21 @@ corpus_copy <- function(
   rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
   
   registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
-  if (verbose) ui_done("saved updated registry file")
-  
-  if (verbose) ui_info("copy data files")
-  data_files_to_copy <- list.files(data_dir, full.names = TRUE)
-  if (progress) pb <- txtProgressBar(min = 1L, max = length(data_files_to_copy), style = 3)
-  for (i in 1L:length(data_files_to_copy)){
-    if (progress) setTxtProgressBar(pb, value = i)
-    file.copy(
-      from = data_files_to_copy[i],
-      to = file.path(data_dir_new, basename(data_files_to_copy[i]), fsep = "/")
-      )
+  if (verbose) cli_alert_success("registry file has been updated")
+
+  spinner <- make_spinner(template = "{spin} copy corpus data files from temporary directory to target data directory")
+  copy_with_spinner <- function(){
+    lapply(
+      list.files(data_dir, full.names = TRUE),
+      function(f){
+        spinner$spin()
+        file.copy(from = f, to = file.path(data_dir_new, basename(f), fsep = "/"))
+      }
+    )
+    spinner$finish()
   }
-  if (progress) close(pb)
-  if (verbose) ui_done("files copied")
+  ansi_with_hidden_cursor(copy_with_spinner())
+  if (verbose) cli_alert_success("copy corpus data files from temporary directory to target data directory")
   invisible(NULL)
 }
 
