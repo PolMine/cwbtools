@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.2.0.9005
-Date: 2020-06-03
+Version: 0.2.0.9006
+Date: 2020-06-06
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -29,7 +29,7 @@ Imports:
     pbapply,
     methods,
     usethis,
-    rstudioapi,
+    cli,
     jsonlite,
     RCurl,
     zen4R

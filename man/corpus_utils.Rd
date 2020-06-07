@@ -67,8 +67,7 @@ corpus_recode(
 \item{tarball}{The URL or local path to a tarball with a CWB indexed corpus.}
 
 \item{doi}{The DOI (Digital Object Identifier) of a corpus deposited at
-Zenodo, presented as a hyperlink. (For testing purposes, use
-("https://doi.org/10.5281/zenodo.3748858".)}
+Zenodo (e.g. "10.5281/zenodo.3748858".)}
 
 \item{lib}{Directory for R packages, defaults to \code{.libPaths()[1]}.}
 

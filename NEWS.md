@@ -26,6 +26,7 @@ that they cannot be processed by `jsonlite::fromJSON()`. The auxiliary function 
 process information from Zenodo now ensures that newline characters are escaped such that 
 they can be processed.
 * The `corpus_copy()` function did not set the path to the info file to the new data directory - corrected.
+* The `corpus_install()` function failed when the `registry_dir` got a `NULL` value from the default call to `cwbtools::cwb_registry_dir()`. But if the directories are created, the registry directory is there. Fixed.
 
 
 cwbtools 0.2.0

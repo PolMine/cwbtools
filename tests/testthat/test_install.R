@@ -41,6 +41,18 @@ test_that(
 
 
 test_that(
+  "download and install UNGAMINI when no system registry is present",
+  {
+    skip_on_cran()
+    Sys.setenv(CORPUS_REGISTRY = "")
+
+    corpus_install(doi = "https://doi.org/10.5281/zenodo.3748858")
+  }
+)
+
+
+
+test_that(
   "download and install UNGAMINI",
   {
     skip_on_cran()
