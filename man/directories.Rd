@@ -75,7 +75,12 @@ The Corpus Workbench (CWB) stores the binary files for
   directories. The function returns a named character vector with the
   registry and the corpus directory.
 
-\code{use_corpus_registry_envvar} is an convenience function that
+\code{use_corpus_registry_envvar} is a convenience function that
   will assist users to define the environment variable CORPUS_REGSITRY in the
-  .Renviron-file, so that it will be available across sessions.
+  .Renviron-file.  making it available across sessions. The function is
+  intended to be used in an interactive R session. An error is thrown if this
+  is not the case. The user will be prompted whether the cwbtools package
+  shall take care of creating / modifying the .Renviron-file. If not,
+  the file will be opened for manual modification with some instructions shown
+  in the terminal.
 }

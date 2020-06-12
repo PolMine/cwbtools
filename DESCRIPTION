@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.2.0.9006
-Date: 2020-06-06
+Version: 0.2.0.9007
+Date: 2020-06-12
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -28,7 +28,6 @@ Imports:
     RcppCWB (>= 0.2.8),
     pbapply,
     methods,
-    usethis,
     cli,
     jsonlite,
     RCurl,
@@ -43,7 +42,8 @@ Suggests:
     devtools,
     polmineR,
     NLP,
-    testthat
+    testthat,
+    usethis
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3

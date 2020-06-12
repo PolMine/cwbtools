@@ -93,8 +93,8 @@
 #' @importFrom stringi stri_enc_mark
 #' @importFrom tools file_path_sans_ext
 #' @importFrom zen4R ZenodoManager
-#' @importFrom usethis ui_info ui_done ui_yeah ui_oops ui_code ui_todo ui_path
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
+#'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
@@ -132,7 +132,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         stop("Argument 'doi' is expected to offer a DOI (Digital Object Identifier) that refers to data",
              "hosted with zenodo, i.e. starting with 10.5281/zenodo.")
       }
+      
+      if (verbose) cli_rule("Resolve DOI")
+      if (verbose) cli_process_start("get metadata for the Zenodo record referred to by DOI")
       zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi)
+      if (verbose) cli_process_done()
+      
       zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
       tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
       
@@ -143,6 +148,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
         tarball <- tarball[userchoice]
       }
+      if (verbose) cli_alert_info(sprintf("tarball to be downloaded: %s", col_blue(basename(tarball))))
     }
   }
   
@@ -177,45 +183,29 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (ask){
         cli_rule("Remove existing corpus")
         if (version_old == version){
-          userinput <- menu(
-            choices = c("Yes", "No"), 
-            title = sprintf(
+          cli_text(sprintf(
               paste(
                 "Local %s version and the version of %s to be downloaded are identical (%s).",
-                "Do you want to proceed and to replace the local corpus by a fresh download?"
+                "If you proceed, the local corpus will be replaced by a fresh download."
               ),
-              toupper(corpus), toupper(corpus), version
+              col_red(toupper(corpus)), col_red(toupper(corpus)), col_blue(version)
             )
           )
-          if (userinput != 1L){
-            stop(sprintf("Aborting - existing version of %s remains unchanged. ", toupper(corpus)))
-          }
         } else {
-          userinput <- menu(
-            choices = c("Yes", "No"), 
-            title = sprintf(
-              "Corpus %s (version: %s) is already installed. Do you want to replace it by version %s?",
+          cli_text(
+            sprintf(
+              "Corpus %s (version: %s) is already installed. If you proceed, it will be replaced by version %s.",
               toupper(corpus), version_old, version
             )
           )
-          if (userinput != 1L){
-            stop(
-              sprintf(paste("Aborting - existing version of %s remains unchanged. ",
-                            "If you want to keep the existing version (%s), rename corpus using cwbtools::corpus_rename(), ",
-                            "and call corpus_install() again."
-              ),
-              toupper(corpus), version
-              )
-            ) 
-          }
         }
       }
       corpus_remove(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]], ask = ask)
     }
     
     # Now download corpus -------------------
-    cat_rule("Download corpus")
-    if (verbose) ui_info(sprintf("downloading corpus tarball {ui_path('%s')}", basename(tarball)))
+    cat_rule("Download corpus tarball")
+    if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
@@ -254,20 +244,20 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' not found locally", tarball))
       file.copy(from = tarball, to = corpus_tarball)
     }
-    if (verbose) ui_done(sprintf("corpus tarball (%s) has been downloaded", basename(tarball)))
+    if (verbose) cli_alert_success(sprintf("download corpus tarball {col_cyan('%s')} ... done", basename(tarball)))
     if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII"){
       corpus_tarball <- utils::shortPathName(corpus_tarball)
     }
     if (.Platform$OS.type == "windows" && stri_enc_mark(cwbtools_tmpdir) != "ASCII"){
       cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
-    # if (verbose) ui_info("extracting tarball")
-    if (verbose) cli_process_start("extracting tarball")
+    if (verbose) cli_process_start("extract tarball")
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     if (verbose) cli_process_done()
 
+    if (verbose) cli_process_start("remove tarball")
     unlink(corpus_tarball)
-    if (verbose) cli_alert_success("tarball has been removed")
+    if (verbose) cli_process_done()
     
     tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
     tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
@@ -340,26 +330,31 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
   }
   if (isTRUE(modify_renviron)){
-    ui_info(
+    cli_alert_info(
       paste(
-        sprintf("You have created the registry directory {ui_path('%s')} anew.", cwb_dirs[["registry_dir"]]),
-        "The environment variable {ui_code('CORPUS_REGISTRY')} needs to refer to this directory to make the newly installed corpus available.",
-        sprintf("You can either call {ui_code('Sys.getenv(CORPUS_REGISTRY=\"%s\")')} whenever the environment variable needs to be set.", cwb_dirs[["registry_dir"]]),
-        sprintf("To avoid having to do so again and again, you can add the line {ui_code('CORPUS_REGISTRY=%s')} to the {ui_path('.Renviron')} file.", cwb_dirs[["registry_dir"]]),
-        "This will make the this setting persist accross sessions.",
+        sprintf("You have created the registry directory {.path %s} anew.", cwb_dirs[["registry_dir"]]),
+        "The environment variable {.envvar CORPUS_REGISTRY} needs to refer to this directory to make the newly installed corpus available.",
+        sprintf("You can call {.code Sys.getenv(CORPUS_REGISTRY=\"%s\")} whenever the environment variable needs to be set.", cwb_dirs[["registry_dir"]]),
+        sprintf("To make this setting persist accross sessions, you can add the line {.code CORPUS_REGISTRY=%s} to the {.path .Renviron} file.", cwb_dirs[["registry_dir"]]),
         collapse = " "
-      )
+      ),
+      wrap = TRUE
     )
-    answer <- ui_yeah(yes = "Yes", no = "No", x ="Do you want to augment the {ui_path('.Renviron')} file now?", shuffle = FALSE)
-    if (isTRUE(answer)){
+    cat("\n")
+    answer <- menu(
+      choices = c("Yes", "No"), 
+      title = cli_text("Do you want to set the {.envvar CORPUS_REGISTRY} environment variable in the {.path .Renviron}-file now?")
+    )
+    if (answer == 1){
       renviron_file <- use_corpus_registry_envvar(registry_dir = cwb_dirs[["registry_dir"]])
     } else {
-      ui_oops(
+      cli_alert_warning(
         paste(
-          "The {ui_path('.Renviron')} file will not be changed.",
-          "Remember to set the {ui_code('CORPUS_REGISTRY')} environment variable temporarily by calling {ui_code('Sys.getenv()')}",
-          "or permanently by amending the {ui_path('.Renviron')} file!"
-        )
+          "The {.path .Renviron} file will not be changed.",
+          "Remember to set the {.envvar CORPUS_REGISTRY} environment variable temporarily by calling {.code Sys.getenv()},",
+          "or permanently by defining it in the {.path .Renviron} file!"
+        ),
+        wrap = TRUE
       )
     }
     
@@ -447,7 +442,7 @@ corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = inter
   if (ask){
     userinput <- menu(
       choices = c("Yes", "No"),
-      title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", corpus)
+      title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", cli::col_red(corpus))
     )
     if (userinput != 1L) stop("Aborting")
   }
@@ -557,39 +552,6 @@ corpus_copy <- function(
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
 
-  rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
-  rf[["home"]] <- data_dir_new
-  
-  
-  # It is a common mistake that the info file is not stated correctly in the registry file,
-  # so this is a forgiving solution to remedy errors
-  info_file_old <- file.path(data_dir, basename(rf[["info"]]))
-  if (!file.exists(info_file_old)){
-    info_file_guessed <- grep(
-      "^.*?/(|\\.)info(\\.md|)$",
-      list.files(data_dir, full.names = TRUE),
-      value = TRUE
-    )
-    if (length(info_file_guessed) > 0L){
-      if (verbose){
-        ui_info(
-          paste(
-            "info file stated in registry does not exist,",
-            "using the following file which likely to be an info file:",
-            sprintf("{ui_path('%s')}", info_file_guessed[1])
-          )
-        )
-      }
-      rf[["info"]] <- info_file_guessed[1]
-    } else {
-      ui_oops("cannot detect info file in data directory")
-    }
-  }
-  rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
-  
-  registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
-  if (verbose) cli_alert_success("registry file has been updated")
-
   spinner <- make_spinner(template = "{spin} copy corpus data files from temporary directory to target data directory")
   copy_with_spinner <- function(){
     lapply(
@@ -602,8 +564,44 @@ corpus_copy <- function(
     spinner$finish()
   }
   ansi_with_hidden_cursor(copy_with_spinner())
-  if (verbose) cli_alert_success("copy corpus data files from temporary directory to target data directory")
-  invisible(NULL)
+  if (verbose) cli_alert_success("copy corpus data files from temporary directory to target data directory ... done")
+
+  if (verbose) cli_process_start("parse registry file")
+  rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  if (verbose) cli_process_done()
+
+  # It is a common mistake that the info file is not stated correctly in the registry file,
+  # so this is a forgiving solution to remedy errors
+  info_file_old <- file.path(data_dir, basename(rf[["info"]]))
+  if (!file.exists(info_file_old)){
+    info_file_guessed <- grep(
+      "^.*?/(|\\.)info(\\.md|)$",
+      list.files(data_dir, full.names = TRUE),
+      value = TRUE
+    )
+    if (length(info_file_guessed) > 0L){
+      if (verbose){
+        cli_alert_danger(
+          paste(
+            "info file stated in registry does not exist,",
+            "using the following file which likely to be an info file:",
+            sprintf("{.path %s}", info_file_guessed[1])
+          )
+        )
+      }
+      rf[["info"]] <- info_file_guessed[1]
+    } else {
+      cli_alert_danger("no info file found")
+    }
+  }
+  
+  if (verbose) cli_process_start("update registry data and save registry file")
+  rf[["home"]] <- data_dir_new
+  rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
+  registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
+  if (verbose) cli_process_done()
+
+  invisible(TRUE)
 }
 
 
