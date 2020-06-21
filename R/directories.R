@@ -127,10 +127,6 @@ cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
 create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbose = TRUE){
   
   prefix <- path.expand(prefix)
-  cwb_dirs <- c(
-    registry_dir = file.path(prefix, "registry"),
-    corpus_dir = file.path(prefix, "indexed_corpora")
-  )
 
   if (dir.exists(prefix)){
     if (file.access(prefix, mode = 2) != 0L){
@@ -150,14 +146,29 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
     cli_rule("Create CWB directories")
     if (ask){
       answer <- menu(
-        title = cli_text(sprintf("Create directory {.path %s}? It will be the parent directory for the registry directory and corpus directory.", prefix)),
-        choices = c("Yes", "No / abort")
+        title = cli_text(sprintf("Create directory {.path %s} as parent directory for the registry directory and the corpus directory?", prefix)),
+        choices = c("Yes!", "I want to choose another directory.", "Cancel (user abort).")
       )
       if (answer == 1L){
         dir.create(prefix, recursive = TRUE)
-      } else {
-        if (verbose) cli_alert_danger("user abort")
-        return(invisible(NULL))
+      } else if (answer == 2L){
+        if (interactive()){
+          if (rstudioapi::isAvailable()){
+            prefix <- rstudioapi::selectDirectory()
+          } else {
+            again <- TRUE
+            while (again){
+              prefix <- readline(prompt = "Please enter valid path (hit ENTER without input to abort): ")
+              if (nchar(prefix) == 0L) stop("user abort")
+              if (file.exists(dirname(prefix))) again <- FALSE
+            }
+            dir.create(prefix)
+          }
+        } else {
+          stop("not in interactive sessions - user cannot choose another directory.")
+        }
+      } else if (answer == 3L){
+        stop("user abort")
       }
     } else {
       dir.create(prefix, recursive = TRUE)
@@ -169,6 +180,11 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
     }
   }
   
+  cwb_dirs <- c(
+    registry_dir = file.path(prefix, "registry"),
+    corpus_dir = file.path(prefix, "indexed_corpora")
+  )
+
   for (dirtype in names(cwb_dirs)){
     what <- gsub("^(.*?)_dir$", "\\1", dirtype)
     if (file.exists(cwb_dirs[[dirtype]])){
