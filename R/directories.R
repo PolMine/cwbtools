@@ -114,6 +114,7 @@ cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
   )
 }
 
+#' @param verbose A \code{logical} value, whether to output status messages.
 #' @details \code{create_cwb_directories} will create a 'registry' and an
 #'   'indexed_corpora' directory as subdirectories of the directory indicated by
 #'   argument \code{prefix}. Argument \code{ask} indicates whether to create
@@ -123,88 +124,73 @@ cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
 #' @rdname directories
 #' @export create_cwb_directories
 #' @importFrom cli cat_rule
-create_cwb_directories <- function(prefix = "~/cwb", ask = interactive()){
+create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbose = TRUE){
   
   prefix <- path.expand(prefix)
+  cwb_dirs <- c(
+    registry_dir = file.path(prefix, "registry"),
+    corpus_dir = file.path(prefix, "indexed_corpora")
+  )
+
   if (dir.exists(prefix)){
-    cli_alert_info(
-      paste(
-        sprintf("Using directory {.path %s} as parent directory for registry directory and the corpus directory. ", prefix),
-        "(Directory already exists.)"
-      ),
-      wrap = TRUE
-    )
-  } else {
-    if (ask){
-      cat_rule()
-      answer <- menu(
-        title = cli_text(sprintf("Parent directory {.path %s} for registry directory and corpus directory is not yet available. Create it?", prefix)),
-        choices = c("Yes", "No")
+    if (file.access(prefix, mode = 2) != 0L){
+      stop(sprintf("no write permissions for CWB data directory %s", prefix))
+    }
+    if (verbose){
+      cli_rule("Create CWB directories")
+      cli_alert_info(
+        sprintf("Using existing directory {.path %s} as parent directory for registry directory and the corpus directory.", prefix),
+        wrap = TRUE
       )
-      if (answer == 1L) dir.create(prefix, recursive = TRUE) else stop("Aborting.")
+    }
+  } else {
+    if (file.access(dirname(prefix), mode = 2) != 0L){
+      stop(sprintf("cannot create directory %s - no write permissions for parent directory %s", prefix, dirname(prefix)))
+    }
+    cli_rule("Create CWB directories")
+    if (ask){
+      answer <- menu(
+        title = cli_text(sprintf("Create directory {.path %s}? It will be the parent directory for the registry directory and corpus directory.", prefix)),
+        choices = c("Yes", "No / abort")
+      )
+      if (answer == 1L){
+        dir.create(prefix, recursive = TRUE)
+      } else {
+        if (verbose) cli_alert_danger("user abort")
+        return(invisible(NULL))
+      }
     } else {
       dir.create(prefix, recursive = TRUE)
     }
     if (dir.exists(prefix)){
-      cli_alert_success(sprintf("parent directory {.path %s} for registry directory and corpus directory has been created successfully.", prefix))
+      if (verbose) cli_alert_success(sprintf("parent directory {.path %s} for registry directory and corpus directory has been created", prefix))
     } else {
-      cli_alert_warning(sprintf("Parent directory {.path %s} for registry directory and corpus directory not found / created!", prefix))
+      if (verbose) cli_alert_danger(sprintf("parent directory {.path %s} for registry directory and corpus directory not found / created!", prefix))
     }
   }
   
-  registry_dir <- file.path(prefix, "registry")
-  if (file.exists(registry_dir)){
-    msg <- sprintf(
-      "The registry directory {.path %s} exists, but is not defined by the environment variable {.envvar CORPUS_REGISTRY}.",
-      registry_dir
+  for (dirtype in names(cwb_dirs)){
+    what <- gsub("^(.*?)_dir$", "\\1", dirtype)
+    if (file.exists(cwb_dirs[[dirtype]])){
+      if (verbose) cli_alert_info(sprintf("%s directory {.path %s} already exists", what, cwb_dirs[[dirtype]]))
+    } else {
+      dir.create(cwb_dirs[[dirtype]])
+      if (dir.exists(cwb_dirs[[dirtype]])){
+        if (verbose) cli_alert_success(sprintf("%s directory {.path %s} has been created", what, cwb_dirs[[dirtype]]))
+      } else {
+        if (verbose) cli_alert_warning(sprintf("%s directory {.path %s} has not been created", what, cwb_dirs[[dirtype]]))
+      }
+    }
+  }
+  
+  Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+  if (verbose){
+    cli_alert_success(
+      sprintf("environment variable {.envvar CORPUS_REGISTRY} set as: {.path %s}", cwb_dirs[["registry_dir"]])
     )
-    cli_alert_warning(msg)
-  } else {
-    if (ask){
-      cat_rule()
-      answer <- menu(
-        title = sprintf("Registry directory {.path %s} does not yet exist. Create it?", registry_dir),
-        choices = c("Yes", "No")
-      )
-      if (answer == 1L) dir.create(registry_dir) else stop("Aborting.")
-    } else {
-      dir.create(registry_dir)
-    }
-    if (dir.exists(registry_dir)){
-      cli_alert_success(sprintf("registry directory {.path %s} has been created successfully.", registry_dir))
-    } else {
-      cli_alert_warning(sprintf("Designated registry directory {.path %s} not found / created!", registry_dir))
-    }
-    cli_alert_success(sprintf("environment variable {.envvar CORPUS_REGISTRY} set as: {.path %s}", registry_dir))
-    Sys.setenv(CORPUS_REGISTRY = registry_dir)
-  }
+  }  
   
-  # Create corpus_dir --------------
-  
-  corpus_dir <- file.path(prefix, "indexed_corpora")
-  if (file.exists(corpus_dir)){
-    cli_alert_warning(sprintf("The corpus directory {.path %s} already exists.", corpus_dir)
-    )
-  } else {
-    if (ask){
-      cat_rule()
-      answer <- menu(
-        title = sprintf("No corpus directory available. Create directory {.path %s}?", corpus_dir),
-        choices = c("Yes", "No")
-      )
-      if (answer == 1L) dir.create(corpus_dir, recursive = TRUE) else stop("Aborting.")
-    } else {
-      dir.create(corpus_dir)
-    }
-    if (dir.exists(corpus_dir)){
-      cli_alert_success(sprintf("corpus directory {.path %s} has been created successfully.", corpus_dir))
-    } else {
-      cli_alert_warning(sprintf("Designated corpus directory {.path %s} not found / created!", corpus_dir))
-    }
-    
-    
-  }
-  c(registry_dir = registry_dir, corpus_dir = corpus_dir)
+  cwb_dirs
 }
 
 

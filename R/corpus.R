@@ -245,12 +245,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       file.copy(from = tarball, to = corpus_tarball)
     }
     if (verbose) cli_alert_success(sprintf("download corpus tarball {col_cyan('%s')} ... done", basename(tarball)))
-    if (.Platform$OS.type == "windows" && stri_enc_mark(corpus_tarball) != "ASCII"){
-      corpus_tarball <- utils::shortPathName(corpus_tarball)
+    
+    if (.Platform$OS.type == "windows"){
+      if (stri_enc_mark(corpus_tarball) != "ASCII") corpus_tarball <- utils::shortPathName(corpus_tarball)
+      if (stri_enc_mark(cwbtools_tmpdir) != "ASCII") cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
-    if (.Platform$OS.type == "windows" && stri_enc_mark(cwbtools_tmpdir) != "ASCII"){
-      cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
-    }
+
     if (verbose) cli_process_start("extract tarball")
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     if (verbose) cli_process_done()
@@ -335,7 +335,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         sprintf("You have created the registry directory {.path %s} anew.", cwb_dirs[["registry_dir"]]),
         "The environment variable {.envvar CORPUS_REGISTRY} needs to refer to this directory to make the newly installed corpus available.",
         sprintf("You can call {.code Sys.getenv(CORPUS_REGISTRY=\"%s\")} whenever the environment variable needs to be set.", cwb_dirs[["registry_dir"]]),
-        sprintf("To make this setting persist accross sessions, you can add the line {.code CORPUS_REGISTRY=%s} to the {.path .Renviron} file.", cwb_dirs[["registry_dir"]]),
+        "It is necessary to set the CORPUS_REGISTRY environment variable before loading polmineR.",
+        sprintf("To make this setting persist across sessions, you can add the line {.code CORPUS_REGISTRY=%s} to the {.path .Renviron} file.", cwb_dirs[["registry_dir"]]),
         collapse = " "
       ),
       wrap = TRUE
@@ -581,7 +582,7 @@ corpus_copy <- function(
     )
     if (length(info_file_guessed) > 0L){
       if (verbose){
-        cli_alert_danger(
+        cli_alert_info(
           paste(
             "info file stated in registry does not exist,",
             "using the following file which likely to be an info file:",

@@ -14,7 +14,7 @@ cwb_registry_dir()
 
 cwb_directories(registry_dir = NULL, corpus_dir = NULL)
 
-create_cwb_directories(prefix = "~/cwb", ask = interactive())
+create_cwb_directories(prefix = "~/cwb", ask = interactive(), verbose = TRUE)
 
 use_corpus_registry_envvar(registry_dir)
 }
@@ -27,6 +27,8 @@ use_corpus_registry_envvar(registry_dir)
 
 \item{ask}{A \code{logical} value, whether to prompt user before creating
 directories.}
+
+\item{verbose}{A \code{logical} value, whether to output status messages.}
 }
 \description{
 The Corpus Workbench (CWB) stores the binary files for
