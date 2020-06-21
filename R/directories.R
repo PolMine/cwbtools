@@ -90,6 +90,12 @@ cwb_registry_dir <- function(){
     }
   } else {
     if (nchar(Sys.getenv("CORPUS_REGISTRY")) > 0L){
+      if (isFALSE(file.exists(Sys.getenv("CORPUS_REGISTRY")))){
+        warning(
+          "The registry directory stated by the environment variable CORPUS_REGISTRY does not exist. ",
+          "This may be a cause for ensuing problems to find corpora."
+        )
+      }
       return(Sys.getenv("CORPUS_REGISTRY"))
     } else {
       return(NULL)
