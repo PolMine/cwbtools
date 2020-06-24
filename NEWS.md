@@ -1,15 +1,14 @@
-cwbtools 0.2.0.9003
-===================
+cwbtools 0.3.0
+==============
 
 ## NEW FEATURES
 
-* A new function `get_zenodo_record_metadata()` will get information available for a 
-Zenodo record and return a `zenodo_record_metadata` object. A `as_bibentry()` method 
-is available to turn this information into a `bibentry`-class object which can be used
-easily to generate a recommended citation.
-* When performing updates on a downloaded corpus, the `corpus_install()` function will 
-look for Rmarkdown files (file extension .Rmd) in the home directory and render the files.
-The initial usage is to generate info files that include an updated DOI.
+* The `corpus_install()` gives much better and nicer reports on steps performed during 
+corpus downloads. User dialogues have been reworked thoroughly to provide better user guidance.
+* The `use_corpus_registry_envvar()` function is called by `corpus_install()` and will
+amend the .Renviron file as appropriate if the user so desires.
+* To resolve a DOI, the 'zen4R' package is used, to extract information on the whereabouts
+of a corpus tarball efficiently from the Zenodo API.
 
 
 ## MINOR IMPROVEMENTS
@@ -18,6 +17,7 @@ The initial usage is to generate info files that include an updated DOI.
 version number does not start with "v".
 * The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.
 * To remedy the fairly common error that the path to the info file is not stated correctly in the registry file, a fallback mechanism will look up potential alternatives to an info file stated wrongly. 
+
 
 ## BUG FIXES
 

@@ -1,17 +1,15 @@
 ## General remarks
 
-New auxiliary functionality to download corpus data from open archives and 
-to install it locally. This release will be a prerequisite for other packages
-that provide access to corpus data at open science repositories. 
-
-Update: A remaining invalid URL in a man page has been corrected.
+Improvements of the user interface with more telling status messages. This 
+results in two new dependencies (cli, rstudioapi), but there is no tricky
+issue I could anticipate.
 
 ## Test environments
 
-* local OS X install, R 3.6.1
-* Ubuntu 14.04 (on travis-ci), R 3.6.1
-* win-builder (devel and release), R. 3.6.1
+* local OS X install, R 4.0.0
+* Ubuntu 14.04 (on travis-ci), R 4.0.0
 * Windows/AppVeyor, R 3.6.1 Patched
+* win-builder (devel and release), R. 3.6.1
 
 
 ## R CMD check results
