@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="Install and manage corpora. — corpus_install" />
 <meta property="og:description" content="Utility functions to assist the installation and management of indexed CWB
 corpora." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ corpora." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +73,7 @@ corpora." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -108,7 +111,12 @@ corpora." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/PolMine/cwbtools/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -123,7 +131,7 @@ corpora." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Install and manage corpora.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/PolMine/cwbtools/blob/master/R/corpus.R'><code>R/corpus.R</code></a></small>
     <div class="hidden name"><code>corpus_utils.Rd</code></div>
     </div>
 
@@ -138,7 +146,7 @@ corpora.</p>
   <span class='kw'>tarball</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>doi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>lib</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths</a></span>()[<span class='fl'>1</span>],
-  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='kw pkg'>cwbtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/cwbtools/man/directories.html'>cwb_registry_dir</a></span>(),
+  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='kw pkg'>cwbtools</span><span class='kw ns'>::</span><span class='fu'><a href='directories.html'>cwb_registry_dir</a></span>(),
   <span class='kw'>corpus_dir</span> <span class='kw'>=</span> <span class='fu'><a href='directories.html'>cwb_corpus_dir</a></span>(<span class='no'>registry_dir</span>),
   <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -199,8 +207,7 @@ corpora.</p>
     <tr>
       <th>doi</th>
       <td><p>The DOI (Digital Object Identifier) of a corpus deposited at
-Zenodo, presented as a hyperlink. (For testing purposes, use
-("https://doi.org/10.5281/zenodo.3748858".)</p></td>
+Zenodo (e.g. "10.5281/zenodo.3748858".)</p></td>
     </tr>
     <tr>
       <th>lib</th>
@@ -327,7 +334,7 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
   corpus installed. If argument <code>pkg</code> is defined, files will be moved
   into a R package, the syste registry and corpus directories are used
   otherwise. Note that at this stage, it is assumed that the DOI has been
-  awarded by <a href='Zenodo'>https://zenodo.org/</a></p></li>
+  awarded by <a href='https://zenodo.org/'>Zenodo</a></p></li>
 <li><p>If argument <code>pkg</code> is provided and specifies an R package (and
   <code>tarball</code> is <code>NULL</code>), the corpus package available at a
   CRAN-style repository specified by argument <code>repo</code> will be installed.
@@ -344,7 +351,7 @@ argument <code>ask</code> is <code>TRUE</code>.</p>
 <p><code>corpus_rename</code> will rename a corpus, affecting the name of the
   registry file, the corpus id, and the name of the directory where data
   files reside.</p>
-<p><code>corpus_remove</code> can be used to drop a corpus.</p>
+<p><code>corpus_remove</code> can be used to delete a corpus.</p>
 <p><code>corpus_as_tarball</code> will create a tarball (.tar.gz-file) with
   two subdirectories. The 'registry' subdirectory will host the registry file
   for the tarred corpus. The data files will be put in a subdirectory with
@@ -369,7 +376,8 @@ for switching to a packaged corpus.</p></div>
     <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RcppCWB"</span>,
     <span class='st'>"extdata"</span>, <span class='st'>"cwb"</span>, <span class='st'>"indexed_corpora"</span>, <span class='st'>"reuters"</span>
   )
-)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%  |                                                                              |======                                                                |   9%  |                                                                              |==========                                                            |  14%  |                                                                              |=============                                                         |  18%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |=============================                                         |  41%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |=========================================                             |  59%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |=========================================================             |  82%  |                                                                              |============================================================          |  86%  |                                                                              |================================================================      |  91%  |                                                                              |===================================================================   |  95%  |                                                                              |======================================================================| 100%</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(
+)
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(
   <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
   <span class='st'>"cwb"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>),
   <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -405,7 +413,8 @@ for switching to a packaged corpus.</p></div>
   <span class='kw'>data_dir</span> <span class='kw'>=</span> <span class='no'>data_dir_src</span>,
   <span class='kw'>registry_dir_new</span> <span class='kw'>=</span> <span class='no'>registry_dir_tmp</span>,
   <span class='kw'>data_dir_new</span> <span class='kw'>=</span> <span class='no'>data_dir_tmp</span>
-)</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%  |                                                                              |======                                                                |   9%  |                                                                              |==========                                                            |  14%  |                                                                              |=============                                                         |  18%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |======================                                                |  32%  |                                                                              |=========================                                             |  36%  |                                                                              |=============================                                         |  41%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |=========================================                             |  59%  |                                                                              |=============================================                         |  64%  |                                                                              |================================================                      |  68%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |=========================================================             |  82%  |                                                                              |============================================================          |  86%  |                                                                              |================================================================      |  91%  |                                                                              |===================================================================   |  95%  |                                                                              |======================================================================| 100%</div><div class='input'>
+)
+
 <span class='kw pkg'>RcppCWB</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RcppCWB/man/cl_charset_name.html'>cl_charset_name</a></span>(<span class='kw'>corpus</span> <span class='kw'>=</span> <span class='no'>corpus</span>, <span class='kw'>registry</span> <span class='kw'>=</span> <span class='no'>registry_dir_tmp</span>)</div><div class='output co'>#&gt; [1] "latin1"</div><div class='input'>
 <span class='fu'>corpus_recode</span>(
   <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='no'>corpus</span>,
@@ -437,16 +446,10 @@ for switching to a packaged corpus.</p></div>
 <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>str</span>)</div><div class='output co'>#&gt; [1] "oil"</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>), <span class='st'>"cwb"</span>, <span class='kw'>fsep</span> <span class='kw'>=</span> <span class='st'>"/"</span>), <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -457,7 +460,7 @@ for switching to a packaged corpus.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

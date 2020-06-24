@@ -1,7 +1,7 @@
 Package: cwbtools
 Type: Package
 Title: Tools to create, modify and manage 'CWB' Corpora
-Version: 0.2.0.9009
+Version: 0.3.0
 Date: 2020-06-24
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
@@ -44,7 +44,8 @@ Suggests:
     polmineR,
     NLP,
     testthat,
-    usethis
+    usethis,
+    rmarkdown
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3

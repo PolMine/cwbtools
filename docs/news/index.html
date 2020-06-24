@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -105,7 +109,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/PolMine/cwbtools/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,17 +128,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/PolMine/cwbtools/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="cwbtools-020" class="section level1">
-<h1 class="page-header">
-<a href="#cwbtools-020" class="anchor"></a>cwbtools 0.2.0<small> Unreleased </small>
+    <div id="cwbtools-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#cwbtools-030" class="anchor"></a>cwbtools 0.3.0<small> Unreleased </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> gives much better and nicer reports on steps performed during corpus downloads. User dialogues have been reworked thoroughly to provide better user guidance.</li>
+<li>The <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> function is called by <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> and will amend the .Renviron file as appropriate if the user so desires.</li>
+<li>To resolve a DOI, the ‘zen4R’ package is used, to extract information on the whereabouts of a corpus tarball efficiently from the Zenodo API.</li>
+</ul>
+</div>
+<div id="minor-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<ul>
+<li>Extracting the version number from the corpus tarball is somewhat more forgiving if the version number does not start with “v”.</li>
+<li>The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.</li>
+<li>To remedy the fairly common error that the path to the info file is not stated correctly in the registry file, a fallback mechanism will look up potential alternatives to an info file stated wrongly.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>The json string returned from Zenodo may include newline strings that are escaped such that they cannot be processed by <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::fromJSON()</a></code>. The auxiliary function to get and process information from Zenodo now ensures that newline characters are escaped such that they can be processed.</li>
+<li>The <code><a href="../reference/corpus_utils.html">corpus_copy()</a></code> function did not set the path to the info file to the new data directory - corrected.</li>
+<li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function failed when the <code>registry_dir</code> got a <code>NULL</code> value from the default call to <code><a href="../reference/directories.html">cwbtools::cwb_registry_dir()</a></code>. But if the directories are created, the registry directory is there. Fixed.</li>
+</ul>
+</div>
+<div id="documentation-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation-fixes" class="anchor"></a>DOCUMENTATION FIXES</h2>
+<ul>
+<li>A problem with updating the <code>curl</code> dependency of <code>cwbtools</code> that may arise when <code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github()</a></code> is used is addressed in an extended explanation in the README.md file how to install the development version of <code>cwbtools</code> using <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> (<a href='https://github.com/PolMine/cwbtools/issues/21'>#21</a>).</li>
+</ul>
+</div>
+</div>
+    <div id="cwbtools-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#cwbtools-020" class="anchor"></a>cwbtools 0.2.0<small> 2020-04-14 </small>
+</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>The <code>install_corpus()</code> function has been reworked thoroughly. Using system directories for the registry and the corpus directory is now supported. This is a prerequisite that corpora can be installed outside of R packages Installing corpora within corpora is not allowed by CRAN.</li>
 <li>A set of new auxiliary functions (<code><a href="../reference/directories.html">cwb_directories()</a></code>, <code><a href="../reference/directories.html">cwb_registry_dir()</a></code>, <code><a href="../reference/directories.html">cwb_corpus_dir()</a></code>) will get the whereabouts of the registry directory and the corpus directory. In particular, they consider that the polmineR package may have generated a temporary corpus registry, resetting the CORPUS_REGISTRY environment variable.</li>
@@ -138,16 +186,16 @@
 <li>New auxiliary functions <code>create_cwb_directories</code> and <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> will assist users to create the required directory structure for CWB indexed corpora.</li>
 </ul>
 </div>
-<div id="minor-improvements" class="section level2">
+<div id="minor-improvements-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
 <li>The default value of the argument “repo” that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account (“<a href="https://PolMine.github.io/drat/" class="uri">https://PolMine.github.io/drat/</a>”).</li>
 </ul>
 </div>
-<div id="documentation-fixes" class="section level2">
+<div id="documentation-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-fixes" class="anchor"></a>DOCUMENTATION FIXES</h2>
+<a href="#documentation-fixes-1" class="anchor"></a>DOCUMENTATION FIXES</h2>
 <ul>
 <li>New R6 Roxygen documentation used for documenting the <code>CorpusData</code> class.</li>
 <li>A (preliminary) vignette has been added that explains how to add a sentence annotation can be added to an existing indexed corpus.</li>
@@ -155,45 +203,45 @@
 </div>
 </div>
     <div id="cwbtools-012" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.2">
 <a href="#cwbtools-012" class="anchor"></a>cwbtools 0.1.2<small> 2019-12-17 </small>
 </h1>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Trying to remove the entire temporary session directory at the end of the package vignettes caused problems to build the package documentation. A more limited approach to clean up temporary files after build the vignettes will omit this problem.</li>
 </ul>
 </div>
 </div>
     <div id="cwbtools-011" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.1">
 <a href="#cwbtools-011" class="anchor"></a>cwbtools 0.1.1<small> 2019-12-09 </small>
 </h1>
-<div id="minor-improvements-1" class="section level2">
+<div id="minor-improvements-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<a href="#minor-improvements-2" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
-<li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (#11).</li>
+<li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (<a href='https://github.com/PolMine/cwbtools/issues/11'>#11</a>).</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code><a href="https://rdrr.io/r/base/length.html">length(class(matrix(1:4,2,2)))</a></code> will return the value 2.</li>
 </ul>
 </div>
-<div id="documentation-fixes-1" class="section level2">
+<div id="documentation-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation-fixes-1" class="anchor"></a>DOCUMENTATION FIXES</h2>
+<a href="#documentation-fixes-2" class="anchor"></a>DOCUMENTATION FIXES</h2>
 <ul>
 <li>The NEWS file now follows the styleguide such that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code> will generate a proper changelog page.</li>
 </ul>
 </div>
 </div>
     <div id="cwbtools-010" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.1.0">
 <a href="#cwbtools-010" class="anchor"></a>cwbtools 0.1.0<small> 2019-10-21 </small>
 </h1>
 <ul>
@@ -208,7 +256,7 @@
 </ul>
 </div>
     <div id="cwbtools-0011" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.11">
 <a href="#cwbtools-0011" class="anchor"></a>cwbtools 0.0.11<small> Unreleased </small>
 </h1>
 <ul>
@@ -225,7 +273,7 @@
 </ul>
 </div>
     <div id="cwbtools-0010" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.10">
 <a href="#cwbtools-0010" class="anchor"></a>cwbtools 0.0.10<small> Unreleased </small>
 </h1>
 <ul>
@@ -234,7 +282,7 @@
 </ul>
 </div>
     <div id="cwbtools-009" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.9">
 <a href="#cwbtools-009" class="anchor"></a>cwbtools 0.0.9<small> Unreleased </small>
 </h1>
 <ul>
@@ -252,7 +300,7 @@
 </ul>
 </div>
     <div id="cwbtools-008" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.8">
 <a href="#cwbtools-008" class="anchor"></a>cwbtools 0.0.8<small> Unreleased </small>
 </h1>
 <ul>
@@ -262,7 +310,7 @@
 </ul>
 </div>
     <div id="cwbtools-007" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.7">
 <a href="#cwbtools-007" class="anchor"></a>cwbtools 0.0.7<small> Unreleased </small>
 </h1>
 <ul>
@@ -283,7 +331,7 @@
 </ul>
 </div>
     <div id="cwbtools-006" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.6">
 <a href="#cwbtools-006" class="anchor"></a>cwbtools 0.0.6<small> Unreleased </small>
 </h1>
 <ul>
@@ -292,7 +340,7 @@
 </ul>
 </div>
     <div id="cwbtools-005" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.5">
 <a href="#cwbtools-005" class="anchor"></a>cwbtools 0.0.5<small> Unreleased </small>
 </h1>
 <ul>
@@ -300,7 +348,7 @@
 </ul>
 </div>
     <div id="cwbtools-004" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.0.4">
 <a href="#cwbtools-004" class="anchor"></a>cwbtools 0.0.4<small> Unreleased </small>
 </h1>
 <ul>
@@ -309,24 +357,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#cwbtools-020">0.2.0</a></li>
-        <li><a href="#cwbtools-012">0.1.2</a></li>
-        <li><a href="#cwbtools-011">0.1.1</a></li>
-        <li><a href="#cwbtools-010">0.1.0</a></li>
-        <li><a href="#cwbtools-0011">0.0.11</a></li>
-        <li><a href="#cwbtools-0010">0.0.10</a></li>
-        <li><a href="#cwbtools-009">0.0.9</a></li>
-        <li><a href="#cwbtools-008">0.0.8</a></li>
-        <li><a href="#cwbtools-007">0.0.7</a></li>
-        <li><a href="#cwbtools-006">0.0.6</a></li>
-        <li><a href="#cwbtools-005">0.0.5</a></li>
-        <li><a href="#cwbtools-004">0.0.4</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -338,7 +372,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
