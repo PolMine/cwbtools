@@ -27,6 +27,9 @@ process information from Zenodo now ensures that newline characters are escaped 
 they can be processed.
 * The `corpus_copy()` function did not set the path to the info file to the new data directory - corrected.
 * The `corpus_install()` function failed when the `registry_dir` got a `NULL` value from the default call to `cwbtools::cwb_registry_dir()`. But if the directories are created, the registry directory is there. Fixed.
+* Removed a bug (faulty assignment) that would prevent that the path of a registry file 
+is handled correctly (i.e. wrapped in quotation marks) by `registry_file_compose()` when the 
+path includes any whitespace characters.
 
 
 ## DOCUMENTATION FIXES

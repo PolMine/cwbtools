@@ -115,16 +115,15 @@ registry_file_compose <- function(x){
   if (.Platform$OS.type == "windows"){
     x[["home"]] <- sprintf('"%s"', normalizePath(x[["home"]], winslash = "/"))
   } else {
-    if (grepl("\\s", x[["home"]])) data_dir <- sprintf('"%s"', x[["home"]])
+    if (grepl("\\s+", x[["home"]])) x[["home"]] <- sprintf('"%s"', x[["home"]])
   }
-  
-  
+
   if (is.null(x[["info"]])) x[["info"]] <- file.path(dirname(data_dir_base), ".info.md", fsep = "/")
   # if (!file.exists(x[["info"]])) warning("cannot confirm that info file exists")
   if (.Platform$OS.type == "windows"){
     x[["info"]] <- sprintf('"%s"', normalizePath(x[["info"]], winslash = "/", mustWork = FALSE))
   } else {
-    if (grepl("\\s", x[["info"]])) x[["info_file"]] <- sprintf('"%s"', x[["info"]])
+    if (grepl("\\s+", x[["info"]])) x[["info"]] <- sprintf('"%s"', x[["info"]])
   }
   
   c(

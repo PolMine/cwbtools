@@ -114,8 +114,10 @@ cwb_registry_dir <- function(){
 #' @importFrom utils menu
 cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
   registry_dir <- if (is.null(registry_dir)) cwb_registry_dir() else registry_dir
-  if (isFALSE(dir.exists(registry_dir))){
-    stop(sprintf("Registry directory '%s' does not exist.", registry_dir))
+  if (isFALSE(is.null(registry_dir))){
+    if (isFALSE(dir.exists(registry_dir))){
+      stop(sprintf("Registry directory '%s' does not exist.", registry_dir))
+    }
   }
   corpus_dir <- if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir) else corpus_dir
   c(registry_dir = registry_dir, corpus_dir = corpus_dir)
@@ -280,7 +282,7 @@ use_corpus_registry_envvar <- function(registry_dir){
         return(FALSE)
       }
       
-      cat(sprintf('CORPUS_REGISTRY="%s"', registry_dir), file = renviron_file, append = TRUE)
+      cat(sprintf('CORPUS_REGISTRY="%s"\n', registry_dir), file = renviron_file, append = TRUE)
       
     } else {
       cli_alert_info("the {.path .Renviron}-file does not yet exist and needs to be created")
