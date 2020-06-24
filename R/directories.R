@@ -114,10 +114,11 @@ cwb_registry_dir <- function(){
 #' @importFrom utils menu
 cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
   registry_dir <- if (is.null(registry_dir)) cwb_registry_dir() else registry_dir
-  c(
-    registry_dir = registry_dir, 
-    corpus_dir = if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir) else corpus_dir
-  )
+  if (isFALSE(dir.exists(registry_dir))){
+    stop(sprintf("Registry directory '%s' does not exist.", registry_dir))
+  }
+  corpus_dir <- if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir) else corpus_dir
+  c(registry_dir = registry_dir, corpus_dir = corpus_dir)
 }
 
 #' @param verbose A \code{logical} value, whether to output status messages.
@@ -160,7 +161,7 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
       } else if (answer == 2L){
         if (interactive()){
           if (rstudioapi::isAvailable()){
-            prefix <- rstudioapi::selectDirectory()
+            prefix <- path.expand(rstudioapi::selectDirectory())
           } else {
             again <- TRUE
             while (again){
@@ -242,10 +243,10 @@ use_corpus_registry_envvar <- function(registry_dir){
   
   cli_rule("Define CORPUS_REGISTRY environmment variable in .Renviron file")
   user_input <- menu(
-    choices = c("Yes", "No"),
+    choices = c("Yes", "No, I want to edit the .Renviron file myself"),
     title = cli_text(
       "I want the {.pkg cwbtools} package to set the {.envvar CORPUS_REGISTRY} environment variable ", 
-      "in the {.file .Renviron} file (see {.code ?Startup} for details}."
+      "in the {.file .Renviron} file (see {.code ?Startup} for details)."
     )
   )
   

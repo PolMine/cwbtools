@@ -103,6 +103,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
   
   if (is.null(tarball)){
     if (isFALSE(is.null(pkg))){
+      # A pkg is stated 
       if (!pkg %in% utils::available.packages(contriburl = utils::contrib.url(repos = repo))) {
         stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
       }
@@ -352,7 +353,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       cli_alert_warning(
         paste(
           "The {.path .Renviron} file will not be changed.",
-          "Remember to set the {.envvar CORPUS_REGISTRY} environment variable temporarily by calling {.code Sys.getenv()},",
+          "Remember to set the {.envvar CORPUS_REGISTRY} environment variable temporarily ",
+          sprintf('by calling {.code Sys.getenv(CORPUS_REGISTRY = "%s")}', cwb_dirs[["registry_dir"]]),
           "or permanently by defining it in the {.path .Renviron} file!"
         ),
         wrap = TRUE
