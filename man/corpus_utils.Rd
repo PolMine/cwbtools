@@ -8,6 +8,7 @@
 \alias{corpus_as_tarball}
 \alias{corpus_copy}
 \alias{corpus_recode}
+\alias{corpus_testload}
 \title{Install and manage corpora.}
 \usage{
 corpus_install(
@@ -56,6 +57,12 @@ corpus_recode(
   data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
   skip = character(),
   to = c("latin1", "UTF-8"),
+  verbose = TRUE
+)
+
+corpus_testload(
+  corpus,
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE
 )
 }

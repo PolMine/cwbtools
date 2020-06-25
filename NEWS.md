@@ -9,6 +9,8 @@ corpus downloads. User dialogues have been reworked thoroughly to provide better
 amend the .Renviron file as appropriate if the user so desires.
 * To resolve a DOI, the 'zen4R' package is used, to extract information on the whereabouts
 of a corpus tarball efficiently from the Zenodo API.
+* A `corpus_testload()` has been implemented to check whether a (newly installed) corpus
+is accessible.
 
 
 ## MINOR IMPROVEMENTS

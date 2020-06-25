@@ -311,11 +311,17 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if (destfile != targetfile){
           file.copy(from = destfile, to = targetfile, overwrite = TRUE)
         }
-        polmineR::registry_reset(registryDir = polmineR::registry())
+        polmineR::registry_reset(registryDir = polmineR::registry(), verbose = FALSE)
       }
 
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
+    
+    # Check whether newly installed corpoa can be loaded
+    for (corpus_id in corpora){
+      corpus_testload(corpus = corpus_id, registry_id = cwb_dirs[["registry_dir"]])
+    }
+    
   } else {
     for (tarfile in tarball){
       corpus_install(
@@ -722,4 +728,49 @@ corpus_recode <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), 
     )
   
   invisible(NULL)
+}
+
+
+#' @importFrom cli cli_process_start
+#' @export corpus_testload
+#' @rdname corpus_utils
+corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
+  
+  msg <- sprintf("check whether corpus %s can be loaded", corpus)
+  cli_process_start(msg, msg_done = paste(msg, "... OK"))
+  
+  # Initializing CQP is a workaround to address an odd issue that cqp_get_registry()
+  # will not work as expected if cqp_initializ() has not been called before,
+  # see https://github.com/PolMine/RcppCWB/issues/14
+  if (isFALSE(RcppCWB::cqp_is_initialized())){
+    RcppCWB::cqp_initialize(registry = Sys.getenv("CORPUS_REGISTRY"))
+  }
+  
+  if (isFALSE(identical(RcppCWB::cqp_get_registry(), registry_dir))){
+    registry_to_restore <- RcppCWB::cqp_get_registry()
+    RcppCWB::cqp_reset_registry(registry = registry_dir)
+  } else {
+    registry_to_restore <- NA
+  }
+  
+  n <- RcppCWB::cl_attribute_size(
+    corpus = corpus,
+    attribute = "word",
+    attribute_type = "p",
+    registry = registry_dir
+  )
+  
+  if (n > 0L){
+    cli::cli_process_done()
+    retval <- TRUE
+  } else {
+    cli::cli_process_failed()
+    retval <- FALSE
+  }
+  
+  if (isFALSE(is.na(registry_to_restore))){
+    RcppCWB::cqp_reset_registry(registry = registry_to_restore)
+  }
+  
+  invisible(retval)
 }
