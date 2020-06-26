@@ -748,11 +748,15 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   
   if (isFALSE(identical(RcppCWB::cqp_get_registry(), registry_dir))){
     registry_to_restore <- RcppCWB::cqp_get_registry()
+    print(registry_dir)
+    print(RcppCWB::cqp_get_registry())
     RcppCWB::cqp_reset_registry(registry = registry_dir)
+    print(RcppCWB::cqp_get_registry())
+    print(registry_to_restore)
+    
   } else {
     registry_to_restore <- NA
   }
-  print(registry_dir)
   
   n <- RcppCWB::cl_attribute_size(
     corpus = corpus,
