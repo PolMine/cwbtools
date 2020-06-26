@@ -319,7 +319,6 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     
     # Check whether newly installed corpoa can be loaded
     for (corpus_id in corpora){
-      print(cwb_dirs[["registry_dir"]])
       corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
     }
     
@@ -753,6 +752,7 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   } else {
     registry_to_restore <- NA
   }
+  print(registry_dir)
   
   n <- RcppCWB::cl_attribute_size(
     corpus = corpus,
