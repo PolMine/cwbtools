@@ -319,6 +319,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     
     # Check whether newly installed corpoa can be loaded
     for (corpus_id in corpora){
+      print(cwb_dirs[["registry_dir"]])
       corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
     }
     
