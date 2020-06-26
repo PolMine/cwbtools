@@ -748,12 +748,7 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   
   if (isFALSE(identical(RcppCWB::cqp_get_registry(), registry_dir))){
     registry_to_restore <- RcppCWB::cqp_get_registry()
-    print(registry_dir)
-    print(RcppCWB::cqp_get_registry())
     RcppCWB::cqp_reset_registry(registry = registry_dir)
-    print(RcppCWB::cqp_get_registry())
-    print(registry_to_restore)
-    
   } else {
     registry_to_restore <- NA
   }
@@ -773,8 +768,11 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
     retval <- FALSE
   }
   
-  if (isFALSE(is.na(registry_to_restore))){
-    RcppCWB::cqp_reset_registry(registry = registry_to_restore)
+  if (isFALSE(is.na(registry_to_restore)) && ){
+    # Check whether dir exists because RcppCWB::cqp_get_registry() is buggy
+    if (dir.exists(registry_to_restore)){
+      RcppCWB::cqp_reset_registry(registry = registry_to_restore)
+    }
   }
   
   invisible(retval)
