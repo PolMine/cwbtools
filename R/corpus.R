@@ -318,9 +318,9 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     unlink(cwbtools_tmpdir, recursive = TRUE)
     
     # Check whether newly installed corpoa can be loaded
-    for (corpus_id in corpora){
-      corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
-    }
+    # for (corpus_id in corpora){
+    #   corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
+    # }
     
   } else {
     for (tarfile in tarball){
