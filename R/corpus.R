@@ -768,7 +768,7 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
     retval <- FALSE
   }
   
-  if (isFALSE(is.na(registry_to_restore)) && ){
+  if (isFALSE(is.na(registry_to_restore))){
     # Check whether dir exists because RcppCWB::cqp_get_registry() is buggy
     if (dir.exists(registry_to_restore)){
       RcppCWB::cqp_reset_registry(registry = registry_to_restore)
