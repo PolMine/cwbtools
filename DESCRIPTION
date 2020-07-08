@@ -1,6 +1,6 @@
 Package: cwbtools
 Type: Package
-Title: Tools to create, modify and manage 'CWB' Corpora
+Title: Tools to Create, Modify and Manage 'CWB' Corpora
 Version: 0.3.0
 Date: 2020-06-24
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
