@@ -95,6 +95,7 @@
 #' @importFrom zen4R ZenodoManager
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
 #'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning
+#' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
@@ -302,18 +303,16 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           data_dir_new = data_dir_target # final location
         )
       }
-      
-      # Resetting registry and copying registry file to polmineR's temporary registry, 
-      # if polmineR is loaded necessary
-      if (isNamespaceLoaded("polmineR")){
-        destfile <- file.path(cwb_dirs[["registry_dir"]], tolower(corpus))
-        targetfile <- file.path(polmineR::registry(), tolower(corpus))
-        if (destfile != targetfile){
-          file.copy(from = destfile, to = targetfile, overwrite = TRUE)
-        }
-        polmineR::registry_reset(registryDir = polmineR::registry(), verbose = FALSE)
-      }
 
+      # Make corpus available if RcppCWB has been initialized
+      if (RcppCWB::cqp_is_initialized()){
+        srcfile <- file.path(cwb_dirs[["registry_dir"]], tolower(corpus))
+        destfile <- file.path(RcppCWB::cqp_get_registry(), tolower(corpus))
+        if (srcfile != destfile){
+          file.copy(from = srcfile, to = destfile, overwrite = TRUE)
+        }
+        RcppCWB::cqp_reset_registry(registry = RcppCWB::cqp_get_registry())
+      }
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
     
@@ -336,13 +335,13 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       )
     }
   }
-  if (isTRUE(modify_renviron)){
+  if (isTRUE(modify_renviron) && isTRUE(ask)){
     cli_alert_info(
       paste(
         sprintf("You have created the registry directory {.path %s} anew.", cwb_dirs[["registry_dir"]]),
         "The environment variable {.envvar CORPUS_REGISTRY} needs to refer to this directory to make the newly installed corpus available.",
         sprintf("You can call {.code Sys.getenv(CORPUS_REGISTRY=\"%s\")} whenever the environment variable needs to be set.", cwb_dirs[["registry_dir"]]),
-        "It is necessary to set the CORPUS_REGISTRY environment variable before loading polmineR.",
+        "It is necessary to set the {.envvar CORPUS_REGISTRY} environment variable before loading polmineR.",
         sprintf("To make this setting persist across sessions, you can add the line {.code CORPUS_REGISTRY=%s} to the {.path .Renviron} file.", cwb_dirs[["registry_dir"]]),
         collapse = " "
       ),

@@ -1,3 +1,22 @@
+cwbtools 0.3.1
+==============
+
+## NEW FEATURES
+
+* The (weak) dependency on the polmineR package (it was in the 'Suggests:' section of the DESCRIPTION file) has been removed. Changes are purely internal (higher-level polmineR functions have been replaced by lower-level RcppCWB functions, some tests were re-written). Dropping the dependency has the advantage that there is a much clearer structure of dependencies now (RcppCWB -> cwbtools -> polmineR).
+
+
+## MINOR IMPROVEMENTS
+
+* A remaining CLI formatting issue has been removed from the user dialogue for modifying the .Renviron file.
+* Unit tests used a test download of the United Nations General Assembly (UNGA) corpus from Zenodo. To reduce the time required for testing the package, a test download of the (much smaller) GermaParlSample copus is performed.
+
+
+## BUG FIXES
+
+* The `corpus_install()` function tried to ask for user feedback when not in an interactive session. The function now checks whether it is possible to ask for user feedback.
+
+
 cwbtools 0.3.0
 ==============
 

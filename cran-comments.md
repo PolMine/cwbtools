@@ -1,13 +1,11 @@
 ## General remarks
 
-The new version brings improvements of the user interface: Reworked user 
-dialogues and  with more telling status messages. This  results in two 
-new dependencies (cli, rstudioapi), but there is no tricky issue I could 
-anticipate.
+The dependency on the polmineR package has been dropped. As pointed out to me by Brian Ripley, polmineR was not used conditionally the orderly way. Removing the dependency altogether (using lower-level functions and alternative tests) was my preferred solution to reduce the number of dependencies.
+
 
 ## Test environments
 
-* local OS X install, R 4.0.0
+* local OS X install, R 4.0.2
 * Ubuntu 14.04 (on travis-ci), R 4.0.0
 * Windows/AppVeyor, R 4.0.2 Patched
 * win-builder (devel and release, R. 4.0.2)
