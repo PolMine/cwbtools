@@ -311,7 +311,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if (srcfile != destfile){
           file.copy(from = srcfile, to = destfile, overwrite = TRUE)
         }
-        RcppCWB::cqp_reset_registry(registry = RcppCWB::cqp_get_registry())
+        RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
       }
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
