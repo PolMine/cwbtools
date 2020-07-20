@@ -68,7 +68,8 @@ test_that(
       corpus_dir = cwb_dirs[["corpus_dir"]],
       ask = FALSE
     )
-
+    
+    RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]]) # should not be necessary
     expect_true("UNGAMINI" %in% RcppCWB::cqp_list_corpora())
     
     unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
