@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Introducing ‘cwbtools’</h1>
                         <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2020-07-19</h4>
+            <h4 class="date">2020-07-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/master/vignettes/vignette.Rmd"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -133,7 +133,7 @@
 <div id="scenario-1-from-xml-to-cwb---un-general-assembly-corpus" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scenario-1-from-xml-to-cwb---un-general-assembly-corpus" class="anchor"></a>Scenario 1: From XML to CWB - UN General Assembly Corpus</h2>
-<p>The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the <a href="https://tei-c.org/">Text Encoding Initiative (TEI)</a>.</p>
+<p>The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the <a href="https://en.wikipedia.org/wiki/Text_Encoding_Initiative">Text Encoding Initiative (TEI)</a>.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">teidir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"cwbtools"</span>, <span class="st">"xml"</span>, <span class="st">"UNGA"</span>)
 <span class="no">teifiles</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="no">teidir</span>, <span class="kw">full.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="no">teidir</span>)</pre></body></html></div>
@@ -192,7 +192,7 @@
   <span class="kw">compress</span> <span class="kw">=</span> <span class="fl">FALSE</span>
   )</pre></body></html></div>
 <pre><code>## === Makeall: processing corpus UNGA ===
-## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpRwfwUc/registry
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpCt3MZz/registry
 ## ATTRIBUTE word
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK
@@ -284,7 +284,7 @@
    <span class="kw">method</span> <span class="kw">=</span> <span class="st">"R"</span>, <span class="kw">compress</span> <span class="kw">=</span> <span class="fl">FALSE</span>
 )</pre></body></html></div>
 <pre><code>## === Makeall: processing corpus AUSTEN ===
-## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpRwfwUc/registry
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpCt3MZz/registry
 ## ATTRIBUTE word
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK
@@ -392,7 +392,7 @@
    <span class="kw">method</span> <span class="kw">=</span> <span class="st">"R"</span>, <span class="kw">compress</span> <span class="kw">=</span> <span class="fl">FALSE</span>
 )</pre></body></html></div>
 <pre><code>## === Makeall: processing corpus REUTERS ===
-## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpRwfwUc/registry
+## Registry directory: /var/folders/m_/431fjnbs1t32_62d35wvs7pr0000gp/T//RtmpCt3MZz/registry
 ## ATTRIBUTE word
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK

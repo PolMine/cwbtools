@@ -15,6 +15,8 @@ cwbtools 0.3.1
 ## BUG FIXES
 
 * The `corpus_install()` function tried to ask for user feedback when not in an interactive session. The function now checks whether it is possible to ask for user feedback.
+* Part of the output of the `cwbtools::create_cwb_directories()` function did show if `verbose` was `FALSE`. Fixed.
+
 
 
 cwbtools 0.3.0
