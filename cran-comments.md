@@ -9,7 +9,7 @@ The dependency on the polmineR package has been dropped. As pointed out to me by
 * Ubuntu 14.04 (on travis-ci), R 4.0.0
 * Windows/AppVeyor, R 4.0.2 Patched
 * win-builder (devel and release, R. 4.0.2)
-* Fedora (R-Hub) R-devel, clang, gfortran
+* Debian 
 
 ## R CMD check results
 

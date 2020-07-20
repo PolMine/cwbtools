@@ -4,11 +4,14 @@ test_that(
   "corpus_install from tarball",
   {
     library(RcppCWB)
-    
     cwb_dir_tmp <- file.path(tempdir(), "cwb_tmp")
     cwb_dirs <- create_cwb_directories(prefix = cwb_dir_tmp, ask = FALSE, verbose = FALSE)
-    cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
-
+    if (cqp_is_initialized()){
+      cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+    } else {
+      cqp_initialize(registry = cwb_dirs[["registry_dir"]])
+    }
+    
     tmp_tarball <- tempfile(fileext = ".tar.gz")
     rcppcwb_registry <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
     cwbtools::corpus_as_tarball(
