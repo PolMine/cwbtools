@@ -57,7 +57,7 @@ Core operations on structural and positional attributes are implemented in "pure
 
 ## Scenario 1: From XML to CWB - UN General Assembly Corpus
 
-The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the [Text Encoding Initiative (TEI)](https://en.wikipedia.org/wiki/Text_Encoding_Initiative).
+The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the [Text Encoding Initiative (TEI)](https://tei-c.org/).
 
 ```{r get_unga_teifiles}
 teidir <- system.file(package = "cwbtools", "xml", "UNGA")
