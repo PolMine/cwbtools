@@ -2,6 +2,7 @@
 [![Travis-CI Build Status](https://api.travis-ci.org/PolMine/cwbtools.svg?branch=master)](https://travis-ci.org/PolMine/cwbtools)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=master&svg=true)](https://ci.appveyor.com/project/PolMine/cwbtools)
 [![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/master)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3952910.svg)](https://doi.org/10.5281/zenodo.3952910)
 
 
 # Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)

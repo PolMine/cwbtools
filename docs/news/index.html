@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -132,35 +132,65 @@
       <small>Source: <a href='https://github.com/PolMine/cwbtools/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="cwbtools-030" class="section level1">
-<h1 class="page-header" data-toc-text="0.3.0">
-<a href="#cwbtools-030" class="anchor"></a>cwbtools 0.3.0<small> Unreleased </small>
+    <div id="cwbtools-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#cwbtools-031" class="anchor"></a>cwbtools 0.3.1<small> Unreleased </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
 <ul>
-<li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> gives much better and nicer reports on steps performed during corpus downloads. User dialogues have been reworked thoroughly to provide better user guidance.</li>
-<li>The <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> function is called by <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> and will amend the .Renviron file as appropriate if the user so desires.</li>
-<li>To resolve a DOI, the ‘zen4R’ package is used, to extract information on the whereabouts of a corpus tarball efficiently from the Zenodo API.</li>
+<li>The (weak) dependency on the polmineR package (it was in the ‘Suggests:’ section of the DESCRIPTION file) has been removed. Changes are purely internal (higher-level polmineR functions have been replaced by lower-level RcppCWB functions, some tests were re-written). Dropping the dependency has the advantage that there is a much clearer structure of dependencies now (RcppCWB -&gt; cwbtools -&gt; polmineR).</li>
 </ul>
 </div>
 <div id="minor-improvements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
-<li>Extracting the version number from the corpus tarball is somewhat more forgiving if the version number does not start with “v”.</li>
-<li>The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.</li>
-<li>To remedy the fairly common error that the path to the info file is not stated correctly in the registry file, a fallback mechanism will look up potential alternatives to an info file stated wrongly.</li>
+<li>A remaining CLI formatting issue has been removed from the user dialogue for modifying the .Renviron file.</li>
+<li>Unit tests used a test download of the United Nations General Assembly (UNGA) corpus from Zenodo. To reduce the time required for testing the package, a test download of the (much smaller) GermaParlSample copus is performed.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
 <ul>
+<li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function tried to ask for user feedback when not in an interactive session. The function now checks whether it is possible to ask for user feedback.</li>
+<li>Part of the output of the <code><a href="../reference/directories.html">cwbtools::create_cwb_directories()</a></code> function did show if <code>verbose</code> was <code>FALSE</code>. Fixed.</li>
+</ul>
+</div>
+</div>
+    <div id="cwbtools-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#cwbtools-030" class="anchor"></a>cwbtools 0.3.0<small> 2020-07-09 </small>
+</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> gives much better and nicer reports on steps performed during corpus downloads. User dialogues have been reworked thoroughly to provide better user guidance.</li>
+<li>The <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> function is called by <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> and will amend the .Renviron file as appropriate if the user so desires.</li>
+<li>To resolve a DOI, the ‘zen4R’ package is used, to extract information on the whereabouts of a corpus tarball efficiently from the Zenodo API.</li>
+<li>A <code><a href="../reference/corpus_utils.html">corpus_testload()</a></code> has been implemented to check whether a (newly installed) corpus is accessible.</li>
+</ul>
+</div>
+<div id="minor-improvements-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<ul>
+<li>Extracting the version number from the corpus tarball is somewhat more forgiving if the version number does not start with “v”.</li>
+<li>The registry file for a newly downloaded corpus is refreshed only if a temporary registry directory is used.</li>
+<li>To remedy the fairly common error that the path to the info file is not stated correctly in the registry file, a fallback mechanism will look up potential alternatives to an info file stated wrongly.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<ul>
 <li>The json string returned from Zenodo may include newline strings that are escaped such that they cannot be processed by <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::fromJSON()</a></code>. The auxiliary function to get and process information from Zenodo now ensures that newline characters are escaped such that they can be processed.</li>
 <li>The <code><a href="../reference/corpus_utils.html">corpus_copy()</a></code> function did not set the path to the info file to the new data directory - corrected.</li>
 <li>The <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function failed when the <code>registry_dir</code> got a <code>NULL</code> value from the default call to <code><a href="../reference/directories.html">cwbtools::cwb_registry_dir()</a></code>. But if the directories are created, the registry directory is there. Fixed.</li>
+<li>Removed a bug (faulty assignment) that would prevent that the path of a registry file is handled correctly (i.e. wrapped in quotation marks) by <code><a href="../reference/registry_file.html">registry_file_compose()</a></code> when the path includes any whitespace characters.</li>
 </ul>
 </div>
 <div id="documentation-fixes" class="section level2">
@@ -175,9 +205,9 @@
 <h1 class="page-header" data-toc-text="0.2.0">
 <a href="#cwbtools-020" class="anchor"></a>cwbtools 0.2.0<small> 2020-04-14 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>The <code>install_corpus()</code> function has been reworked thoroughly. Using system directories for the registry and the corpus directory is now supported. This is a prerequisite that corpora can be installed outside of R packages Installing corpora within corpora is not allowed by CRAN.</li>
 <li>A set of new auxiliary functions (<code><a href="../reference/directories.html">cwb_directories()</a></code>, <code><a href="../reference/directories.html">cwb_registry_dir()</a></code>, <code><a href="../reference/directories.html">cwb_corpus_dir()</a></code>) will get the whereabouts of the registry directory and the corpus directory. In particular, they consider that the polmineR package may have generated a temporary corpus registry, resetting the CORPUS_REGISTRY environment variable.</li>
@@ -186,9 +216,9 @@
 <li>New auxiliary functions <code>create_cwb_directories</code> and <code><a href="../reference/directories.html">use_corpus_registry_envvar()</a></code> will assist users to create the required directory structure for CWB indexed corpora.</li>
 </ul>
 </div>
-<div id="minor-improvements-1" class="section level2">
+<div id="minor-improvements-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements-1" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<a href="#minor-improvements-2" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
 <li>The default value of the argument “repo” that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account (“<a href="https://PolMine.github.io/drat/" class="uri">https://PolMine.github.io/drat/</a>”).</li>
 </ul>
@@ -206,9 +236,9 @@
 <h1 class="page-header" data-toc-text="0.1.2">
 <a href="#cwbtools-012" class="anchor"></a>cwbtools 0.1.2<small> 2019-12-17 </small>
 </h1>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Trying to remove the entire temporary session directory at the end of the package vignettes caused problems to build the package documentation. A more limited approach to clean up temporary files after build the vignettes will omit this problem.</li>
 </ul>
@@ -218,16 +248,16 @@
 <h1 class="page-header" data-toc-text="0.1.1">
 <a href="#cwbtools-011" class="anchor"></a>cwbtools 0.1.1<small> 2019-12-09 </small>
 </h1>
-<div id="minor-improvements-2" class="section level2">
+<div id="minor-improvements-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-improvements-2" class="anchor"></a>MINOR IMPROVEMENTS</h2>
+<a href="#minor-improvements-3" class="anchor"></a>MINOR IMPROVEMENTS</h2>
 <ul>
 <li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (<a href='https://github.com/PolMine/cwbtools/issues/11'>#11</a>).</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code><a href="https://rdrr.io/r/base/length.html">length(class(matrix(1:4,2,2)))</a></code> will return the value 2.</li>
 </ul>

@@ -152,7 +152,7 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
     if (file.access(dirname(prefix), mode = 2) != 0L){
       stop(sprintf("cannot create directory %s - no write permissions for parent directory %s", prefix, dirname(prefix)))
     }
-    cli_rule("Create CWB directories")
+    if (verbose) cli_rule("Create CWB directories")
     if (ask){
       answer <- menu(
         title = cli_text(sprintf("Create directory {.path %s} as parent directory for the registry directory and the corpus directory?", prefix)),
