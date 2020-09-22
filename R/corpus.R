@@ -137,7 +137,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       
       if (verbose) cli_rule("Resolve DOI")
       if (verbose) cli_process_start("get metadata for the Zenodo record referred to by DOI")
-      zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi)
+      tryCatch(zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi))
       if (verbose) cli_process_done()
       
       zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
