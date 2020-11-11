@@ -1,3 +1,12 @@
+cwbtools 0.3.2
+==============
+
+## MINOR IMPROVEMENTS
+
+* The `corpus_install()` function will abort with a warning and return value `FALSE` rather than an error if the DOI is not offered by Zenodo.
+* A new argument `checksum` for the `corpus_install()` function introduces functionality to check the integrity of a downloaded corpus tarball. If the tarball is downloaded from Zenodo (by stating a DOI using argument `doi`), the md5 checksum included in the record's metadata is extracted internally and used for checking.
+
+
 cwbtools 0.3.1
 ==============
 

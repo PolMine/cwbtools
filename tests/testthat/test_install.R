@@ -80,3 +80,59 @@ test_that(
     Sys.setenv("CORPUS_REGISTRY" = old_registry)
   }
 )
+
+test_that(
+  "check that corpus_install() fails gracefully if DOI is incorrect",
+  {
+    skip_on_cran()
+    y <- corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
+    expect_false(y, FALSE)
+  }
+)
+
+
+test_that(
+  "check that corpus_install() aborts of md5 checksum is invalid",
+  {
+    skip_on_cran()
+    
+    old_registry <- Sys.getenv("CORPUS_REGISTRY")
+    Sys.setenv(CORPUS_REGISTRY = "")
+    
+    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
+    Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+    
+    if (RcppCWB::cqp_is_initialized()){
+      RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+    } else {
+      RcppCWB::cqp_initialize(registry = cwb_dirs[["registry_dir"]])
+    }
+
+    zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi)
+    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
+    tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
+
+    y <- corpus_install(
+      tarball = tarball,
+      checksum = "cd542b95b3e6c80600f896c2a288c5d3",
+      registry_dir = cwb_dirs[["registry_dir"]],
+      corpus_dir = cwb_dirs[["corpus_dir"]],
+      verbose = FALSE
+    )
+    expect_true(y)
+    
+    y <- corpus_install(
+      tarball = tarball,
+      checksum = "cd542b95b3e6c80600f896c2a288c5d4",
+      registry_dir = cwb_dirs[["registry_dir"]],
+      corpus_dir = cwb_dirs[["corpus_dir"]],
+      ask = FALSE,
+      verbose = FALSE
+    )
+    expect_false(y)
+    
+    unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
+    unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)
+    Sys.setenv("CORPUS_REGISTRY" = old_registry)
+  }
+)

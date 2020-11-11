@@ -117,7 +117,7 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{to}{Character string describing the target encoding of the corpus.}
 }
 \value{
-Logical value \code{TRUE} if installation has been successful.
+Logical value \code{TRUE} if installation has been successful, or \code{FALSE} if not.
 }
 \description{
 Utility functions to assist the installation and management of indexed CWB
