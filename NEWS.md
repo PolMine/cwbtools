@@ -5,7 +5,9 @@ cwbtools 0.3.2
 
 * The `corpus_install()` function will abort with a warning and return value `FALSE` rather than an error if the DOI is not offered by Zenodo.
 * A new argument `checksum` for the `corpus_install()` function introduces functionality to check the integrity of a downloaded corpus tarball. If the tarball is downloaded from Zenodo (by stating a DOI using argument `doi`), the md5 checksum included in the record's metadata is extracted internally and used for checking.
-
+* If `corpus_install()` is used to install a corpus from a tarball present locally, a somewhat confusing message suggested that the tarball was downloaded. This message is not shown any more.
+* Extracting a corpus tarball present locally involved copying the tarball to a temporary location before extracting it. This step consuming more disk space than necessary (inefficient and potentially problematic with large corpora) is now omitted.
+* The function `corpus_copy()` will accept a new argument `remove`. If `TRUE` (the default value is `FALSE`), files that have been copied will be removed. Removing files is reasonable to handle disk space parsimonously if the source corpus is at a temporary location where nobody will miss it.
 
 cwbtools 0.3.1
 ==============
