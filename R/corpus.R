@@ -343,7 +343,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           registry_dir = tmp_registry_dir, 
           data_dir = tmp_home_dir, # the temporary place
           registry_dir_new = cwb_dirs[["registry_dir"]], 
-          data_dir_new = data_dir_target # final location
+          data_dir_new = data_dir_target, # final location
+          verbose = verbose
         )
       }
 
@@ -608,8 +609,8 @@ corpus_copy <- function(
     lapply(
       list.files(data_dir, full.names = TRUE),
       function(f){
-        spinner$spin()
         file.copy(from = f, to = file.path(data_dir_new, basename(f), fsep = "/"))
+        spinner$spin()
       }
     )
     spinner$finish()

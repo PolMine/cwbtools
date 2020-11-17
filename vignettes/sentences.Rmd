@@ -7,27 +7,44 @@ vignette: >
   %\VignetteIndexEntry{Sentence Annotation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## About
 
-There are many reasons why encoding an annotation of sentences as a structural attribute may be valuable. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParl corpus serves as an example.
+Adding an annotation of sentences as a structural attribute to an existing is a frequent scenario. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParlSamplee corpus serves as an example.
 
 
 ## Getting started
 
-In addition to the cwbtools package, we use some functionality of the polmineR package.
+In addition to the **cwbtools** package, we use the functionality of the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package to decode the p-attribute 'pos'. The same could be achieved using the higher-level `get_token_stream()` method of the [polmineR](https://CRAN.R-project.org/package=polmineR) package, but we want to avoid creating an additional dependency of this package.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 library(cwbtools)
-library(polmineR)
-use("polmineR")
+library(RcppCWB)
 ```
 
-Adding an s-attribute is not a risky operation. The attribute can be removed again. Nevertheless, we use a temporary copy here.
+For the purposes of this vigneette, ee will work with a temporary corpy of the corpus we wish to augment, so we create a temporary corpus directory.
 
-```{r, eval = FALSE}
-# Yet to be written
+```{r, eval = TRUE}
+corpus_dir_tmp <- file.path(tempdir(), "corpus_dir_tmp")
+dir.create(path = corpus_dir_tmp)
+```
+
+The GermaParlSample corpus can be downloaded from [Zenodo](https://doi.org/10.5281/zenodo.3823245) as follows.
+
+```{r, eval = TRUE}
+cwbtools::corpus_install(
+  doi = "10.5281/zenodo.3823245",
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  corpus_dir = corpus_dir_tmp,
+  verbose = FALSE
+)
+```
+
+```{r}
+list.files(file.path(corpus_dir_tmp, "germaparlsample"))
 ```
 
 
@@ -35,47 +52,45 @@ Adding an s-attribute is not a risky operation. The attribute can be removed aga
 
 We generate the data for the sentence annotation from the part-of-speech annotation that is already present.
 
-```{r, eval = FALSE}
-pos <- corpus("GERMAPARL") %>% 
-  get_token_stream(p_attribute = "pos")
+At first, we decode the p-attribute "pos".
 
-sentence_end <- grep("\\$\\.", pos)
-
-cpos_sentences <- cut(
-  x = seq.int(from = 0L, to = length(pos) - 1L),
-  breaks = c(0L, sentence_end),
-  include.lowest = TRUE,
-  right = FALSE
+```{r, eval = TRUE}
+germaparl_size <- cl_attribute_size(
+  corpus = "GERMAPARLSAMPLE",
+  attribute = "word", attribute_type = "p"
 )
-
-df <- split(x = cpos, f = cpos_sentences) %>%
-  lapply(function(cpos) c(cpos[1L], cpos[length(cpos)])) %>%
-  unlist() %>%
-  matrix(ncol = 2L, byrow = TRUE) %>%
-  data.frame()
-
-colnames(df) <- c("cpos_left", "cpos_right")
-df[["sentence"]] <- seq.int(from = 0L, to = nrow(df) - 1L)
+cpos_vec <- seq.int(from = 0L, to = germaparl_size - 1L)
+ids <- cl_cpos2id(corpus = "GERMAPARLSAMPLE", p_attribute = "pos", cpos = cpos_vec)
+pos <- cl_id2str(corpus = "GERMAPARLSAMPLE", p_attribute = "pos", id = ids)
 ```
 
-So let us see what we have ...
+The pos-tag for Stuttgart Tuebingen Tag Set (STTS) is a "$.". From this information, we can generate a region matrix with start and end corpus positions of sentences easily.
 
-```{r, eval = FALSE}
-head(df)
+```{r}
+sentence_end <- grep("\\$\\.", pos)
+sentence_factor <- cut(x = cpos_vec, breaks = c(0L, sentence_end), include.lowest = TRUE, right = FALSE)
+sentences_cpos <- unname(split(x = cpos_vec, f = sentence_factor))
+region_matrix <- do.call(rbind, lapply(sentences_cpos, function(cpos) c(cpos[1L], cpos[length(cpos)])))
+```
+
+So let us see what this looks like ...
+
+```{r, eval = TRUE}
+head(region_matrix)
 ```
 
 And this is how the new annotation layer is written back to the corpus.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 s_attribute_encode(
-  values = as.character(df[["sentence"]]),
-  data_dir = cwbtools::registry_file_parse(corpus = "GERMAPARL")[["home"]],
+  values = as.character(seq.int(from = 0L, to = nrow(region_matrix) - 1L)),
+  data_dir = registry_file_parse(corpus = "GERMAPARLSAMPLE")[["home"]],
   s_attribute = "s",
-  corpus = "GERMAPARL",
-  region_matrix = as.matrix(df[,c("cpos_left", "cpos_right")]),
+  corpus = "GERMAPARLSAMPLE",
+  region_matrix = region_matrix,
   method = "R",
-  registry_dir = registry(pkg = "GERMAPARL"),
-  encoding = cwbtools::registry_file_parse(corpus = "GERMAPARL")[["properties"]][["charset"]],
+  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+  encoding = registry_file_parse(corpus = "GERMAPARLSAMPLE")[["properties"]][["charset"]],
   delete = TRUE,
   verbose = TRUE
 )
@@ -84,10 +99,23 @@ s_attribute_encode(
 
 ## Checking the result
 
-```{r, eval = FALSE}
-k <- kwic("GERMAPARL", query = "Integration", left = 30, right = 30, boundary = "s")
+To see whether everything has worked, we get the left and right boundaries of the sentence with corpus position 60. 
+
+```{r, eval = TRUE}
+left <- cl_cpos2lbound("GERMAPARLSAMPLE", cpos = 60, s_attribute = "s")
+right <- cl_cpos2rbound("GERMAPARLSAMPLE", cpos = 60, s_attribute = "s")
+ids <- cl_cpos2id("GERMAPARLSAMPLE", cpos = left:right, p_attribute = "word")
+cl_id2str("GERMAPARLSAMPLE", p_attribute = "word", id = ids)
 ```
 
+
+## Cleaning up
+
+As a matter of housekeeping, we remove the temporary data directory.
+
+```{r, eval = TRUE}
+unlink(corpus_dir_tmp)
+```
 
 ## Next Steps
 
