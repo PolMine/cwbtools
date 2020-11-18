@@ -1,3 +1,8 @@
+cwbtools 0.3.2.9001-0.3.2.9002
+==============================
+
+* A new vignette explains how an existing CWB corpus can be enhanced using openNLP.
+
 cwbtools 0.3.2
 ==============
 
