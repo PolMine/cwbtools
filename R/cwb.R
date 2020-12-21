@@ -5,12 +5,12 @@
 #' part of the CWB package, or using the default installation location of the
 #' CWB.
 #' @param url_cwb The URL from where the CWB can be downloaded.
+#' @param cwb_dir The directory where the CWB shall be installed.
 #' @rdname cwb
 #' @export cwb_install
 #' @importFrom utils unzip untar download.file
-cwb_install <- function(url_cwb = cwb_get_url()){
+cwb_install <- function(url_cwb = cwb_get_url(), cwb_dir = system.file(package = "cwbtools", "extdata", "cwb")){
   subdir <- gsub("^(.*?)(-UPDATED|)(\\.tar\\.gz|\\.zip)$", "\\1", basename(url_cwb))
-  cwb_dir <- system.file(package = "cwbtools", "extdata", "cwb")
   tmp_dir <- normalizePath(tempdir(), winslash = "/")
   download.file(url_cwb, destfile = file.path(tmp_dir, basename(url_cwb), fsep = "/"))
   
@@ -44,7 +44,9 @@ cwb_install <- function(url_cwb = cwb_get_url()){
     system(install_script_file)
   }
   unlink(tmp_dir)
-  invisible( NULL )
+  cwb_bindir <- file.path(cwb_dir, "bin")
+  Sys.setenv("CWB_BINDIR" = cwb_bindir)
+  cwb_bindir
 }
 
 #' @details \code{cwb_get_url} will return the URL for downloading the
@@ -66,16 +68,16 @@ cwb_get_url <- function(){
   url_cwb
 }
 
+#' @param bindir The directory with CWB binaries.
 #' @details \code{cwb_get_bindir} will return the directory where the cwb
 #'   utility programs reside. If \code{cwb_install()} has been used to install
 #'   the CWB, the function returns the directory within the \code{cwbtools}
 #'   package. Alternatively, a check for a local installation is performed.
 #' @export cwb_get_bindir
 #' @rdname cwb
-cwb_get_bindir <- function(){
-  pkg_cwbtools_bindir <- system.file(package = "cwbtools", "extdata", "cwb", "bin")
-  if (file.exists(pkg_cwbtools_bindir)){
-    return( pkg_cwbtools_bindir )
+cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR")){
+  if (file.exists(bindir)){
+    return( bindir )
   } else {
     cwb_config <- "/usr/local/bin/cwb-config"
     if (file.exists(cwb_config)){

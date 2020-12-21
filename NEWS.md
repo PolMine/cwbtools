@@ -11,6 +11,8 @@ cwbtools 0.3.2.9001-0.3.2.9002
 * Extracting a corpus tarball present locally involved copying the tarball to a temporary location before extracting it. This step consuming more disk space than necessary (inefficient and potentially problematic with large corpora) is now omitted.
 * The function `corpus_copy()` will accept a new argument `remove`. If `TRUE` (the default value is `FALSE`), files that have been copied will be removed. Removing files is reasonable to handle disk space parsimonously if the source corpus is at a temporary location where nobody will miss it.
 * A new vignette explains how an existing CWB corpus can be enhanced using openNLP.
+* The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
+* The function `cwb_get_bindir()` now introduces an argument `bindir`.
 
 
 cwbtools 0.3.1

@@ -7,16 +7,23 @@
 \alias{cwb_is_installed}
 \title{Utilities to install Corpus Workbench.}
 \usage{
-cwb_install(url_cwb = cwb_get_url())
+cwb_install(
+  url_cwb = cwb_get_url(),
+  cwb_dir = system.file(package = "cwbtools", "extdata", "cwb")
+)
 
 cwb_get_url()
 
-cwb_get_bindir()
+cwb_get_bindir(bindir = Sys.getenv("CWB_BINDIR"))
 
 cwb_is_installed()
 }
 \arguments{
 \item{url_cwb}{The URL from where the CWB can be downloaded.}
+
+\item{cwb_dir}{The directory where the CWB shall be installed.}
+
+\item{bindir}{The directory with CWB binaries.}
 }
 \description{
 Some steps for encoding corpora can be performed by calling CWB utilities

@@ -223,7 +223,7 @@ Ready to encode the corpus!
 ```{r, message = FALSE}
 Austen$encode(
    corpus = "AUSTEN", encoding = "utf8",
-   p_attributes = "word", s_attributes = "book",
+   p_attributes = c("word", "stem"), s_attributes = "book",
    registry_dir = registry_tmp, data_dir = austen_data_dir_tmp,
    method = "R", compress = FALSE
 )
