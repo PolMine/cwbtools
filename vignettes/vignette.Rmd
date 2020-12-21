@@ -241,7 +241,7 @@ This is a rudimentary check (using low-level RcppCWB functions) whether to corpu
 corpus <- "AUSTEN"
 token <- "pride"
 p_attr <- "word"
-id <- cl_str2id(corpus = corpus, p_attribute = p_attr, str = token, registry = registry_tmp)
+id <- RcppCWB::cl_str2id(corpus = corpus, p_attribute = p_attr, str = token, registry = registry_tmp)
 cpos <- cl_id2cpos(corpus = corpus, p_attribute = p_attr, id = id, registry = registry_tmp)
 count <- length(cpos)
 count

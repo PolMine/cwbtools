@@ -338,7 +338,7 @@ CorpusData <- R6::R6Class(
         name = toupper(corpus), id = tolower(corpus),
         home = path.expand(data_dir), properties = c(charset = encoding), 
         p_attributes = p_attributes, s_attributes = s_attributes
-        )
+      )
       registry_file_write(data = reg_data, corpus = tolower(corpus), registry_dir = registry_dir)
       invisible(self)
     }

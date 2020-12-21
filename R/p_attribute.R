@@ -119,7 +119,19 @@ p_attribute_encode <- function(
     
     ids <- as.integer(tokenstream_factor) - 1L
     if (verbose) message("... writing file: ", basename(corpus_file))
-    writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
+    if (length(ids) * 4 < ((2^31) - 1)){
+      writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
+    } else {
+      corpus_file_con <- file(corpus_file, open = "ab")
+      max_id <- trunc((2^31 - 1) / 4) # trunc() necessary to avoid floating number issue
+      if (length(ids) > 2 * max_id){
+        stop("Corpus size exceeds current limitation. Not difficut to implement, but remaining business.")
+      }
+      writeBin(object = ids[1L:max_id], size = 4L, endian = "big", con = corpus_file_con)
+      writeBin(object = ids[(max_id + 1L):length(ids)], size = 4L, endian = "big", con = corpus_file_con)
+      close(corpus_file_con)
+    }
+    
     rm(ids); gc()
     
     lexicon <- levels(tokenstream_factor)
