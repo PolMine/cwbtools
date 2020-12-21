@@ -223,13 +223,15 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
     
     # Now download corpus -------------------
-    if (verbose) cat_rule("Download corpus tarball")
-    if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
-    corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
     if (grepl("^http", tarball)){
+      if (verbose) cat_rule("Download corpus tarball")
+      if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
+      
+      corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
+      
       if (is.null(user)){
         if (!RCurl::url.exists(tarball)) stop("tarball is not available")
         if (.Platform$OS.type == "windows"){
@@ -286,9 +288,9 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if (verbose) cli_alert_warning("no md5 checksum provided or available to check downloaded tarball - note that checking the integrity of downloaded data is good practice")
       }
     } else {
-      # If tqrball is not a URL, it is assumed to be present on the local machine
+      # If tarball is not a URL, it is assumed to be present on the local machine
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' not found locally", tarball))
-      file.copy(from = tarball, to = corpus_tarball)
+      corpus_tarball <- tarball
     }
 
     if (.Platform$OS.type == "windows"){
@@ -300,9 +302,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
     if (verbose) cli_process_done()
 
-    if (verbose) cli_process_start("remove tarball")
-    unlink(corpus_tarball)
-    if (verbose) cli_process_done()
+    if (tarball != corpus_tarball){
+      # Remove corpus_tarball only if it has been downloaded
+      if (verbose) cli_process_start("remove tarball")
+      unlink(corpus_tarball)
+      if (verbose) cli_process_done()
+    }
     
     tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
     tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
@@ -344,7 +349,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           data_dir = tmp_home_dir, # the temporary place
           registry_dir_new = cwb_dirs[["registry_dir"]], 
           data_dir_new = data_dir_target, # final location
-          verbose = verbose
+          verbose = verbose,
+          remove = TRUE
         )
       }
 
@@ -562,6 +568,8 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 #' @param data_dir The data directory where the files of the CWB corpus live.
 #' @param registry_dir_new Target directory with for (new) registry files.
 #' @param data_dir_new Target directory for corpus files.
+#' @param remove A \code{logical} value, whether to remove orginal files after
+#'   having created the copy.
 #' @param progress Logical, whether to show a progress bar.
 #' @details \code{corpus_copy} will create a copy of a corpus (useful for
 #'   experimental modifications, for instance).
@@ -590,6 +598,7 @@ corpus_copy <- function(
   corpus, registry_dir, data_dir = NULL,
   registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/"),
   data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
+  remove = FALSE,
   verbose = interactive(),
   progress = TRUE
   ){
@@ -611,6 +620,7 @@ corpus_copy <- function(
       function(f){
         file.copy(from = f, to = file.path(data_dir_new, basename(f), fsep = "/"))
         spinner$spin()
+        if (remove) file.remove(f)
       }
     )
     spinner$finish()

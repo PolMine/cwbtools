@@ -53,6 +53,7 @@ corpus_copy(
     "registry", fsep = "/"),
   data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
     "indexed_corpora", tolower(corpus), fsep = "/"),
+  remove = FALSE,
   verbose = interactive(),
   progress = TRUE
 )
@@ -120,6 +121,9 @@ or \code{download.file}, if \code{tarball} is specified.}
 \item{registry_dir_new}{Target directory with for (new) registry files.}
 
 \item{data_dir_new}{Target directory for corpus files.}
+
+\item{remove}{A \code{logical} value, whether to remove orginal files after
+having created the copy.}
 
 \item{progress}{Logical, whether to show a progress bar.}
 
