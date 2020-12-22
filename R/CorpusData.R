@@ -217,8 +217,7 @@ CorpusData <- R6::R6Class(
       if (!all(file.exists(filenames))) stop("all files provided by x need to exist (not fulfilled)")
       if (is.null(mc) || mc == 1L){
         data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
-      } else {
-        if (is.numeric(mc))
+      } else if (is.numeric(mc)){
         data <- if (progress) pblapply(filenames, .xml_reader, cl = mc) else mclapply(filenames, .xml_reader, mc.cores = mc)
       } else {
         stop("If argument 'mc' is not NULL nor 1, it is required to be an integer value.")
