@@ -218,8 +218,10 @@ CorpusData <- R6::R6Class(
       if (is.null(mc) || mc == 1L){
         data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
       } else {
-        if (!is.numeric(mc))
-        data <- if (progress) pblapply(filenames, function(x) .xml_reader(x), cl = mc) else mclapply(filenames, .xml_reader, mc.cores = mc)
+        if (is.numeric(mc))
+        data <- if (progress) pblapply(filenames, .xml_reader, cl = mc) else mclapply(filenames, .xml_reader, mc.cores = mc)
+      } else {
+        stop("If argument 'mc' is not NULL nor 1, it is required to be an integer value.")
       }
       self$chunktable <- rbindlist(lapply(data, function(x) x[["text"]]))
       self$chunktable[["id"]] <- 1L:nrow(self$chunktable)
