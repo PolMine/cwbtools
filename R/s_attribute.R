@@ -73,8 +73,12 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     class(region_matrix)[1] == "matrix",
     ncol(region_matrix) == 2L,
     is.character(values),
-    length(values) == nrow(region_matrix)
-    )
+    length(values) == nrow(region_matrix),
+    length(method) == 1L,
+    length(encoding) == 1L,
+    length(verbose) == 1L,
+    is.logical(verbose)
+  )
   if (class(as.vector(region_matrix)) != "integer"){
     region_matrix <- matrix(data = as.integer(as.vector(region_matrix)), ncol = 2)
   }
