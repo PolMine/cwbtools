@@ -18,6 +18,7 @@ cwbtools 0.3.2
 * The function `corpus_copy()` will accept a new argument `remove`. If `TRUE` (the default value is `FALSE`), files that have been copied will be removed. Removing files is reasonable to handle disk space parsimonously if the source corpus is at a temporary location where nobody will miss it.
 * The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
 * The function `cwb_get_bindir()` now introduces an argument `bindir`.
+* Argument `compress` of `p_attribute_encode(` now has default value `FALSE` (#29).
 
 
 ## BUG FIXES

@@ -92,7 +92,7 @@
 p_attribute_encode <- function(
   token_stream, p_attribute = "word", registry_dir, corpus, data_dir, method = c("R", "CWB"),
   verbose = TRUE, encoding = get_encoding(token_stream),
-  compress = NULL
+  compress = FALSE
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
     stop("encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode")
