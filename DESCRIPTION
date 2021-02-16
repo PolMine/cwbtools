@@ -46,7 +46,8 @@ Suggests:
     testthat,
     usethis,
     rmarkdown,
-    openNLP
+    openNLP,
+    aws.s3
 VignetteBuilder: knitr
 LazyData: yes
 License: GPL-3

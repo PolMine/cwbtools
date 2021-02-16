@@ -78,7 +78,9 @@ corpus_testload(
 
 \item{repo}{URL of the repository.}
 
-\item{tarball}{The URL or local path to a tarball with a CWB indexed corpus.}
+\item{tarball}{URL,  S3-URI or local filename of a tarball with a CWB indexed
+corpus. If \code{NULL} (default) and argument \code{doi} is stated, the
+whereabouts of a corpus tarball will be derived from DOI.}
 
 \item{doi}{The DOI (Digital Object Identifier) of a corpus deposited at
 Zenodo (e.g. "10.5281/zenodo.3748858".)}

@@ -63,7 +63,9 @@
 #' @param new Name of the (new) corpus.
 #' @param pkg Name of the data package.
 #' @param repo URL of the repository.
-#' @param tarball The URL or local path to a tarball with a CWB indexed corpus.
+#' @param tarball URL,  S3-URI or local filename of a tarball with a CWB indexed
+#'   corpus. If \code{NULL} (default) and argument \code{doi} is stated, the
+#'   whereabouts of a corpus tarball will be derived from DOI.
 #' @param doi The DOI (Digital Object Identifier) of a corpus deposited at
 #'   Zenodo (e.g. "10.5281/zenodo.3748858".)
 #' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
@@ -287,6 +289,34 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       } else if (FALSE){
         if (verbose) cli_alert_warning("no md5 checksum provided or available to check downloaded tarball - note that checking the integrity of downloaded data is good practice")
       }
+    } else if (grepl("^[sS]3:", tarball)){
+      if (!requireNamespace("aws.s3", quietly = TRUE)){
+        stop(
+          "To download a corpus tarball from S3, package 'aws.s3' is required. ",
+          "Package 'aws.s3' is not installed. ",
+          "Install package 'aws.s3' by calling install.packages('aws.s3') and retry."
+        )
+      }
+      if (verbose) cat_rule("Download corpus tarball from S3")
+      if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
+      corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
+      
+      bucketname <- aws.s3::get_bucketname(tarball)
+      location <- aws.s3::get_location(bucketname)
+      obj <- aws.s3::get_objectkey(tarball)
+      
+      if (isFALSE(aws.s3::object_exists(obj, bucket = bucketname, region = location))){
+        warning("S3 object does not exist - aborting")
+        return(FALSE)
+      }
+
+      aws.s3::save_object(
+        object = obj,
+        file = corpus_tarball, # temporary local destfile
+        bucket = bucketname,
+        region = location,
+        show_progress = TRUE
+      )
     } else {
       # If tarball is not a URL, it is assumed to be present on the local machine
       if (!file.exists(tarball)) stop(sprintf("tarball '%s' not found locally", tarball))

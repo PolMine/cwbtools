@@ -13,6 +13,7 @@ cwbtools 0.3.2.9001-0.3.2.9004
 * A new vignette explains how an existing CWB corpus can be enhanced using openNLP.
 * The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
 * The function `cwb_get_bindir()` now introduces an argument `bindir`.
+* It is now possible to install a corpus from S3 by stating a S3-URI as argument `tarball` of `corpus_install()`.
 
 ## BUG FIXES
 
