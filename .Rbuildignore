@@ -1,4 +1,3 @@
-^.travis.yml$
 ^cran-comments.md$
 ^data-raw$
 ^_pkgdown\.yml$
@@ -6,3 +5,4 @@
 ^appveyor.yml$
 ^README.md$
 ^CRAN-RELEASE$
+^\.github$
