@@ -14,7 +14,7 @@ p_attribute_encode(
   method = c("R", "CWB"),
   verbose = TRUE,
   encoding = get_encoding(token_stream),
-  compress = NULL
+  compress = FALSE
 )
 
 p_attribute_recode(
