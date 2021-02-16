@@ -91,7 +91,7 @@
 #' @importFrom utils available.packages contrib.url install.packages
 #' @importFrom utils installed.packages tar
 #' @importFrom curl curl_download new_handle handle_setopt
-#' @importFrom RCurl url.exists getURL
+#' @importFrom httr http_error
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils menu
 #' @importFrom tools md5sum
@@ -233,7 +233,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
       
       if (is.null(user)){
-        if (!RCurl::url.exists(tarball)) stop("tarball is not available")
+        if (http_error(tarball)) stop("tarball is not available")
         if (.Platform$OS.type == "windows"){
           # use download.file because it is able to cope with murky user names / path names
           download.file(url = tarball, destfile = corpus_tarball, quiet = !verbose)

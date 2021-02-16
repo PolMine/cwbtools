@@ -1,4 +1,4 @@
-cwbtools 0.3.2.9001-0.3.2.9002
+cwbtools 0.3.2.9001-0.3.2.9004
 ==============================
 
 ## MINOR IMPROVEMENTS
@@ -13,6 +13,10 @@ cwbtools 0.3.2.9001-0.3.2.9002
 * A new vignette explains how an existing CWB corpus can be enhanced using openNLP.
 * The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
 * The function `cwb_get_bindir()` now introduces an argument `bindir`.
+
+## BUG FIXES
+
+* To avoid an issue with a false negative issued by `RCurl::url.exists()`, this function has been replaced by `httr::http_error()` (#31).
 
 
 cwbtools 0.3.1
