@@ -98,9 +98,6 @@ test_that(
     vocab1 <- RcppCWB::cl_id2str(corpus = "AUSTEN", p_attribute = "word", id = 0L:(lex1 - 1L))
     vocab2 <- RcppCWB::cl_id2str(corpus = "AUSTEN2", p_attribute = "word", id = 0L:(lex1 - 1L))
     expect_identical(vocab1, vocab2)
-    
-    
-    
   }
 )
 

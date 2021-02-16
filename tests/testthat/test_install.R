@@ -108,7 +108,8 @@ test_that(
       RcppCWB::cqp_initialize(registry = cwb_dirs[["registry_dir"]])
     }
 
-    zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi)
+    doi <- "10.5281/zenodo.3823245"
+    zenodo_record <- zen4R::ZenodoManager$new()$getRecordByDOI(doi = doi)
     zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
     tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
 

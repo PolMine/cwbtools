@@ -206,7 +206,7 @@ p_attribute_encode <- function(
         args = c(
           sprintf("-d %s", normalizePath(data_dir)),
           sprintf("-f %s", normalizePath(vrt_tmp_file)),
-          sprintf("-R %s", normalizePath(registry_file)),
+          sprintf("-R %s", normalizePath(registry_file, mustWork = FALSE)),
           sprintf("-c %s", encoding), "-v")
       )
     } else {
@@ -225,7 +225,7 @@ p_attribute_encode <- function(
         file.path(cwb_get_bindir(), executable, fsep = "/"),
         "-d", normalizePath(data_dir),
         "-f", normalizePath(vrt_tmp_file),
-        "-R", normalizePath(registry_file),
+        "-R", normalizePath(registry_file, mustWork = FALSE),
         "-p", "-",
         "-P", p_attribute,
         "-c", encoding
