@@ -32,7 +32,7 @@ test_that(
     
     expect_true("REUTERS" %in% RcppCWB::cqp_list_corpora())
     
-    unlink(cwb_dir_tmp, recursive = TRUE)
+    # unlink(cwb_dir_tmp, recursive = TRUE)
   }
 )
 

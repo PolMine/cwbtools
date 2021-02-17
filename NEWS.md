@@ -19,6 +19,7 @@ cwbtools 0.3.2
 * The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
 * The function `cwb_get_bindir()` now introduces an argument `bindir`.
 * Argument `compress` of `p_attribute_encode(` now has default value `FALSE` (#29).
+* Examples in documentation of `p_attribute_encode()` have been adapted so that GitHub Actio unit test passes on Windows.
 
 
 ## BUG FIXES
