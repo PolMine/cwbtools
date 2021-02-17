@@ -11,6 +11,9 @@ get_encoding <- function(x, verbose = FALSE){
   if (length(enc) == 1){
     if (enc == "unknown"){
       locale <- localeToCharset()[1]
+      if (is.na(locale)){
+        locale <- "UTF-8"
+      }
       if (verbose) message(sprintf("... encoding of the input vector is 'unknown', assuming it to be '%s'", locale))
       return( locale )
     } else {
