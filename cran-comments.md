@@ -1,14 +1,13 @@
 ## General remarks
 
-The dependency on the polmineR package has been dropped. As pointed out to me by Brian Ripley, polmineR was not used conditionally the orderly way. Removing the dependency altogether (using lower-level functions and alternative tests) was my preferred solution to reduce the number of dependencies.
+This release solves issues with the robustness of download mechanisms for corpora (function `corpus_install()`). An issue with the GermaParl package on Windows (see https://cran.r-project.org/web/checks/check_results_GermaParl.html) will disappear with this release. 
 
 
 ## Test environments
 
 * local OS X install, R 4.0.2
-* Ubuntu 14.04 (on travis-ci), R 4.0.0
-* Windows/AppVeyor, R 4.0.2 Patched
-* win-builder (devel and release, R. 4.0.2)
+* GitHub Actions (Ubuntu 20.04 release and devel, macOS, Windows) R 4.0.4
+* win-builder (devel and release, R. 4.0.4)
 * Debian (docker image, R-devel)
 
 ## R CMD check results
@@ -18,6 +17,5 @@ There were no ERRORs, WARNINGs or NOTEs on the Linux / macOS / Windows environme
 
 ## Downstream dependencies
 
-The 'polmineR' package depends on cwbtools. I do not see any issues when checking GermaParl
-with the new cwbtools version.
+I do not see any issues when checking GermaParl with the new cwbtools version.
 

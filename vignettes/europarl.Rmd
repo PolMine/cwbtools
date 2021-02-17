@@ -1,10 +1,10 @@
 ---
-title: "Creating a Corpus Data Package: Wrapping Europarl"
+title: "Creating a Corpus Data Package with Europarl"
 author: "Andreas Blätte (andreas.blaette@uni-due.de)"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Europarl}
+  %\VignetteIndexEntry{Creating a Corpus Data Package with Europarl}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

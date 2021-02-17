@@ -3,31 +3,34 @@ cwbtools 0.3.2
 
 ## NEW FEATURES
 
-* A new argument `checksum` for the `corpus_install()` function introduces functionality to check the integrity of a downloaded corpus tarball. If the tarball is downloaded from Zenodo (by stating a DOI using argument `doi`), the md5 checksum included in the record's metadata is extracted internally and used for checking.
 * It is now possible to install a corpus from S3 by stating a S3-URI as argument `tarball` of `corpus_install()`.
+* A new argument `checksum` for the `corpus_install()` function introduces functionality to check the integrity of a downloaded corpus tarball. If the tarball is downloaded from Zenodo (by stating a DOI using argument `doi`), the md5 checksum included in the record's metadata is extracted internally and used for checking.
 * A new vignette explains how an existing CWB corpus can be enhanced using openNLP.
-
+* The function `corpus_copy()` will accept a new argument `remove`. If `TRUE` (the default value is `FALSE`), files that have been copied will be removed. Removing files is reasonable to handle disk space parsimonously if the source corpus is at a temporary location where nobody will miss it.
 
 ## MINOR IMPROVEMENTS
 
 * The `corpus_install()` function will abort with a warning and return value `FALSE` rather than an error if the DOI is not offered by Zenodo.
-* The code in the vignette on adding a sentence annotation was not executed when building the package and a bug in the code went unnoticed. Fixed (#17).
-* The `corpus_install()` function still showed some progress messages even when `verbose` was set as `FALSE` (argument not passed to `corpus_copy()`. Fixed.
 * If `corpus_install()` is used to install a corpus from a tarball present locally, a somewhat confusing message suggested that the tarball was downloaded. This message is not shown any more.
 * Extracting a corpus tarball present locally involved copying the tarball to a temporary location before extracting it. This step consuming more disk space than necessary (inefficient and potentially problematic with large corpora) is now omitted.
-* The function `corpus_copy()` will accept a new argument `remove`. If `TRUE` (the default value is `FALSE`), files that have been copied will be removed. Removing files is reasonable to handle disk space parsimonously if the source corpus is at a temporary location where nobody will miss it.
 * The function `cwb_install()` now replaces an internally hardcoded argument `cwb_dir` with an argument `cwb_dir`; the function returns the directory where the CWB is installed rather than `NULL` value.
 * The function `cwb_get_bindir()` now introduces an argument `bindir`.
 * Argument `compress` of `p_attribute_encode(` now has default value `FALSE` (#29).
-* Examples in documentation of `p_attribute_encode()` have been adapted so that GitHub Actio unit test passes on Windows.
-* The `get_encoding()` method would return `NA` if `localeToCharset()` fails to infer charset from locale. In this case, UTF-8 is assumed.
+* Examples in documentation of `p_attribute_encode()` have been adapted so that GitHub Action unit test passes on Windows.
 * A user abort if an existing corpus would be removed by installing the same version anew will not result in an error message any more, but in return value `FALSE` (#25).
-* A misleading, deprecated example in a dontrun section of the general package documentation has been removed (#23). The vignette includes a working and tested example how to encode the REUTERS corpus.
 
 
 ## BUG FIXES
 
 * To avoid an issue with a false negative issued by `RCurl::url.exists()`, this function has been replaced by `httr::http_error()` (#31).
+* The `corpus_install()` function still showed some progress messages even when `verbose` was set as `FALSE` (argument not passed to `corpus_copy()`. Fixed.
+* The code in the vignette on adding a sentence annotation was not executed when building the package and a bug in the code went unnoticed. Fixed (#17).
+* The `get_encoding()` method would return `NA` if `localeToCharset()` fails to infer charset from locale. In this case, UTF-8 is assumed.
+
+
+## DOCUMENTATION FIXES
+
+* A misleading, deprecated example in a dontrun section of the general package documentation has been removed (#23). The vignette includes a working and tested example how to encode the REUTERS corpus.
 
 
 cwbtools 0.3.1
