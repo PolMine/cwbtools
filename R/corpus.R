@@ -221,7 +221,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           )
         }
       }
-      corpus_remove(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]], ask = ask)
+      purged <- corpus_remove(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]], ask = ask)
+      if (isFALSE(purged)) return(invisible(FALSE))
     }
     
     # Now download corpus -------------------
@@ -238,14 +239,20 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if (http_error(tarball)) stop("tarball is not available")
         if (.Platform$OS.type == "windows"){
           # Use download.file() because it is able to cope with murky user names / path names
-          # Progress messages are better of download.file()
-          download.file(
-            url = tarball,
-            destfile = corpus_tarball,
-            quiet = !verbose,
-            cacheOK = FALSE,
-            method = if (isTRUE(capabilities("libcurl"))) "libcurl" else getOption("download.file.method")
+          # Progress messages are better of download.file(). However curl_download() is more
+          # robust, so we use it when download.file() has failed.
+          trystatus <- try(
+            download.file(
+              url = tarball,
+              destfile = corpus_tarball,
+              quiet = !verbose,
+              cacheOK = FALSE,
+              method = if (isTRUE(capabilities("libcurl"))) "libcurl" else getOption("download.file.method")
+            )
           )
+          if (is(trystatus)[[1]] == "try_error"){
+            curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+          }
         } else {
           curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         }
@@ -314,7 +321,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       
       if (isFALSE(aws.s3::object_exists(obj, bucket = bucketname, region = location))){
         warning("S3 object does not exist - aborting")
-        return(FALSE)
+        return(invisible(FALSE))
       }
 
       aws.s3::save_object(
@@ -539,7 +546,10 @@ corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = inter
       choices = c("Yes", "No"),
       title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", cli::col_red(corpus))
     )
-    if (userinput != 1L) stop("Aborting")
+    if (userinput != 1L){
+      cli_alert_warning("User abort")
+      return(invisible(FALSE))
+    }
   }
   for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
   file.remove(data_directory)

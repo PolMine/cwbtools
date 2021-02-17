@@ -21,6 +21,8 @@ cwbtools 0.3.2
 * Argument `compress` of `p_attribute_encode(` now has default value `FALSE` (#29).
 * Examples in documentation of `p_attribute_encode()` have been adapted so that GitHub Actio unit test passes on Windows.
 * The `get_encoding()` method would return `NA` if `localeToCharset()` fails to infer charset from locale. In this case, UTF-8 is assumed.
+* A user abort if an existing corpus would be removed by installing the same version anew will not result in an error message any more, but in return value `FALSE` (#25).
+* A misleading, deprecated example in a dontrun section of the general package documentation has been removed (#23). The vignette includes a working and tested example how to encode the REUTERS corpus.
 
 
 ## BUG FIXES
