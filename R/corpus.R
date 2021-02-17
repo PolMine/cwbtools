@@ -250,9 +250,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
               method = if (isTRUE(capabilities("libcurl"))) "libcurl" else getOption("download.file.method")
             )
           )
-          if (is(trystatus)[[1]] == "try_error"){
-            curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+          if (is(trystatus)[[1]] == "try-error"){
+            retry <- TRUE
+          } else {
+            retry <- if (trystatus == 1L) TRUE else FALSE
           }
+          if (isTRUE(retry)) curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         } else {
           curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         }
