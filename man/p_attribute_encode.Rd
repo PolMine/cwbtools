@@ -86,19 +86,20 @@ library(RcppCWB)
 
 tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
 
-# create new (and empty) directory structure
+# Create new (and empty) directory structure
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
-if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
-data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
+data_dir_tmp <- file.path(tmpdir, "data_dir", "reuters", fsep = "/")
 if (file.exists(file.path(data_dir_tmp, "word.corpus"))){
   file.remove(file.path(data_dir_tmp, "word.corpus"))
 }
 if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
-dir.create (registry_tmp)
-dir.create(data_dir_tmp)
+dir.create(registry_tmp)
+dir.create(data_dir_tmp, recursive = TRUE)
+
+# Now encode token stream
 
 p_attribute_encode(
   corpus = "reuters",
@@ -109,14 +110,20 @@ p_attribute_encode(
   encoding = "utf8"
   )
 
+# Create minimal registry file
+
 regdata <- registry_data(
   id = "REUTERS", name = "Reuters Sample Corpus", home = data_dir_tmp,
   properties = c(encoding = "utf-8", language = "en"), p_attributes = "word"
 )
+
 regfile <- registry_file_write(
   data = regdata, corpus = "REUTERS",
   registry_dir = registry_tmp, data_dir = data_dir_tmp,
 )
+
+# Reload corpus and run query as a test
+
 if (cqp_is_initialized()) cqp_reset_registry(registry_tmp) else cqp_initialize(registry_tmp)
 
 cqp_query(corpus = "REUTERS", query = '[]{3} "oil" []{3};')
