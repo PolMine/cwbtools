@@ -237,8 +237,15 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (is.null(user)){
         if (http_error(tarball)) stop("tarball is not available")
         if (.Platform$OS.type == "windows"){
-          # use download.file because it is able to cope with murky user names / path names
-          download.file(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+          # Use download.file() because it is able to cope with murky user names / path names
+          # Progress messages are better of download.file()
+          download.file(
+            url = tarball,
+            destfile = corpus_tarball,
+            quiet = !verbose,
+            cacheOK = FALSE,
+            method = if (isTRUE(capabilities("libcurl"))) "libcurl" else getOption("download.file.method")
+          )
         } else {
           curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
         }
