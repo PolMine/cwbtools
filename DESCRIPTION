@@ -53,7 +53,7 @@ LazyData: yes
 License: GPL-3
 Language: en-US
 Encoding: UTF-8
-URL: https://www.github.com/PolMine/cwbtools
+URL: https://github.com/PolMine/cwbtools
 BugReports: https://github.com/PolMine/cwbtools/issues
 Collate:
     'CorpusData.R'
