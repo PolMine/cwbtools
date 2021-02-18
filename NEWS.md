@@ -1,3 +1,12 @@
+cwbtools 0.3.3
+==============
+
+* A unit test that involves calling `cwb_install()` is skipped on Solaris to ensure that Solaris CRAN tests will not fail: A CWB binary is not available for Solaris.
+* Assumptions about the directory structure in a corpus tarball are somewhat relaxed: The name of the data directory may also be "data" (not just "indexed_corpora") and data files need not be necessarily in a subdirectory of the data directory. This makes downloading and installing the Europarl and the Dickens corpus possible.
+* The vignette "europarl.Rmd" is dropped altogether: Putting corpora into packages is not the recommended approach any more.
+* The dependency on the devtools package can be dropped as one consequence of removing the Europarl vignette.
+
+
 cwbtools 0.3.2
 ==============
 
