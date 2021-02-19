@@ -154,7 +154,6 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @param maintainer Maintainer, R package style, either \code{character} vector or \code{person}.
 #' @param description description of the data package.
 #' @param license The license.
-#' @seealso The \code{\link[usethis]{use_description}} function in the usethis-package will also create a DESCRIPTION file.
 #' @export pkg_add_description
 #' @rdname pkg_utils
 pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author, maintainer = NULL, description = "", license = "", verbose = TRUE){

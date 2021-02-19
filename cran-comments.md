@@ -9,6 +9,7 @@ This release solves issues with the robustness of download mechanisms for corpor
 * GitHub Actions (Ubuntu 20.04 release and devel, macOS, Windows) R 4.0.4
 * win-builder (devel and release, R. 4.0.4)
 * Debian (docker image, R-devel)
+* Solaris on R-hub (Oracle Solaris 10, x86, 32 bit, R-release, Oracle Developer Studio 12.6)
 
 ## R CMD check results
 

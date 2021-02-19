@@ -76,6 +76,7 @@ amend the .Renviron file as appropriate if the user so desires.
 of a corpus tarball efficiently from the Zenodo API.
 * A `corpus_testload()` has been implemented to check whether a (newly installed) corpus
 is accessible.
+* Dependency on usethis-package has been dropped.
 
 
 ## MINOR IMPROVEMENTS
