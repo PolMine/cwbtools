@@ -313,15 +313,11 @@ use_corpus_registry_envvar <- function(registry_dir){
     }
 
   } else if (user_input == 2L){
-    if (!requireNamespace("usethis", quietly = TRUE)){
-      stop("The package 'usethis' is required, but not available to modify the .Renviron file manually. ",
-           'Install it by calling install.packages("usethis").'
-      )
-    }
-    usethis::ui_todo(
-      "Include the following line in file {usethis::ui_value('.Renviron')} to make \\\n    {usethis::ui_field(registry_dir)} available as environment variable CORPUS_REGISTRY in all interactive R sessions:"
+    cli_alert_warning(
+      sprintf("Include the following line in file {.path .Renviron} to make {.path %s} available as environment variable {.envvar CORPUS_REGISTRY} across R sessions:", registry_dir)
     )
-    usethis::ui_code_block(sprintf('\n    CORPUS_REGISTRY="%s"\n    ', registry_dir))
-    usethis::edit_r_environ("user")
+    cli::cli_code(sprintf('CORPUS_REGISTRY="%s"', registry_dir))
+    cli_alert_warning('Call {.code file.edit("~/.Renviron")} to edit the {.path .Renviron} file from R.')
+    
   }
 }
