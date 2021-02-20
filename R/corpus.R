@@ -288,7 +288,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       }
       if (isFALSE(is.null(checksum))){
         if (verbose){
-          cli_process_start(sprintf("check md5 checksum for tarball %s (expected: %s)", basename(tarball), checksum))
+          msg <- sprintf("check md5 checksum for tarball %s (expected %s)", basename(tarball), checksum)
+          cli_process_start(msg)
         }
         corpus_tarball_checksum <- tools::md5sum(corpus_tarball)
         if (corpus_tarball_checksum == checksum){

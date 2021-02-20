@@ -93,7 +93,6 @@ test_that(
 test_that(
   "check that corpus_install() aborts of md5 checksum is invalid",
   {
-    skip_on_cran()
     skip_on_ci()
     
     old_registry <- Sys.getenv("CORPUS_REGISTRY")
