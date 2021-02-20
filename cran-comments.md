@@ -1,6 +1,6 @@
 ## General remarks
 
-This release solves issues with the robustness of download mechanisms for corpora (function `corpus_install()`). An issue with the GermaParl package on Windows (see https://cran.r-project.org/web/checks/check_results_GermaParl.html) will disappear with this release. 
+This version addresses an error on Solaris and a warning on Fedora that emerged with v0.3.2, see https://cran.r-project.org/web/checks/check_results_cwbtools.html. 
 
 
 ## Test environments
@@ -10,6 +10,7 @@ This release solves issues with the robustness of download mechanisms for corpor
 * win-builder (devel and release, R. 4.0.4)
 * Debian (docker image, R-devel)
 * Solaris on R-hub (Oracle Solaris 10, x86, 32 bit, R-release, Oracle Developer Studio 12.6)
+* Fedora, R-devel (docker image).
 
 ## R CMD check results
 
