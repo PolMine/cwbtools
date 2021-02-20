@@ -318,6 +318,5 @@ use_corpus_registry_envvar <- function(registry_dir){
     )
     cli::cli_code(sprintf('CORPUS_REGISTRY="%s"', registry_dir))
     cli_alert_warning('Call {.code file.edit("~/.Renviron")} to edit the {.path .Renviron} file from R.')
-    
   }
 }
