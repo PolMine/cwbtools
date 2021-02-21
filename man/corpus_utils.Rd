@@ -141,14 +141,14 @@ Utility functions to assist the installation and management of indexed CWB
 corpora.
 }
 \details{
-A CWB corpus consists a set of binary files with corpus data 
-  kept together in a data directory, and a registry file, which is a
-  plain test file that details the corpus id, corpus properties, 
-  structural and positional attributes. The registry file also specifies
-  the path to the corpus data directory. Typically, the registry directory
-  and a corpus directory with the data directories for individual corpora
-  are within one parent folder (which might be called "cwb" by default).
-  See the following stylized directory structure.
+A CWB corpus consists a set of binary files with corpus data
+kept together in a data directory, and a registry file, which is a
+plain test file that details the corpus id, corpus properties,
+structural and positional attributes. The registry file also specifies
+the path to the corpus data directory. Typically, the registry directory
+and a corpus directory with the data directories for individual corpora
+are within one parent folder (which might be called "cwb" by default).
+See the following stylized directory structure.
 
 \preformatted{
   .
@@ -169,53 +169,53 @@ A CWB corpus consists a set of binary files with corpus data
 }
 
 The \code{corpus_install} function will assist the installation of a
-  corpus. The following scenarios are offered: 
+corpus. The following scenarios are offered:
 \itemize{
-  \item{If argument \code{tarball} is a local tarball, the tarball will
-  be extracted and files will be moved.}
-  \item{If \code{tarball} is a URL, the tarball will be downloaded from
-  the online location. It is possible to state user credentials using the
-  arguments \code{user} and \code{password}. Then the aforementioned
-  installation (scenario 1) is executed. If argument \code{pkg} is the
-  name of an installed package, corpus files will be moved into this 
-  package.}
-  \item{If argument \code{doi} is Document Object Identifier (DOI), the URL
-  from which a corpus tarball can be downloaded is derived from the
-  information available at that location. The tarball is downloaded and the
-  corpus installed. If argument \code{pkg} is defined, files will be moved
-  into a R package, the syste registry and corpus directories are used
-  otherwise. Note that at this stage, it is assumed that the DOI has been
-  awarded by \href{https://zenodo.org/}{Zenodo}}
-  \item{If argument \code{pkg} is provided and specifies an R package (and
-  \code{tarball} is \code{NULL}), the corpus package available at a
-  CRAN-style repository specified by argument \code{repo} will be installed.
-  Internally, the \code{install.packages} function is called and further
-  arguments can be passed into this function call. This can be used to pass
-  user credentials, e.g. by adding \code{method = "wget" extra = "--user
+\item{If argument \code{tarball} is a local tarball, the tarball will
+be extracted and files will be moved.}
+\item{If \code{tarball} is a URL, the tarball will be downloaded from
+the online location. It is possible to state user credentials using the
+arguments \code{user} and \code{password}. Then the aforementioned
+installation (scenario 1) is executed. If argument \code{pkg} is the
+name of an installed package, corpus files will be moved into this
+package.}
+\item{If argument \code{doi} is Document Object Identifier (DOI), the URL
+from which a corpus tarball can be downloaded is derived from the
+information available at that location. The tarball is downloaded and the
+corpus installed. If argument \code{pkg} is defined, files will be moved
+into a R package, the syste registry and corpus directories are used
+otherwise. Note that at this stage, it is assumed that the DOI has been
+awarded by \href{https://zenodo.org/}{Zenodo}}
+\item{If argument \code{pkg} is provided and specifies an R package (and
+\code{tarball} is \code{NULL}), the corpus package available at a
+CRAN-style repository specified by argument \code{repo} will be installed.
+Internally, the \code{install.packages} function is called and further
+arguments can be passed into this function call. This can be used to pass
+user credentials, e.g. by adding \code{method = "wget" extra = "--user
   donald --password duck"}.
-  }
-}   
+}
+}
 If the corpus to be installed is already available, a dialogue will ask the
 user whether an existing corpus shall be deleted and installed anew, if
 argument \code{ask} is \code{TRUE}.
 
 \code{corpus_packages} will detect the packages that include CWB
-  corpora. Note that the directory structure of all installed packages is
-  evaluated which may be slow on network-mounted file systems.
+corpora. Note that the directory structure of all installed packages is
+evaluated which may be slow on network-mounted file systems.
 
 \code{corpus_rename} will rename a corpus, affecting the name of the
-  registry file, the corpus id, and the name of the directory where data
-  files reside.
+registry file, the corpus id, and the name of the directory where data
+files reside.
 
 \code{corpus_remove} can be used to delete a corpus.
 
 \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
-  two subdirectories. The 'registry' subdirectory will host the registry file
-  for the tarred corpus. The data files will be put in a subdirectory with
-  the corpus name in the 'indexed_corpora' subdirectory.
+two subdirectories. The 'registry' subdirectory will host the registry file
+for the tarred corpus. The data files will be put in a subdirectory with
+the corpus name in the 'indexed_corpora' subdirectory.
 
 \code{corpus_copy} will create a copy of a corpus (useful for
-  experimental modifications, for instance).
+experimental modifications, for instance).
 }
 \examples{
 registry_file_new <- file.path(

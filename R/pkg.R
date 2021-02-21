@@ -146,6 +146,8 @@ pkg_add_configure_scripts = function(pkg = "."){
 
 
 #' @details \code{pkg_add_description} will add a description file to the package.
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #' @param package The package name (\code{character}), may not include special
 #'   chars, and no underscores ('_').
 #' @param author The author of the package, either character vector or object of class \code{person}.
@@ -157,6 +159,15 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @export pkg_add_description
 #' @rdname pkg_utils
 pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author, maintainer = NULL, description = "", license = "", verbose = TRUE){
+  
+  lifecycle::deprecate_warn(
+    when = "3.3.4",
+    what = "pkg_add_description()",
+    details = paste0(
+      "Downloading corpora from a repository (HTTP-Server, Zenodo, S3) using corpus_install() is recommended. ",
+      "Only small corpora should be put into packages as sample data."
+    )
+  )
   
   if (missing(author)) stop("Aborting, argument 'author' needs to be declared to generate a valid package.")
   

@@ -67,11 +67,11 @@ See the appendix to the 'Corpus Encoding Tutorial'
 explanation of the registry file format.
 
 \code{registry_file_compose} will turn an
-  \code{registry_data}-object into a character vector with a registry file
-  that can be written to disk.
+\code{registry_data}-object into a character vector with a registry file
+that can be written to disk.
 
 \code{registry_file_write} will compose a registry file from
-  \code{data} and write it to disk.
+\code{data} and write it to disk.
 }
 \examples{
 regdata <- registry_file_parse(

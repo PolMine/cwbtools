@@ -48,4 +48,10 @@
 #' @author Andreas Blaette
 #' @import R6
 #' @import methods
+#' @importFrom lifecycle deprecate_warn
+NULL
+
+## usethis namespace: start
+#' @importFrom lifecycle deprecate_soft
+## usethis namespace: end
 NULL

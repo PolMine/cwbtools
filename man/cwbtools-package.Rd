@@ -20,7 +20,7 @@ The C implementation of the CWB is mature and efficient. However, the
 convenience and flexibility of traditional CWB command line tools is limited.
 These tools are not portable across platforms, inhibiting the ideal of
 reproducible research.
- 
+
 The 'cwbtools' package combines portable pure R tools to create indexed
 corpus files and convenience wrappers for the original C implementation of
 CWB as exposed by the
@@ -38,18 +38,18 @@ quantitative and qualitative approaches when working with textual data.
 }
 \references{
 Christ, Oliver (1994): "A Modular and Flexible Architecture for
-  an Integrated Corpus Query System". \emph{Proceedings of COMPLEX'94},
-  pp.23-32. \href{https://arxiv.org/pdf/cmp-lg/9408005.pdf}{(available online here)}
+an Integrated Corpus Query System". \emph{Proceedings of COMPLEX'94},
+pp.23-32. \href{https://arxiv.org/pdf/cmp-lg/9408005.pdf}{(available online here)}
 
 Evert, Stefan and Andrew Hardie (2011): "Twenty-first
-  century Corpus Workbench: Updating a query architecture for the new
-  millennium." In: \emph{Proceedings of the Corpus Linguistics 2011 conference},
-  University of Birmingham, UK.
-  \href{https://www.birmingham.ac.uk/documents/college-artslaw/corpus/conference-archives/2011/Paper-153.pdf}{(available online here)}
+century Corpus Workbench: Updating a query architecture for the new
+millennium." In: \emph{Proceedings of the Corpus Linguistics 2011 conference},
+University of Birmingham, UK.
+\href{https://www.birmingham.ac.uk/documents/college-artslaw/corpus/conference-archives/2011/Paper-153.pdf}{(available online here)}
 
 Witten, Ian H., Alistair Moffat and Timothy C. Bell (1999):
-  \emph{Managing Gigabytes: Compressing and Indexing Documents and Images.}
-  2nd edition. San Francisco et al.: Morgan Kaufmann.
+\emph{Managing Gigabytes: Compressing and Indexing Documents and Images.}
+2nd edition. San Francisco et al.: Morgan Kaufmann.
 }
 \author{
 Andreas Blaette

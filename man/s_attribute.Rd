@@ -92,32 +92,32 @@ as a helper for \code{corpus_recode} that will recode all s-attributes, all p-at
 and will reset the encoding in the registry file.
 
 \code{s_attribute_files} will return a named character vector with
-  the data files (extensions: "avs", "avx", "rng") in the directory indicated
-  by \code{data_dir} for the structural attribute \code{s_attribute}.
+the data files (extensions: "avs", "avx", "rng") in the directory indicated
+by \code{data_dir} for the structural attribute \code{s_attribute}.
 
 \code{s_attribute_get_values} is equivalent to performing the CL
-  function cl_struc2id for all strucs of a structural attribute. It is a
-  "pure R" operation that is faster than using CL, as it processes entire
-  files for the s-attribute directly. The return value is a \code{character}
-  vector with all string values for the s-attribute.
+function cl_struc2id for all strucs of a structural attribute. It is a
+"pure R" operation that is faster than using CL, as it processes entire
+files for the s-attribute directly. The return value is a \code{character}
+vector with all string values for the s-attribute.
 
 \code{s_attribute_get_regions} will return a two-column integer
-  matrix with regions for the strucs of a given s-attribute. Left corpus
-  positions are in the first column, right corpus positions in the second
-  column. The result is equivalent to calling RcppCWB::get_region_matrix for
-  all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
-  function which is fast as it processes files entirely and directly.
+matrix with regions for the strucs of a given s-attribute. Left corpus
+positions are in the first column, right corpus positions in the second
+column. The result is equivalent to calling RcppCWB::get_region_matrix for
+all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
+function which is fast as it processes files entirely and directly.
 
 \code{s_attribute_merge} combines two tables with regions for
-  s-attributes checking for intersections that may cause problems. The
-  heuristic is to keep all non-intersecting annotations and those annotations
-  that define the same region in object \code{x} and object \code{y}.
-  Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
-  an identity of the left and the right corpus position ("cpos_left" /
-  "cpos_right") are dropped. The scenario for using the function is to decode
-  a s-attribute (using \code{s_attribute_decode}), mix in an additional
-  annotation, and to re-encode the enhanced s-attribute (using
-  \code{s_attribute_encode}).
+s-attributes checking for intersections that may cause problems. The
+heuristic is to keep all non-intersecting annotations and those annotations
+that define the same region in object \code{x} and object \code{y}.
+Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
+an identity of the left and the right corpus position ("cpos_left" /
+"cpos_right") are dropped. The scenario for using the function is to decode
+a s-attribute (using \code{s_attribute_decode}), mix in an additional
+annotation, and to re-encode the enhanced s-attribute (using
+\code{s_attribute_encode}).
 
 Function \code{s_attribute_delete} is not yet implemented.
 }

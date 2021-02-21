@@ -32,57 +32,57 @@ directories.}
 }
 \description{
 The Corpus Workbench (CWB) stores the binary files for
-  structural and positional attributes in an individual 'data directory'
-  (referred to by argument \code{data_dir}) for each corpus. The data
-  directories will typically be subdirectories of a parent directory called
-  'corpus directory' (argument \code{corpus_dir}). Irrespective of the
-  location of the data directories, all corpora available on a machine are
-  described by so-called (plain text) registry files stored in a so-called
-  'registry directory' (referred to by argument \code{registry_dir}).  The
-  functionality to manage theses directories is used as auxiliary
-  functionality by higher-level functionality to download and install
-  corpora.
+structural and positional attributes in an individual 'data directory'
+(referred to by argument \code{data_dir}) for each corpus. The data
+directories will typically be subdirectories of a parent directory called
+'corpus directory' (argument \code{corpus_dir}). Irrespective of the
+location of the data directories, all corpora available on a machine are
+described by so-called (plain text) registry files stored in a so-called
+'registry directory' (referred to by argument \code{registry_dir}).  The
+functionality to manage theses directories is used as auxiliary
+functionality by higher-level functionality to download and install
+corpora.
 }
 \details{
 \code{cwb_corpus_dir} will make a plausible suggestion for a corpus
-  directory where data directories for corpora reside. The procedure requires
-  that  the registry directory (argument \code{registry_dir}) is known. If
-  the argument \code{registry_dir} is missing, the registry directory will be
-  guessed by calling \code{cwb_registry_dir}. The heuristic to detect the
-  corpus directory is as follows: First, directories in the parent directory
-  of the registry directory that contain "corpus" or "corpora" are suggested.
-  If this does not yield a result, the data directories stated in the
-  registry files are evaluated. If there is one unique parent directory of
-  data directories (after removing temporary directories and directories
-  within packages), this unique directory is suggested. \code{cwb_corpus_dir}
-  will return a length-one \code{character} vector with the path of the
-  suggested corpus directory, or \code{NULL} if the heuristic does not yield
-  a result.
+directory where data directories for corpora reside. The procedure requires
+that  the registry directory (argument \code{registry_dir}) is known. If
+the argument \code{registry_dir} is missing, the registry directory will be
+guessed by calling \code{cwb_registry_dir}. The heuristic to detect the
+corpus directory is as follows: First, directories in the parent directory
+of the registry directory that contain "corpus" or "corpora" are suggested.
+If this does not yield a result, the data directories stated in the
+registry files are evaluated. If there is one unique parent directory of
+data directories (after removing temporary directories and directories
+within packages), this unique directory is suggested. \code{cwb_corpus_dir}
+will return a length-one \code{character} vector with the path of the
+suggested corpus directory, or \code{NULL} if the heuristic does not yield
+a result.
 
 \code{cwb_registry_dir} will return return the system registry
-  directory. By default, the environment variable CORPUS_REGISTRY defines the
-  system registry directory. If the polmineR-package is loaded, a temporary
-  registry directory is used, replacing the system registry directory. In
-  this case, \code{cwb_registry_dir} will retrieve the directory from the
-  option 'polmineR.corpus_registry'. The return value is a length-one
-  character vector or \code{NULL}, if no registry directory can be detected.
+directory. By default, the environment variable CORPUS_REGISTRY defines the
+system registry directory. If the polmineR-package is loaded, a temporary
+registry directory is used, replacing the system registry directory. In
+this case, \code{cwb_registry_dir} will retrieve the directory from the
+option 'polmineR.corpus_registry'. The return value is a length-one
+character vector or \code{NULL}, if no registry directory can be detected.
 
 \code{cwb_directories} will return a named character vector with the
-  registry directory and the corpus directory.
+registry directory and the corpus directory.
 
 \code{create_cwb_directories} will create a 'registry' and an
-  'indexed_corpora' directory as subdirectories of the directory indicated by
-  argument \code{prefix}. Argument \code{ask} indicates whether to create
-  directories, and whether user feedback is asked for before creating the
-  directories. The function returns a named character vector with the
-  registry and the corpus directory.
+'indexed_corpora' directory as subdirectories of the directory indicated by
+argument \code{prefix}. Argument \code{ask} indicates whether to create
+directories, and whether user feedback is asked for before creating the
+directories. The function returns a named character vector with the
+registry and the corpus directory.
 
 \code{use_corpus_registry_envvar} is a convenience function that
-  will assist users to define the environment variable CORPUS_REGSITRY in the
-  .Renviron-file.  making it available across sessions. The function is
-  intended to be used in an interactive R session. An error is thrown if this
-  is not the case. The user will be prompted whether the cwbtools package
-  shall take care of creating / modifying the .Renviron-file. If not,
-  the file will be opened for manual modification with some instructions shown
-  in the terminal.
+will assist users to define the environment variable CORPUS_REGSITRY in the
+.Renviron-file.  making it available across sessions. The function is
+intended to be used in an interactive R session. An error is thrown if this
+is not the case. The user will be prompted whether the cwbtools package
+shall take care of creating / modifying the .Renviron-file. If not,
+the file will be opened for manual modification with some instructions shown
+in the terminal.
 }

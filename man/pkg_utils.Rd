@@ -71,35 +71,37 @@ chars, and no underscores ('_').}
 Putting CWB indexed corpora into R data packages is a convenient way to ship
 and share corpora, and to keep documentation and supplementary functionality
 with the data.
+
+\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
 }
 \details{
 \code{pkg_creage_cwb_dirs} will create the standard directory
-  structure for storing registry files and indexed corpora within a package
-  (\code{./inst/extdata/cwb/registry} and
-  \code{./inst/extdata/cwb/indexed_corpora}, respectively).
+structure for storing registry files and indexed corpora within a package
+(\code{./inst/extdata/cwb/registry} and
+\code{./inst/extdata/cwb/indexed_corpora}, respectively).
 
 \code{pkg_add_corpus} will add the corpus described in registry directory to
 the package defined by \code{pkg}.
 
 \code{add_configure_script} will add standardized and tested
-  configure scripts \code{configure} for Linux and macOS, and
-  \code{configure.win} for Windows to the top level directory of the data
-  package, and file \code{setpaths.R} to \code{tools} subdirectory. The
-  configuration mechanism ensures that the data directory is specified
-  correctly in the registry files during the installation of the data
-  package.
+configure scripts \code{configure} for Linux and macOS, and
+\code{configure.win} for Windows to the top level directory of the data
+package, and file \code{setpaths.R} to \code{tools} subdirectory. The
+configuration mechanism ensures that the data directory is specified
+correctly in the registry files during the installation of the data
+package.
 
 \code{pkg_add_description} will add a description file to the package.
 
 \code{pkg_add_creativecommons_license} will license information to
-  the DESCRIPTION file, and move file LICENSE to top level directory of the
-  package.
+the DESCRIPTION file, and move file LICENSE to top level directory of the
+package.
 
 \code{pkg_add_gitattributes_file} will add a file '.gitattributes'
-  to the package. The file defines types of files that will be tracked by Git
-  LFS, i.e. they will not be under conventional version control. This is
-  suitable for large binary files, which is the scenario applicable for
-  indexed corpus data.
+to the package. The file defines types of files that will be tracked by Git
+LFS, i.e. they will not be under conventional version control. This is
+suitable for large binary files, which is the scenario applicable for
+indexed corpus data.
 }
 \examples{
 pkgdir <- normalizePath(tempdir(), winslash = "/")
@@ -120,7 +122,7 @@ pkg_add_creativecommons_license(pkg = pkgdir)
 }
 \references{
 Blätte, Andreas (2018). "Using Data Packages to Ship Annotated
-  Corpora of Parliamentary Protocols: The GermaParl R Package",
-  \emph{ParlaCLARIN 2018 Workshop Proceedings}, available online
-  \href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
+Corpora of Parliamentary Protocols: The GermaParl R Package",
+\emph{ParlaCLARIN 2018 Workshop Proceedings}, available online
+\href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
 }

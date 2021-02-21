@@ -1,3 +1,9 @@
+cwbtools 0.3.3.9001
+===================
+
+* The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
+
+
 cwbtools 0.3.3
 ==============
 

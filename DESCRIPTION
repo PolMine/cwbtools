@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.3
-Date: 2021-02-20
+Version: 0.3.3.9001
+Date: 2021-02-21
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -33,7 +33,8 @@ Imports:
     jsonlite,
     httr,
     rstudioapi,
-    zen4R
+    zen4R,
+    lifecycle
 Suggests:
     tm (>= 0.7.3),
     knitr,
@@ -66,3 +67,5 @@ Collate:
     'registry_file.R'
     's_attribute.R'
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+RdMacros: lifecycle
