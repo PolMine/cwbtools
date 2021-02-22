@@ -3,7 +3,8 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   europarl: europarl.html
+  opennlp: opennlp.html
   sentences: sentences.html
   vignette: vignette.html
-last_built: 2021-02-16T22:14Z
+last_built: 2021-02-22T13:05Z
 

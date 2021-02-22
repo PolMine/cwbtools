@@ -73,7 +73,7 @@ corpora." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -96,7 +96,10 @@ corpora." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/europarl.html">Creating a Corpus Data Package with Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -145,6 +148,7 @@ corpora.</p>
   repo <span class='op'>=</span> <span class='st'>"https://PolMine.github.io/drat/"</span>,
   tarball <span class='op'>=</span> <span class='cn'>NULL</span>,
   doi <span class='op'>=</span> <span class='cn'>NULL</span>,
+  checksum <span class='op'>=</span> <span class='cn'>NULL</span>,
   lib <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
   registry_dir <span class='op'>=</span> <span class='fu'>cwbtools</span><span class='fu'>::</span><span class='fu'><a href='cwb_corpus_dir.html'>cwb_registry_dir</a></span><span class='op'>(</span><span class='op'>)</span>,
   corpus_dir <span class='op'>=</span> <span class='fu'><a href='cwb_corpus_dir.html'>cwb_corpus_dir</a></span><span class='op'>(</span><span class='va'>registry_dir</span><span class='op'>)</span>,
@@ -164,7 +168,12 @@ corpora.</p>
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 
-<span class='fu'>corpus_remove</span><span class='op'>(</span><span class='va'>corpus</span>, registry_dir <span class='op'>=</span> <span class='fu'><a href='cwb_corpus_dir.html'>cwb_registry_dir</a></span><span class='op'>(</span><span class='op'>)</span>, ask <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>corpus_remove</span><span class='op'>(</span>
+  <span class='va'>corpus</span>,
+  registry_dir <span class='op'>=</span> <span class='fu'><a href='cwb_corpus_dir.html'>cwb_registry_dir</a></span><span class='op'>(</span><span class='op'>)</span>,
+  ask <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
 <span class='fu'>corpus_as_tarball</span><span class='op'>(</span><span class='va'>corpus</span>, <span class='va'>registry_dir</span>, <span class='va'>data_dir</span>, <span class='va'>tarfile</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
@@ -176,6 +185,7 @@ corpora.</p>
     <span class='st'>"registry"</span>, fsep <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>,
   data_dir_new <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>, <span class='st'>"cwb"</span>,
     <span class='st'>"indexed_corpora"</span>, <span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span><span class='op'>(</span><span class='va'>corpus</span><span class='op'>)</span>, fsep <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>,
+  remove <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>,
   progress <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
@@ -208,12 +218,21 @@ corpora.</p>
     </tr>
     <tr>
       <th>tarball</th>
-      <td><p>The URL or local path to a tarball with a CWB indexed corpus.</p></td>
+      <td><p>URL,  S3-URI or local filename of a tarball with a CWB indexed
+corpus. If <code>NULL</code> (default) and argument <code>doi</code> is stated, the
+whereabouts of a corpus tarball will be derived from DOI.</p></td>
     </tr>
     <tr>
       <th>doi</th>
       <td><p>The DOI (Digital Object Identifier) of a corpus deposited at
 Zenodo (e.g. "10.5281/zenodo.3748858".)</p></td>
+    </tr>
+    <tr>
+      <th>checksum</th>
+      <td><p>A length-one <code>character</code> vector with a MD5 checksum to
+check for the integrity of a downloaded tarball. If the tarball is
+downloaded from Zenodo by stating a DOI (argument <code>doi</code>), the checksum
+included in the metadata for the record is used for the check.</p></td>
     </tr>
     <tr>
       <th>lib</th>
@@ -280,6 +299,11 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
       <td><p>Target directory for corpus files.</p></td>
     </tr>
     <tr>
+      <th>remove</th>
+      <td><p>A <code>logical</code> value, whether to remove orginal files after
+having created the copy.</p></td>
+    </tr>
+    <tr>
       <th>progress</th>
       <td><p>Logical, whether to show a progress bar.</p></td>
     </tr>
@@ -295,7 +319,7 @@ or <code>download.file</code>, if <code>tarball</code> is specified.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Logical value <code>TRUE</code> if installation has been successful.</p>
+    <p>Logical value <code>TRUE</code> if installation has been successful, or <code>FALSE</code> if not.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A CWB corpus consists a set of binary files with corpus data 

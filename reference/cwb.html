@@ -75,7 +75,7 @@ CWB." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -98,7 +98,10 @@ CWB." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/europarl.html">Creating a Corpus Data Package with Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -144,11 +147,14 @@ part of the CWB package, or using the default installation location of the
 CWB.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cwb_install</span><span class='op'>(</span>url_cwb <span class='op'>=</span> <span class='fu'>cwb_get_url</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>cwb_install</span><span class='op'>(</span>
+  url_cwb <span class='op'>=</span> <span class='fu'>cwb_get_url</span><span class='op'>(</span><span class='op'>)</span>,
+  cwb_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span>package <span class='op'>=</span> <span class='st'>"cwbtools"</span>, <span class='st'>"extdata"</span>, <span class='st'>"cwb"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='fu'>cwb_get_url</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>cwb_get_bindir</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>cwb_get_bindir</span><span class='op'>(</span>bindir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='st'>"CWB_BINDIR"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>cwb_is_installed</span><span class='op'>(</span><span class='op'>)</span></pre>
 
@@ -158,6 +164,14 @@ CWB.</p>
     <tr>
       <th>url_cwb</th>
       <td><p>The URL from where the CWB can be downloaded.</p></td>
+    </tr>
+    <tr>
+      <th>cwb_dir</th>
+      <td><p>The directory where the CWB shall be installed.</p></td>
+    </tr>
+    <tr>
+      <th>bindir</th>
+      <td><p>The directory with CWB binaries.</p></td>
     </tr>
     </table>
 

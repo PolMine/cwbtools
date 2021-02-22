@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -54,7 +54,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/europarl.html">Creating a Corpus Data Package with Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -91,7 +94,7 @@
       <h1 data-toc-skip>Introducing ‘cwbtools’</h1>
                         <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2021-02-16</h4>
+            <h4 class="date">2021-02-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/master/vignettes/vignette.Rmd"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -128,8 +131,8 @@
 <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span></code></pre></div>
 <p>In addition to <em>cwbtools</em>, we rely extensively on the <a href="https://CRAN.R-project.org/package=data.table">data.table</a> package. It is a good companion to <em>cwbtools</em> because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.github.com/PolMine/cwbtools">cwbtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://Rdatatable.gitlab.io/data.table">data.table</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools">cwbtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></code></pre></div>
 <p>Core operations on structural and positional attributes are implemented in “pure R”, but the CWB can be downloaded and stored within the package using the <code><a href="../reference/cwb_install.html">cwb_install()</a></code> function. In the following examples, we will rely on the “pure R” approach.</p>
 </div>
 <div id="scenario-1-from-xml-to-cwb---un-general-assembly-corpus" class="section level2">
@@ -202,8 +205,12 @@
   p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>,
   compress <span class="op">=</span> <span class="cn">FALSE</span>
   <span class="op">)</span></code></pre></div>
-<pre><code>## === Makeall: processing corpus UNGA ===
-## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpkaRl2S/registry
+<pre><code>## Corpus to delete (ID): UNGA
+## Corpus name: UNGA
+## Number of loads before reset: 1
+## Number of loads resetted: 1
+## === Makeall: processing corpus UNGA ===
+## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpLp36SG/registry
 ## ATTRIBUTE word
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK
@@ -299,13 +306,34 @@
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Austen</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span>
    corpus <span class="op">=</span> <span class="st">"AUSTEN"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>,
-   p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="st">"book"</span>,
+   p_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"word"</span>, <span class="st">"stem"</span><span class="op">)</span>, s_attributes <span class="op">=</span> <span class="st">"book"</span>,
    registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">austen_data_dir_tmp</span>,
    method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
-<pre><code>## === Makeall: processing corpus AUSTEN ===
-## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpkaRl2S/registry
+<pre><code>## Corpus to delete (ID): AUSTEN
+## Corpus name: AUSTEN
+## Number of loads before reset: 1
+## Number of loads resetted: 1
+## === Makeall: processing corpus AUSTEN ===
+## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpLp36SG/registry
 ## ATTRIBUTE word
+##  + creating LEXSRT ... OK
+##  - lexicon      OK
+##  + creating FREQS ... OK
+##  - frequencies  OK
+##  - token stream OK
+##  + creating REVCIDX ... OK
+##  + creating REVCORP ... OK
+##  ? validating REVCORP ... OK
+##  - index        OK
+## ========================================
+## Corpus to delete (ID): AUSTEN
+## Corpus name: AUSTEN
+## Number of loads before reset: 2
+## Number of loads resetted: 1
+## === Makeall: processing corpus AUSTEN ===
+## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpLp36SG/registry
+## ATTRIBUTE stem
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK
 ##  + creating FREQS ... OK
@@ -325,7 +353,7 @@
 <code class="sourceCode R"><span class="va">corpus</span> <span class="op">&lt;-</span> <span class="st">"AUSTEN"</span>
 <span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"pride"</span>
 <span class="va">p_attr</span> <span class="op">&lt;-</span> <span class="st">"word"</span>
-<span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, str <span class="op">=</span> <span class="va">token</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
+<span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, str <span class="op">=</span> <span class="va">token</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
 <span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, id <span class="op">=</span> <span class="va">id</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
 <span class="va">count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span>
 <span class="va">count</span></code></pre></div>
@@ -421,8 +449,12 @@
    data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,
    method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
-<pre><code>## === Makeall: processing corpus REUTERS ===
-## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpkaRl2S/registry
+<pre><code>## Corpus to delete (ID): REUTERS
+## Corpus name: REUTERS
+## Number of loads before reset: 1
+## Number of loads resetted: 1
+## === Makeall: processing corpus REUTERS ===
+## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpLp36SG/registry
 ## ATTRIBUTE word
 ##  + creating LEXSRT ... OK
 ##  - lexicon      OK

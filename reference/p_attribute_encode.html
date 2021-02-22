@@ -73,7 +73,7 @@ tokens (the token stream)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -96,7 +96,10 @@ tokens (the token stream)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/europarl.html">Creating a Corpus Data Package with Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -149,7 +152,7 @@ tokens (the token stream).</p>
   method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"R"</span>, <span class='st'>"CWB"</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   encoding <span class='op'>=</span> <span class='fu'><a href='get_encoding.html'>get_encoding</a></span><span class='op'>(</span><span class='va'>token_stream</span><span class='op'>)</span>,
-  compress <span class='op'>=</span> <span class='cn'>NULL</span>
+  compress <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
 <span class='fu'>p_attribute_recode</span><span class='op'>(</span>
@@ -241,19 +244,20 @@ and will reset the encoding in the registry file.</p>
 
 <span class='va'>tokens</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span>package <span class='op'>=</span> <span class='st'>"RcppCWB"</span>, <span class='st'>"extdata"</span>, <span class='st'>"examples"</span>, <span class='st'>"reuters.txt"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># create new (and empty) directory structure</span>
+<span class='co'># Create new (and empty) directory structure</span>
 
 <span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='va'>.Platform</span><span class='op'>$</span><span class='va'>OS.type</span> <span class='op'>==</span> <span class='st'>"windows"</span><span class='op'>)</span> <span class='va'>tmpdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
 <span class='va'>registry_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"registry"</span>, fsep <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='va'>data_dir_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"data_dir"</span>, fsep <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
+<span class='va'>data_dir_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>tmpdir</span>, <span class='st'>"data_dir"</span>, <span class='st'>"reuters"</span>, fsep <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/files.html'>file.exists</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span>, <span class='st'>"word.corpus"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
   <span class='fu'><a href='https://rdrr.io/r/base/files.html'>file.remove</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span>, <span class='st'>"word.corpus"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>registry_tmp</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>registry_tmp</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span> <span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>data_dir_tmp</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># Now encode token stream</span>
 
 <span class='fu'>p_attribute_encode</span><span class='op'>(</span>
   corpus <span class='op'>=</span> <span class='st'>"reuters"</span>,
@@ -263,22 +267,37 @@ and will reset the encoding in the registry file.</p>
   compress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   encoding <span class='op'>=</span> <span class='st'>"utf8"</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span></div><div class='output co'>#&gt; <span class='message'>... creating indices (in memory)</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.corpus</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon.idx</span></div><div class='output co'>#&gt; <span class='message'>... creating data for new registry file</span></div><div class='output co'>#&gt; <span class='message'>... writing registry file</span></div><div class='output co'>#&gt; === Makeall: processing corpus reuters ===
-#&gt; Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp8bGop5/registry
+</div><div class='output co'>#&gt; <span class='message'>... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span></div><div class='output co'>#&gt; <span class='message'>... creating indices (in memory)</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.corpus</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon</span></div><div class='output co'>#&gt; <span class='message'>... writing file: word.lexicon.idx</span></div><div class='output co'>#&gt; <span class='message'>... creating data for new registry file</span></div><div class='output co'>#&gt; <span class='message'>... writing registry file</span></div><div class='output co'>#&gt; Corpus to delete (ID): reuters
+#&gt; Corpus name: REUTERS
+#&gt; Number of loads before reset: 3
+#&gt; Number of loads resetted: 1
+#&gt; === Makeall: processing corpus reuters ===
+#&gt; Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpgNMPV6/registry
 #&gt; ATTRIBUTE word
+#&gt;  + creating LEXSRT ... OK
 #&gt;  - lexicon      OK
+#&gt;  + creating FREQS ... OK
 #&gt;  - frequencies  OK
-#&gt;  - token stream OK (COMPRESSED)
-#&gt;  - index        OK (COMPRESSED)
+#&gt;  - token stream OK
+#&gt;  + creating REVCIDX ... OK
+#&gt;  + creating REVCORP ... OK
+#&gt;  ? validating REVCORP ... OK
+#&gt;  - index        OK
 #&gt; ========================================</div><div class='input'>
+<span class='co'># Create minimal registry file</span>
+
 <span class='va'>regdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='registry_file_parse.html'>registry_data</a></span><span class='op'>(</span>
   id <span class='op'>=</span> <span class='st'>"REUTERS"</span>, name <span class='op'>=</span> <span class='st'>"Reuters Sample Corpus"</span>, home <span class='op'>=</span> <span class='va'>data_dir_tmp</span>,
   properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>encoding <span class='op'>=</span> <span class='st'>"utf-8"</span>, language <span class='op'>=</span> <span class='st'>"en"</span><span class='op'>)</span>, p_attributes <span class='op'>=</span> <span class='st'>"word"</span>
 <span class='op'>)</span>
+
 <span class='va'>regfile</span> <span class='op'>&lt;-</span> <span class='fu'><a href='registry_file_parse.html'>registry_file_write</a></span><span class='op'>(</span>
   data <span class='op'>=</span> <span class='va'>regdata</span>, corpus <span class='op'>=</span> <span class='st'>"REUTERS"</span>,
   registry_dir <span class='op'>=</span> <span class='va'>registry_tmp</span>, data_dir <span class='op'>=</span> <span class='va'>data_dir_tmp</span>,
 <span class='op'>)</span>
+
+<span class='co'># Reload corpus and run query as a test</span>
+
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html'>cqp_is_initialized</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html'>cqp_reset_registry</a></span><span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span> <span class='kw'>else</span> <span class='fu'><a href='https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html'>cqp_initialize</a></span><span class='op'>(</span><span class='va'>registry_tmp</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/pkg/RcppCWB/man/cqp_query.html'>cqp_query</a></span><span class='op'>(</span>corpus <span class='op'>=</span> <span class='st'>"REUTERS"</span>, query <span class='op'>=</span> <span class='st'>'[]{3} "oil" []{3};'</span><span class='op'>)</span>

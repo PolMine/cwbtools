@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -95,7 +95,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/europarl.html">Creating a Corpus Data Package with Europarl</a>
+    </li>
+    <li>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -182,41 +185,6 @@ quantitative and qualitative approaches when working with textual data.</p>
 
     <p>Andreas Blaette</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tm.r-forge.r-project.org/'>tm</a></span><span class='op'>)</span>
-<span class='va'>reut21578</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"texts"</span>, <span class='st'>"crude"</span>, package <span class='op'>=</span> <span class='st'>"tm"</span><span class='op'>)</span>
-<span class='va'>reuters.tm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tm/man/VCorpus.html'>VCorpus</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/tm/man/DirSource.html'>DirSource</a></span><span class='op'>(</span><span class='va'>reut21578</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>reader <span class='op'>=</span> <span class='va'>readReut21578XMLasPlain</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='op'>)</span>
-<span class='va'>reuters.tibble</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>reuters.tm</span><span class='op'>)</span>
-<span class='va'>reuters.tibble</span><span class='op'>[[</span><span class='st'>"topics_cat"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span>
-  <span class='va'>reuters.tibble</span><span class='op'>[[</span><span class='st'>"topics_cat"</span><span class='op'>]</span><span class='op'>]</span>,
-  <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>reuters.tibble</span><span class='op'>[[</span><span class='st'>"topics_cat"</span><span class='op'>]</span><span class='op'>]</span>, collapse <span class='op'>=</span> <span class='st'>"|"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>reuters.tibble</span><span class='op'>[[</span><span class='st'>"places"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span>
-  <span class='va'>reuters.tibble</span><span class='op'>[[</span><span class='st'>"places"</span><span class='op'>]</span><span class='op'>]</span>,
-  <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>x</span>, collapse <span class='op'>=</span> <span class='st'>"|"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>reuters.tidy</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='op'>(</span>
-  <span class='va'>reuters.tibble</span>, output <span class='op'>=</span> <span class='st'>"word"</span>, input <span class='op'>=</span> <span class='st'>"text"</span>, to_lower <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span>
-
-<span class='va'>cdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  tokenstream <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>reuters.tidy</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"word"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
-  metadata <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>reuters.tibble</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"topics_cat"</span>, <span class='st'>"places"</span>, <span class='st'>"language"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='va'>cdata</span> <span class='op'>&lt;-</span> <span class='fu'>add_corpus_positions</span><span class='op'>(</span><span class='va'>cdata</span><span class='op'>)</span>
-
-<span class='va'>registry_dir_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-<span class='va'>data_dir_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, winslash <span class='op'>=</span> <span class='st'>"/"</span><span class='op'>)</span>
-
-<span class='fu'>encode_corpusdata</span><span class='op'>(</span>
-  <span class='va'>cdata</span>, corpus <span class='op'>=</span> <span class='st'>"REUTERS"</span>, encoding <span class='op'>=</span> <span class='st'>"utf8"</span>,
-  registry_dir <span class='op'>=</span> <span class='va'>registry_dir_tmp</span>, data_dir <span class='op'>=</span> <span class='va'>data_dir_tmp</span>
-  <span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
