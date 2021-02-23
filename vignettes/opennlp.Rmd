@@ -13,7 +13,7 @@ editor_options:
 
 ## Required packages
 
-```{r packages}
+```{r packages, eval = FALSE}
 library(cwbtools)
 library(RcppCWB)
 library(NLP)
@@ -26,7 +26,7 @@ library(data.table)
 
 ### Decode p-attribute 'word'
 
-```{r decode_word, eval = TRUE}
+```{r decode_word, eval = FALSE}
 corpus_size <- cl_attribute_size("UNGA", attribute = "word", attribute_type ="p")
 dt <- data.table(cpos = 0L:(corpus_size - 1L))
 dt <- dt[, "id" := cl_cpos2id("UNGA", p_attribute = "word", cpos = dt[["cpos"]])]
@@ -36,7 +36,7 @@ dt[, "word" := cl_id2str("UNGA", p_attribute = "word", id = dt[["id"]])]
 
 ### Reconstruct String
 
-```{r get_txt, eval = TRUE}
+```{r get_txt, eval = FALSE}
 dt[, "whitespace" := c(ifelse(word %in% c(".", ",", ":", "!", "?", ";"), FALSE, TRUE)[2L:length(word)], FALSE)]
 txt <- String(paste(paste(dt[["word"]], ifelse(dt[["whitespace"]], " ", ""), sep = ""), collapse = ""))
 ```
@@ -44,7 +44,7 @@ txt <- String(paste(paste(dt[["word"]], ifelse(dt[["whitespace"]], " ", ""), sep
 
 ### Match token annotation
 
-```{r word_offset_annotation, eval = TRUE}
+```{r word_offset_annotation, eval = FALSE}
 dt[, "nchar" := sapply(dt[["word"]], nchar)]
 dt[, "start" := c(1L, (cumsum(dt[["nchar"]] + dt[["whitespace"]]) + 1L)[1L:(nrow(dt) - 1L)])]
 dt[, "end" := (dt[["start"]] + dt[["nchar"]] - 1L)]
@@ -62,7 +62,7 @@ w <- NLP::Annotation(
 
 ### Sentences
 
-```{r sentence_annotation, eval = TRUE}
+```{r sentence_annotation, eval = FALSE}
 sentence_annotator <- Maxent_Sent_Token_Annotator()
 s <- annotate(s = txt, f = sentence_annotator)
 

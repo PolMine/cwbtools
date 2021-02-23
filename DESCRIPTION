@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.2
-Date: 2021-02-17
+Version: 0.3.3
+Date: 2021-02-20
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
   )
@@ -41,10 +41,8 @@ Suggests:
     tidytext,
     SnowballC,
     janeaustenr,
-    devtools,
     NLP,
     testthat,
-    usethis,
     rmarkdown,
     openNLP,
     aws.s3

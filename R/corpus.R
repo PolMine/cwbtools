@@ -96,7 +96,7 @@
 #' @importFrom httr http_error
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils menu
-#' @importFrom tools md5sum
+#' @importFrom tools md5sum file_path_sans_ext
 #' @importFrom stringi stri_enc_mark
 #' @importFrom tools file_path_sans_ext
 #' @importFrom zen4R ZenodoManager
@@ -356,15 +356,43 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (verbose) cli_process_done()
     }
     
-    tmp_registry_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "registry", fsep = "/")
-    tmp_data_dir <- file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), "indexed_corpora", fsep = "/")
+    # The registry directory and the data directory might be within a subdirectory 
+    # with the same name of the tarball (or name of tarball without date)
+    subdir1 <- file_path_sans_ext(basename(tarball), compression = TRUE)
+    subdir2 <- gsub("^(.*?)(-|_)\\d{4}-\\d{2}-\\d{2}$", "\\1", subdir1)
+    
+    if (dir.exists(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir1, fsep = "/"))){
+      subdir <- subdir1
+    } else if (dir.exists(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir2, fsep = "/"))){
+      subdir <- subdir2
+    } else {
+      subdir <- ""
+    }
+    
+    tmp_registry_dir <- file.path(
+      normalizePath(cwbtools_tmpdir, winslash = "/"),
+      subdir, "registry", fsep = "/"
+    )
+    filenames <- list.files(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir))
+    dirname <- if ("indexed_corpora" %in% filenames) "indexed_corpora" else "data"
+    tmp_data_dir <- file.path(
+      normalizePath(cwbtools_tmpdir, winslash = "/"),
+      subdir, dirname, fsep = "/"
+    )
     corpora <- list.files(tmp_registry_dir)
     
     for (corpus in corpora){
 
       registry_data <- registry_file_parse(corpus = corpus, registry_dir = tmp_registry_dir)
       
-      tmp_home_dir <- file.path(tmp_data_dir, tolower(corpus), fsep = "/")
+      # In corpus tarball, directory for binary files is not necessarily name of corpus
+      # we assume that last (sub-)directory stated in HOME is correct
+      tmp_home_dir <- file.path(tmp_data_dir, basename(registry_data[["home"]]), fsep = "/")
+      if (isFALSE(dir.exists(tmp_home_dir))){
+        # Maybe data is not in another 
+        tmp_home_dir <- tmp_data_dir
+        if (isFALSE(dir.exists(tmp_home_dir))) stop("don't know where to look for data directory")
+      }
       
       if (.Platform$OS.type == "windows" && stri_enc_mark(tmp_home_dir) != "ASCII")
         tmp_home_dir <- utils::shortPathName(tmp_home_dir)
@@ -663,7 +691,7 @@ corpus_copy <- function(
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
 
-  spinner <- make_spinner(template = "{spin} copy corpus data files from temporary directory to target data directory")
+  spinner <- make_spinner(template = sprintf("{spin} copy corpus data files for corpus {col_cyan('%s')} to target data directory", toupper(corpus)))
   copy_with_spinner <- function(){
     lapply(
       list.files(data_dir, full.names = TRUE),
@@ -676,9 +704,9 @@ corpus_copy <- function(
     spinner$finish()
   }
   ansi_with_hidden_cursor(copy_with_spinner())
-  if (verbose) cli_alert_success("copy corpus data files from temporary directory to target data directory ... done")
+  if (verbose) cli_alert_success(sprintf("copy corpus data files for corpus {col_cyan('%s')} to target data directory ... done", toupper(corpus)))
 
-  if (verbose) cli_process_start("parse registry file")
+  if (verbose) cli_process_start(sprintf("parse registry file for corpus {col_cyan('%s')}", toupper(corpus)))
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   if (verbose) cli_process_done()
 

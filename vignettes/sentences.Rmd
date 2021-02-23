@@ -28,8 +28,14 @@ library(RcppCWB)
 For the purposes of this vigneette, ee will work with a temporary corpy of the corpus we wish to augment, so we create a temporary corpus directory.
 
 ```{r, eval = TRUE}
+registry_dir_tmp <- file.path(tempdir(), "registry_dir_tmp")
 corpus_dir_tmp <- file.path(tempdir(), "corpus_dir_tmp")
+
+dir.create(path = registry_dir_tmp)
 dir.create(path = corpus_dir_tmp)
+
+regdir_envvar <- Sys.getenv("CORPUS_REGISTRY")
+Sys.setenv(CORPUS_REGISTRY = registry_dir_tmp)
 ```
 
 The GermaParlSample corpus can be downloaded from [Zenodo](https://doi.org/10.5281/zenodo.3823245) as follows.
@@ -37,8 +43,7 @@ The GermaParlSample corpus can be downloaded from [Zenodo](https://doi.org/10.52
 ```{r, eval = TRUE}
 cwbtools::corpus_install(
   doi = "10.5281/zenodo.3823245",
-  registry_dir = Sys.getenv("CORPUS_REGISTRY"),
-  corpus_dir = corpus_dir_tmp,
+  registry_dir = registry_dir_tmp, corpus_dir = corpus_dir_tmp,
   verbose = FALSE
 )
 ```
@@ -111,10 +116,13 @@ cl_id2str("GERMAPARLSAMPLE", p_attribute = "word", id = ids)
 
 ## Cleaning up
 
-As a matter of housekeeping, we remove the temporary data directory.
+As a matter of housekeeping, we remove temporary directories and restore value of environment variable CORPUS_REGISTRY.
 
 ```{r, eval = TRUE}
 unlink(corpus_dir_tmp)
+unlink(registry_dir_tmp)
+
+Sys.setenv(CORPUS_REGISTRY = regdir_envvar)
 ```
 
 ## Next Steps

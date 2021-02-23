@@ -63,6 +63,7 @@ test_that(
     
     # Check CWB encoded version against R version
     
+    skip_on_os(os = "solaris") # CWB not available for Solaris
     cwb_install(cwb_dir = file.path(tempdir(), "cwb"))
     
     Austen$encode(

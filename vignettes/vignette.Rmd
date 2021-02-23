@@ -43,6 +43,9 @@ if (!file.exists(registry_tmp)){
   file.remove(list.files(registry_tmp, full.names = TRUE))
 }
 if (!file.exists(data_dir_tmp)) dir.create(data_dir_tmp)
+
+regdir_envvar <- Sys.getenv("CORPUS_REGISTRY")
+Sys.setenv(CORPUS_REGISTRY = registry_tmp)
 ```
 
 In addition to *cwbtools*, we rely extensively on the [data.table](https://CRAN.R-project.org/package=data.table) package. It is a good companion to *cwbtools* because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.
@@ -135,13 +138,13 @@ In this example, the logical parameter `compress` is `TRUE. This triggers a so-c
 
 The indexed corpus has now been prepared and can be used with CQP, CQPweb, or -- if you like R -- with a package such as [polmineR](https://CRAN.R-project.org/package=polmineR). To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package. 
 
-```{r check_use, eval = TRUE}
-library(RcppCWB)
-id_peace <- cl_str2id(
+```{r}
+RcppCWB::cqp_initialize()
+id_peace <- RcppCWB::cl_str2id(
   corpus = "UNGA", p_attribute = "word",
   str = "peace", registry = registry_tmp
 )
-cpos_peace <- cl_id2cpos(
+cpos_peace <- RcppCWB::cl_id2cpos(
   corpus = "UNGA", p_attribute = "word",
   id = id_peace, registry = registry_tmp
 )
@@ -150,11 +153,11 @@ tab <- data.frame(
   i = unlist(lapply(1:length(cpos_peace), function(x) rep(x, times = 11))),
   cpos = unlist(lapply(cpos_peace, function(x) (x - 5):(x + 5)))
   )
-tab[["id"]] <- cl_cpos2id(
+tab[["id"]] <- RcppCWB::cl_cpos2id(
   corpus = "UNGA", p_attribute = "word",
   cpos = tab[["cpos"]], registry = registry_tmp
 )
-tab[["str"]] <- cl_id2str(
+tab[["str"]] <- RcppCWB::cl_id2str(
   corpus = "UNGA", p_attribute = "word",
   id = tab[["id"]], registry = registry_tmp
 )
@@ -232,7 +235,7 @@ Austen$encode(
 The new corpus will not be available unless we trigger that files in the registry directory are re-read.
 
 ```{r}
-cqp_reset_registry(registry = registry_tmp)
+RcppCWB::cqp_reset_registry(registry = registry_tmp)
 ```
 
 This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token "pride" occur?
@@ -242,7 +245,7 @@ corpus <- "AUSTEN"
 token <- "pride"
 p_attr <- "word"
 id <- RcppCWB::cl_str2id(corpus = corpus, p_attribute = p_attr, str = token, registry = registry_tmp)
-cpos <- cl_id2cpos(corpus = corpus, p_attribute = p_attr, id = id, registry = registry_tmp)
+cpos <- RcppCWB::cl_id2cpos(corpus = corpus, p_attribute = p_attr, id = id, registry = registry_tmp)
 count <- length(cpos)
 count
 ```
@@ -323,14 +326,14 @@ Reuters$encode(
 The corpus will not be available unless we call `cqp_reset_registry()` so that files in the registry directory are reloaded.
 
 ```{r, message = FALSE, results = FALSE}
-cqp_reset_registry(registry = registry_tmp)
+RcppCWB::cqp_reset_registry(registry = registry_tmp)
 ```
 
 The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word "oil".
 
 ```{r}
-id <- cl_str2id(corpus = "REUTERS", p_attribute = "word", str = "oil", registry = registry_tmp)
-cpos <- cl_id2cpos(corpus = "REUTERS", p_attribute = "word", id = id, registry = registry_tmp)
+id <- RcppCWB::cl_str2id(corpus = "REUTERS", p_attribute = "word", str = "oil", registry = registry_tmp)
+cpos <- RcppCWB::cl_id2cpos(corpus = "REUTERS", p_attribute = "word", id = id, registry = registry_tmp)
 count <- length(cpos)
 count
 ```
@@ -342,6 +345,8 @@ As a matter of housekeeping, we remove the temporary directory.
 ```{r}
 unlink(registry_tmp, recursive = TRUE)
 unlink(data_dir_tmp, recursive = TRUE)
+
+Sys.setenv(CORPUS_REGISTRY = regdir_envvar)
 ```
 
 Hope everything works! Enjoy! Feedback is welcome! 
