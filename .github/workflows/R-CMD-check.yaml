@@ -81,6 +81,18 @@ jobs:
           Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
+        
+      - name: Build Windows binary package
+        if: runner.os == 'Windows'
+        run: pkgbuild::build(binary = TRUE, dest_path = Sys.getenv("GITHUB_WORKSPACE"))
+        shell: Rscript {0}
+          
+      - name: Upload Windows binary
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v2
+        with:
+          name: cwbtools-Windows-binary
+          path: ./*.zip
 
       - name: Upload check results
         if: failure()
