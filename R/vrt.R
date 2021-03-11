@@ -66,6 +66,7 @@ as.vrt <- function(x, replacements = list()){
     c("&", "&amp;"), # incompatible with XML
     c("\xC2\xA0", ""), # incompatible with XML
     c("^\u201E\\t[A-Z]+\\t#unknown#$", "'\t$(\t'"),
+    c("\u200e", ""), # Left-to-Right Mark (invisible, hard to see, but disruptive)
     c("^``\\t.*?\\t``$", "'\t$(\t'"),
     c('^\\s*<\\s*$', ""),
     c("^(<.*?>)(<.*?>)$", "\\1\n\\2")

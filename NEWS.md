@@ -1,8 +1,9 @@
-cwbtools 0.3.3.9001 - 0.3.3.9002
+cwbtools 0.3.3.9001 - 0.3.3.9003
 ================================
 
 * The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
 * A new function `as.vrt()` will generate valid *.vrt files from `xml_document` input.
+* Added Left-to-Right Mark / "\u200E" to signs that are cleaned. 
 
 
 cwbtools 0.3.3
