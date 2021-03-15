@@ -1,9 +1,11 @@
-cwbtools 0.3.3.9001 - 0.3.3.9003
+cwbtools 0.3.3.9001 - 0.3.3.9004
 ================================
 
 * The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
 * A new function `as.vrt()` will generate valid *.vrt files from `xml_document` input.
 * Added Left-to-Right Mark / "\u200E" to signs that are cleaned. 
+* Due to an inconsistency in the code of `cwb_corpus_dir()`, the function would falsely yield `NA` results if the CWB directory would contain more than two directories.
+* To be able to recognize faulty directories, the registry directory and the corpus directory are reported by `cwb_corpus_dir()` and `cwb_registry_dir()`. Argument `verbose` can be used to suppress this output.
 
 
 cwbtools 0.3.3

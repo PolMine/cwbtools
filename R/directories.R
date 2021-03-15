@@ -29,15 +29,15 @@
 #' @param corpus_dir Path to the directory with data directories for corpora.
 #' @export cwb_corpus_dir
 #' @rdname directories
-cwb_corpus_dir <- function(registry_dir){
+cwb_corpus_dir <- function(registry_dir, verbose = TRUE){
   
-  if (missing(registry_dir)) registry_dir <- cwb_registry_dir()
+  if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
   
   if (is.null(registry_dir)) return(NULL)
 
   cwb_dir <- dirname(registry_dir)
-  candidate_id <- grep("corp(us|ora)", list.files(file.path(cwb_dir), full.names = FALSE))
-  candidate <- grep("corp(us|ora)", list.files(file.path(cwb_dir), full.names = TRUE), value = TRUE)[candidate_id]
+  candidate_id <- grep("corp(us|ora)", list.files(cwb_dir, full.names = FALSE))
+  candidate <- list.files(cwb_dir, full.names = TRUE)[candidate_id]
   candidate <- candidate[file.info(candidate)[["isdir"]]]
   
   if (length(candidate) == 0L){
@@ -65,6 +65,7 @@ cwb_corpus_dir <- function(registry_dir){
     corpus_dir <- NULL
   } else if (length(candidate) == 1L){
     corpus_dir <- candidate
+    if (verbose) cli_alert_success(sprintf("directory with data directories found: {col_cyan('%s')}", corpus_dir))
   }
   
   corpus_dir
@@ -79,11 +80,12 @@ cwb_corpus_dir <- function(registry_dir){
 #'   character vector or \code{NULL}, if no registry directory can be detected.
 #' @rdname directories
 #' @export cwb_registry_dir
-cwb_registry_dir <- function(){
+cwb_registry_dir <- function(verbose = TRUE){
   if (isFALSE(is.null(getOption("polmineR.corpus_registry")))){
     # If polmineR has been loaded, the CORPUS_REGISTRY environment variable will
     # have been reset, and the system registry is stored in the options
     if (nchar(getOption("polmineR.corpus_registry")) > 0L){
+      if (verbose) cli_alert_success(sprintf("registry directory: {col_cyan('%s')}", getOption("polmineR.corpus_registry")))
       return(getOption("polmineR.corpus_registry"))
     } else {
       return(NULL)
@@ -96,6 +98,7 @@ cwb_registry_dir <- function(){
           "This may be a cause for ensuing problems to find corpora."
         )
       }
+      if (verbose) cli_alert_success(sprintf("registry directory: {col_cyan('%s')}", Sys.getenv("CORPUS_REGISTRY")))
       return(Sys.getenv("CORPUS_REGISTRY"))
     } else {
       return(NULL)
@@ -112,14 +115,16 @@ cwb_registry_dir <- function(){
 #' @rdname directories
 #' @export cwb_directories
 #' @importFrom utils menu
-cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL){
-  registry_dir <- if (is.null(registry_dir)) cwb_registry_dir() else registry_dir
+cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL, verbose = TRUE){
+  registry_dir <- if (is.null(registry_dir)) cwb_registry_dir(verbose = FALSE) else registry_dir
   if (isFALSE(is.null(registry_dir))){
     if (isFALSE(dir.exists(registry_dir))){
       stop(sprintf("Registry directory '%s' does not exist.", registry_dir))
     }
   }
-  corpus_dir <- if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir) else corpus_dir
+  if (verbose) cli_alert_success(sprintf("registry directory: {col_cyan('%s')}", registry_dir))
+  corpus_dir <- if (is.null(corpus_dir)) cwb_corpus_dir(registry_dir, verbose = FALSE) else corpus_dir
+  if (verbose) cli_alert_success(sprintf("directory with data directories: {col_cyan('%s')}", corpus_dir))
   c(registry_dir = registry_dir, corpus_dir = corpus_dir)
 }
 

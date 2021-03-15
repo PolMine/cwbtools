@@ -18,8 +18,8 @@ corpus_install(
   doi = NULL,
   checksum = NULL,
   lib = .libPaths()[1],
-  registry_dir = cwbtools::cwb_registry_dir(),
-  corpus_dir = cwb_corpus_dir(registry_dir),
+  registry_dir,
+  corpus_dir,
   ask = interactive(),
   verbose = TRUE,
   user = NULL,
@@ -36,12 +36,7 @@ corpus_rename(
   verbose = TRUE
 )
 
-corpus_remove(
-  corpus,
-  registry_dir = cwb_registry_dir(),
-  ask = interactive(),
-  verbose = TRUE
-)
+corpus_remove(corpus, registry_dir, ask = interactive(), verbose = TRUE)
 
 corpus_as_tarball(corpus, registry_dir, data_dir, tarfile, verbose = TRUE)
 
@@ -92,10 +87,11 @@ included in the metadata for the record is used for the check.}
 
 \item{lib}{Directory for R packages, defaults to \code{.libPaths()[1]}.}
 
-\item{registry_dir}{Directory of registry.}
+\item{registry_dir}{The corpus registry directory. If missing, the result of
+\code{cwb_registry_dir()}.}
 
 \item{corpus_dir}{The directory that contains the data directories of indexed
-corpora.}
+corpora. If missing, the value of \code{cwb_corpus_dir()} will be used.}
 
 \item{ask}{A \code{logical} value, whether to ask user for confirmation
 before removing a corpus.}

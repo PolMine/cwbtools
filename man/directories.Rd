@@ -8,11 +8,11 @@
 \alias{use_corpus_registry_envvar}
 \title{Manage directories for indexed corpora}
 \usage{
-cwb_corpus_dir(registry_dir)
+cwb_corpus_dir(registry_dir, verbose = TRUE)
 
-cwb_registry_dir()
+cwb_registry_dir(verbose = TRUE)
 
-cwb_directories(registry_dir = NULL, corpus_dir = NULL)
+cwb_directories(registry_dir = NULL, corpus_dir = NULL, verbose = TRUE)
 
 create_cwb_directories(prefix = "~/cwb", ask = interactive(), verbose = TRUE)
 
@@ -21,14 +21,14 @@ use_corpus_registry_envvar(registry_dir)
 \arguments{
 \item{registry_dir}{Path to the directory with registry files.}
 
+\item{verbose}{A \code{logical} value, whether to output status messages.}
+
 \item{corpus_dir}{Path to the directory with data directories for corpora.}
 
 \item{prefix}{The base path that will be prefixed}
 
 \item{ask}{A \code{logical} value, whether to prompt user before creating
 directories.}
-
-\item{verbose}{A \code{logical} value, whether to output status messages.}
 }
 \description{
 The Corpus Workbench (CWB) stores the binary files for

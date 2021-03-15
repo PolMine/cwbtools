@@ -72,7 +72,8 @@
 #' @param verbose Logical, whether to be verbose.
 #' @param ask A \code{logical} value, whether to ask for user input when
 #'   choices are required.
-#' @param registry_dir Directory of registry.
+#' @param registry_dir The corpus registry directory. If missing, the result of
+#'   `cwb_registry_dir()`.
 #' @param corpus A CWB corpus.
 #' @param tarfile Filename of tarball.
 #' @param checksum A length-one \code{character} vector with a MD5 checksum to
@@ -80,7 +81,7 @@
 #'   downloaded from Zenodo by stating a DOI (argument \code{doi}), the checksum
 #'   included in the metadata for the record is used for the check.
 #' @param corpus_dir The directory that contains the data directories of indexed
-#'   corpora.
+#'   corpora. If missing, the value of `cwb_corpus_dir()` will be used.
 #' @param ... Further parameters that will be passed into
 #'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 #'   or \code{download.file}, if \code{tarball} is specified.
@@ -105,7 +106,10 @@
 #' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir = cwbtools::cwb_registry_dir(), corpus_dir = cwb_corpus_dir(registry_dir), ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
+  
+  if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
+  if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
   
   modify_renviron <- FALSE
   
@@ -175,7 +179,9 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
   
   # Create CWB directory structure if necessary --------------
   
-  cwb_dirs <- cwb_directories(registry_dir = registry_dir, corpus_dir = corpus_dir)
+  if (verbose) cli_rule("Get CWB directories")
+  
+  cwb_dirs <- cwb_directories(registry_dir = registry_dir, corpus_dir = corpus_dir, verbose = verbose)
   if (any(is.null(cwb_dirs))){
     cwb_dirs <- create_cwb_directories(ask = ask)
     modify_renviron <- TRUE
@@ -567,7 +573,9 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
 #' @rdname corpus_utils
 #' @importFrom cli cli_alert_success
 #' @export corpus_remove
-corpus_remove <- function(corpus, registry_dir = cwb_registry_dir(), ask = interactive(), verbose = TRUE){
+corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = TRUE){
+  
+  if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
   
   stopifnot(tolower(corpus) %in% list.files(registry_dir)) # check that corpus exists
   
