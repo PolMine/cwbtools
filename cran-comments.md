@@ -1,7 +1,9 @@
 ## General remarks
 
-This version addresses an error on Solaris and a warning on Fedora that emerged with v0.3.2, see https://cran.r-project.org/web/checks/check_results_cwbtools.html. 
+The package was removed from CRAN and archived because I failed to fix an issue in time: There is one remaining scenario when `corpus_install()` does not abort gracefully if a ressource cannot be downloaded. 
+This has been fixed.
 
+In addition I removed the 'LazyData' statement that is unnecessary because there is not sample data within the package. R-devel started to show a respective NOTE.
 
 ## Test environments
 

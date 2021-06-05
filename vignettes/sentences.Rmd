@@ -41,7 +41,7 @@ Sys.setenv(CORPUS_REGISTRY = registry_dir_tmp)
 The GermaParlSample corpus can be downloaded from [Zenodo](https://doi.org/10.5281/zenodo.3823245) as follows.
 
 ```{r, eval = TRUE}
-cwbtools::corpus_install(
+is_corpus_available <- cwbtools::corpus_install(
   doi = "10.5281/zenodo.3823245",
   registry_dir = registry_dir_tmp, corpus_dir = corpus_dir_tmp,
   verbose = FALSE
@@ -59,7 +59,7 @@ We generate the data for the sentence annotation from the part-of-speech annotat
 
 At first, we decode the p-attribute "pos".
 
-```{r, eval = TRUE}
+```{r, eval = is_corpus_available}
 germaparl_size <- cl_attribute_size(
   corpus = "GERMAPARLSAMPLE",
   attribute = "word", attribute_type = "p"
@@ -71,7 +71,7 @@ pos <- cl_id2str(corpus = "GERMAPARLSAMPLE", p_attribute = "pos", id = ids)
 
 The pos-tag for Stuttgart Tuebingen Tag Set (STTS) is a "$.". From this information, we can generate a region matrix with start and end corpus positions of sentences easily.
 
-```{r}
+```{r, eval = is_corpus_available}
 sentence_end <- grep("\\$\\.", pos)
 sentence_factor <- cut(x = cpos_vec, breaks = c(0L, sentence_end), include.lowest = TRUE, right = FALSE)
 sentences_cpos <- unname(split(x = cpos_vec, f = sentence_factor))
@@ -80,13 +80,13 @@ region_matrix <- do.call(rbind, lapply(sentences_cpos, function(cpos) c(cpos[1L]
 
 So let us see what this looks like ...
 
-```{r, eval = TRUE}
+```{r, eval = is_corpus_available}
 head(region_matrix)
 ```
 
 And this is how the new annotation layer is written back to the corpus.
 
-```{r, eval = TRUE}
+```{r, eval = is_corpus_available}
 s_attribute_encode(
   values = as.character(seq.int(from = 0L, to = nrow(region_matrix) - 1L)),
   data_dir = registry_file_parse(corpus = "GERMAPARLSAMPLE")[["home"]],
@@ -106,7 +106,7 @@ s_attribute_encode(
 
 To see whether everything has worked, we get the left and right boundaries of the sentence with corpus position 60. 
 
-```{r, eval = TRUE}
+```{r, eval = is_corpus_available}
 left <- cl_cpos2lbound("GERMAPARLSAMPLE", cpos = 60, s_attribute = "s")
 right <- cl_cpos2rbound("GERMAPARLSAMPLE", cpos = 60, s_attribute = "s")
 ids <- cl_cpos2id("GERMAPARLSAMPLE", cpos = left:right, p_attribute = "word")
@@ -118,7 +118,7 @@ cl_id2str("GERMAPARLSAMPLE", p_attribute = "word", id = ids)
 
 As a matter of housekeeping, we remove temporary directories and restore value of environment variable CORPUS_REGISTRY.
 
-```{r, eval = TRUE}
+```{r, eval = is_corpus_available}
 unlink(corpus_dir_tmp)
 unlink(registry_dir_tmp)
 

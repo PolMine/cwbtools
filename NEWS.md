@@ -1,4 +1,4 @@
-cwbtools 0.3.3.9001 - 0.3.3.9004
+cwbtools 0.3.3.9001 - 0.3.3.9005
 ================================
 
 * The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
@@ -6,7 +6,9 @@ cwbtools 0.3.3.9001 - 0.3.3.9004
 * Added Left-to-Right Mark / "\u200E" to signs that are cleaned. 
 * Due to an inconsistency in the code of `cwb_corpus_dir()`, the function would falsely yield `NA` results if the CWB directory would contain more than two directories.
 * To be able to recognize faulty directories, the registry directory and the corpus directory are reported by `cwb_corpus_dir()` and `cwb_registry_dir()`. Argument `verbose` can be used to suppress this output.
-
+* The statement on 'LazyData' has been removed from the DESCRIPTION file to avoid a warning emerging with R-devel on CRAN check machines (#33).
+* Executing the code in the vignette 'sentences.Rmd' is conditional on the availability of the sample corpus. If the corpus can not be installed from Zenodo, building the vignette will not fail (#35).
+* The `corpus_install()` function will abort with a FALSE return value if the requested tarball is not available (#34).
 
 cwbtools 0.3.3
 ==============
