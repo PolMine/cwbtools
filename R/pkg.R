@@ -1,17 +1,17 @@
 #' Create and manage packages with corpus data.
-#' 
+#'
 #' Putting CWB indexed corpora into R data packages is a convenient way to ship
 #' and share corpora, and to keep documentation and supplementary functionality
 #' with the data.
-#' 
+#'
 #' @param pkg Path to directory of data package or package name.
 #' @param verbose A \code{logical} value, whether to be verbose.
 #' @references Blätte, Andreas (2018). "Using Data Packages to Ship Annotated
 #'   Corpora of Parliamentary Protocols: The GermaParl R Package",
 #'   \emph{ParlaCLARIN 2018 Workshop Proceedings}, available online
 #'   \href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
-#' 
-#' @examples 
+#'
+#' @examples
 #' pkgdir <- normalizePath(tempdir(), winslash = "/")
 #' pkg_create_cwb_dirs(pkg = pkgdir)
 #' pkg_add_description(
@@ -41,7 +41,7 @@ NULL
 pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
   if (!file.exists(pkg)) stop("directory does not exist")
   if (!file.info(pkg)$isdir) stop("dir exists, but is not a directory")
-  
+
   dirs_to_create <- c(
     "R",
     "man",
@@ -72,6 +72,16 @@ pkg_create_cwb_dirs = function(pkg = ".", verbose = TRUE){
 #' @export pkg_add_corpus
 #' @importFrom pbapply pblapply
 pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGISTRY"), verbose = TRUE){
+
+  lifecycle::deprecate_warn(
+    when = "0.3.4",
+    what = "pkg_add_corpus()",
+    details = paste0(
+      "Downloading corpora from a repository (HTTP-Server, Zenodo, S3) using corpus_install() is recommended. ",
+      "Only small corpora should be put into packages as sample data."
+    )
+  )
+
   if (!file.exists(pkg)){
     pkg <- system.file(package = pkg)
     if (pkg != ""){
@@ -84,11 +94,11 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
     dest_registry <- file.path(pkg, "inst", "extdata", "cwb", "registry", fsep = "/")
     data_dir <- file.path(pkg, "inst", "extdata", "cwb", "indexed_corpora", fsep = "/")
   }
-  
+
   # Create cwb directories within package if they do not exist yet
   if (!file.exists(dest_registry)) dir.create(dest_registry, recursive = TRUE)
   if (!file.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
-  
+
   target_dir <- file.path(data_dir, tolower(corpus), fsep = "/")
   if (!file.exists(target_dir)){
     message("... directory for indexed corpus does not yet exist, creating: ", target_dir)
@@ -98,7 +108,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
   # copy registry file
   if (verbose) message("... copying registry file")
   file.copy(from = file.path(registry, tolower(corpus), fsep = "/"), to = dest_registry, overwrite = TRUE)
-  
+
   # copy files in dir for indexed corpora
   if (verbose) message("... copying data files")
   files_to_copy <- list.files(
@@ -106,7 +116,7 @@ pkg_add_corpus = function(pkg = ".", corpus, registry = Sys.getenv("CORPUS_REGIS
     full.names = TRUE
   )
   pblapply(files_to_copy, function(x) file.copy(from = x, to = target_dir))
-  
+
   # adjust registry dir
   if (verbose) message("... adjusting paths in registry file")
   regdata <- registry_file_parse(corpus = corpus, registry_dir = dest_registry)
@@ -159,18 +169,18 @@ pkg_add_configure_scripts = function(pkg = "."){
 #' @export pkg_add_description
 #' @rdname pkg_utils
 pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", date = Sys.Date(), author, maintainer = NULL, description = "", license = "", verbose = TRUE){
-  
+
   lifecycle::deprecate_warn(
-    when = "3.3.4",
+    when = "0.3.4",
     what = "pkg_add_description()",
     details = paste0(
       "Downloading corpora from a repository (HTTP-Server, Zenodo, S3) using corpus_install() is recommended. ",
       "Only small corpora should be put into packages as sample data."
     )
   )
-  
+
   if (missing(author)) stop("Aborting, argument 'author' needs to be declared to generate a valid package.")
-  
+
   if (file.exists(file.path(pkg, "DESCRIPTION", fsep = "/"))){
     user_input <- readline(prompt = "DESCRIPTION file already exists. Proceed anyway (Y / any other key to abort)?")
     if (user_input != "Y"){
@@ -178,14 +188,14 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
       return( invisible( FALSE ) )
     }
   }
-  
+
   # sanity checks, to be extended
   stopifnot(
     class(author)[1] %in% c("character", "person"),
     length(date) == 1,
-    is.character(date) || class(date)[1] == "Date" 
+    is.character(date) || class(date)[1] == "Date"
   )
-  
+
   if (verbose) message("... creating DESCRIPTION file")
   if (is.null(pkg)){
     pkg <- basename(pkg)
