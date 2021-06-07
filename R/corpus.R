@@ -110,14 +110,9 @@
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
-  # cat(registry_dir)
-  registry_dir <- fs::path_tidy(registry_dir)
-  print(registry_dir)
+  if (.Platform$OS.type == "windows") registry_dir <- as.character(fs::path_tidy(registry_dir))
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
-  # cat(corpus_dir)
-  corpus_dir <- fs::path_tidy(corpus_dir)
-  print(corpus_dir)
-
+  if (.Platform$OS.type == "windows") corpus_dir <- as.character(fs::path_tidy(corpus_dir))
 
   modify_renviron <- FALSE
 
@@ -719,7 +714,10 @@ corpus_copy <- function(
   if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
 
   registry_file_new <- file.path(registry_dir_new, tolower(corpus), fsep = "/")
-  if (file.exists(registry_file_new)) stop(sprintf("Aborting - registry file %s already exists in target registy", registry_file_new))
+
+  if (file.exists(registry_file_new)){
+    stop(sprintf("Aborting - registry file %s already exists in target registry", registry_file_new))
+  }
 
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
