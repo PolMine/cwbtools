@@ -457,8 +457,10 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       # Make corpus available if RcppCWB has been initialized
       if (RcppCWB::cqp_is_initialized()){
-        srcfile <- fs::path_tidy(file.path(cwb_dirs[["registry_dir"]], tolower(corpus)))
-        destfile <- fs::path_tidy(file.path(RcppCWB::cqp_get_registry(), tolower(corpus)))
+        srcfile <- fs::path_tidy(fs::path(cwb_dirs[["registry_dir"]], tolower(corpus)))
+        if (.Platform$OS.type == "windows") srcfile <- fs::path_tidy(utils::shortPathName(srcfile))
+        destfile <- fs::path_tidy(fs::path(RcppCWB::cqp_get_registry(), tolower(corpus)))
+        if (.Platform$OS.type == "windows") destfile <- fs::path_tidy(utils::shortPathName(destfile))
         if (srcfile != destfile){
           file.copy(from = srcfile, to = destfile, overwrite = TRUE)
         }

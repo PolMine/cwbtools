@@ -141,7 +141,12 @@ cwb_directories <- function(registry_dir = NULL, corpus_dir = NULL, verbose = TR
 #' @importFrom fs path_expand path_tidy path
 create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbose = TRUE){
 
-  prefix <- path_tidy(shortPathName(path_expand(prefix)))
+  prefix <- if (.Platform$OS.type == "windows"){
+    path_tidy(utils::shortPathName(path_expand(prefix)))
+  } else {
+    path_expand(prefix)
+  }
+
 
   if (dir.exists(prefix)){
     if (file.access(prefix, mode = 2) != 0L){
