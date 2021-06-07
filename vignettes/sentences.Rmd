@@ -28,8 +28,8 @@ library(RcppCWB)
 For the purposes of this vigneette, ee will work with a temporary corpy of the corpus we wish to augment, so we create a temporary corpus directory.
 
 ```{r, eval = TRUE}
-registry_dir_tmp <- file.path(tempdir(), "registry_dir_tmp")
-corpus_dir_tmp <- file.path(tempdir(), "corpus_dir_tmp")
+registry_dir_tmp <- fs::path(tempdir(), "registry_dir_tmp")
+corpus_dir_tmp <- fs::path(tempdir(), "corpus_dir_tmp")
 
 dir.create(path = registry_dir_tmp)
 dir.create(path = corpus_dir_tmp)
