@@ -110,9 +110,9 @@
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
-  if (.Platform$OS.type == "windows") registry_dir <- as.character(fs::path_tidy(registry_dir))
+  registry_dir <- as.character(fs::path_tidy(registry_dir))
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
-  if (.Platform$OS.type == "windows") corpus_dir <- as.character(fs::path_tidy(corpus_dir))
+  corpus_dir <- as.character(fs::path_tidy(corpus_dir))
 
   modify_renviron <- FALSE
 
@@ -457,8 +457,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       # Make corpus available if RcppCWB has been initialized
       if (RcppCWB::cqp_is_initialized()){
-        srcfile <- file.path(cwb_dirs[["registry_dir"]], tolower(corpus))
-        destfile <- file.path(RcppCWB::cqp_get_registry(), tolower(corpus))
+        srcfile <- fs::path_tidy(file.path(cwb_dirs[["registry_dir"]], tolower(corpus)))
+        destfile <- fs::path_tidy(file.path(RcppCWB::cqp_get_registry(), tolower(corpus)))
         if (srcfile != destfile){
           file.copy(from = srcfile, to = destfile, overwrite = TRUE)
         }
