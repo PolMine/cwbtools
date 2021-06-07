@@ -12,7 +12,7 @@ test_that(
       cqp_initialize(registry = cwb_dirs[["registry_dir"]])
     }
 
-    tmp_tarball <- tempfile(fileext = ".tar.gz")
+    tmp_tarball <- fs::path_tidy(tempfile(fileext = ".tar.gz"))
     rcppcwb_registry <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
     cwbtools::corpus_as_tarball(
       corpus = "REUTERS",

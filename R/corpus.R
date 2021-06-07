@@ -238,7 +238,10 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
 
     # Now download corpus -------------------
+    message(tempdir())
+    message(normalizePath(tempdir(), winslash = "/"))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
+    message(cwbtools_tmpdir)
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
     if (grepl("^http", tarball)){

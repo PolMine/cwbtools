@@ -34,7 +34,8 @@ Imports:
     httr,
     rstudioapi,
     zen4R,
-    lifecycle
+    lifecycle,
+    fs
 Suggests:
     tm (>= 0.7.3),
     knitr,
