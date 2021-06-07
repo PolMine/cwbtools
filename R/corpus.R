@@ -110,9 +110,9 @@
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
-  registry_dir <- as.character(fs::path_tidy(registry_dir))
+  if (!is.null(registry_dir)) registry_dir <- as.character(fs::path_tidy(registry_dir))
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
-  corpus_dir <- as.character(fs::path_tidy(corpus_dir))
+  if (!is.null(corpus_dir)) corpus_dir <- as.character(fs::path_tidy(corpus_dir))
 
   modify_renviron <- FALSE
 
