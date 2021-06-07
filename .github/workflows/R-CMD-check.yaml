@@ -6,6 +6,7 @@ on:
       - main
       - master
       - dev
+      - windows
   pull_request:
     branches:
       - main
@@ -81,12 +82,12 @@ jobs:
           Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
-        
+
       - name: Build Windows binary package
         if: runner.os == 'Windows'
         run: pkgbuild::build(binary = TRUE, dest_path = Sys.getenv("GITHUB_WORKSPACE"))
         shell: Rscript {0}
-          
+
       - name: Upload Windows binary
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v2
@@ -100,7 +101,7 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
-          
+
       - name: Test coverage
         run: covr::codecov()
-        shell: Rscript {0}    
+        shell: Rscript {0}
