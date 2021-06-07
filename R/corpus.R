@@ -190,7 +190,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
   if (verbose) cli_rule("Get CWB directories")
 
-  cwb_dirs <- cwb_directories(registry_dir = registry_dir, corpus_dir = corpus_dir, verbose = verbose)
+  cwb_dirs <- cwb_directories(registry_dir = registry_dir, corpus_dir = corpus_dir, verbose = FALSE)
   if (any(is.null(cwb_dirs))){
     cwb_dirs <- create_cwb_directories(ask = ask)
     modify_renviron <- TRUE

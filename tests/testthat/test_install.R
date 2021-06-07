@@ -55,7 +55,7 @@ test_that(
     old_registry <- Sys.getenv("CORPUS_REGISTRY")
     Sys.setenv(CORPUS_REGISTRY = "")
 
-    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
+    cwb_dirs <- cwbtools::create_cwb_directories(prefix = fs::path_temp(), ask = FALSE, verbose = FALSE)
     Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
 
     if (RcppCWB::cqp_is_initialized()){
