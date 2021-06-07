@@ -109,12 +109,10 @@
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
-  message(registry_dir)
-  cat(registry_dir)
+  # cat(registry_dir)
   print(registry_dir)
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
-  message(corpus_dir)
-  cat(corpus_dir)
+  # cat(corpus_dir)
   print(corpus_dir)
 
 
@@ -245,10 +243,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     }
 
     # Now download corpus -------------------
-    message(tempdir())
-    message(normalizePath(tempdir(), winslash = "/"))
     cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
-    message(cwbtools_tmpdir)
     if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
     dir.create(cwbtools_tmpdir)
     if (grepl("^http", tarball)){
