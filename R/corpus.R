@@ -104,15 +104,18 @@
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
 #'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning cli_process_failed
 #' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
+#' @importFrom fs path_tidy
 #' @rdname corpus_utils
 #' @export corpus_install
 corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
   # cat(registry_dir)
+  registry_dir <- fs::path_tidy(registry_dir)
   print(registry_dir)
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
   # cat(corpus_dir)
+  corpus_dir <- fs::path_tidy(corpus_dir)
   print(corpus_dir)
 
 

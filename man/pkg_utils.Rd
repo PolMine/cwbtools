@@ -72,7 +72,7 @@ Putting CWB indexed corpora into R data packages is a convenient way to ship
 and share corpora, and to keep documentation and supplementary functionality
 with the data.
 
-\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
 \code{pkg_creage_cwb_dirs} will create the standard directory

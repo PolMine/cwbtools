@@ -149,7 +149,7 @@ See the following stylized directory structure.
 \preformatted{
   .
   |- registry/
-  |  |- corpus1 
+  |  |- corpus1
   |  +- corpus2
   |
   + indexed_corpora/
