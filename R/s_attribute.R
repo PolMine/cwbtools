@@ -340,3 +340,59 @@ s_attribute_merge <- function(x, y){
 s_attribute_delete <- function(corpus, s_attribute){
   stop("function 's_attribute_delete' is not yet implemented")
 }
+
+#' @details Function \code{s_attribute_rename} can be used to rename a
+#'   structural attribute.
+#' @param old A `character` vector with s-attributes to be renamed.
+#' @param new A `character` vector with new names of s-attributes. The vector
+#'   needs to have the same length as vector `old`. The 1st, 2nd, 3rd ... nth
+#'   attribute stated in vector `old` will get the new names at the 1st, 2nd,
+#'   3rd, ... nth position of vector `new`.
+#' @export s_attribute_rename
+#' @importFrom cli cli_alert
+#' @rdname s_attribute
+s_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE){
+  # missing: Check that file is present
+  
+  stopifnot(
+    is.character(corpus),
+    length(corpus) == 1L,
+    is.character(registry_dir),
+    length(registry_dir) == 1L,
+    is.character(old),
+    is.character(new)
+  )
+  if (length(old) != length(new)){
+    warning("Length of arguments 'old' and 'new' not identical.")
+    return(FALSE)
+  } 
+  if (!file.exists(fs::path(registry_dir, tolower(corpus)))){
+    warning(
+      sprintf("No registry file for corpus '%s' in registry directory '%s'", corpus, registry_dir)
+    )
+  }
+  
+  rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  
+  for (i in 1L:length(old)){
+    if (verbose) cli::cli_alert(sprintf("renaming s_attribute '%s' to '%s'", old[i], new[i]))
+    if (!old[i] %in% rf[["s_attributes"]]){
+      warning(sprintf("s_attribute '%s' does not exist", old[i]))
+      return(FALSE)
+    }
+    if (new[i] %in% rf[["s_attributes"]]){
+      warning(sprintf("new s_attribute '%s' already exists", new[i]))
+      return(FALSE)
+    }
+    rf[["s_attributes"]][which(rf[["s_attributes"]] == old[i])] <- new[i]
+    for (fileext in c("avs", "avx", "rng")){
+      file.rename(
+        from = fs::path(rf[["home"]], paste(old[i], fileext, sep = ".")),
+        to = fs::path(rf[["home"]], paste(new[i], fileext, sep = "."))
+      )
+    }
+  }
+  if (verbose) cli::cli_alert("update and write registry file")
+  registry_file_write(data = rf, corpus = corpus, registry_dir = registry_dir)
+  return(TRUE)
+}

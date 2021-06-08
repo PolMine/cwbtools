@@ -1,4 +1,4 @@
-cwbtools 0.3.3.9001 - 0.3.3.9005
+cwbtools 0.3.3.9001 - 0.3.3.9006
 ================================
 
 * The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
@@ -9,6 +9,7 @@ cwbtools 0.3.3.9001 - 0.3.3.9005
 * The statement on 'LazyData' has been removed from the DESCRIPTION file to avoid a warning emerging with R-devel on CRAN check machines (#33).
 * Executing the code in the vignette 'sentences.Rmd' is conditional on the availability of the sample corpus. If the corpus can not be installed from Zenodo, building the vignette will not fail (#35).
 * The `corpus_install()` function will abort with a FALSE return value if the requested tarball is not available (#34).
+* A new function `s_attribute_rename()` can be used to rename s-attributes.
 
 cwbtools 0.3.3
 ==============
