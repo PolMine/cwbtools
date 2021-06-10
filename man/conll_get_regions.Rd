@@ -27,7 +27,7 @@ x <- data.frame(
     "zur",
     "Lage",
     "der",
-    "Nation"
+    "Nation",
     "."
   ),
   ne = c("O", "O", "B-PERS", "I-PERS", "O", "O", "B-ORG", "O", "O", "O", "O", "O"),
