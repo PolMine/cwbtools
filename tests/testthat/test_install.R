@@ -73,6 +73,10 @@ test_that(
 
     RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]]) # should not be necessary
     expect_true("UNGAMINI" %in% RcppCWB::cqp_list_corpora())
+    
+    # On this occasion, we also test the corpus_get_version() function
+    v <- corpus_get_version("UNGAMINI")
+    expect_true(v == numeric_version("0.0.1"))
 
     unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
     unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)

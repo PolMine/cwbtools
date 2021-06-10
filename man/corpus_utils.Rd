@@ -9,6 +9,7 @@
 \alias{corpus_copy}
 \alias{corpus_recode}
 \alias{corpus_testload}
+\alias{corpus_get_version}
 \title{Install and manage corpora.}
 \usage{
 corpus_install(
@@ -67,6 +68,8 @@ corpus_testload(
   registry_dir = Sys.getenv("CORPUS_REGISTRY"),
   verbose = TRUE
 )
+
+corpus_get_version(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 }
 \arguments{
 \item{pkg}{Name of the data package.}
@@ -110,7 +113,7 @@ or \code{download.file}, if \code{tarball} is specified.}
 
 \item{new}{Name of the (new) corpus.}
 
-\item{corpus}{A CWB corpus.}
+\item{corpus}{The ID of a CWB indexed corpus (in upper case).}
 
 \item{data_dir}{The data directory where the files of the CWB corpus live.}
 
@@ -212,6 +215,12 @@ the corpus name in the 'indexed_corpora' subdirectory.
 
 \code{corpus_copy} will create a copy of a corpus (useful for
 experimental modifications, for instance).
+
+\code{corpus_get_version} parses the registry file and derives the
+corpus version number from the corpus properties. The return value is a
+\code{numeric_version} class object. The corpus version is expected to follow
+semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
+has another format or if it is not available, the return value is \code{NA}.
 }
 \examples{
 registry_file_new <- file.path(

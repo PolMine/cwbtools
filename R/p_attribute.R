@@ -125,20 +125,25 @@ p_attribute_encode <- function(
     rm(token_stream); gc()
     
     ids <- as.integer(tokenstream_factor) - 1L
-    if (verbose) message("... writing file: ", basename(corpus_file))
-    if (length(ids) * 4 < ((2^31) - 1)){
-      writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
-    } else {
-      corpus_file_con <- file(corpus_file, open = "ab")
-      max_id <- trunc((2^31 - 1) / 4) # trunc() necessary to avoid floating number issue
-      if (length(ids) > 2 * max_id){
-        stop("Corpus size exceeds current limitation. Not difficut to implement, but remaining business.")
+
+    if (getRversion() < R_system_version("4.0.0")){
+      max_integer <- trunc((2^31 - 1) / 4)
+      if (length(ids) > trunc((2^31 - 1) / 4)){
+        stop(sprintf(
+          paste(
+            "You are using R %s. Due to a limitation of writeBin() to process long integer vectors before R v4.0.0,",
+            "writing the p-Attribute to disk is not possible:",
+            "The length of the p-Attribute is %d but the maximum length that can be processed is %d.",
+            "Proposed solution: Install R v4.0.0 or higher.",
+            collapse = " "
+          ),
+          getRversion(), length(ids), max_integer
+        ))
       }
-      writeBin(object = ids[1L:max_id], size = 4L, endian = "big", con = corpus_file_con)
-      writeBin(object = ids[(max_id + 1L):length(ids)], size = 4L, endian = "big", con = corpus_file_con)
-      close(corpus_file_con)
     }
-    
+    if (verbose) message("... writing file: ", basename(corpus_file))
+    writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
+
     rm(ids); gc()
     
     lexicon <- levels(tokenstream_factor)

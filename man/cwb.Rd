@@ -9,7 +9,9 @@
 \usage{
 cwb_install(
   url_cwb = cwb_get_url(),
-  cwb_dir = system.file(package = "cwbtools", "extdata", "cwb")
+  md5 = attr(url_cwb, "md5"),
+  cwb_dir = fs::path(fs::path_temp(), "cwb"),
+  verbose = TRUE
 )
 
 cwb_get_url()
@@ -19,11 +21,19 @@ cwb_get_bindir(bindir = Sys.getenv("CWB_BINDIR"))
 cwb_is_installed()
 }
 \arguments{
-\item{url_cwb}{The URL from where the CWB can be downloaded.}
+\item{url_cwb}{URL for downloading the CWB.}
+
+\item{md5}{The md5 checksum of the compressed file to be downloaded.}
 
 \item{cwb_dir}{The directory where the CWB shall be installed.}
 
+\item{verbose}{A \code{logical} value, whether to output messages.}
+
 \item{bindir}{The directory with CWB binaries.}
+}
+\value{
+The path of the CWB binaries or \code{NULL} if downloading and installing
+the CWB has failed.
 }
 \description{
 Some steps for encoding corpora can be performed by calling CWB utilities
@@ -33,7 +43,9 @@ CWB.
 }
 \details{
 \code{cwb_get_url} will return the URL for downloading the
-appropriate binary (Linux / macOS / Windows) of the Corpus Workbench.
+appropriate binary (Linux / macOS) of the Corpus Workbench, or the source
+tarball (Linux). The md5 checksum of the file to be downloaded is part of
+the return value as "md5" attribute.
 
 \code{cwb_get_bindir} will return the directory where the cwb
 utility programs reside. If \code{cwb_install()} has been used to install

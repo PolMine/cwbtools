@@ -74,7 +74,7 @@
 #'   choices are required.
 #' @param registry_dir The corpus registry directory. If missing, the result of
 #'   `cwb_registry_dir()`.
-#' @param corpus A CWB corpus.
+#' @param corpus The ID of a CWB indexed corpus (in upper case).
 #' @param tarfile Filename of tarball.
 #' @param checksum A length-one \code{character} vector with a MD5 checksum to
 #'   check for the integrity of a downloaded tarball. If the tarball is
@@ -940,4 +940,29 @@ corpus_testload <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   }
 
   invisible(retval)
+}
+
+#' @details `corpus_get_version` parses the registry file and derives the
+#'   corpus version number from the corpus properties. The return value is a
+#'   `numeric_version` class object. The corpus version is expected to follow
+#'   semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
+#'   has another format or if it is not available, the return value is `NA`.
+#' @export corpus_get_version
+#' @rdname corpus_utils
+corpus_get_version <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
+  v_string <- registry_file_parse(corpus, registry_dir = registry_dir)[["properties"]][["version"]]
+  if (is.null(v_string)) return(NA)
+  # Remove leading "v" if present
+  if (grepl("^\\s*v\\d+\\.\\d+\\.\\d+$", v_string)){
+    v_string <- gsub("^(\\s*v)(\\d+\\.\\d+\\.\\d+)\\s*$", "\\2", v_string)
+  }
+  if (!grepl("^\\d+\\.\\d+\\.\\d+$", v_string)){
+    warning(sprintf(
+      "Found version '%s' in properties file for corpus '%s'. The version does not meet the expectation of a three-digit version number. Returning NA value.",
+      v_string, corpus
+      )
+    )
+    return(NA)
+  }
+  numeric_version(v_string)
 }
