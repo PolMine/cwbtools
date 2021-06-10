@@ -21,14 +21,16 @@ x <- data.frame(
     "Bundeskanzlerin",
     "Angela",
     "Merkel",
-    "hält",
+    "spricht",
     "im",
     "Bundestag",
-    "eine",
-    "Rede",
+    "zur",
+    "Lage",
+    "der",
+    "Nation"
     "."
   ),
-  ne = c("O", "O", "B-PERS", "I-PERS", "O", "O", "B-ORG", "O", "O", "O"),
+  ne = c("O", "O", "B-PERS", "I-PERS", "O", "O", "B-ORG", "O", "O", "O", "O", "O"),
   stringsAsFactors = FALSE
 )
 x[["cpos"]] <- 100L:(100L + nrow(x) - 1L)
