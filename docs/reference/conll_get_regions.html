@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -112,7 +112,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/PolMine/cwbtools/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,7 +138,7 @@
     <p>Extract regions from NER annotations (CoNNL format).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>conll_get_regions</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>conll_get_regions</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,24 +153,27 @@ the columns "token" and "ner", and "cpos".</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  token <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
     <span class='st'>"Die"</span>,
     <span class='st'>"Bundeskanzlerin"</span>,
     <span class='st'>"Angela"</span>,
     <span class='st'>"Merkel"</span>,
-    <span class='st'>"hält"</span>,
+    <span class='st'>"spricht"</span>,
     <span class='st'>"im"</span>,
     <span class='st'>"Bundestag"</span>,
-    <span class='st'>"eine"</span>,
-    <span class='st'>"Rede"</span>,
+    <span class='st'>"zur"</span>,
+    <span class='st'>"Lage"</span>,
+    <span class='st'>"der"</span>,
+    <span class='st'>"Nation"</span>,
     <span class='st'>"."</span>
-  ),
-  <span class='kw'>ne</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-PERS"</span>, <span class='st'>"I-PERS"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-ORG"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>),
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-<span class='no'>x</span><span class='kw'>[[</span><span class='st'>"cpos"</span>]] <span class='kw'>&lt;-</span> <span class='fl'>100L</span>:(<span class='fl'>100L</span> + <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>) - <span class='fl'>1L</span>)
-<span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'>conll_get_regions</span>(<span class='no'>x</span>)</div></pre>
+  <span class='op'>)</span>,
+  ne <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-PERS"</span>, <span class='st'>"I-PERS"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-ORG"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span><span class='op'>)</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+<span class='va'>x</span><span class='op'>[[</span><span class='st'>"cpos"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>100L</span><span class='op'>:</span><span class='op'>(</span><span class='fl'>100L</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1L</span><span class='op'>)</span>
+<span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'>conll_get_regions</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -186,7 +189,7 @@ the columns "token" and "ner", and "cpos".</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

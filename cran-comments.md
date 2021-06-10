@@ -1,18 +1,16 @@
 ## General remarks
 
-The package was removed from CRAN and archived because I failed to fix an issue in time: There is one remaining scenario when `corpus_install()` does not abort gracefully if a ressource cannot be downloaded. 
+The package has been archived because there was a policy violation (on internet access) I failed to fix in time: There has been a scenario when `corpus_install()` does not abort gracefully if a ressource cannot be downloaded. 
 This has been fixed.
 
 In addition I removed the 'LazyData' statement that is unnecessary because there is not sample data within the package. R-devel started to show a respective NOTE.
 
 ## Test environments
 
-* local OS X install, R 4.0.2
-* GitHub Actions (Ubuntu 20.04 release and devel, macOS, Windows) R 4.0.4
-* win-builder (devel and release, R. 4.0.4)
+* local macOS install, R 4.1.0
+* GitHub Actions (Ubuntu 20.04, macOS, Windows) R 4.1.0 and R-devel (Ubuntu 20.04)
+* win-builder (devel and release, R. 4.1.0)
 * Debian (docker image, R-devel)
-* Solaris on R-hub (Oracle Solaris 10, x86, 32 bit, R-release, Oracle Developer Studio 12.6)
-* Fedora, R-devel (docker image).
 
 ## R CMD check results
 

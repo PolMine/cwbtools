@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -71,7 +71,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/PolMine/cwbtools/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +91,7 @@
       <h1 data-toc-skip>How to add a sentence annotation to an indexed corpus</h1>
                         <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2020-07-20</h4>
+            <h4 class="date">2021-06-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/master/vignettes/sentences.Rmd"><code>vignettes/sentences.Rmd</code></a></small>
       <div class="hidden name"><code>sentences.Rmd</code></div>
@@ -103,62 +103,113 @@
 <div id="about" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about" class="anchor"></a>About</h2>
-<p>There are many reasons why encoding an annotation of sentences as a structural attribute may be valuable. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParl corpus serves as an example.</p>
+<p>Adding an annotation of sentences as a structural attribute to an existing is a frequent scenario. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParlSamplee corpus serves as an example.</p>
 </div>
 <div id="getting-started" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-started" class="anchor"></a>Getting started</h2>
-<p>In addition to the cwbtools package, we use some functionality of the polmineR package.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cwbtools</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">polmineR</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/use.html">use</a></span>(<span class="st">"polmineR"</span>)</pre></body></html></div>
-<p>Adding an s-attribute is not a risky operation. The attribute can be removed again. Nevertheless, we use a temporary copy here.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"># Yet to be written</pre></body></html></div>
+<p>In addition to the <strong>cwbtools</strong> package, we use the functionality of the <a href="https://CRAN.R-project.org/package=RcppCWB">RcppCWB</a> package to decode the p-attribute ‘pos’. The same could be achieved using the higher-level <code>get_token_stream()</code> method of the <a href="https://CRAN.R-project.org/package=polmineR">polmineR</a> package, but we want to avoid creating an additional dependency of this package.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools">cwbtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB">RcppCWB</a></span><span class="op">)</span></code></pre></div>
+<p>For the purposes of this vigneette, ee will work with a temporary corpy of the corpus we wish to augment, so we create a temporary corpus directory.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">registry_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/path.html">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"registry_dir_tmp"</span><span class="op">)</span>
+<span class="va">corpus_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/path.html">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"corpus_dir_tmp"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">registry_dir_tmp</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">corpus_dir_tmp</span><span class="op">)</span>
+
+<span class="va">regdir_envvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">registry_dir_tmp</span><span class="op">)</span></code></pre></div>
+<p>The GermaParlSample corpus can be downloaded from <a href="https://doi.org/10.5281/zenodo.3823245">Zenodo</a> as follows.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">is_corpus_available</span> <span class="op">&lt;-</span> <span class="fu">cwbtools</span><span class="fu">::</span><span class="fu"><a href="../reference/corpus_install.html">corpus_install</a></span><span class="op">(</span>
+  doi <span class="op">=</span> <span class="st">"10.5281/zenodo.3823245"</span>,
+  registry_dir <span class="op">=</span> <span class="va">registry_dir_tmp</span>, corpus_dir <span class="op">=</span> <span class="va">corpus_dir_tmp</span>,
+  verbose <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">corpus_dir_tmp</span>, <span class="st">"germaparlsample"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##  [1] "date.avs"         "date.avx"         "date.rng"         "interjection.avs"
+##  [5] "interjection.avx" "interjection.rng" "party.avs"        "party.avx"       
+##  [9] "party.rng"        "pos.corpus.cnt"   "pos.crc"          "pos.crx"         
+## [13] "pos.hcd"          "pos.huf"          "pos.huf.syn"      "pos.lexicon"     
+## [17] "pos.lexicon.idx"  "pos.lexicon.srt"  "speaker.avs"      "speaker.avx"     
+## [21] "speaker.rng"      "template.json"    "word.corpus.cnt"  "word.crc"        
+## [25] "word.crx"         "word.hcd"         "word.huf"         "word.huf.syn"    
+## [29] "word.lexicon"     "word.lexicon.idx" "word.lexicon.srt"</code></pre>
 </div>
 <div id="recipe" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recipe" class="anchor"></a>Recipe</h2>
 <p>We generate the data for the sentence annotation from the part-of-speech annotation that is already present.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">pos</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/corpus-class.html">corpus</a></span>(<span class="st">"GERMAPARL"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/get_token_stream-method.html">get_token_stream</a></span>(<span class="kw">p_attribute</span> <span class="kw">=</span> <span class="st">"pos"</span>)
-
-<span class="no">sentence_end</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"\\$\\."</span>, <span class="no">pos</span>)
-
-<span class="no">cpos_sentences</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span>(
-  <span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq.int</a></span>(<span class="kw">from</span> <span class="kw">=</span> <span class="fl">0L</span>, <span class="kw">to</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">pos</span>) - <span class="fl">1L</span>),
-  <span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0L</span>, <span class="no">sentence_end</span>),
-  <span class="kw">include.lowest</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-  <span class="kw">right</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-)
-
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/partition_class.html">split</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">cpos</span>, <span class="kw">f</span> <span class="kw">=</span> <span class="no">cpos_sentences</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw">function</span>(<span class="no">cpos</span>) <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">cpos</span>[<span class="fl">1L</span>], <span class="no">cpos</span>[<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">cpos</span>)])) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2L</span>, <span class="kw">byrow</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>()
-
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">df</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>)
-<span class="no">df</span><span class="kw">[[</span><span class="st">"sentence"</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq.int</a></span>(<span class="kw">from</span> <span class="kw">=</span> <span class="fl">0L</span>, <span class="kw">to</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df</span>) - <span class="fl">1L</span>)</pre></body></html></div>
-<p>So let us see what we have …</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">df</span>)</pre></body></html></div>
+<p>At first, we decode the p-attribute “pos”.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">germaparl_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cl_attribute_size.html">cl_attribute_size</a></span><span class="op">(</span>
+  corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span>,
+  attribute <span class="op">=</span> <span class="st">"word"</span>, attribute_type <span class="op">=</span> <span class="st">"p"</span>
+<span class="op">)</span>
+<span class="va">cpos_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq.int</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0L</span>, to <span class="op">=</span> <span class="va">germaparl_size</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span>
+<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_cpos2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span>, p_attribute <span class="op">=</span> <span class="st">"pos"</span>, cpos <span class="op">=</span> <span class="va">cpos_vec</span><span class="op">)</span>
+<span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2str</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span>, p_attribute <span class="op">=</span> <span class="st">"pos"</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></code></pre></div>
+<p>The pos-tag for Stuttgart Tuebingen Tag Set (STTS) is a “$.”. From this information, we can generate a region matrix with start and end corpus positions of sentences easily.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sentence_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"\\$\\."</span>, <span class="va">pos</span><span class="op">)</span>
+<span class="va">sentence_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cpos_vec</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="va">sentence_end</span><span class="op">)</span>, include.lowest <span class="op">=</span> <span class="cn">TRUE</span>, right <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">sentences_cpos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html">split</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cpos_vec</span>, f <span class="op">=</span> <span class="va">sentence_factor</span><span class="op">)</span><span class="op">)</span>
+<span class="va">region_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">sentences_cpos</span>, <span class="kw">function</span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span>, <span class="va">cpos</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>So let us see what this looks like …</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">region_matrix</span><span class="op">)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    0    9
+## [2,]   10   25
+## [3,]   26   35
+## [4,]   36   52
+## [5,]   53   64
+## [6,]   65   86</code></pre>
 <p>And this is how the new annotation layer is written back to the corpus.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/s_attribute.html">s_attribute_encode</a></span>(
-  <span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">df</span><span class="kw">[[</span><span class="st">"sentence"</span>]]),
-  <span class="kw">data_dir</span> <span class="kw">=</span> <span class="kw pkg">cwbtools</span><span class="kw ns">::</span><span class="fu"><a href="../reference/registry_file.html">registry_file_parse</a></span>(<span class="kw">corpus</span> <span class="kw">=</span> <span class="st">"GERMAPARL"</span>)<span class="kw">[[</span><span class="st">"home"</span>]],
-  <span class="kw">s_attribute</span> <span class="kw">=</span> <span class="st">"s"</span>,
-  <span class="kw">corpus</span> <span class="kw">=</span> <span class="st">"GERMAPARL"</span>,
-  <span class="kw">region_matrix</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">df</span>[,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>)]),
-  <span class="kw">method</span> <span class="kw">=</span> <span class="st">"R"</span>,
-  <span class="kw">registry_dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/registry.html">registry</a></span>(<span class="kw">pkg</span> <span class="kw">=</span> <span class="st">"GERMAPARL"</span>),
-  <span class="kw">encoding</span> <span class="kw">=</span> <span class="kw pkg">cwbtools</span><span class="kw ns">::</span><span class="fu"><a href="../reference/registry_file.html">registry_file_parse</a></span>(<span class="kw">corpus</span> <span class="kw">=</span> <span class="st">"GERMAPARL"</span>)<span class="kw">[[</span><span class="st">"properties"</span>]]<span class="kw">[[</span><span class="st">"charset"</span>]],
-  <span class="kw">delete</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-  <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">TRUE</span>
-)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/s_attribute_encode.html">s_attribute_encode</a></span><span class="op">(</span>
+  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq.int</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0L</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">region_matrix</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span>,
+  data_dir <span class="op">=</span> <span class="fu"><a href="../reference/registry_file_parse.html">registry_file_parse</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span><span class="op">)</span><span class="op">[[</span><span class="st">"home"</span><span class="op">]</span><span class="op">]</span>,
+  s_attribute <span class="op">=</span> <span class="st">"s"</span>,
+  corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span>,
+  region_matrix <span class="op">=</span> <span class="va">region_matrix</span>,
+  method <span class="op">=</span> <span class="st">"R"</span>,
+  registry_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>,
+  encoding <span class="op">=</span> <span class="fu"><a href="../reference/registry_file_parse.html">registry_file_parse</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"GERMAPARLSAMPLE"</span><span class="op">)</span><span class="op">[[</span><span class="st">"properties"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"charset"</span><span class="op">]</span><span class="op">]</span>,
+  delete <span class="op">=</span> <span class="cn">TRUE</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<pre><code>## ... adding s-attribute 's' to registry</code></pre>
+<pre><code>## Corpus to delete (ID): GERMAPARLSAMPLE
+## Corpus name: GermaParlSample: Sample subset of the GermaParl corpus of plenary protocols of the German Bundestag
+## Number of loads before reset: 5
+## Number of loads resetted: 1</code></pre>
 </div>
 <div id="checking-the-result" class="section level2">
 <h2 class="hasAnchor">
 <a href="#checking-the-result" class="anchor"></a>Checking the result</h2>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">k</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/polmineR/man/kwic.html">kwic</a></span>(<span class="st">"GERMAPARL"</span>, <span class="kw">query</span> <span class="kw">=</span> <span class="st">"Integration"</span>, <span class="kw">left</span> <span class="kw">=</span> <span class="fl">30</span>, <span class="kw">right</span> <span class="kw">=</span> <span class="fl">30</span>, <span class="kw">boundary</span> <span class="kw">=</span> <span class="st">"s"</span>)</pre></body></html></div>
+<p>To see whether everything has worked, we get the left and right boundaries of the sentence with corpus position 60.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">left</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/s_attributes.html">cl_cpos2lbound</a></span><span class="op">(</span><span class="st">"GERMAPARLSAMPLE"</span>, cpos <span class="op">=</span> <span class="fl">60</span>, s_attribute <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span>
+<span class="va">right</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/s_attributes.html">cl_cpos2rbound</a></span><span class="op">(</span><span class="st">"GERMAPARLSAMPLE"</span>, cpos <span class="op">=</span> <span class="fl">60</span>, s_attribute <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span>
+<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_cpos2id</a></span><span class="op">(</span><span class="st">"GERMAPARLSAMPLE"</span>, cpos <span class="op">=</span> <span class="va">left</span><span class="op">:</span><span class="va">right</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2str</a></span><span class="op">(</span><span class="st">"GERMAPARLSAMPLE"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></code></pre></div>
+<pre><code>##  [1] "Ich"      "bin"      "am"       "Sonntag"  ","        "dem"     
+##  [7] "1."       "Dezember" "1935"     ","        "geboren"  "."</code></pre>
+</div>
+<div id="cleaning-up" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cleaning-up" class="anchor"></a>Cleaning up</h2>
+<p>As a matter of housekeeping, we remove temporary directories and restore value of environment variable CORPUS_REGISTRY.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="va">corpus_dir_tmp</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="va">registry_dir_tmp</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">regdir_envvar</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="next-steps" class="section level2">
 <h2 class="hasAnchor">
@@ -182,7 +233,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

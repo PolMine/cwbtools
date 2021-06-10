@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/europarl.html">Creating a Corpus Data Package: Wrapping Europarl</a>
+      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
     </li>
     <li>
       <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
@@ -112,7 +112,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/PolMine/cwbtools/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -151,7 +151,7 @@ the CWB (Christ 1994).</p>
 <p>The C implementation of the CWB is mature and efficient. However, the
 convenience and flexibility of traditional CWB command line tools is limited.
 These tools are not portable across platforms, inhibiting the ideal of
-reproducible research.</p> 
+reproducible research.</p>
 <p>The 'cwbtools' package combines portable pure R tools to create indexed
 corpus files and convenience wrappers for the original C implementation of
 CWB as exposed by the
@@ -168,51 +168,20 @@ quantitative and qualitative approaches when working with textual data.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Christ, Oliver (1994): "A Modular and Flexible Architecture for
-  an Integrated Corpus Query System". <em>Proceedings of COMPLEX'94</em>,
-  pp.23-32. <a href='https://arxiv.org/pdf/cmp-lg/9408005.pdf'>(available online here)</a></p>
+an Integrated Corpus Query System". <em>Proceedings of COMPLEX'94</em>,
+pp.23-32. <a href='https://arxiv.org/pdf/cmp-lg/9408005.pdf'>(available online here)</a></p>
 <p>Evert, Stefan and Andrew Hardie (2011): "Twenty-first
-  century Corpus Workbench: Updating a query architecture for the new
-  millennium." In: <em>Proceedings of the Corpus Linguistics 2011 conference</em>,
-  University of Birmingham, UK.
-  <a href='https://www.birmingham.ac.uk/documents/college-artslaw/corpus/conference-archives/2011/Paper-153.pdf'>(available online here)</a></p>
+century Corpus Workbench: Updating a query architecture for the new
+millennium." In: <em>Proceedings of the Corpus Linguistics 2011 conference</em>,
+University of Birmingham, UK.
+<a href='https://www.birmingham.ac.uk/documents/college-artslaw/corpus/conference-archives/2011/Paper-153.pdf'>(available online here)</a></p>
 <p>Witten, Ian H., Alistair Moffat and Timothy C. Bell (1999):
-  <em>Managing Gigabytes: Compressing and Indexing Documents and Images.</em>
-  2nd edition. San Francisco et al.: Morgan Kaufmann.</p>
+<em>Managing Gigabytes: Compressing and Indexing Documents and Images.</em>
+2nd edition. San Francisco et al.: Morgan Kaufmann.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tm</span>)
-<span class='no'>reut21578</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"texts"</span>, <span class='st'>"crude"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"tm"</span>)
-<span class='no'>reuters.tm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tm/man/VCorpus.html'>VCorpus</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/tm/man/DirSource.html'>DirSource</a></span>(<span class='no'>reut21578</span>), <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>reader</span> <span class='kw'>=</span> <span class='no'>readReut21578XMLasPlain</span>))
+    <p>Andreas Blaette</p>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidytext</span>)
-<span class='no'>reuters.tibble</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/reexports.html'>tidy</a></span>(<span class='no'>reuters.tm</span>)
-<span class='no'>reuters.tibble</span><span class='kw'>[[</span><span class='st'>"topics_cat"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(
-  <span class='no'>reuters.tibble</span><span class='kw'>[[</span><span class='st'>"topics_cat"</span>]],
-  <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>reuters.tibble</span><span class='kw'>[[</span><span class='st'>"topics_cat"</span>]], <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"|"</span>)
-)
-<span class='no'>reuters.tibble</span><span class='kw'>[[</span><span class='st'>"places"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(
-  <span class='no'>reuters.tibble</span><span class='kw'>[[</span><span class='st'>"places"</span>]],
-  <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"|"</span>)
-)
-<span class='no'>reuters.tidy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span>(
-  <span class='no'>reuters.tibble</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"word"</span>, <span class='kw'>input</span> <span class='kw'>=</span> <span class='st'>"text"</span>, <span class='kw'>to_lower</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-
-<span class='no'>cdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>tokenstream</span> <span class='kw'>=</span> <span class='fu'>as.data.table</span>(<span class='no'>reuters.tidy</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id"</span>, <span class='st'>"word"</span>)]),
-  <span class='kw'>metadata</span> <span class='kw'>=</span> <span class='fu'>as.data.table</span>(<span class='no'>reuters.tibble</span>[,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id"</span>, <span class='st'>"topics_cat"</span>, <span class='st'>"places"</span>, <span class='st'>"language"</span>)])
-  )
-<span class='no'>cdata</span> <span class='kw'>&lt;-</span> <span class='fu'>add_corpus_positions</span>(<span class='no'>cdata</span>)
-
-<span class='no'>registry_dir_tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
-<span class='no'>data_dir_tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/normalizePath.html'>normalizePath</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>winslash</span> <span class='kw'>=</span> <span class='st'>"/"</span>)
-
-<span class='fu'>encode_corpusdata</span>(
-  <span class='no'>cdata</span>, <span class='kw'>corpus</span> <span class='kw'>=</span> <span class='st'>"REUTERS"</span>, <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='st'>"utf8"</span>,
-  <span class='kw'>registry_dir</span> <span class='kw'>=</span> <span class='no'>registry_dir_tmp</span>, <span class='kw'>data_dir</span> <span class='kw'>=</span> <span class='no'>data_dir_tmp</span>
-  )
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -228,7 +197,7 @@ quantitative and qualitative approaches when working with textual data.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
