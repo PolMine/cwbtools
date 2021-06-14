@@ -41,16 +41,16 @@
 
 <meta property="og:title" content="Manage directories for indexed corpora — cwb_corpus_dir" />
 <meta property="og:description" content="The Corpus Workbench (CWB) stores the binary files for
-  structural and positional attributes in an individual 'data directory'
-  (referred to by argument data_dir) for each corpus. The data
-  directories will typically be subdirectories of a parent directory called
-  'corpus directory' (argument corpus_dir). Irrespective of the
-  location of the data directories, all corpora available on a machine are
-  described by so-called (plain text) registry files stored in a so-called
-  'registry directory' (referred to by argument registry_dir).  The
-  functionality to manage theses directories is used as auxiliary
-  functionality by higher-level functionality to download and install
-  corpora." />
+structural and positional attributes in an individual 'data directory'
+(referred to by argument data_dir) for each corpus. The data
+directories will typically be subdirectories of a parent directory called
+'corpus directory' (argument corpus_dir). Irrespective of the
+location of the data directories, all corpora available on a machine are
+described by so-called (plain text) registry files stored in a so-called
+'registry directory' (referred to by argument registry_dir).  The
+functionality to manage theses directories is used as auxiliary
+functionality by higher-level functionality to download and install
+corpora." />
 
 
 
@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -146,23 +146,23 @@
 
     <div class="ref-description">
     <p>The Corpus Workbench (CWB) stores the binary files for
-  structural and positional attributes in an individual 'data directory'
-  (referred to by argument <code>data_dir</code>) for each corpus. The data
-  directories will typically be subdirectories of a parent directory called
-  'corpus directory' (argument <code>corpus_dir</code>). Irrespective of the
-  location of the data directories, all corpora available on a machine are
-  described by so-called (plain text) registry files stored in a so-called
-  'registry directory' (referred to by argument <code>registry_dir</code>).  The
-  functionality to manage theses directories is used as auxiliary
-  functionality by higher-level functionality to download and install
-  corpora.</p>
+structural and positional attributes in an individual 'data directory'
+(referred to by argument <code>data_dir</code>) for each corpus. The data
+directories will typically be subdirectories of a parent directory called
+'corpus directory' (argument <code>corpus_dir</code>). Irrespective of the
+location of the data directories, all corpora available on a machine are
+described by so-called (plain text) registry files stored in a so-called
+'registry directory' (referred to by argument <code>registry_dir</code>).  The
+functionality to manage theses directories is used as auxiliary
+functionality by higher-level functionality to download and install
+corpora.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cwb_corpus_dir</span><span class='op'>(</span><span class='va'>registry_dir</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>cwb_corpus_dir</span><span class='op'>(</span><span class='va'>registry_dir</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>cwb_registry_dir</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>cwb_registry_dir</span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>cwb_directories</span><span class='op'>(</span>registry_dir <span class='op'>=</span> <span class='cn'>NULL</span>, corpus_dir <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>cwb_directories</span><span class='op'>(</span>registry_dir <span class='op'>=</span> <span class='cn'>NULL</span>, corpus_dir <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='fu'>create_cwb_directories</span><span class='op'>(</span>prefix <span class='op'>=</span> <span class='st'>"~/cwb"</span>, ask <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
@@ -174,6 +174,10 @@
     <tr>
       <th>registry_dir</th>
       <td><p>Path to the directory with registry files.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>A <code>logical</code> value, whether to output status messages.</p></td>
     </tr>
     <tr>
       <th>corpus_dir</th>
@@ -188,51 +192,47 @@
       <td><p>A <code>logical</code> value, whether to prompt user before creating
 directories.</p></td>
     </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>A <code>logical</code> value, whether to output status messages.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>cwb_corpus_dir</code> will make a plausible suggestion for a corpus
-  directory where data directories for corpora reside. The procedure requires
-  that  the registry directory (argument <code>registry_dir</code>) is known. If
-  the argument <code>registry_dir</code> is missing, the registry directory will be
-  guessed by calling <code>cwb_registry_dir</code>. The heuristic to detect the
-  corpus directory is as follows: First, directories in the parent directory
-  of the registry directory that contain "corpus" or "corpora" are suggested.
-  If this does not yield a result, the data directories stated in the
-  registry files are evaluated. If there is one unique parent directory of
-  data directories (after removing temporary directories and directories
-  within packages), this unique directory is suggested. <code>cwb_corpus_dir</code>
-  will return a length-one <code>character</code> vector with the path of the
-  suggested corpus directory, or <code>NULL</code> if the heuristic does not yield
-  a result.</p>
+directory where data directories for corpora reside. The procedure requires
+that  the registry directory (argument <code>registry_dir</code>) is known. If
+the argument <code>registry_dir</code> is missing, the registry directory will be
+guessed by calling <code>cwb_registry_dir</code>. The heuristic to detect the
+corpus directory is as follows: First, directories in the parent directory
+of the registry directory that contain "corpus" or "corpora" are suggested.
+If this does not yield a result, the data directories stated in the
+registry files are evaluated. If there is one unique parent directory of
+data directories (after removing temporary directories and directories
+within packages), this unique directory is suggested. <code>cwb_corpus_dir</code>
+will return a length-one <code>character</code> vector with the path of the
+suggested corpus directory, or <code>NULL</code> if the heuristic does not yield
+a result.</p>
 <p><code>cwb_registry_dir</code> will return return the system registry
-  directory. By default, the environment variable CORPUS_REGISTRY defines the
-  system registry directory. If the polmineR-package is loaded, a temporary
-  registry directory is used, replacing the system registry directory. In
-  this case, <code>cwb_registry_dir</code> will retrieve the directory from the
-  option 'polmineR.corpus_registry'. The return value is a length-one
-  character vector or <code>NULL</code>, if no registry directory can be detected.</p>
+directory. By default, the environment variable CORPUS_REGISTRY defines the
+system registry directory. If the polmineR-package is loaded, a temporary
+registry directory is used, replacing the system registry directory. In
+this case, <code>cwb_registry_dir</code> will retrieve the directory from the
+option 'polmineR.corpus_registry'. The return value is a length-one
+character vector or <code>NULL</code>, if no registry directory can be detected.</p>
 <p><code>cwb_directories</code> will return a named character vector with the
-  registry directory and the corpus directory.</p>
+registry directory and the corpus directory.</p>
 <p><code>create_cwb_directories</code> will create a 'registry' and an
-  'indexed_corpora' directory as subdirectories of the directory indicated by
-  argument <code>prefix</code>. Argument <code>ask</code> indicates whether to create
-  directories, and whether user feedback is asked for before creating the
-  directories. The function returns a named character vector with the
-  registry and the corpus directory.</p>
+'indexed_corpora' directory as subdirectories of the directory indicated by
+argument <code>prefix</code>. Argument <code>ask</code> indicates whether to create
+directories, and whether user feedback is asked for before creating the
+directories. The function returns a named character vector with the
+registry and the corpus directory.</p>
 <p><code>use_corpus_registry_envvar</code> is a convenience function that
-  will assist users to define the environment variable CORPUS_REGSITRY in the
-  .Renviron-file.  making it available across sessions. The function is
-  intended to be used in an interactive R session. An error is thrown if this
-  is not the case. The user will be prompted whether the cwbtools package
-  shall take care of creating / modifying the .Renviron-file. If not,
-  the file will be opened for manual modification with some instructions shown
-  in the terminal.</p>
+will assist users to define the environment variable CORPUS_REGSITRY in the
+.Renviron-file.  making it available across sessions. The function is
+intended to be used in an interactive R session. An error is thrown if this
+is not the case. The user will be prompted whether the cwbtools package
+shall take care of creating / modifying the .Renviron-file. If not,
+the file will be opened for manual modification with some instructions shown
+in the terminal.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -166,7 +166,9 @@
 
 <span class='fu'>s_attribute_merge</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
 
-<span class='fu'>s_attribute_delete</span><span class='op'>(</span><span class='va'>corpus</span>, <span class='va'>s_attribute</span><span class='op'>)</span></pre>
+<span class='fu'>s_attribute_delete</span><span class='op'>(</span><span class='va'>corpus</span>, <span class='va'>s_attribute</span><span class='op'>)</span>
+
+<span class='fu'>s_attribute_rename</span><span class='op'>(</span><span class='va'>corpus</span>, <span class='va'>old</span>, <span class='va'>new</span>, <span class='va'>registry_dir</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -231,6 +233,17 @@ coercible to a <code>data.table</code>) with three columns ("cpos_left",
 object coercible to a <code>data.table</code>)with three columns ("cpos_left",
 "cpos_right", "value").</p></td>
     </tr>
+    <tr>
+      <th>old</th>
+      <td><p>A <code>character</code> vector with s-attributes to be renamed.</p></td>
+    </tr>
+    <tr>
+      <th>new</th>
+      <td><p>A <code>character</code> vector with new names of s-attributes. The vector
+needs to have the same length as vector <code>old</code>. The 1st, 2nd, 3rd ... nth
+attribute stated in vector <code>old</code> will get the new names at the 1st, 2nd,
+3rd, ... nth position of vector <code>new</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -247,30 +260,32 @@ file remains unchanged, and it is highly recommended to consider <code>s_attribu
 as a helper for <code>corpus_recode</code> that will recode all s-attributes, all p-attributes,
 and will reset the encoding in the registry file.</p>
 <p><code>s_attribute_files</code> will return a named character vector with
-  the data files (extensions: "avs", "avx", "rng") in the directory indicated
-  by <code>data_dir</code> for the structural attribute <code>s_attribute</code>.</p>
+the data files (extensions: "avs", "avx", "rng") in the directory indicated
+by <code>data_dir</code> for the structural attribute <code>s_attribute</code>.</p>
 <p><code>s_attribute_get_values</code> is equivalent to performing the CL
-  function cl_struc2id for all strucs of a structural attribute. It is a
-  "pure R" operation that is faster than using CL, as it processes entire
-  files for the s-attribute directly. The return value is a <code>character</code>
-  vector with all string values for the s-attribute.</p>
+function cl_struc2id for all strucs of a structural attribute. It is a
+"pure R" operation that is faster than using CL, as it processes entire
+files for the s-attribute directly. The return value is a <code>character</code>
+vector with all string values for the s-attribute.</p>
 <p><code>s_attribute_get_regions</code> will return a two-column integer
-  matrix with regions for the strucs of a given s-attribute. Left corpus
-  positions are in the first column, right corpus positions in the second
-  column. The result is equivalent to calling RcppCWB::get_region_matrix for
-  all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
-  function which is fast as it processes files entirely and directly.</p>
+matrix with regions for the strucs of a given s-attribute. Left corpus
+positions are in the first column, right corpus positions in the second
+column. The result is equivalent to calling RcppCWB::get_region_matrix for
+all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
+function which is fast as it processes files entirely and directly.</p>
 <p><code>s_attribute_merge</code> combines two tables with regions for
-  s-attributes checking for intersections that may cause problems. The
-  heuristic is to keep all non-intersecting annotations and those annotations
-  that define the same region in object <code>x</code> and object <code>y</code>.
-  Annotations of <code>x</code> and <code>y</code> which overlap uncleanly, i.e. without
-  an identity of the left and the right corpus position ("cpos_left" /
-  "cpos_right") are dropped. The scenario for using the function is to decode
-  a s-attribute (using <code>s_attribute_decode</code>), mix in an additional
-  annotation, and to re-encode the enhanced s-attribute (using
-  <code>s_attribute_encode</code>).</p>
+s-attributes checking for intersections that may cause problems. The
+heuristic is to keep all non-intersecting annotations and those annotations
+that define the same region in object <code>x</code> and object <code>y</code>.
+Annotations of <code>x</code> and <code>y</code> which overlap uncleanly, i.e. without
+an identity of the left and the right corpus position ("cpos_left" /
+"cpos_right") are dropped. The scenario for using the function is to decode
+a s-attribute (using <code>s_attribute_decode</code>), mix in an additional
+annotation, and to re-encode the enhanced s-attribute (using
+<code>s_attribute_encode</code>).</p>
 <p>Function <code>s_attribute_delete</code> is not yet implemented.</p>
+<p>Function <code>s_attribute_rename</code> can be used to rename a
+structural attribute.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>To decode a structural attribute, see <code><a href='https://rdrr.io/pkg/RcppCWB/man/s_attribute_decode.html'>s_attribute_decode</a></code>.</p></div>

@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ if (!"remotes" %in% installed.packages()[,"Package"]) install.packages("remotes"
 Sys.setenv(R_REMOTES_STANDALONE = "true")
 remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></pre>
 <p><strong>Explanatory note:</strong></p>
-<p>The default approach to install the development version <code>cwbtools</code> from GitHub would be <code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("PolMine/cwbtools", ref = "dev")</a></code>. However, the concurrent dependency of <code>devtools</code> and of <code>cwbtools</code> on the <code>curl</code> package may cause nerve-wrecking problems if <code>curl</code> can be updated: If a newer version of <code>curl</code> is available, the user will be prompted whether this update is desired. Most users will agree. However, this update will fail because <code>curl</code> is loaded by <code>devtools</code>, and parts of the <code>curl</code> package cannot be deleted/updated (the dynamic library that is loaded).</p>
+<p>The default approach to install the development version <code>cwbtools</code> from GitHub would be <code>devtools::install_github("PolMine/cwbtools", ref = "dev")</code>. However, the concurrent dependency of <code>devtools</code> and of <code>cwbtools</code> on the <code>curl</code> package may cause nerve-wrecking problems if <code>curl</code> can be updated: If a newer version of <code>curl</code> is available, the user will be prompted whether this update is desired. Most users will agree. However, this update will fail because <code>curl</code> is loaded by <code>devtools</code>, and parts of the <code>curl</code> package cannot be deleted/updated (the dynamic library that is loaded).</p>
 <p>To avoid having to perform manual updates in the correct order, using the original <code>install_github()</code> function of the <code>remotes</code> package is recommended. When setting the environment variable <code>R_REMOTES_STANDALONE</code> to <code>true</code>, the <code>remotes</code> package will rely on a minimal set of additional packages. The aforementioned situation that may make the installation of <code>cwbtools</code> difficult for most users is omitted.</p>
 </div>
 <div id="acknowledgements" class="section level2">
@@ -165,7 +165,6 @@ remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></p
 <ul class="list-unstyled">
 <li><a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>
 <li><a href="https://github.com/PolMine/cwbtools/actions"><img src="https://github.com/PolMine/cwbtools/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/PolMine/cwbtools"><img src="https://ci.appveyor.com/api/projects/status/github/PolMine/cwbtools?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/gh/PolMine/cwbtools/branch/master"><img src="https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg" alt="codecov"></a></li>
 <li><a href="https://doi.org/10.5281/zenodo.4558099"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4558099.svg" alt="DOI"></a></li>
 </ul>

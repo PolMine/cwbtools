@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -132,6 +132,28 @@
       <small>Source: <a href='https://github.com/PolMine/cwbtools/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="cwbtools-034" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.4">
+<a href="#cwbtools-034" class="anchor"></a>cwbtools 0.3.4<small> 2021-06-11 </small>
+</h1>
+<ul>
+<li>The function <code><a href="../reference/pkg_utils.html">pkg_add_description()</a></code> is declared deprecated. To alert users, functionality of the lifecycle package is used (<a href='https://github.com/PolMine/cwbtools/issues/1'>#1</a>).</li>
+<li>A new function <code><a href="../reference/as.vrt.html">as.vrt()</a></code> will generate valid *.vrt files from <code>xml_document</code> input.</li>
+<li>Added Left-to-Right Mark / “\u200E” to signs that are cleaned.</li>
+<li>Due to an inconsistency in the code of <code><a href="../reference/cwb_corpus_dir.html">cwb_corpus_dir()</a></code>, the function would falsely yield <code>NA</code> results if the CWB directory would contain more than two directories.</li>
+<li>To be able to recognize faulty directories, the registry directory and the corpus directory are reported by <code><a href="../reference/cwb_corpus_dir.html">cwb_corpus_dir()</a></code> and <code><a href="../reference/cwb_corpus_dir.html">cwb_registry_dir()</a></code>. Argument <code>verbose</code> can be used to suppress this output.</li>
+<li>The statement on ‘LazyData’ has been removed from the DESCRIPTION file to avoid a warning emerging with R-devel on CRAN check machines (<a href='https://github.com/PolMine/cwbtools/issues/33'>#33</a>).</li>
+<li>Executing the code in the vignette ‘sentences.Rmd’ is conditional on the availability of the sample corpus. If the corpus can not be installed from Zenodo, building the vignette will not fail (<a href='https://github.com/PolMine/cwbtools/issues/35'>#35</a>).</li>
+<li>The <code><a href="../reference/corpus_install.html">corpus_install()</a></code> function will abort with a FALSE return value if the requested tarball is not available (<a href='https://github.com/PolMine/cwbtools/issues/34'>#34</a>).</li>
+<li>A new function <code><a href="../reference/s_attribute_encode.html">s_attribute_rename()</a></code> can be used to rename s-attributes.</li>
+<li>A new function <code><a href="../reference/corpus_install.html">corpus_get_version()</a></code> will derive the corpus version number from the registry file and return a <code>numeric version</code> object (<a href='https://github.com/PolMine/cwbtools/issues/16'>#16</a>).</li>
+<li>A limitation of <code><a href="https://rdrr.io/r/base/readBin.html">writeBin()</a></code> to write long integer vectors has been overcome with R v4.0.0. A warning and a preliminary workaround to address this limitation when using <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> for corpora with more than 536870911 tokens can therefore be dropped. For large corpora, the function will check the R version and issue the recommendation to install $ v4.0.0 or higher, if the size limitation (536870911) is relevant (<a href='https://github.com/PolMine/cwbtools/issues/28'>#28</a>).</li>
+<li>In addition to the URL for downloading the CWB, <code><a href="../reference/cwb_install.html">cwb_get_url()</a></code> will return the MD5 checksum of the compressed file as attribute ‘md5’.</li>
+<li>The <code><a href="../reference/cwb_install.html">cwb_install()</a></code> function will fail gracefully if downloading the CWB fails (returning <code>NULL</code>). A new argument md5 will trigger checking the MD5 sum of the downloaded file (if provided). The default value of <code>cwb_dir</code> is now a temporary directory.</li>
+<li>
+</li>
+</ul>
+</div>
     <div id="cwbtools-033" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.3">
 <a href="#cwbtools-033" class="anchor"></a>cwbtools 0.3.3<small> 2021-02-23 </small>
@@ -199,7 +221,7 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
 <ul>
-<li>To avoid an issue with a false negative issued by <code><a href="https://rdrr.io/pkg/RCurl/man/url.exists.html">RCurl::url.exists()</a></code>, this function has been replaced by <code><a href="https://httr.r-lib.org/reference/http_error.html">httr::http_error()</a></code> (<a href='https://github.com/PolMine/cwbtools/issues/31'>#31</a>).</li>
+<li>To avoid an issue with a false negative issued by <code>RCurl::url.exists()</code>, this function has been replaced by <code><a href="https://httr.r-lib.org/reference/http_error.html">httr::http_error()</a></code> (<a href='https://github.com/PolMine/cwbtools/issues/31'>#31</a>).</li>
 <li>The <code><a href="../reference/corpus_install.html">corpus_install()</a></code> function still showed some progress messages even when <code>verbose</code> was set as <code>FALSE</code> (argument not passed to <code><a href="../reference/corpus_install.html">corpus_copy()</a></code>. Fixed.</li>
 <li>The code in the vignette on adding a sentence annotation was not executed when building the package and a bug in the code went unnoticed. Fixed (<a href='https://github.com/PolMine/cwbtools/issues/17'>#17</a>).</li>
 <li>The <code><a href="../reference/get_encoding.html">get_encoding()</a></code> method would return <code>NA</code> if <code><a href="https://rdrr.io/r/utils/localeToCharset.html">localeToCharset()</a></code> fails to infer charset from locale. In this case, UTF-8 is assumed.</li>
@@ -279,7 +301,7 @@
 <h2 class="hasAnchor">
 <a href="#documentation-fixes-2" class="anchor"></a>DOCUMENTATION FIXES</h2>
 <ul>
-<li>A problem with updating the <code>curl</code> dependency of <code>cwbtools</code> that may arise when <code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github()</a></code> is used is addressed in an extended explanation in the README.md file how to install the development version of <code>cwbtools</code> using <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> (<a href='https://github.com/PolMine/cwbtools/issues/21'>#21</a>).</li>
+<li>A problem with updating the <code>curl</code> dependency of <code>cwbtools</code> that may arise when <code>devtools::install_github()</code> is used is addressed in an extended explanation in the README.md file how to install the development version of <code>cwbtools</code> using <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> (<a href='https://github.com/PolMine/cwbtools/issues/21'>#21</a>).</li>
 </ul>
 </div>
 </div>
@@ -359,7 +381,7 @@
 <ul>
 <li>updated vignette so that annex explains installation of CoreNLP v3.9.2 (2018-10-05)</li>
 <li>New functions <code>s_atttribute_get_regions()</code> and <code><a href="../reference/s_attribute_encode.html">s_attribute_get_values()</a></code>.</li>
-<li>In <code><a href="../reference/corpus_install.html">corpus_install()</a></code>, using <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> replaces <code><a href="https://jeroen.cran.dev/curl/reference/curl_download.html">curl::curl_download()</a></code> for Windows because curl apparently is not able to process target filenames that include special characters.</li>
+<li>In <code><a href="../reference/corpus_install.html">corpus_install()</a></code>, using <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> replaces <code><a href="https://rdrr.io/pkg/curl/man/curl_download.html">curl::curl_download()</a></code> for Windows because curl apparently is not able to process target filenames that include special characters.</li>
 <li>For Windows machines, there is a check for non-ASCII characters in the file path. If TRUE, a path generated by a call to <code><a href="https://rdrr.io/r/utils/shortPathName.html">shortPathName()</a></code> is used.</li>
 <li>In the vignette, the registry is reset after creating the new corpora, to make the new corpus available.</li>
 <li>A (preliminary) <code>decode()</code>-method will turn a <code>partition</code> into an <code>Annotation</code> object from the NLP package.</li>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1 data-toc-skip>How to add a sentence annotation to an indexed corpus</h1>
                         <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2021-02-23</h4>
+            <h4 class="date">2021-06-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/master/vignettes/sentences.Rmd"><code>vignettes/sentences.Rmd</code></a></small>
       <div class="hidden name"><code>sentences.Rmd</code></div>
@@ -114,8 +114,8 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB">RcppCWB</a></span><span class="op">)</span></code></pre></div>
 <p>For the purposes of this vigneette, ee will work with a temporary corpy of the corpus we wish to augment, so we create a temporary corpus directory.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">registry_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"registry_dir_tmp"</span><span class="op">)</span>
-<span class="va">corpus_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"corpus_dir_tmp"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">registry_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/path.html">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"registry_dir_tmp"</span><span class="op">)</span>
+<span class="va">corpus_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/path.html">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"corpus_dir_tmp"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">registry_dir_tmp</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">corpus_dir_tmp</span><span class="op">)</span>
@@ -124,7 +124,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">registry_dir_tmp</span><span class="op">)</span></code></pre></div>
 <p>The GermaParlSample corpus can be downloaded from <a href="https://doi.org/10.5281/zenodo.3823245">Zenodo</a> as follows.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">cwbtools</span><span class="fu">::</span><span class="fu"><a href="../reference/corpus_install.html">corpus_install</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">is_corpus_available</span> <span class="op">&lt;-</span> <span class="fu">cwbtools</span><span class="fu">::</span><span class="fu"><a href="../reference/corpus_install.html">corpus_install</a></span><span class="op">(</span>
   doi <span class="op">=</span> <span class="st">"10.5281/zenodo.3823245"</span>,
   registry_dir <span class="op">=</span> <span class="va">registry_dir_tmp</span>, corpus_dir <span class="op">=</span> <span class="va">corpus_dir_tmp</span>,
   verbose <span class="op">=</span> <span class="cn">FALSE</span>

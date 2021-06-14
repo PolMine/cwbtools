@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -159,14 +159,16 @@ the columns "token" and "ner", and "cpos".</p></td>
     <span class='st'>"Bundeskanzlerin"</span>,
     <span class='st'>"Angela"</span>,
     <span class='st'>"Merkel"</span>,
-    <span class='st'>"hält"</span>,
+    <span class='st'>"spricht"</span>,
     <span class='st'>"im"</span>,
     <span class='st'>"Bundestag"</span>,
-    <span class='st'>"eine"</span>,
-    <span class='st'>"Rede"</span>,
+    <span class='st'>"zur"</span>,
+    <span class='st'>"Lage"</span>,
+    <span class='st'>"der"</span>,
+    <span class='st'>"Nation"</span>,
     <span class='st'>"."</span>
   <span class='op'>)</span>,
-  ne <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-PERS"</span>, <span class='st'>"I-PERS"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-ORG"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span><span class='op'>)</span>,
+  ne <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-PERS"</span>, <span class='st'>"I-PERS"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"B-ORG"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span>, <span class='st'>"O"</span><span class='op'>)</span>,
   stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 <span class='va'>x</span><span class='op'>[[</span><span class='st'>"cpos"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>100L</span><span class='op'>:</span><span class='op'>(</span><span class='fl'>100L</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1L</span><span class='op'>)</span>
