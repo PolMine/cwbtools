@@ -1,5 +1,5 @@
-cwbtools 0.3.3.9001 - 0.3.3.9006
-================================
+cwbtools 0.3.4
+==============
 
 * The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
 * A new function `as.vrt()` will generate valid *.vrt files from `xml_document` input.
@@ -14,6 +14,7 @@ cwbtools 0.3.3.9001 - 0.3.3.9006
 * A limitation of `writeBin()` to write long integer vectors has been overcome with R v4.0.0. A warning and a preliminary workaround to address this limitation when using `p_attribute_encode()` for corpora with more than 536870911 tokens can therefore be dropped. For large corpora, the function will check the R version and issue the recommendation to install $ v4.0.0 or higher, if the size limitation (536870911) is relevant (#28).
 * In addition to the URL for downloading the CWB, `cwb_get_url()` will return the MD5 checksum of the compressed file as attribute 'md5'.
 * The `cwb_install()` function will fail gracefully if downloading the CWB fails (returning `NULL`). A new argument md5 will trigger checking the MD5 sum of the downloaded file (if provided). The default value of `cwb_dir` is now a temporary directory.
+* 
 
 cwbtools 0.3.3
 ==============
