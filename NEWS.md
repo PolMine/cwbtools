@@ -1,3 +1,8 @@
+cwbtools 0.3.4.9001
+===================
+
+* New function `p_attribute_rename()` added, corresponding to `s_attribute_rename()`.
+
 cwbtools 0.3.4
 ==============
 
