@@ -1,10 +1,10 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.4
-Date: 2021-06-10
+Version: 0.3.4.9001
+Date: 2022-03-24
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
-  person("Christoph", "Leonhardt", role = "ctb", email = "christoph.leonhardt@uni-due.de")
+  person("Christoph", "Leonhardt", role = "aut", email = "christoph.leonhardt@uni-due.de")
   )
 Description: The 'Corpus Workbench' ('CWB', <http://cwb.sourceforge.net/>) offers a classic and mature
  approach for working with large, linguistically and structurally annotated corpora. The 'CWB'
@@ -68,6 +68,6 @@ Collate:
     'registry_file.R'
     's_attribute.R'
     'vrt.R'
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 RdMacros: lifecycle
