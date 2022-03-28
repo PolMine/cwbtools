@@ -327,8 +327,9 @@ p_attribute_encode <- function(
   
   if (compress){
     files_to_remove <- c(
-      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
-      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
+      corpus_file = path(data_dir, sprintf("%s.corpus", p_attribute)),
+      rdx_file = path(data_dir, sprintf("%s.corpus.rdx", p_attribute)),
+      rev_file = path(data_dir, sprintf("%s.corpus.rev", p_attribute))
     )
     for (x in files_to_remove){
       if (file.exists(x)) {

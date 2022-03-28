@@ -2,6 +2,8 @@ cwbtools 0.3.4.9001
 ===================
 
 * New function `p_attribute_rename()` added, corresponding to `s_attribute_rename()`.
+* `p_attribute_encode()` will remove the [p_attr].corpus file as suggested my
+cwb-makeall (if `compress` is `TRUE`).
 
 cwbtools 0.3.4
 ==============
