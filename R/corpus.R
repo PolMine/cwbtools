@@ -200,8 +200,11 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
   if (length(tarball) == 1L){
     
     cwbtools_tmpdir <- path(tempdir(), "cwbtools_tmpdir")
-    if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
-    dir.create(cwbtools_tmpdir)
+    if (file.exists(cwbtools_tmpdir)){
+      f <- list.files(cwbtools_tmpdir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+      file.remove(f)
+    }
+    
 
     # Download corpus -------------------
     if (grepl("^http", tarball)){
@@ -268,7 +271,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       }
       if (verbose) cli_alert_success(
         sprintf(
-          "download corpus tarball {col_cyan('%s')} ... done",basename(tarball)
+          "download corpus tarball {col_cyan('%s')} ... done", basename(tarball)
         )
       )
       if (exists("zenodo_file_record")){
@@ -307,7 +310,9 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       }
       if (verbose) cat_rule("Download corpus tarball from S3")
-      if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
+      if (verbose) cli_alert_info(
+        sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball))
+      )
       corpus_tarball <- path(cwbtools_tmpdir, basename(tarball))
 
       bucketname <- aws.s3::get_bucketname(tarball)
@@ -751,7 +756,9 @@ corpus_copy <- function(
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
 
-  spinner <- make_spinner(template = sprintf("{spin} copy corpus data files for corpus {col_cyan('%s')} to target data directory", toupper(corpus)))
+  spinner <- make_spinner(
+    template = "{spin} copy corpus data files to target data directory"
+  )
   copy_with_spinner <- function(){
     lapply(
       list.files(data_dir, full.names = TRUE),
