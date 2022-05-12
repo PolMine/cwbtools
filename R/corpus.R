@@ -203,6 +203,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     if (file.exists(cwbtools_tmpdir)){
       f <- list.files(cwbtools_tmpdir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
       file.remove(f)
+    } else {
+      dir.create(cwbtools_tmpdir)
     }
     
 
