@@ -11,6 +11,8 @@ paths (such as `fs::path()`) is used more widely.
 * Assumptions about the definition of a version in the name of a corpus tarball 
 are relaxed. If possible, the version is taken from the properties (i.e. the
 registry file).
+* New function `zenodo_get_tarball()` for downloading corpus tarballs from 
+Zenodo. Restricted access can be handled too (personalized URL with token).
 
 
 cwbtools 0.3.4
