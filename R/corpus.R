@@ -82,6 +82,7 @@
 #'   included in the metadata for the record is used for the check.
 #' @param corpus_dir The directory that contains the data directories of indexed
 #'   corpora. If missing, the value of `cwb_corpus_dir()` will be used.
+#' @param load A `logical` value, whether to load corpus after installation.
 #' @param ... Further parameters that will be passed into
 #'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 #'   or \code{download.file}, if \code{tarball} is specified.
@@ -104,10 +105,11 @@
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
 #'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning cli_process_failed
 #' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
+#'   cl_load_corpus cqp_load_corpus
 #' @importFrom fs path_tidy path_temp
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), load = TRUE, verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
   if (!is.null(registry_dir)) registry_dir <- as.character(path_tidy(registry_dir))
@@ -196,6 +198,13 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     cwb_dirs <- create_cwb_directories(ask = ask)
     modify_renviron <- TRUE
   }
+  if (verbose) cli_alert_info(
+    sprintf("registry directory: {.path %s}", cwb_dirs[["registry_dir"]])
+  )
+  if (verbose) cli_alert_info(
+    sprintf("data directory: {.path %s}", cwb_dirs[["corpus_dir"]])
+  )
+  
 
   if (length(tarball) == 1L){
     
@@ -350,6 +359,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       if (stri_enc_mark(cwbtools_tmpdir) != "ASCII")
         cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
+    
+    if (verbose) cat_rule("Install corpus")
 
     if (verbose) cli_process_start("extract tarball")
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
@@ -481,7 +492,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       } else {
         if (is.null(cwb_dirs[["registry_dir"]])) stop("Could not determine registry directory.")
         if (is.null(cwb_dirs[["corpus_dir"]])) stop("Could not determine corpus directory.")
-        data_dir_target <- file.path(cwb_dirs[["corpus_dir"]], tolower(corpus), fsep = "/")
+        data_dir_target <- path(cwb_dirs[["corpus_dir"]], tolower(corpus))
         if (!file.exists(data_dir_target)) dir.create(data_dir_target)
         corpus_copy(
           corpus = corpus,
@@ -494,24 +505,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       }
 
-      # Make corpus available if RcppCWB has been initialized
-      if (RcppCWB::cqp_is_initialized()){
-        srcfile <- fs::path_tidy(fs::path(cwb_dirs[["registry_dir"]], tolower(corpus)))
-        if (.Platform$OS.type == "windows") srcfile <- fs::path_tidy(utils::shortPathName(srcfile))
-        destfile <- fs::path_tidy(fs::path(RcppCWB::cqp_get_registry(), tolower(corpus)))
-        if (.Platform$OS.type == "windows") destfile <- fs::path_tidy(utils::shortPathName(destfile))
-        if (srcfile != destfile){
-          file.copy(from = srcfile, to = destfile, overwrite = TRUE)
-        }
-        RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+      # Load corpus
+      if (isTRUE(load)){
+        if (verbose) cli_process_start("load corpus")
+        cl <- cl_load_corpus(corpus = corpus, registry = cwb_dirs[["registry_dir"]])
+        cqp <- cqp_load_corpus(corpus = toupper(corpus), registry = cwb_dirs[["registry_dir"]])
+        if (cl && cqp)
+          if (verbose) cli_process_done()
+        else
+          cli_alert_danger("loading corpus NOT successful")
       }
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
-
-    # Check whether newly installed corpoa can be loaded
-    # for (corpus_id in corpora){
-    #   corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
-    # }
 
   } else {
     for (tarfile in tarball){
@@ -627,9 +632,9 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   invisible(NULL)
 }
 
-#' @param ask A \code{logical} value, whether to ask user for confirmation
-#'   before removing a corpus.
-#' @details \code{corpus_remove} can be used to delete a corpus.
+#' @param ask A `logical` value, whether to ask user for confirmation before
+#'   removing a corpus.
+#' @details `corpus_remove()` can be used to delete a corpus.
 #' @rdname corpus_utils
 #' @importFrom cli cli_alert_success
 #' @export corpus_remove
@@ -778,9 +783,10 @@ corpus_copy <- function(
     spinner$finish()
   }
   ansi_with_hidden_cursor(copy_with_spinner())
-  if (verbose) cli_alert_success(sprintf("copy corpus data files for corpus {col_cyan('%s')} to target data directory ... done", toupper(corpus)))
+  if (verbose)
+    cli_alert_success("copy corpus data to target directory ... done")
 
-  if (verbose) cli_process_start(sprintf("parse registry file for corpus {col_cyan('%s')}", toupper(corpus)))
+  if (verbose) cli_process_start("parse registry file")
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   if (verbose) cli_process_done()
 

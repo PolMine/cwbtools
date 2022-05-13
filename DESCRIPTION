@@ -25,7 +25,7 @@ Imports:
     xml2,
     stringi,
     curl,
-    RcppCWB (>= 0.2.8),
+    RcppCWB (>= 0.5.2),
     pbapply,
     methods,
     tools,

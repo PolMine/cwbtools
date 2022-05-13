@@ -7,6 +7,7 @@
 zenodo_get_tarball(
   url,
   destfile = tempfile(fileext = ".tar.gz"),
+  checksum = TRUE,
   verbose = TRUE,
   progress = TRUE
 )
@@ -18,6 +19,8 @@ restricted access (?token= appended with a long key).}
 \item{destfile}{A \code{character} vector with the file path where the downloaded
 file is to be saved. Tilde-expansion is performed. Defaults to a temporary
 file.}
+
+\item{checksum}{A \code{logical} value, whether to check md5 sum.}
 
 \item{verbose}{A \code{logical} value, whether to output progess messages.}
 
@@ -34,10 +37,23 @@ and data with restricted access is supported.
 }
 \examples{
 \donttest{
+# Temporary directory structure as a preparatory step
+Sys.setenv(CORPUS_REGISTRY = "")
+cwb_dirs <- create_cwb_directories(
+  prefix = tempdir(),
+  ask = FALSE,
+  verbose = FALSE
+)
+Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+
+# Download and install open access resource
 gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
 tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
+corpus_install(tarball = tarball_tmp)
 
+# Download and install resource with restricted access
 gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
 tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+corpus_install(tarball = tarball_tmp)
 }
 }

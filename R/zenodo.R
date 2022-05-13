@@ -6,24 +6,39 @@
 #'   input for \code{\link{corpus_install}} (as argument `tarball`).
 #' @examples
 #' \donttest{
+#' # Temporary directory structure as a preparatory step
+#' Sys.setenv(CORPUS_REGISTRY = "")
+#' cwb_dirs <- create_cwb_directories(
+#'   prefix = tempdir(),
+#'   ask = FALSE,
+#'   verbose = FALSE
+#' )
+#' Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+#' 
+#' # Download and install open access resource
 #' gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
 #' tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
+#' corpus_install(tarball = tarball_tmp)
 #' 
+#' # Download and install resource with restricted access
 #' gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
 #' tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+#' corpus_install(tarball = tarball_tmp)
 #' }
 #' @export
 #' @importFrom curl curl new_handle handle_cookies curl_fetch_memory curl_download
 #' @importFrom xml2 read_html xml_find_all xml_attr
+#' @importFrom cli col_magenta
 #' @param url Landing page at Zenodo for resource. Can also be the URL for
 #'   restricted access (?token= appended with a long key).
 #' @param destfile A `character` vector with the file path where the downloaded
 #'   file is to be saved. Tilde-expansion is performed. Defaults to a temporary
 #'   file.
+#' @param checksum A `logical` value, whether to check md5 sum.
 #' @param verbose A `logical` value, whether to output progess messages.
 #' @param progress A `logical` value, whether to report progress during
 #'   download.
-zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), verbose = TRUE, progress = TRUE){
+zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), checksum = TRUE, verbose = TRUE, progress = TRUE){
   
   stopifnot(
     is.character(url),
@@ -43,11 +58,13 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ve
   restricted <- grepl("\\?token=", url)
   
   if (restricted){
+    if (verbose) cat_rule("Download restricted resource from Zenodo")
     if (verbose) cli_process_start("get handle for restricted resource")
     curl_fetch_memory(url = url, handle = h)
     page <- curl(url = strsplit(x = url, split = "\\?token=")[[1]][1], handle = h)
     if (verbose) cli_process_done()
   } else {
+    if (verbose) cat_rule("Download resource from Zenodo")
     page <- curl(url = url)
   }
   
@@ -62,18 +79,52 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ve
     `[[`, 1L
   )
   if (verbose) cli_process_done()
-  tarball <- filenames[grep("\\.tar\\.gz", filenames)]
-  if (length(tarball) > 1L) stop("more than one tarball could be downloaded")
+  tarball_index <- grep("\\.tar\\.gz", filenames)
+  if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
+  tarball <- filenames[tarball_index]
+  
+  md5_el <- xml_find_first(file_elems[[tarball_index]], xpath = "../small")
+  md5sum_zenodo <- gsub("^md5:(.*?)\\s*$", "\\1", xml_text(md5_el))
+  
   cli_alert_info(
     paste("tarball to download:", sprintf("{.path %s}", basename(tarball)))
   )
   
   curl_download(
-    url = fs::path("https://zenodo.org", tarball[[1]]),
+    url = fs::path("https://zenodo.org", tarball),
     destfile = destfile,
     quiet = !progress, 
     handle = h
   )
+  
+  if (isTRUE(checksum)){
+    if (verbose){
+      msg <- sprintf(
+        "checking whether md5 checksum meets expectation (%s)", col_cyan(md5sum_zenodo)
+      )
+      cli_process_start(msg)
+    }
+    tarball_checksum <- tools::md5sum(destfile)
+    if (tarball_checksum == md5sum_zenodo){
+      if (verbose) cli_process_done()
+    } else {
+      if (verbose) cli_process_failed()
+      cli_alert_danger(
+        sprintf(
+          "md5 checksum of corpus tarball is '%s' and fails to meet expectation",
+          col_magenta(tarball_checksum)
+        )
+      )
+      return(invisible(NULL))
+    }
+  } else {
+    if (verbose)
+      cli_alert_warning(
+        paste("md5 checksum not checked (argument 'checksum' not 'TRUE') -",
+        "note that checking the integrity of downloaded data is good practice")
+      )
+  }
+
   destfile
 }
 

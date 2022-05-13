@@ -13,6 +13,8 @@ are relaxed. If possible, the version is taken from the properties (i.e. the
 registry file).
 * New function `zenodo_get_tarball()` for downloading corpus tarballs from 
 Zenodo. Restricted access can be handled too (personalized URL with token).
+* Function `corpus_install()` has new argument `load` to control whether corpus
+will be loaded after installation.
 
 
 cwbtools 0.3.4
