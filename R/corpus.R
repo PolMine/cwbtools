@@ -201,8 +201,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     
     cwbtools_tmpdir <- path(tempdir(), "cwbtools_tmpdir")
     if (file.exists(cwbtools_tmpdir)){
-      f <- list.files(cwbtools_tmpdir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+      # remove files first
+      f <- list.files(cwbtools_tmpdir, include.dirs = FALSE, full.names = TRUE, recursive = TRUE)
       file.remove(f)
+      # and then directories
+      dirs <- list.files(cwbtools_tmpdir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+      file.remove(dirs)
     } else {
       dir.create(cwbtools_tmpdir)
     }
@@ -407,17 +411,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           if (version_old == version){
             cli_text(sprintf(
               paste(
-                "Local %s version and the version of %s to be downloaded are identical (%s).",
-                "If you proceed, the local corpus will be replaced by a fresh download."
+                "Corpus %s is already installed with version %s.",
+                "The version of the installation candidate is %s.",
+                "Proceed?"
               ),
-              col_red(toupper(corpus)), col_red(toupper(corpus)), col_blue(version)
+              col_red(toupper(corpus)), col_blue(version_old), col_blue(version)
             )
             )
           } else {
             cli_text(
               sprintf(
                 "Corpus %s (version: %s) is already installed. If you proceed, it will be replaced by version %s.",
-                toupper(corpus), version_old, version
+                col_red(toupper(corpus)), col_blue(version_old), col_blue(version)
               )
             )
           }

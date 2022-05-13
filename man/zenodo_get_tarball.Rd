@@ -11,14 +11,33 @@ zenodo_get_tarball(
   progress = TRUE
 )
 }
+\arguments{
+\item{url}{Landing page at Zenodo for resource. Can also be the URL for
+restricted access (?token= appended with a long key).}
+
+\item{destfile}{A \code{character} vector with the file path where the downloaded
+file is to be saved. Tilde-expansion is performed. Defaults to a temporary
+file.}
+
+\item{verbose}{A \code{logical} value, whether to output progess messages.}
+
+\item{progress}{A \code{logical} value, whether to report progress during
+download.}
+}
 \value{
-Filename of downloaded corpus, to serve as input (argument ``)
+The filename of the downloaded corpus tarball, designed to serve as
+input for \code{\link{corpus_install}} (as argument \code{tarball}).
 }
 \description{
-Download corpus tarball from Zenodo. Both freely available data and
-restricted access is supported.
+Download corpus tarball from Zenodo. Downloading both freely available data
+and data with restricted access is supported.
 }
 \examples{
-fname <- zenodo_get_tarball(url = "https://zenodo.org/record/3823245")
-corpus_install(fname)
+\donttest{
+gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
+tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
+
+gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
+tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+}
 }

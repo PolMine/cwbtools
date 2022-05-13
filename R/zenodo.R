@@ -1,35 +1,72 @@
 #' Download corpus tarball from Zenodo
 #' 
-#' Download corpus tarball from Zenodo. Both freely available data and
-#' restricted access is supported.
-#' @return Filename of downloaded corpus, to serve as input (argument ``)
+#' Download corpus tarball from Zenodo. Downloading both freely available data
+#' and data with restricted access is supported.
+#' @return The filename of the downloaded corpus tarball, designed to serve as
+#'   input for \code{\link{corpus_install}} (as argument `tarball`).
 #' @examples
-#' fname <- zenodo_get_tarball(url = "https://zenodo.org/record/3823245")
-#' corpus_install(fname)
+#' \donttest{
+#' gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
+#' tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
+#' 
+#' gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
+#' tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+#' }
+#' @export
 #' @importFrom curl curl new_handle handle_cookies curl_fetch_memory curl_download
 #' @importFrom xml2 read_html xml_find_all xml_attr
+#' @param url Landing page at Zenodo for resource. Can also be the URL for
+#'   restricted access (?token= appended with a long key).
+#' @param destfile A `character` vector with the file path where the downloaded
+#'   file is to be saved. Tilde-expansion is performed. Defaults to a temporary
+#'   file.
+#' @param verbose A `logical` value, whether to output progess messages.
+#' @param progress A `logical` value, whether to report progress during
+#'   download.
 zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), verbose = TRUE, progress = TRUE){
+  
+  stopifnot(
+    is.character(url),
+    length(url) == 1L,
+    is.character(destfile),
+    length(destfile) == 1L,
+    is.logical(verbose),
+    length(verbose) == 1L,
+    is.logical(progress),
+    length(progress) == 1L
+  )
+  
+  destfile <- fs::path_expand(destfile)
   
   h <- new_handle()
   
   restricted <- grepl("\\?token=", url)
-  if (verbose) message("... restricted", as.character(restricted))
   
   if (restricted){
+    if (verbose) cli_process_start("get handle for restricted resource")
     curl_fetch_memory(url = url, handle = h)
     page <- curl(url = strsplit(x = url, split = "\\?token=")[[1]][1], handle = h)
+    if (verbose) cli_process_done()
   } else {
     page <- curl(url = url)
   }
   
+  if (verbose) cli_process_start("extract tarball URL from Zenodo website")
   website <- read_html(page)
   file_elems <- xml_find_all(website, xpath = "//a[@class='filename']")
   filenames <- sapply(
-    strsplit(x = sapply(x, xml_attr, attr = "href"), split = "\\?download"),
+    strsplit(
+      x = sapply(file_elems, xml_attr, attr = "href"),
+      split = "\\?download"
+    ),
     `[[`, 1L
   )
+  if (verbose) cli_process_done()
   tarball <- filenames[grep("\\.tar\\.gz", filenames)]
   if (length(tarball) > 1L) stop("more than one tarball could be downloaded")
+  cli_alert_info(
+    paste("tarball to download:", sprintf("{.path %s}", basename(tarball)))
+  )
   
   curl_download(
     url = fs::path("https://zenodo.org", tarball[[1]]),
