@@ -85,7 +85,7 @@ steps are enough to use the CQP functionality. To run
 installation of the CWB may be necessary.
 
 See the CQP Corpus Encoding Tutorial
-(\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an
+(\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}) for an
 explanation of the procedure (section 3, ``Indexing and compression without
 CWB/Perl'').
 

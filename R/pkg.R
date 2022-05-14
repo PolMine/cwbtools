@@ -193,7 +193,7 @@ pkg_add_description = function(pkg = ".", package = NULL, version = "0.0.1", dat
   stopifnot(
     class(author)[1] %in% c("character", "person"),
     length(date) == 1,
-    is.character(date) || class(date)[1] == "Date"
+    is.character(date) || inherits(date, "Date")
   )
 
   if (verbose) message("... creating DESCRIPTION file")

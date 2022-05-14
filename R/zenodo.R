@@ -21,8 +21,7 @@
 #' corpus_install(tarball = tarball_tmp)
 #' 
 #' # Download and install resource with restricted access
-#' gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
-#' tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+#' tarball_tmp <- zenodo_get_tarball(url = gparlsample_url_restricted)
 #' corpus_install(tarball = tarball_tmp)
 #' }
 #' @export
@@ -38,6 +37,7 @@
 #' @param verbose A `logical` value, whether to output progess messages.
 #' @param progress A `logical` value, whether to report progress during
 #'   download.
+#' @rdname zenodo
 zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), checksum = TRUE, verbose = TRUE, progress = TRUE){
   
   stopifnot(
@@ -129,3 +129,15 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
 }
 
 
+#' @details A sample subset of the GermaParl corpus is deposited at Zenodo for
+#'   testing purposes. There are identical open access and restricted versions
+#'   of GermaParlSample to test different flavours of downloading a resource
+#'   from Zenodo. The URL for restricted access includes an access token which
+#'   is very lengthy. This URL is included as a dataset in the package to avoid
+#'   excessive line in sample code. Note that URLs that give access to
+#'   restricted data are usually not to be shared.
+#' @docType data
+#' @rdname zenodo
+#' @keywords datasets
+#' @export
+gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"

@@ -60,10 +60,10 @@ declare.}
 A set of functions to parse, create and write registry files.
 }
 \details{
-\code{registry_file_parse} will return an object of class \code{registry_data}.
+\code{registry_file_parse()} will return an object of class \code{registry_data}.
 
 See the appendix to the 'Corpus Encoding Tutorial'
-(http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
+(https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf), which includes an
 explanation of the registry file format.
 
 \code{registry_file_compose} will turn an

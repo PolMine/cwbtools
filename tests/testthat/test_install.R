@@ -146,7 +146,7 @@ test_that(
 )
 
 test_that(
-  "check that corpus_install() aborts of md5 checksum is invalid",
+  "zenodo_get_tarball()",
   {
     skip_on_ci()
     

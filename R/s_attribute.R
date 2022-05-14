@@ -70,7 +70,7 @@
 #' @rdname s_attribute
 s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, delete = FALSE, verbose = TRUE){
   stopifnot(
-    class(region_matrix)[1] == "matrix",
+    inherits(region_matrix, "matrix"),
     ncol(region_matrix) == 2L,
     is.character(values),
     length(values) == nrow(region_matrix),
@@ -79,7 +79,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     length(verbose) == 1L,
     is.logical(verbose)
   )
-  if (class(as.vector(region_matrix)) != "integer"){
+  if (!inherits(as.vector(region_matrix), "integer")){
     region_matrix <- matrix(data = as.integer(as.vector(region_matrix)), ncol = 2)
   }
   if (method == "R"){

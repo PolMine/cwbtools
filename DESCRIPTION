@@ -1,12 +1,12 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.4.9004
+Version: 0.3.5
 Date: 2022-05-13
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "aut", email = "christoph.leonhardt@uni-due.de")
   )
-Description: The 'Corpus Workbench' ('CWB', <http://cwb.sourceforge.net/>) offers a classic and mature
+Description: The 'Corpus Workbench' ('CWB', <https://cwb.sourceforge.io/>) offers a classic and mature
  approach for working with large, linguistically and structurally annotated corpora. The 'CWB'
  is memory efficient and its design makes running queries fast (Evert and Hardie 2011,
  <http://www.stefan-evert.de/PUB/EvertHardie2011.pdf>). The 'cwbtools' package offers

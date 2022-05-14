@@ -2,13 +2,13 @@
 #' 
 #' A set of functions to parse, create and write registry files.
 #' 
-#' \code{registry_file_parse} will return an object of class \code{registry_data}.
+#' `registry_file_parse()` will return an object of class `registry_data`.
 #' 
 #' See the appendix to the 'Corpus Encoding Tutorial'
-#' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
+#' (https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf), which includes an
 #' explanation of the registry file format.
-#' @param data A \code{registry_data} object.
-#' @param corpus A CWB corpus indicated by a length-one \code{character} vector.
+#' @param data A `registry_data` object.
+#' @param corpus A CWB corpus indicated by a length-one `character` vector.
 #' @param registry_dir Directory with registry files.
 #' @param x An object of class \code{registry_data}.
 #' @param ... further parameters

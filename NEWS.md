@@ -1,5 +1,5 @@
-cwbtools 0.3.4.9001
-===================
+cwbtools 0.3.5
+==============
 
 * New function `p_attribute_rename()`, corresponding to `s_attribute_rename()`.
 * `p_attribute_encode()` will remove the [p_attr].corpus file as suggested my
@@ -7,14 +7,14 @@ cwb-makeall (if `compress` is `TRUE`).
 * Assumptions about the statement of an info file in registry files are relaxed,
 the line starting with "INFO" is not required.
 * Internally, functionality from the `fs` package for a consistent handling of 
-paths (such as `fs::path()`) is used more widely.
+paths (such as `fs::path()`) is used more widely (#36).
 * Assumptions about the definition of a version in the name of a corpus tarball 
 are relaxed. If possible, the version is taken from the properties (i.e. the
 registry file).
 * New function `zenodo_get_tarball()` for downloading corpus tarballs from 
 Zenodo. Restricted access can be handled too (personalized URL with token).
 * Function `corpus_install()` has new argument `load` to control whether corpus
-will be loaded after installation.
+is loaded after installation.
 
 
 cwbtools 0.3.4
