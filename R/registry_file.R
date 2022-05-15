@@ -2,13 +2,13 @@
 #' 
 #' A set of functions to parse, create and write registry files.
 #' 
-#' \code{registry_file_parse} will return an object of class \code{registry_data}.
+#' `registry_file_parse()` will return an object of class `registry_data`.
 #' 
 #' See the appendix to the 'Corpus Encoding Tutorial'
-#' (http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf), which includes an
+#' (https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf), which includes an
 #' explanation of the registry file format.
-#' @param data A \code{registry_data} object.
-#' @param corpus A CWB corpus indicated by a length-one \code{character} vector.
+#' @param data A `registry_data` object.
+#' @param corpus A CWB corpus indicated by a length-one `character` vector.
 #' @param registry_dir Directory with registry files.
 #' @param x An object of class \code{registry_data}.
 #' @param ... further parameters
@@ -109,21 +109,20 @@ print.registry_data <- function(x, ...){
 #' @export registry_file_compose
 registry_file_compose <- function(x){
   
-  data_dir_base <- x[["home"]] # will be needed for composing path to info file
-  
-  if (!file.exists(x[["home"]])) warning("cannot confirm that data/home directory exists")
+  if (!file.exists(x[["home"]]))
+    warning("cannot confirm that data/home directory exists")
   if (.Platform$OS.type == "windows"){
-    x[["home"]] <- sprintf('"%s"', normalizePath(x[["home"]], winslash = "/"))
+    x[["home"]] <- sprintf('"%s"', path_tidy(x[["home"]]))
   } else {
     if (grepl("\\s+", x[["home"]])) x[["home"]] <- sprintf('"%s"', x[["home"]])
   }
 
-  if (is.null(x[["info"]])) x[["info"]] <- file.path(dirname(data_dir_base), ".info.md", fsep = "/")
-  # if (!file.exists(x[["info"]])) warning("cannot confirm that info file exists")
-  if (.Platform$OS.type == "windows"){
-    x[["info"]] <- sprintf('"%s"', normalizePath(x[["info"]], winslash = "/", mustWork = FALSE))
-  } else {
-    if (grepl("\\s+", x[["info"]])) x[["info"]] <- sprintf('"%s"', x[["info"]])
+  if (length(x[["info"]]) == 1L){
+    if (.Platform$OS.type == "windows"){
+      x[["info"]] <- sprintf('"%s"', path_tidy(x[["info"]]))
+    } else {
+      if (grepl("\\s+", x[["info"]])) x[["info"]] <- sprintf('"%s"', x[["info"]])
+    }
   }
   
   c(
@@ -137,8 +136,11 @@ registry_file_compose <- function(x){
     sprintf("ID   %s", tolower(x[["id"]])),                                                                                                        
     "# path to binary data files",                                                                                         
     sprintf("HOME %s", x[["home"]]),
-    "# optional info file (displayed by \",info;\" command in CQP)",                                                       
-    sprintf("INFO %s", x[["info"]]),
+    if (length(x[["info"]]) == 1L)
+      "# optional info file (displayed by \",info;\" command in CQP)"
+    else
+      NULL,
+    if (length(x[["info"]]) == 1L) sprintf("INFO %s", x[["info"]]) else NULL,
     "",                                                                                                                 
     "# corpus properties provide additional information about the corpus:",                                                
     sprintf("##:: %s = \"%s\"", names(x[["properties"]]), unname(x[["properties"]])),

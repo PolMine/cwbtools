@@ -3,6 +3,7 @@
 \name{p_attribute_encode}
 \alias{p_attribute_encode}
 \alias{p_attribute_recode}
+\alias{p_attribute_rename}
 \title{Encode Positional Attribute(s).}
 \usage{
 p_attribute_encode(
@@ -22,6 +23,15 @@ p_attribute_recode(
   p_attribute,
   from = c("UTF-8", "latin1"),
   to = c("UTF-8", "latin1")
+)
+
+p_attribute_rename(
+  corpus,
+  old,
+  new,
+  registry_dir,
+  verbose = TRUE,
+  dryrun = FALSE
 )
 }
 \arguments{
@@ -47,6 +57,14 @@ registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 \item{from}{Character string describing the current encoding of the attribute.}
 
 \item{to}{Character string describing the target encoding of the attribute.}
+
+\item{old}{A \code{character} vector with p-attributes to be renamed.}
+
+\item{new}{A \code{character} vector with new names of p-attributes. The vector
+needs to have the same length as vector \code{old}.}
+
+\item{dryrun}{A \code{logical} value, whether to suppress actual renaming operation
+for inspecting output messages}
 }
 \description{
 Pure R implementation to generate positional attribute from a character vector of
@@ -67,7 +85,7 @@ steps are enough to use the CQP functionality. To run
 installation of the CWB may be necessary.
 
 See the CQP Corpus Encoding Tutorial
-(\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an
+(\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}) for an
 explanation of the procedure (section 3, ``Indexing and compression without
 CWB/Perl'').
 
@@ -76,6 +94,11 @@ the attribute value index in the avx file. The rng-file remains unchanged. The r
 file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
 as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 and will reset the encoding in the registry file.
+
+Function \code{p_attribute_rename} can be used to rename a
+positional attribute. Note that the corpus is not refreshed (unloaded,
+re-loaded), so it may be necessary to restart R for changes to become
+effective.
 }
 \examples{
 library(RcppCWB)
@@ -137,4 +160,7 @@ kwic <- apply(
   }
 )
 kwic[1:10]
+}
+\author{
+Christoph Leonhardt, Andreas Blaette
 }

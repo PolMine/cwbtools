@@ -22,6 +22,7 @@ corpus_install(
   registry_dir,
   corpus_dir,
   ask = interactive(),
+  load = TRUE,
   verbose = TRUE,
   user = NULL,
   password = NULL,
@@ -96,8 +97,10 @@ included in the metadata for the record is used for the check.}
 \item{corpus_dir}{The directory that contains the data directories of indexed
 corpora. If missing, the value of \code{cwb_corpus_dir()} will be used.}
 
-\item{ask}{A \code{logical} value, whether to ask user for confirmation
-before removing a corpus.}
+\item{ask}{A \code{logical} value, whether to ask user for confirmation before
+removing a corpus.}
+
+\item{load}{A \code{logical} value, whether to load corpus after installation.}
 
 \item{verbose}{Logical, whether to be verbose.}
 
@@ -206,7 +209,7 @@ evaluated which may be slow on network-mounted file systems.
 registry file, the corpus id, and the name of the directory where data
 files reside.
 
-\code{corpus_remove} can be used to delete a corpus.
+\code{corpus_remove()} can be used to delete a corpus.
 
 \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
 two subdirectories. The 'registry' subdirectory will host the registry file

@@ -159,7 +159,7 @@ CorpusData <- R6::R6Class(
     #' Simple tokenization of text in chunktable.
     tokenize = function(..., verbose = TRUE, progress = TRUE){
       if (requireNamespace("tokenizers", quietly = TRUE)){
-        if (class(self$chunktable)[1] != "data.table")
+        if (!inherits(self$chunktable, "data.table"))
           stop("the chunktable needs to be a data. table")
 
         if (progress) pb <- txtProgressBar(min = 0, max = uniqueN(self$chunktable[["id"]]), style = 3)

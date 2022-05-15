@@ -2,7 +2,7 @@
 #'
 #' Tools to Create, Modify and Manage CWB Corpora.
 #'
-#' The \href{http://cwb.sourceforge.net/}{\emph{Corpus Workbench}} (CWB) offers
+#' The \href{https://cwb.sourceforge.io/}{\emph{Corpus Workbench}} (CWB) offers
 #' a classic approach for working with large, linguistically and structurally
 #' annotated corpora. Its design ensures memory efficiency and makes running
 #' queries fast (Evert and Hardie 2011). Technically, indexing and compressing

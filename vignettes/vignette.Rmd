@@ -17,7 +17,7 @@ The *cwbtools* package offers a toolset to create, modify and manage corpora to 
 
 Moving to CWB indexed corpora is worth considering when working with large corpora. The *cwbtools* package is designed to be able to work with large data. The core tool of the cwbtools package is the `CorpusData`-Class. It offers a standard workflow to import and process data, and to generate an indexed corpus. It is implemented as a [R6 class](https://adv-r.hadley.nz/r6.html). The advantage of using the reference semantics of the R6 class system is that there is minimal copying of the data. Handling memory parsimoniously is necessary when working with large corpora.
 
-Further functions of the package support the creation, modification and management of structural and positional attributes of a corpus, and of registry files. See the manual to learn more about these functions. To learn more about the data structure of the CWB and the CWB jargon, the [IMS Open Corpus Workbench (CWB) Corpus Encoding Tutorial](http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf) is recommended as a point of entry.
+Further functions of the package support the creation, modification and management of structural and positional attributes of a corpus, and of registry files. See the manual to learn more about these functions. To learn more about the data structure of the CWB and the CWB jargon, the [IMS Open Corpus Workbench (CWB) Corpus Encoding Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf) is recommended as a point of entry.
 
 The focus of this vignette is the creation of CWB indexed corpora. We present three scenarios: Creating a corpus (a) from XML, (b) from a `tibble` and (c) from the `VCorpus` used by the tm package.
 
@@ -31,11 +31,10 @@ The CWB stores each indexed corpora in an individual data directory. Registry fi
 For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.
 
 ```{r create_tmp_dirs}
-tmpdir <- tempdir()
-if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
+tmpdir <- fs::path_tidy(tempdir())
 
-registry_tmp <- file.path(tmpdir, "registry")
-data_dir_tmp <- file.path(tmpdir, "data_dir")
+registry_tmp <- fs::path(tmpdir, "registry")
+data_dir_tmp <- fs::path(tmpdir, "data_dir")
 
 if (!file.exists(registry_tmp)){
   dir.create (registry_tmp)

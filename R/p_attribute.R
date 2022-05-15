@@ -17,7 +17,7 @@
 #' installation of the CWB may be necessary.
 #' 
 #' See the CQP Corpus Encoding Tutorial
-#' (\url{http://cwb.sourceforge.net/files/CWB_Encoding_Tutorial.pdf}) for an
+#' (\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}) for an
 #' explanation of the procedure (section 3, ``Indexing and compression without
 #' CWB/Perl'').
 #' 
@@ -327,8 +327,9 @@ p_attribute_encode <- function(
   
   if (compress){
     files_to_remove <- c(
-      rdx_file = file.path(data_dir, sprintf("%s.corpus.rdx", p_attribute), fsep = "/"),
-      rev_file = file.path(data_dir, sprintf("%s.corpus.rev", p_attribute), fsep = "/")
+      corpus_file = path(data_dir, sprintf("%s.corpus", p_attribute)),
+      rdx_file = path(data_dir, sprintf("%s.corpus.rdx", p_attribute)),
+      rev_file = path(data_dir, sprintf("%s.corpus.rev", p_attribute))
     )
     for (x in files_to_remove){
       if (file.exists(x)) {
@@ -378,3 +379,89 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
   
   invisible( NULL )
 }
+
+#' @details Function \code{p_attribute_rename} can be used to rename a
+#'   positional attribute. Note that the corpus is not refreshed (unloaded,
+#'   re-loaded), so it may be necessary to restart R for changes to become
+#'   effective.
+#' @param old A `character` vector with p-attributes to be renamed.
+#' @param new A `character` vector with new names of p-attributes. The vector
+#'   needs to have the same length as vector `old`.
+#' @param dryrun A `logical` value, whether to suppress actual renaming operation
+#'   for inspecting output messages 
+#' @export p_attribute_rename
+#' @rdname p_attribute_encode
+#' @author Christoph Leonhardt, Andreas Blaette
+p_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE, dryrun = FALSE) {
+  
+  stopifnot(
+    is.character(corpus),
+    length(corpus) == 1L,
+    is.character(registry_dir), 
+    length(registry_dir) == 1L,
+    dir.exists(registry_dir),
+    is.character(old),
+    is.character(new),
+    length(verbose) == 1L,
+    is.logical(verbose),
+    length(dryrun) == 1L,
+    is.logical(dryrun)
+  )
+  
+  if (length(old) != length(new)) {
+    warning("Length of arguments 'old' and 'new' not identical.")
+    return(FALSE)
+  }
+  if (dryrun) verbose <- TRUE
+  
+  if (!file.exists(fs::path(registry_dir, tolower(corpus)))) {
+    warning(
+      sprintf(
+        "No registry file for corpus '%s' in registry directory '%s'",
+        corpus, registry_dir
+      )
+    )
+  }
+  rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
+  
+  for (i in 1L:length(old)){
+    
+    if (verbose) cli::cli_alert(
+      sprintf("renaming p_attribute '%s' to '%s'", old[i], new[i])
+    )
+    
+    if (!old[i] %in% rf[["p_attributes"]]){
+      warning(sprintf("p_attribute '%s' does not exist", old[i]))
+      return(FALSE)
+    }
+    
+    if (new[i] %in% rf[["p_attributes"]]) {
+      warning(sprintf("new p_attribute '%s' already exists", new[i]))
+      return(FALSE)
+    }
+    
+    files <- grep(
+      sprintf("^%s.", old[i]),
+      list.files(rf[["home"]]),
+      value = TRUE
+    )
+    
+    for (f in files){
+      oldfile <- path(rf[["home"]], f)
+      newfile <- path(
+        rf[["home"]],
+        gsub(sprintf("^%s(\\..*?)$", old[i]), sprintf("%s\\1", new[i]), f)
+      )
+      if (verbose) cli::cli_alert(sprintf("rename file %s to %s", col_blue(basename(oldfile)), col_blue(basename(newfile))))
+      if (isFALSE(dryrun)) file.rename(from = oldfile, to = newfile)
+    }
+    
+    rf[["p_attributes"]][which(rf[["p_attributes"]] == old[i])] <- new[i]
+  }
+  
+  if (verbose) cli::cli_alert("update and write registry file")
+  registry_file_write(data = rf, corpus = corpus, registry_dir = registry_dir)
+  
+  return(TRUE)
+}
+

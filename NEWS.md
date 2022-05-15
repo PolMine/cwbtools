@@ -1,7 +1,27 @@
+cwbtools 0.3.5
+==============
+
+* New function `p_attribute_rename()`, corresponding to `s_attribute_rename()`.
+* `p_attribute_encode()` will remove the [p_attr].corpus file as suggested my
+cwb-makeall (if `compress` is `TRUE`).
+* Assumptions about the statement of an info file in registry files are relaxed,
+the line starting with "INFO" is not required.
+* Internally, functionality from the `fs` package for a consistent handling of 
+paths (such as `fs::path()`) is used more widely (#36).
+* Assumptions about the definition of a version in the name of a corpus tarball 
+are relaxed. If possible, the version is taken from the properties (i.e. the
+registry file).
+* New function `zenodo_get_tarball()` for downloading corpus tarballs from 
+Zenodo. Restricted access can be handled too (personalized URL with token).
+* Function `corpus_install()` has new argument `load` to control whether corpus
+is loaded after installation.
+
+
 cwbtools 0.3.4
 ==============
 
-* The function `pkg_add_description()` is declared deprecated. To alert users, functionality of the lifecycle package is used (#1).
+* The function `pkg_add_description()` is declared deprecated. To alert users,
+functionality of the lifecycle package is used (#1).
 * A new function `as.vrt()` will generate valid *.vrt files from `xml_document` input.
 * Added Left-to-Right Mark / "\u200E" to signs that are cleaned. 
 * Due to an inconsistency in the code of `cwb_corpus_dir()`, the function would falsely yield `NA` results if the CWB directory would contain more than two directories.
@@ -14,7 +34,7 @@ cwbtools 0.3.4
 * A limitation of `writeBin()` to write long integer vectors has been overcome with R v4.0.0. A warning and a preliminary workaround to address this limitation when using `p_attribute_encode()` for corpora with more than 536870911 tokens can therefore be dropped. For large corpora, the function will check the R version and issue the recommendation to install $ v4.0.0 or higher, if the size limitation (536870911) is relevant (#28).
 * In addition to the URL for downloading the CWB, `cwb_get_url()` will return the MD5 checksum of the compressed file as attribute 'md5'.
 * The `cwb_install()` function will fail gracefully if downloading the CWB fails (returning `NULL`). A new argument md5 will trigger checking the MD5 sum of the downloaded file (if provided). The default value of `cwb_dir` is now a temporary directory.
-* 
+
 
 cwbtools 0.3.3
 ==============

@@ -144,3 +144,29 @@ test_that(
     Sys.setenv("CORPUS_REGISTRY" = old_registry)
   }
 )
+
+test_that(
+  "zenodo_get_tarball()",
+  {
+    skip_on_ci()
+    
+    old_registry <- Sys.getenv("CORPUS_REGISTRY")
+    Sys.setenv(CORPUS_REGISTRY = "")
+    
+    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
+    Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+    
+    gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
+    tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
+    success <- corpus_install(tarball = tarball_tmp, load = FALSE)
+    testthat::expect_true(success)
+
+    gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
+    tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+    success <- corpus_install(tarball = tarball_tmp, ask = FALSE, load = FALSE)
+
+    unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
+    unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)
+    Sys.setenv("CORPUS_REGISTRY" = old_registry)
+  }
+)

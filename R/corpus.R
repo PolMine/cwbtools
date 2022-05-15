@@ -82,6 +82,7 @@
 #'   included in the metadata for the record is used for the check.
 #' @param corpus_dir The directory that contains the data directories of indexed
 #'   corpora. If missing, the value of `cwb_corpus_dir()` will be used.
+#' @param load A `logical` value, whether to load corpus after installation.
 #' @param ... Further parameters that will be passed into
 #'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
 #'   or \code{download.file}, if \code{tarball} is specified.
@@ -104,13 +105,14 @@
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
 #'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning cli_process_failed
 #' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
-#' @importFrom fs path_tidy
+#'   cl_load_corpus cqp_load_corpus
+#' @importFrom fs path_tidy path_temp
 #' @rdname corpus_utils
 #' @export corpus_install
-corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), verbose = TRUE, user = NULL, password = NULL, ...){
+corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/", tarball = NULL, doi = NULL, checksum = NULL, lib = .libPaths()[1], registry_dir, corpus_dir, ask = interactive(), load = TRUE, verbose = TRUE, user = NULL, password = NULL, ...){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
-  if (!is.null(registry_dir)) registry_dir <- as.character(fs::path_tidy(registry_dir))
+  if (!is.null(registry_dir)) registry_dir <- as.character(path_tidy(registry_dir))
   if (missing(corpus_dir)) corpus_dir <- cwb_corpus_dir(verbose = FALSE)
   if (!is.null(corpus_dir)) corpus_dir <- as.character(fs::path_tidy(corpus_dir))
 
@@ -142,7 +144,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     } else {
       # Turn DOI into tarball
 
-      if (is.null(doi)) stop("If argument 'tarball' is NULL, either argument 'pkg' or argument 'doi' are required.")
+      if (is.null(doi))
+        stop("If argument 'tarball' is NULL, either argument 'pkg' or argument 'doi' are required.")
       if (grepl("https://doi.org/", doi)) doi <- gsub("https://doi.org/", "", doi)
       if (isFALSE(grepl("^.*?10\\.5281/zenodo\\.\\d+$", doi))){
         warning("argument 'doi' is expected to offer a DOI (Digital Object Identifier) that refers to data",
@@ -195,60 +198,37 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     cwb_dirs <- create_cwb_directories(ask = ask)
     modify_renviron <- TRUE
   }
+  if (verbose) cli_alert_info(
+    sprintf("registry directory: {.path %s}", cwb_dirs[["registry_dir"]])
+  )
+  if (verbose) cli_alert_info(
+    sprintf("data directory: {.path %s}", cwb_dirs[["corpus_dir"]])
+  )
+  
 
   if (length(tarball) == 1L){
-
-    # Ask user before overwriting existing corpus ----------------
-    corpus <- gsub("^(.*?)_(v|)(\\d+\\.\\d+\\.\\d+|)\\.tar\\.gz$", "\\1", basename(tarball))
-    version <- if (exists("zenodo_record")){
-      zenodo_record[["metadata"]][["version"]]
+    
+    cwbtools_tmpdir <- path(tempdir(), "cwbtools_tmpdir")
+    if (file.exists(cwbtools_tmpdir)){
+      # remove files first
+      f <- list.files(cwbtools_tmpdir, include.dirs = FALSE, full.names = TRUE, recursive = TRUE)
+      file.remove(f)
+      # and then directories
+      dirs <- list.files(cwbtools_tmpdir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+      file.remove(dirs)
     } else {
-      if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(tarball))){
-        gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "v\\2", basename(tarball))
-      } else {
-        "unknown"
-      }
+      dir.create(cwbtools_tmpdir)
     }
-    if (tolower(corpus) %in% list.files(cwb_dirs[["registry_dir"]])){
-      regdata <- registry_file_parse(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]])
-      version_old <- if ("version" %in% names(regdata[["properties"]])){
-        regdata[["properties"]][["version"]]
-      } else {
-        "unknown"
-      }
-      if (ask){
-        cli_rule("Remove existing corpus")
-        if (version_old == version){
-          cli_text(sprintf(
-              paste(
-                "Local %s version and the version of %s to be downloaded are identical (%s).",
-                "If you proceed, the local corpus will be replaced by a fresh download."
-              ),
-              col_red(toupper(corpus)), col_red(toupper(corpus)), col_blue(version)
-            )
-          )
-        } else {
-          cli_text(
-            sprintf(
-              "Corpus %s (version: %s) is already installed. If you proceed, it will be replaced by version %s.",
-              toupper(corpus), version_old, version
-            )
-          )
-        }
-      }
-      purged <- corpus_remove(corpus = toupper(corpus), registry_dir = cwb_dirs[["registry_dir"]], ask = ask)
-      if (isFALSE(purged)) return(invisible(FALSE))
-    }
+    
 
-    # Now download corpus -------------------
-    cwbtools_tmpdir <- file.path(normalizePath(tempdir(), winslash = "/"), "cwbtools_tmpdir", fsep = "/")
-    if (file.exists(cwbtools_tmpdir)) unlink(cwbtools_tmpdir, recursive = TRUE)
-    dir.create(cwbtools_tmpdir)
+    # Download corpus -------------------
     if (grepl("^http", tarball)){
       if (verbose) cat_rule("Download corpus tarball")
-      if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
+      if (verbose) cli_alert_info(
+        sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball))
+      )
 
-      corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
+      corpus_tarball <- path(cwbtools_tmpdir, basename(tarball))
 
       if (is.null(user)){
 
@@ -304,7 +284,11 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           )
         }
       }
-      if (verbose) cli_alert_success(sprintf("download corpus tarball {col_cyan('%s')} ... done", basename(tarball)))
+      if (verbose) cli_alert_success(
+        sprintf(
+          "download corpus tarball {col_cyan('%s')} ... done", basename(tarball)
+        )
+      )
       if (exists("zenodo_file_record")){
         if (!is.null(checksum)){
           if (verbose) cli_alert_warning("argument checksum is not NULL but md5 checksum can be derived from Zenodo record - using checksum issued by Zenodo")
@@ -341,8 +325,10 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       }
       if (verbose) cat_rule("Download corpus tarball from S3")
-      if (verbose) cli_alert_info(sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball)))
-      corpus_tarball <- file.path(cwbtools_tmpdir, basename(tarball), fsep = "/")
+      if (verbose) cli_alert_info(
+        sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball))
+      )
+      corpus_tarball <- path(cwbtools_tmpdir, basename(tarball))
 
       bucketname <- aws.s3::get_bucketname(tarball)
       location <- aws.s3::get_location(bucketname)
@@ -362,14 +348,19 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       )
     } else {
       # If tarball is not a URL, it is assumed to be present on the local machine
-      if (!file.exists(tarball)) stop(sprintf("tarball '%s' not found locally", tarball))
+      if (!file.exists(tarball))
+        stop(sprintf("tarball '%s' not found locally", tarball))
       corpus_tarball <- tarball
     }
 
     if (.Platform$OS.type == "windows"){
-      if (stri_enc_mark(corpus_tarball) != "ASCII") corpus_tarball <- utils::shortPathName(corpus_tarball)
-      if (stri_enc_mark(cwbtools_tmpdir) != "ASCII") cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
+      if (stri_enc_mark(corpus_tarball) != "ASCII")
+        corpus_tarball <- utils::shortPathName(corpus_tarball)
+      if (stri_enc_mark(cwbtools_tmpdir) != "ASCII")
+        cwbtools_tmpdir <- utils::shortPathName(cwbtools_tmpdir)
     }
+    
+    if (verbose) cat_rule("Install corpus")
 
     if (verbose) cli_process_start("extract tarball")
     untar(tarfile = corpus_tarball, exdir = cwbtools_tmpdir)
@@ -387,25 +378,78 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     subdir1 <- file_path_sans_ext(basename(tarball), compression = TRUE)
     subdir2 <- gsub("^(.*?)(-|_)\\d{4}-\\d{2}-\\d{2}$", "\\1", subdir1)
 
-    if (dir.exists(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir1, fsep = "/"))){
+    if (dir.exists(path(path_tidy(cwbtools_tmpdir), subdir1))){
       subdir <- subdir1
-    } else if (dir.exists(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir2, fsep = "/"))){
+    } else if (dir.exists(path(path_tidy(cwbtools_tmpdir), subdir2))){
       subdir <- subdir2
     } else {
       subdir <- ""
     }
 
-    tmp_registry_dir <- file.path(
-      normalizePath(cwbtools_tmpdir, winslash = "/"),
-      subdir, "registry", fsep = "/"
-    )
-    filenames <- list.files(file.path(normalizePath(cwbtools_tmpdir, winslash = "/"), subdir))
-    dirname <- if ("indexed_corpora" %in% filenames) "indexed_corpora" else "data"
-    tmp_data_dir <- file.path(
-      normalizePath(cwbtools_tmpdir, winslash = "/"),
-      subdir, dirname, fsep = "/"
-    )
+    tmp_registry_dir <- path(path_tidy(cwbtools_tmpdir), subdir, "registry")
     corpora <- list.files(tmp_registry_dir)
+    
+    # Ask user before overwriting existing corpus ----------------
+    for (corpus in corpora){
+      if (exists("zenodo_record")){
+        version <- zenodo_record[["metadata"]][["version"]]
+      } else {
+        rf <- registry_file_parse(
+          corpus = corpus,
+          registry_dir = tmp_registry_dir
+        )
+        if ("version" %in% names(rf[["properties"]])){
+          version <- rf[["properties"]][["version"]]
+        } else if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(corpus_tarball))){
+          version <- gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "v\\2", basename(tarball))
+        } else {
+          version <- "unknown"
+        }
+      }
+      
+      if (tolower(corpus) %in% list.files(cwb_dirs[["registry_dir"]])){
+        regdata <- registry_file_parse(
+          corpus = toupper(corpus),
+          registry_dir = cwb_dirs[["registry_dir"]]
+        )
+        version_old <- if ("version" %in% names(regdata[["properties"]])){
+          regdata[["properties"]][["version"]]
+        } else {
+          "unknown"
+        }
+        if (ask){
+          cli_rule("Remove existing corpus")
+          if (version_old == version){
+            cli_text(sprintf(
+              paste(
+                "Corpus %s is already installed with version %s.",
+                "The version of the installation candidate is %s.",
+                "Proceed?"
+              ),
+              col_red(toupper(corpus)), col_blue(version_old), col_blue(version)
+            )
+            )
+          } else {
+            cli_text(
+              sprintf(
+                "Corpus %s (version: %s) is already installed. If you proceed, it will be replaced by version %s.",
+                col_red(toupper(corpus)), col_blue(version_old), col_blue(version)
+              )
+            )
+          }
+        }
+        purged <- corpus_remove(
+          corpus = toupper(corpus),
+          registry_dir = cwb_dirs[["registry_dir"]],
+          ask = ask
+        )
+        if (isFALSE(purged)) return(invisible(FALSE))
+      }
+    }
+
+    filenames <- list.files(path(path_tidy(cwbtools_tmpdir), subdir))
+    dirname <- if ("indexed_corpora" %in% filenames) "indexed_corpora" else "data"
+    tmp_data_dir <- path(path_tidy(cwbtools_tmpdir), subdir, dirname)
 
     for (corpus in corpora){
 
@@ -413,7 +457,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       # In corpus tarball, directory for binary files is not necessarily name of corpus
       # we assume that last (sub-)directory stated in HOME is correct
-      tmp_home_dir <- file.path(tmp_data_dir, basename(registry_data[["home"]]), fsep = "/")
+      tmp_home_dir <- path(tmp_data_dir, basename(registry_data[["home"]]))
       if (isFALSE(dir.exists(tmp_home_dir))){
         # Maybe data is not in another
         tmp_home_dir <- tmp_data_dir
@@ -424,10 +468,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         tmp_home_dir <- utils::shortPathName(tmp_home_dir)
       registry_data[["home"]] <- tmp_home_dir
 
-      info_file <- file.path(registry_data[["home"]], basename(registry_data[["info"]]), fsep = "/")
-      if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
-        info_file <- utils::shortPathName(info_file)
-      registry_data[["info"]] <- info_file
+      if (length(registry_data[["info"]]) == 1L){
+        info_file <- path(registry_data[["home"]], basename(registry_data[["info"]]))
+        if (.Platform$OS.type == "windows" && stri_enc_mark(info_file) != "ASCII")
+          info_file <- utils::shortPathName(info_file)
+        registry_data[["info"]] <- info_file
+      }
 
       if (!is.null(doi)) registry_data[["properties"]][["doi"]] <- doi
 
@@ -435,14 +481,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         registry_data[["properties"]][["version"]] <- version
       }
 
-      registry_file_write(data = registry_data, corpus = corpus, registry_dir = tmp_registry_dir)
+      registry_file_write(
+        data = registry_data,
+        corpus = corpus,
+        registry_dir = tmp_registry_dir
+      )
 
       if (!is.null(pkg)){
         pkg_add_corpus(pkg = pkg, corpus = corpus, registry = tmp_registry_dir)
       } else {
         if (is.null(cwb_dirs[["registry_dir"]])) stop("Could not determine registry directory.")
         if (is.null(cwb_dirs[["corpus_dir"]])) stop("Could not determine corpus directory.")
-        data_dir_target <- file.path(cwb_dirs[["corpus_dir"]], tolower(corpus), fsep = "/")
+        data_dir_target <- path(cwb_dirs[["corpus_dir"]], tolower(corpus))
         if (!file.exists(data_dir_target)) dir.create(data_dir_target)
         corpus_copy(
           corpus = corpus,
@@ -455,24 +505,18 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       }
 
-      # Make corpus available if RcppCWB has been initialized
-      if (RcppCWB::cqp_is_initialized()){
-        srcfile <- fs::path_tidy(fs::path(cwb_dirs[["registry_dir"]], tolower(corpus)))
-        if (.Platform$OS.type == "windows") srcfile <- fs::path_tidy(utils::shortPathName(srcfile))
-        destfile <- fs::path_tidy(fs::path(RcppCWB::cqp_get_registry(), tolower(corpus)))
-        if (.Platform$OS.type == "windows") destfile <- fs::path_tidy(utils::shortPathName(destfile))
-        if (srcfile != destfile){
-          file.copy(from = srcfile, to = destfile, overwrite = TRUE)
-        }
-        RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+      # Load corpus
+      if (isTRUE(load)){
+        if (verbose) cli_process_start("load corpus")
+        cl <- cl_load_corpus(corpus = corpus, registry = cwb_dirs[["registry_dir"]])
+        cqp <- cqp_load_corpus(corpus = toupper(corpus), registry = cwb_dirs[["registry_dir"]])
+        if (cl && cqp)
+          if (verbose) cli_process_done()
+        else
+          cli_alert_danger("loading corpus NOT successful")
       }
     }
     unlink(cwbtools_tmpdir, recursive = TRUE)
-
-    # Check whether newly installed corpoa can be loaded
-    # for (corpus_id in corpora){
-    #   corpus_testload(corpus = corpus_id, registry_dir = cwb_dirs[["registry_dir"]])
-    # }
 
   } else {
     for (tarfile in tarball){
@@ -588,9 +632,9 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
   invisible(NULL)
 }
 
-#' @param ask A \code{logical} value, whether to ask user for confirmation
-#'   before removing a corpus.
-#' @details \code{corpus_remove} can be used to delete a corpus.
+#' @param ask A `logical` value, whether to ask user for confirmation before
+#'   removing a corpus.
+#' @details `corpus_remove()` can be used to delete a corpus.
 #' @rdname corpus_utils
 #' @importFrom cli cli_alert_success
 #' @export corpus_remove
@@ -724,7 +768,9 @@ corpus_copy <- function(
   if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
   if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
 
-  spinner <- make_spinner(template = sprintf("{spin} copy corpus data files for corpus {col_cyan('%s')} to target data directory", toupper(corpus)))
+  spinner <- make_spinner(
+    template = "{spin} copy corpus data files to target data directory"
+  )
   copy_with_spinner <- function(){
     lapply(
       list.files(data_dir, full.names = TRUE),
@@ -737,40 +783,45 @@ corpus_copy <- function(
     spinner$finish()
   }
   ansi_with_hidden_cursor(copy_with_spinner())
-  if (verbose) cli_alert_success(sprintf("copy corpus data files for corpus {col_cyan('%s')} to target data directory ... done", toupper(corpus)))
+  if (verbose)
+    cli_alert_success("copy corpus data to target directory ... done")
 
-  if (verbose) cli_process_start(sprintf("parse registry file for corpus {col_cyan('%s')}", toupper(corpus)))
+  if (verbose) cli_process_start("parse registry file")
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   if (verbose) cli_process_done()
 
-  # It is a common mistake that the info file is not stated correctly in the registry file,
-  # so this is a forgiving solution to remedy errors
-  info_file_old <- file.path(data_dir, basename(rf[["info"]]))
-  if (!file.exists(info_file_old)){
-    info_file_guessed <- grep(
-      "^.*?/(|\\.)info(\\.md|)$",
-      list.files(data_dir, full.names = TRUE),
-      value = TRUE
-    )
-    if (length(info_file_guessed) > 0L){
-      if (verbose){
-        cli_alert_info(
-          paste(
-            "info file stated in registry does not exist,",
-            "using the following file which likely to be an info file:",
-            sprintf("{.path %s}", info_file_guessed[1])
+  if (length(rf[["info"]]) == 1L){
+    # It is a common mistake that the info file is not stated correctly in the registry file,
+    # so this is a forgiving solution to remedy errors
+    info_file_old <- file.path(data_dir, basename(rf[["info"]]))
+    if (!file.exists(info_file_old)){
+      info_file_guessed <- grep(
+        "^.*?/(|\\.)info(\\.md|)$",
+        list.files(data_dir, full.names = TRUE),
+        value = TRUE
+      )
+      if (length(info_file_guessed) > 0L){
+        if (verbose){
+          cli_alert_info(
+            paste(
+              "info file stated in registry does not exist,",
+              "using the following file which likely to be an info file:",
+              sprintf("{.path %s}", info_file_guessed[1])
+            )
           )
-        )
+        }
+        rf[["info"]] <- info_file_guessed[1]
+      } else {
+        if (verbose) cli_alert_warning("no info file")
       }
-      rf[["info"]] <- info_file_guessed[1]
-    } else {
-      if (verbose) cli_alert_warning("no info file found")
     }
   }
 
   if (verbose) cli_process_start("update registry data and save registry file")
   rf[["home"]] <- data_dir_new
-  rf[["info"]] <- file.path(data_dir_new, basename(rf[["info"]]))
+  if (length(rf[["info"]]) == 1L){
+    rf[["info"]] <- path(data_dir_new, basename(rf[["info"]]))
+  }
   registry_file_write(rf, corpus = corpus, registry_dir = registry_dir_new)
   if (verbose) cli_process_done()
 
