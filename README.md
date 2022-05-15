@@ -1,6 +1,7 @@
 <!-- badges: start -->
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![R build status](https://github.com/PolMine/cwbtools/workflows/R-CMD-check/badge.svg)](https://github.com/PolMine/cwbtools/actions)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cwbtools)](https://cran.r-project.org/package=cwbtools)
 [![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/master)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6550747.svg)](https://doi.org/10.5281/zenodo.6550747)
 <!-- badges: end -->
