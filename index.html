@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Tools to Create, Modify and Manage CWB Corpora">
-<meta property="og:description" content="The Corpus Workbench (CWB, &lt;http://cwb.sourceforge.net/&gt;) offers a classic and mature
+<meta property="og:description" content="The Corpus Workbench (CWB, &lt;https://cwb.sourceforge.io/&gt;) offers a classic and mature
  approach for working with large, linguistically and structurally annotated corpora. The CWB
  is memory efficient and its design makes running queries fast (Evert and Hardie 2011,
  &lt;http://www.stefan-evert.de/PUB/EvertHardie2011.pdf&gt;). The cwbtools package offers
@@ -31,6 +31,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -43,23 +45,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +78,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PolMine/cwbtools/">
+  <a href="https://github.com/PolMine/cwbtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,27 +97,27 @@
   <div class="contents col-md-9">
 
 
-<div id="tools-to-create-modify-and-manage-corpora-for-the-corpus-workbench-cwb" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#tools-to-create-modify-and-manage-corpora-for-the-corpus-workbench-cwb" class="anchor"></a>Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)</h1></div>
-<p>The <a href="http://cwb.sourceforge.net/">Corpus Workbench (CWB)</a> is a classic indexing and query engine to efficiently work with large, linguistically annotated corpora. The <em>cwbtools</em> package offers a set of tools to conveniently create, modify and manage CWB indexed corpora from within R. It complements R packages that use the CWB as a backend for text mining with R, namely the <a href="https://CRAN.R-project.org/package=RcppCWB">RcppCWB</a> package for low-level access to CWB indexed corpora, and <a href="https://CRAN.R-project.org/package=polmineR">polmineR</a> as a toolset to implement common text mining workflows.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level1">
+<div class="page-header"><h1 id="tools-to-create-modify-and-manage-corpora-for-the-corpus-workbench-cwb">Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)<a class="anchor" aria-label="anchor" href="#tools-to-create-modify-and-manage-corpora-for-the-corpus-workbench-cwb"></a>
+</h1></div>
+<p>The <a href="http://cwb.sourceforge.net/" class="external-link">Corpus Workbench (CWB)</a> is a classic indexing and query engine to efficiently work with large, linguistically annotated corpora. The <em>cwbtools</em> package offers a set of tools to conveniently create, modify and manage CWB indexed corpora from within R. It complements R packages that use the CWB as a backend for text mining with R, namely the <a href="https://CRAN.R-project.org/package=RcppCWB" class="external-link">RcppCWB</a> package for low-level access to CWB indexed corpora, and <a href="https://CRAN.R-project.org/package=polmineR" class="external-link">polmineR</a> as a toolset to implement common text mining workflows.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The package is available via CRAN and can be installed as follows on Windows, macOS and Linux.</p>
-<pre class="{r}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("cwbtools")</a></code></pre>
-<p>To install the development version of the package, use the installation mechanism offered by the <a href="https://cran.r-project.org/package=remotes">remotes</a> package. On Windows, an installation of <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> may be necessary.</p>
-<pre class="{r}"><code># Make sure the remotes package is present
-if (!"remotes" %in% installed.packages()[,"Package"]) install.packages("remotes")
-Sys.setenv(R_REMOTES_STANDALONE = "true")
-remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></pre>
+<pre class="{r}"><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cwbtools"</span><span class="op">)</span></code></pre>
+<p>To install the development version of the package, use the installation mechanism offered by the <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a> package. On Windows, an installation of <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> may be necessary.</p>
+<pre class="{r}"><code><span class="co"># Make sure the remotes package is present</span>
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"remotes"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span>,<span class="st">"Package"</span><span class="op">]</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>R_REMOTES_STANDALONE <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"PolMine/cwbtools"</span>, ref <span class="op">=</span> <span class="st">"dev"</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre>
 <p><strong>Explanatory note:</strong></p>
 <p>The default approach to install the development version <code>cwbtools</code> from GitHub would be <code>devtools::install_github("PolMine/cwbtools", ref = "dev")</code>. However, the concurrent dependency of <code>devtools</code> and of <code>cwbtools</code> on the <code>curl</code> package may cause nerve-wrecking problems if <code>curl</code> can be updated: If a newer version of <code>curl</code> is available, the user will be prompted whether this update is desired. Most users will agree. However, this update will fail because <code>curl</code> is loaded by <code>devtools</code>, and parts of the <code>curl</code> package cannot be deleted/updated (the dynamic library that is loaded).</p>
 <p>To avoid having to perform manual updates in the correct order, using the original <code>install_github()</code> function of the <code>remotes</code> package is recommended. When setting the environment variable <code>R_REMOTES_STANDALONE</code> to <code>true</code>, the <code>remotes</code> package will rely on a minimal set of additional packages. The aforementioned situation that may make the installation of <code>cwbtools</code> difficult for most users is omitted.</p>
 </div>
-<div id="acknowledgements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
 <p>The CWB is a classical indexing and query engine. Its character as an open source project is of great value for the community working with corpora. The enduring effort of the developers of the CWB is gratefully acknowledged!</p>
 </div>
 </div>
@@ -130,55 +126,59 @@ remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></p
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=cwbtools">https://​cloud.r-project.org/​package=cwbtools</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/PolMine/cwbtools/">https://​github.com/​PolMine/​cwbtools/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/PolMine/cwbtools/issues">https://​github.com/​PolMine/​cwbtools/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
-</ul>
-</div>
-<div class="citation">
-<h2>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html">Citing cwbtools</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Andreas Blaette <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=cwbtools" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/PolMine/cwbtools/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/PolMine/cwbtools/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="https://github.com/PolMine/cwbtools/actions"><img src="https://github.com/PolMine/cwbtools/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/PolMine/cwbtools/branch/master"><img src="https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.4945087"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4945087.svg" alt="DOI"></a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing cwbtools</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Andreas Blaette <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Christoph Leonhardt <br><small class="roles"> Author </small>  </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>
+<li><a href="https://github.com/PolMine/cwbtools/actions" class="external-link"><img src="https://github.com/PolMine/cwbtools/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/PolMine/cwbtools/branch/master" class="external-link"><img src="https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.6550747" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6550747.svg" alt="DOI"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Andreas Blaette.</p>
+  <p></p>
+<p>Developed by Andreas Blaette, Christoph Leonhardt.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -186,6 +186,8 @@ remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></p
 
   
 
+
+  
 
   </body>
 </html>

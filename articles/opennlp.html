@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PolMine/cwbtools/">
+  <a href="https://github.com/PolMine/cwbtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -89,114 +85,114 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CWB corpora and openNLP</h1>
-                        <h4 class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
+                        <h4 data-toc-skip class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 class="date">2021-06-14</h4>
+            <h4 data-toc-skip class="date">2022-05-15</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/master/vignettes/opennlp.Rmd"><code>vignettes/opennlp.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/vignettes/opennlp.Rmd" class="external-link"><code>vignettes/opennlp.Rmd</code></a></small>
       <div class="hidden name"><code>opennlp.Rmd</code></div>
 
     </div>
 
     
     
-<div id="required-packages" class="section level2">
-<h2 class="hasAnchor">
-<a href="#required-packages" class="anchor"></a>Required packages</h2>
+<div class="section level2">
+<h2 id="required-packages">Required packages<a class="anchor" aria-label="anchor" href="#required-packages"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools">cwbtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB">RcppCWB</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">NLP</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">openNLP</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools" class="external-link">cwbtools</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB" class="external-link">RcppCWB</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">NLP</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">openNLP</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></code></pre></div>
 </div>
-<div id="interfacing-to-opennlp" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interfacing-to-opennlp" class="anchor"></a>Interfacing to openNLP</h2>
-<div id="decode-p-attribute-word" class="section level3">
-<h3 class="hasAnchor">
-<a href="#decode-p-attribute-word" class="anchor"></a>Decode p-attribute ‘word’</h3>
+<div class="section level2">
+<h2 id="interfacing-to-opennlp">Interfacing to openNLP<a class="anchor" aria-label="anchor" href="#interfacing-to-opennlp"></a>
+</h2>
+<div class="section level3">
+<h3 id="decode-p-attribute-word">Decode p-attribute ‘word’<a class="anchor" aria-label="anchor" href="#decode-p-attribute-word"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">corpus_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cl_attribute_size.html">cl_attribute_size</a></span><span class="op">(</span><span class="st">"UNGA"</span>, attribute <span class="op">=</span> <span class="st">"word"</span>, attribute_type <span class="op">=</span><span class="st">"p"</span><span class="op">)</span>
-<span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>cpos <span class="op">=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="va">corpus_size</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span>
-<span class="va">dt</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">[</span>, <span class="st">"id"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_cpos2id</a></span><span class="op">(</span><span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, cpos <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="st">"word"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html">cl_id2str</a></span><span class="op">(</span><span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, id <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span class="va">corpus_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cl_attribute_size.html" class="external-link">cl_attribute_size</a></span><span class="op">(</span><span class="st">"UNGA"</span>, attribute <span class="op">=</span> <span class="st">"word"</span>, attribute_type <span class="op">=</span><span class="st">"p"</span><span class="op">)</span>
+<span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>cpos <span class="op">=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="va">corpus_size</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">)</span>
+<span class="va">dt</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">[</span>, <span class="st">"id"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span><span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, cpos <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dt</span><span class="op">[</span>, <span class="st">"word"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span><span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, id <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 </div>
-<div id="reconstruct-string" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reconstruct-string" class="anchor"></a>Reconstruct String</h3>
+<div class="section level3">
+<h3 id="reconstruct-string">Reconstruct String<a class="anchor" aria-label="anchor" href="#reconstruct-string"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dt</span><span class="op">[</span>, <span class="st">"whitespace"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">word</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"."</span>, <span class="st">","</span>, <span class="st">":"</span>, <span class="st">"!"</span>, <span class="st">"?"</span>, <span class="st">";"</span><span class="op">)</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">2L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">]</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
-<span class="va">txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/String.html">String</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"whitespace"</span><span class="op">]</span><span class="op">]</span>, <span class="st">" "</span>, <span class="st">""</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">dt</span><span class="op">[</span>, <span class="st">"whitespace"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">word</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"."</span>, <span class="st">","</span>, <span class="st">":"</span>, <span class="st">"!"</span>, <span class="st">"?"</span>, <span class="st">";"</span><span class="op">)</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">2L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">]</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
+<span class="va">txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/String.html" class="external-link">String</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"whitespace"</span><span class="op">]</span><span class="op">]</span>, <span class="st">" "</span>, <span class="st">""</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="match-token-annotation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#match-token-annotation" class="anchor"></a>Match token annotation</h3>
+<div class="section level3">
+<h3 id="match-token-annotation">Match token annotation<a class="anchor" aria-label="anchor" href="#match-token-annotation"></a>
+</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dt</span><span class="op">[</span>, <span class="st">"nchar"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, <span class="va">nchar</span><span class="op">)</span><span class="op">]</span>
-<span class="va">dt</span><span class="op">[</span>, <span class="st">"start"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"nchar"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"whitespace"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>
+<code class="sourceCode R"><span class="va">dt</span><span class="op">[</span>, <span class="st">"nchar"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, <span class="va">nchar</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dt</span><span class="op">[</span>, <span class="st">"start"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"nchar"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"whitespace"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>
 <span class="va">dt</span><span class="op">[</span>, <span class="st">"end"</span> <span class="op">:=</span> <span class="op">(</span><span class="va">dt</span><span class="op">[[</span><span class="st">"start"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"nchar"</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span>
 
-<span class="va">w</span> <span class="op">&lt;-</span> <span class="fu">NLP</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Annotation.html">Annotation</a></span><span class="op">(</span>
+<span class="va">w</span> <span class="op">&lt;-</span> <span class="fu">NLP</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Annotation.html" class="external-link">Annotation</a></span><span class="op">(</span>
   id <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep.int</a></span><span class="op">(</span><span class="st">"word"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep.int</a></span><span class="op">(</span><span class="st">"word"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span><span class="op">)</span>,
   start <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"start"</span><span class="op">]</span><span class="op">]</span>,
   end <span class="op">=</span> <span class="va">dt</span><span class="op">[[</span><span class="st">"end"</span><span class="op">]</span><span class="op">]</span>
 <span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="create-annotations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#create-annotations" class="anchor"></a>Create Annotations</h2>
-<div id="sentences" class="section level3">
-<h3 class="hasAnchor">
-<a href="#sentences" class="anchor"></a>Sentences</h3>
+<div class="section level2">
+<h2 id="create-annotations">Create Annotations<a class="anchor" aria-label="anchor" href="#create-annotations"></a>
+</h2>
+<div class="section level3">
+<h3 id="sentences">Sentences<a class="anchor" aria-label="anchor" href="#sentences"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sentence_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_Sent_Token_Annotator.html">Maxent_Sent_Token_Annotator</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">sentence_annotator</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">sentence_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_Sent_Token_Annotator.html" class="external-link">Maxent_Sent_Token_Annotator</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">sentence_annotator</span><span class="op">)</span>
 
-<span class="va">spans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Span.html">as.Span</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="st">"sentence"</span> <span class="op">:=</span> <span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">]</span>
-<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_left"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"start"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_right"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"end"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="va">regions</span> <span class="op">&lt;-</span> <span class="va">spans</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"sentence"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<span class="va">spans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Span.html" class="external-link">as.Span</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="st">"sentence"</span> <span class="op">:=</span> <span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">]</span>
+<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_left"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"start"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
+<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_right"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"end"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
+<span class="va">regions</span> <span class="op">&lt;-</span> <span class="va">spans</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"sentence"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 </div>
-<div id="part-of-speech" class="section level3">
-<h3 class="hasAnchor">
-<a href="#part-of-speech" class="anchor"></a>Part-of-speech</h3>
+<div class="section level3">
+<h3 id="part-of-speech">Part-of-speech<a class="anchor" aria-label="anchor" href="#part-of-speech"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pos_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_POS_Tag_Annotator.html">Maxent_POS_Tag_Annotator</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"en"</span>, probs <span class="op">=</span> <span class="cn">FALSE</span>, model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">pos_annotator</span>, a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">w</span>, <span class="va">s</span><span class="op">)</span><span class="op">)</span>
-<span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"POS"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">pos_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_POS_Tag_Annotator.html" class="external-link">Maxent_POS_Tag_Annotator</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"en"</span>, probs <span class="op">=</span> <span class="cn">FALSE</span>, model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">pos_annotator</span>, a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">w</span>, <span class="va">s</span><span class="op">)</span><span class="op">)</span>
+<span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"POS"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="named-entities" class="section level3">
-<h3 class="hasAnchor">
-<a href="#named-entities" class="anchor"></a>Named entities</h3>
+<div class="section level3">
+<h3 id="named-entities">Named entities<a class="anchor" aria-label="anchor" href="#named-entities"></a>
+</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span>pkgs <span class="op">=</span> <span class="st">"openNLPmodels.en"</span>, repos <span class="op">=</span> <span class="st">"https://datacube.wu.ac.at"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span>pkgs <span class="op">=</span> <span class="st">"openNLPmodels.en"</span>, repos <span class="op">=</span> <span class="st">"https://datacube.wu.ac.at"</span><span class="op">)</span>
 
-<span class="va">ne_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_Entity_Annotator.html">Maxent_Entity_Annotator</a></span><span class="op">(</span>
+<span class="va">ne_annotator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openNLP/man/Maxent_Entity_Annotator.html" class="external-link">Maxent_Entity_Annotator</a></span><span class="op">(</span>
   language <span class="op">=</span> <span class="st">"en"</span>,
   kind <span class="op">=</span> <span class="st">"person"</span>,
   probs <span class="op">=</span> <span class="cn">FALSE</span>,
   model <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
-<span class="va">ne</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">ne_annotator</span>, a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">w</span>, <span class="va">s</span><span class="op">)</span><span class="op">)</span>
+<span class="va">ne</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/NLP/man/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>s <span class="op">=</span> <span class="va">txt</span>, f <span class="op">=</span> <span class="va">ne_annotator</span>, a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">w</span>, <span class="va">s</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">ne_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">ne</span>, <span class="va">type</span> <span class="op">==</span> <span class="st">"entity"</span><span class="op">)</span>
-<span class="va">spans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Span.html">as.Span</a></span><span class="op">(</span><span class="va">ne_min</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_left"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"start"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_right"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"end"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="va">spans</span><span class="op">[</span>, <span class="st">"ne"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ne_min</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"kind"</span><span class="op">)</span><span class="op">]</span>
-<span class="va">regions</span> <span class="op">&lt;-</span> <span class="va">spans</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"ne"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">ne_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">ne</span>, <span class="va">type</span> <span class="op">==</span> <span class="st">"entity"</span><span class="op">)</span>
+<span class="va">spans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/NLP/man/Span.html" class="external-link">as.Span</a></span><span class="op">(</span><span class="va">ne_min</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_left"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"start"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
+<span class="va">spans</span><span class="op">[</span>, <span class="st">"cpos_right"</span> <span class="op">:=</span> <span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="va">spans</span>, on <span class="op">=</span> <span class="st">"end"</span><span class="op">]</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
+<span class="va">spans</span><span class="op">[</span>, <span class="st">"ne"</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ne_min</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"kind"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">regions</span> <span class="op">&lt;-</span> <span class="va">spans</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"ne"</span><span class="op">)</span><span class="op">]</span>
 
-<span class="va">txt</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">[</span>, <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[</span><span class="va">cpos</span> <span class="op">%in%</span> <span class="va">.SD</span><span class="op">[[</span><span class="st">"cpos_left"</span><span class="op">]</span><span class="op">]</span><span class="op">:</span><span class="va">.SD</span><span class="op">[[</span><span class="st">"cpos_right"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span><span class="op">}</span>, by <span class="op">=</span> <span class="st">"cpos_left"</span>, .SDcols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span><span class="op">)</span><span class="op">]</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<span class="va">txt</span> <span class="op">&lt;-</span> <span class="va">regions</span><span class="op">[</span>, <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">dt</span><span class="op">[</span><span class="va">cpos</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">.SD</span><span class="op">[[</span><span class="st">"cpos_left"</span><span class="op">]</span><span class="op">]</span><span class="op">:</span><span class="va">.SD</span><span class="op">[[</span><span class="st">"cpos_right"</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span><span class="op">}</span>, by <span class="op">=</span> <span class="st">"cpos_left"</span>, .SDcols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span><span class="op">)</span><span class="op">]</span><span class="op">[[</span><span class="st">"V1"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 </div>
 </div>
-<div id="add-annotation-to-corpus" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-annotation-to-corpus" class="anchor"></a>Add annotation to corpus</h2>
+<div class="section level2">
+<h2 id="add-annotation-to-corpus">Add annotation to corpus<a class="anchor" aria-label="anchor" href="#add-annotation-to-corpus"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"POS"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[[</span><span class="st">"features"</span><span class="op">]</span><span class="op">]</span>, <span class="va">`[[`</span>, <span class="st">"POS"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -211,11 +207,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andreas Blaette.</p>
+  <p></p>
+<p>Developed by Andreas Blaette, Christoph Leonhardt.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -223,6 +221,8 @@
 
   
 
+
+  
 
   </body>
 </html>
