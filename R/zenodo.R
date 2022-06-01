@@ -3,7 +3,8 @@
 #' Download corpus tarball from Zenodo. Downloading both freely available data
 #' and data with restricted access is supported.
 #' @return The filename of the downloaded corpus tarball, designed to serve as
-#'   input for \code{\link{corpus_install}} (as argument `tarball`).
+#'   input for \code{\link{corpus_install}} (as argument `tarball`). If the 
+#'   resource is not available, `NULL` is returned.
 #' @examples
 #' \donttest{
 #' # Temporary directory structure as a preparatory step
@@ -60,17 +61,49 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
   if (restricted){
     if (verbose) cat_rule("Download restricted resource from Zenodo")
     if (verbose) cli_process_start("get handle for restricted resource")
-    curl_fetch_memory(url = url, handle = h)
-    page <- curl(url = strsplit(x = url, split = "\\?token=")[[1]][1], handle = h)
+    
+    trystatus <- try(curl_fetch_memory(url = url, handle = h))
+    if (is(trystatus)[[1]] == "try-error"){
+      warning("Zenodo not available. Try again later.")
+      return(NULL)
+    }
+    
+    trystatus <- try(
+      page <- curl(
+        url = strsplit(x = url, split = "\\?token=")[[1]][1],
+        handle = h
+      )
+    )
+    if (is(trystatus)[[1]] == "try-error"){
+      warning("Zenodo not available. Try again later.")
+      return(NULL)
+    }
+    
     if (verbose) cli_process_done()
   } else {
     if (verbose) cat_rule("Download resource from Zenodo")
-    page <- curl(url = url)
+
+    trystatus <- try(page <- curl(url = url))
+    if (is(trystatus)[[1]] == "try-error"){
+      warning("Zenodo not available. Try again later.")
+      return(NULL)
+    }
+
   }
   
   if (verbose) cli_process_start("extract tarball URL from Zenodo website")
-  website <- read_html(page)
+  
+  trystatus <- try(website <- read_html(page))
+  if (is(trystatus)[[1]] == "try-error"){
+    warning("Zenodo not available. Try again later.")
+    return(NULL)
+  }
+
   file_elems <- xml_find_all(website, xpath = "//a[@class='filename']")
+  if (length(file_elems) == 0L){
+    warning("Website does not reference files to download.")
+    return(NULL)
+  }
   filenames <- sapply(
     strsplit(
       x = sapply(file_elems, xml_attr, attr = "href"),
@@ -90,13 +123,19 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
     paste("tarball to download:", sprintf("{.path %s}", basename(tarball)))
   )
   
-  curl_download(
-    url = fs::path("https://zenodo.org", tarball),
-    destfile = destfile,
-    quiet = !progress, 
-    handle = h
+  trystatus <- try(
+    curl_download(
+      url = fs::path("https://zenodo.org", tarball),
+      destfile = destfile,
+      quiet = !progress, 
+      handle = h
+    )
   )
-  
+  if (is(trystatus)[[1]] == "try-error"){
+    warning("Zenodo not available. Try again later.")
+    return(NULL)
+  }
+
   if (isTRUE(checksum)){
     if (verbose){
       msg <- sprintf(
@@ -140,4 +179,4 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
 #' @rdname zenodo
 #' @keywords datasets
 #' @export
-gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
+gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY1NjcxMjc5OSwiaWF0IjoxNjU0MTI1MzA5fQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzNjE2LCJybmQiOiI1NzdmNjU4MiJ9.flJUJJKQAtq0BjkUdu16PZdRCtz0buJIY1kaKFYZEGUnejUh3sGb9oowhHKSVA9ZszIygJ--F69Qsc_4vJ0ieA"
