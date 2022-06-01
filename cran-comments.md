@@ -1,8 +1,6 @@
 ## General remarks
 
-`zenodo_get_tarball()`, a new function for downloading restricted data from a repository is the main  new feature of this release. Example for
-this function are wrapped into \donttest{}, but I do not suppress the unit test
-on CRAN, hoping that it will not run too long.
+`zenodo_get_tarball()` fails gracefully if Zenodo is not available.
 
 ## Test environments
 
