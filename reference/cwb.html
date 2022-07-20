@@ -20,7 +20,7 @@ CWB."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -75,36 +75,47 @@ CWB.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cwb_install</span><span class="op">(</span>
-  url_cwb <span class="op">=</span> <span class="fu">cwb_get_url</span><span class="op">(</span><span class="op">)</span>,
-  md5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">url_cwb</span>, <span class="st">"md5"</span><span class="op">)</span>,
-  cwb_dir <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_temp.html" class="external-link">path_temp</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span><span class="op">)</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">cwb_get_url</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">cwb_get_bindir</span><span class="op">(</span>bindir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CWB_BINDIR"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">cwb_is_installed</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cwb_install</span><span class="op">(</span></span>
+<span>  url_cwb <span class="op">=</span> <span class="fu">cwb_get_url</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  md5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">url_cwb</span>, <span class="st">"md5"</span><span class="op">)</span>,</span>
+<span>  cwb_dir <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_temp.html" class="external-link">path_temp</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cwb_get_url</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cwb_get_bindir</span><span class="op">(</span>bindir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CWB_BINDIR"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cwb_is_installed</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>url_cwb</dt>
 <dd><p>URL for downloading the CWB.</p></dd>
+
+
 <dt>md5</dt>
 <dd><p>The md5 checksum of the compressed file to be downloaded.</p></dd>
+
+
 <dt>cwb_dir</dt>
 <dd><p>The directory where the CWB shall be installed.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>A <code>logical</code> value, whether to output messages.</p></dd>
+
+
 <dt>bindir</dt>
 <dd><p>The directory with CWB binaries.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The path of the CWB binaries or <code>NULL</code> if downloading and installing
+    
+
+<p>The path of the CWB binaries or <code>NULL</code> if downloading and installing
 the CWB has failed.</p>
     </div>
     <div id="details">
@@ -132,7 +143,7 @@ package. Alternatively, a check for a local installation is performed.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

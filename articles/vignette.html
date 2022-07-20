@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <h1 data-toc-skip>Introducing ‘cwbtools’</h1>
                         <h4 data-toc-skip class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2022-05-15</h4>
+            <h4 data-toc-skip class="date">2022-07-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/vignettes/vignette.Rmd" class="external-link"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -110,24 +110,24 @@
 <p>The CWB stores each indexed corpora in an individual data directory. Registry files in a ‘registry directory’ (or ‘registry’ in short) describe the indexed corpora and include the path to the data directory.</p>
 <p>For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_tidy.html" class="external-link">path_tidy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"registry"</span><span class="op">)</span>
-<span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"data_dir"</span><span class="op">)</span>
-
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span> <span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">registry_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span>
-
-<span class="va">regdir_envvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_tidy.html" class="external-link">path_tidy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"registry"</span><span class="op">)</span></span>
+<span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"data_dir"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span> <span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">registry_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">regdir_envvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></code></pre></div>
 <p>In addition to <em>cwbtools</em>, we rely extensively on the <a href="https://CRAN.R-project.org/package=data.table" class="external-link">data.table</a> package. It is a good companion to <em>cwbtools</em> because of its efficiency to handle large data. Apart from the processing speed, it supports in-place modifications of data. When corpora grow large, it is advisable to omit copying the data in memory if not absolutely necessary.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools" class="external-link">cwbtools</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/cwbtools" class="external-link">cwbtools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></code></pre></div>
 <p>Core operations on structural and positional attributes are implemented in “pure R”, but the CWB can be downloaded and stored within the package using the <code><a href="../reference/cwb.html">cwb_install()</a></code> function. In the following examples, we will rely on the “pure R” approach.</p>
 </div>
 <div class="section level3">
@@ -135,338 +135,340 @@
 </h3>
 <p>The first example is to turn a small sample corpus of debates in the UN General Assembly into an indexed corpus. The package includes some XML files that follow a standard suggested by the <a href="https://tei-c.org/" class="external-link">Text Encoding Initiative (TEI)</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">teidir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cwbtools"</span>, <span class="st">"xml"</span>, <span class="st">"UNGA"</span><span class="op">)</span>
-<span class="va">teifiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">teidir</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">teidir</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "N9986497.xml" "N9986515.xml" "N9986521.xml" "N9986551.xml" "N9986557.xml"</span>
-<span class="co">## [6] "N9986569.xml" "N9986587.xml"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">teidir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cwbtools"</span>, <span class="st">"xml"</span>, <span class="st">"UNGA"</span><span class="op">)</span></span>
+<span><span class="va">teifiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">teidir</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">teidir</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "N9986497.xml" "N9986515.xml" "N9986521.xml" "N9986551.xml" "N9986557.xml"</span></span>
+<span><span class="co">## [6] "N9986569.xml" "N9986587.xml"</span></span></code></pre>
 <p>For our example, we need an (empty) data directory for the UNGA corpus.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">unga_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"unga"</span><span class="op">)</span>
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">unga_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"unga"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The point of departure then is to create a <code>CorpusData</code> object that will serve as a processor for these files and storage facility for the corpus data. The central fields of the class are named <code>chunktable</code>, <code>tokenstream</code> and <code>metadata</code>. When we inspect the new object at the outset, we will see that these fields are not filled initially.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">UNGA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
-<span class="va">UNGA</span></code></pre></div>
-<pre><code><span class="co">## chunktable: NULL</span>
-<span class="co">## tokenstream: NULL</span>
-<span class="co">## metadata: NULL</span></code></pre>
+<code class="sourceCode R"><span><span class="va">UNGA</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">UNGA</span></span></code></pre></div>
+<pre><code><span><span class="co">## chunktable: NULL</span></span>
+<span><span class="co">## tokenstream: NULL</span></span>
+<span><span class="co">## metadata: NULL</span></span></code></pre>
 <p>To turn the XML files into the <code>CorpusData object, we use the method</code>$import_xml()`. To be able to add metadata from the header to the metadata table, the method requires a named vector of XPath expressions used to find the metadata within the XML document.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  lp <span class="op">=</span> <span class="st">"//legislativePeriod"</span>, session <span class="op">=</span> <span class="st">"//titleStmt/sessionNo"</span>,
-  date <span class="op">=</span> <span class="st">"//publicationStmt/date"</span>, url <span class="op">=</span> <span class="st">"//sourceDesc/url"</span>,
-  src <span class="op">=</span> <span class="st">"//sourceDesc/filetype"</span>
-<span class="op">)</span>
-<span class="va">UNGA</span><span class="op">$</span><span class="fu">import_xml</span><span class="op">(</span>filenames <span class="op">=</span> <span class="va">teifiles</span>, meta <span class="op">=</span> <span class="va">metadata</span><span class="op">)</span>
-<span class="va">UNGA</span></code></pre></div>
-<pre><code><span class="co">## chunktable: 2 columns / 1148 rows</span>
-<span class="co">## tokenstream: NULL</span>
-<span class="co">## metadata: 20 columns / 1148 rows</span></code></pre>
+<code class="sourceCode R"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  lp <span class="op">=</span> <span class="st">"//legislativePeriod"</span>, session <span class="op">=</span> <span class="st">"//titleStmt/sessionNo"</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"//publicationStmt/date"</span>, url <span class="op">=</span> <span class="st">"//sourceDesc/url"</span>,</span>
+<span>  src <span class="op">=</span> <span class="st">"//sourceDesc/filetype"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">UNGA</span><span class="op">$</span><span class="fu">import_xml</span><span class="op">(</span>filenames <span class="op">=</span> <span class="va">teifiles</span>, meta <span class="op">=</span> <span class="va">metadata</span><span class="op">)</span></span>
+<span><span class="va">UNGA</span></span></code></pre></div>
+<pre><code><span><span class="co">## chunktable: 2 columns / 1148 rows</span></span>
+<span><span class="co">## tokenstream: NULL</span></span>
+<span><span class="co">## metadata: 20 columns / 1148 rows</span></span></code></pre>
 <p>The input XML files are TEI files. Speaker information is included in the attributes of a tag named ‘sp’. To maintain the original content, there is a element ‘speaker’ in the document that includes the information on the speaker call without having parsed it. It is not text spoken in the debate, so we consider it as noise to be removed.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">to_keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span><span class="op">[[</span><span class="st">"speaker"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="va">UNGA</span><span class="op">$</span><span class="va">chunktable</span> <span class="op">&lt;-</span> <span class="va">UNGA</span><span class="op">$</span><span class="va">chunktable</span><span class="op">[</span><span class="va">to_keep</span><span class="op">]</span>
-<span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span><span class="op">[</span><span class="va">to_keep</span><span class="op">]</span><span class="op">[</span>, <span class="va">speaker</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">to_keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span><span class="op">[[</span><span class="st">"speaker"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">UNGA</span><span class="op">$</span><span class="va">chunktable</span> <span class="op">&lt;-</span> <span class="va">UNGA</span><span class="op">$</span><span class="va">chunktable</span><span class="op">[</span><span class="va">to_keep</span><span class="op">]</span></span>
+<span><span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span><span class="op">[</span><span class="va">to_keep</span><span class="op">]</span><span class="op">[</span>, <span class="va">speaker</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span></span></code></pre></div>
 <p>We assign more telling column names …</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sp_who"</span>, <span class="st">"sp_state"</span>, <span class="st">"sp_role"</span><span class="op">)</span>, new <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">UNGA</span><span class="op">$</span><span class="va">metadata</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sp_who"</span>, <span class="st">"sp_state"</span>, <span class="st">"sp_role"</span><span class="op">)</span>, new <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The CWB requires a tokenstream as input to generate positional attributes. NLP tools will offer lemmatization, part-of-speech-recognition and more. To keep things simple, we perform a very simple tokenization that relies on the <a href="https://CRAN.R-project.org/package=tokenizers" class="external-link">tokenizers</a> package.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">UNGA</span><span class="op">$</span><span class="fu">tokenize</span><span class="op">(</span>lowercase <span class="op">=</span> <span class="cn">FALSE</span>, strip_punct <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">UNGA</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">UNGA</span><span class="op">$</span><span class="fu">tokenize</span><span class="op">(</span>lowercase <span class="op">=</span> <span class="cn">FALSE</span>, strip_punct <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">UNGA</span></span></code></pre></div>
 <p>Let us see how it looks like now …</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">UNGA</span><span class="op">$</span><span class="va">tokenstream</span></code></pre></div>
-<pre><code><span class="co">##           id   word   cpos</span>
-<span class="co">##      1:    2      I      0</span>
-<span class="co">##      2:    2 should      1</span>
-<span class="co">##      3:    2   like      2</span>
-<span class="co">##      4:    2     to      3</span>
-<span class="co">##      5:    2 inform      4</span>
-<span class="co">##     ---                   </span>
-<span class="co">## 127078: 1148   rose 127077</span>
-<span class="co">## 127079: 1148     at 127078</span>
-<span class="co">## 127080: 1148      1 127079</span>
-<span class="co">## 127081: 1148    p.m 127080</span>
-<span class="co">## 127082: 1148      . 127081</span></code></pre>
+<code class="sourceCode R"><span><span class="va">UNGA</span><span class="op">$</span><span class="va">tokenstream</span></span></code></pre></div>
+<pre><code><span><span class="co">##           id   word   cpos</span></span>
+<span><span class="co">##      1:    2      I      0</span></span>
+<span><span class="co">##      2:    2 should      1</span></span>
+<span><span class="co">##      3:    2   like      2</span></span>
+<span><span class="co">##      4:    2     to      3</span></span>
+<span><span class="co">##      5:    2 inform      4</span></span>
+<span><span class="co">##     ---                   </span></span>
+<span><span class="co">## 127078: 1148   rose 127077</span></span>
+<span><span class="co">## 127079: 1148     at 127078</span></span>
+<span><span class="co">## 127080: 1148      1 127079</span></span>
+<span><span class="co">## 127081: 1148    p.m 127080</span></span>
+<span><span class="co">## 127082: 1148      . 127081</span></span></code></pre>
 <p>The <code>CorpusData</code> object now includes a table with the token stream, and we are ready to import the corpus into the CWB. We use the <code>$encode()</code> method for this purpose. Note that the workers are the <code>p_attribute_encode</code> function (to encode the token stream), and the <code>s_attribute_encode</code> function (to encode the structural attributes / the metadata).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">s_attrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>, <span class="st">"lp"</span>, <span class="st">"session"</span>, <span class="st">"date"</span><span class="op">)</span>
-<span class="va">UNGA</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span>
-  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">unga_data_dir_tmp</span>,
-  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>, method <span class="op">=</span> <span class="st">"R"</span>,
-  p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,
-  compress <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## === Makeall: processing corpus UNGA ===</span>
-<span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpFHq1st/registry</span>
-<span class="co">## ATTRIBUTE word</span>
-<span class="co">##  + creating LEXSRT ... OK</span>
-<span class="co">##  - lexicon      OK</span>
-<span class="co">##  + creating FREQS ... OK</span>
-<span class="co">##  - frequencies  OK</span>
-<span class="co">##  - token stream OK</span>
-<span class="co">##  + creating REVCIDX ... OK</span>
-<span class="co">##  + creating REVCORP ... OK</span>
-<span class="co">##  ? validating REVCORP ... OK</span>
-<span class="co">##  - index        OK</span>
-<span class="co">## ========================================</span></code></pre>
+<code class="sourceCode R"><span><span class="va">s_attrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"who"</span>, <span class="st">"state"</span>, <span class="st">"role"</span>, <span class="st">"lp"</span>, <span class="st">"session"</span>, <span class="st">"date"</span><span class="op">)</span></span>
+<span><span class="va">UNGA</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span></span>
+<span>  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">unga_data_dir_tmp</span>,</span>
+<span>  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>, method <span class="op">=</span> <span class="st">"R"</span>,</span>
+<span>  p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## === Makeall: processing corpus UNGA ===</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## ATTRIBUTE word</span></span>
+<span><span class="co">##  + creating LEXSRT ... OK</span></span>
+<span><span class="co">##  - lexicon      OK</span></span>
+<span><span class="co">##  + creating FREQS ... OK</span></span>
+<span><span class="co">##  - frequencies  OK</span></span>
+<span><span class="co">##  - token stream OK</span></span>
+<span><span class="co">##  + creating REVCIDX ... OK</span></span>
+<span><span class="co">##  + creating REVCORP ... OK</span></span>
+<span><span class="co">##  ? validating REVCORP ... OK</span></span>
+<span><span class="co">##  - index        OK</span></span>
+<span><span class="co">## ========================================</span></span></code></pre>
 <p>In this example, the logical parameter <code>compress</code> is `TRUE. This triggers a so-called “huffcode”" compression, which will reduce corpus size and speed up queries. For big corpora, compression certainly makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.</p>
 <p>The indexed corpus has now been prepared and can be used with CQP, CQPweb, or – if you like R – with a package such as <a href="https://CRAN.R-project.org/package=polmineR" class="external-link">polmineR</a>. To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the <a href="https://CRAN.R-project.org/package=RcppCWB" class="external-link">RcppCWB</a> package.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">id_peace</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span>
-  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,
-  str <span class="op">=</span> <span class="st">"peace"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>
-<span class="op">)</span>
-<span class="va">cpos_peace</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span>
-  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,
-  id <span class="op">=</span> <span class="va">id_peace</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>
-<span class="op">)</span>
-
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
-  i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos_peace</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-  cpos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">cpos_peace</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fl">5</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="va">tab</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span>
-  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,
-  cpos <span class="op">=</span> <span class="va">tab</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>
-<span class="op">)</span>
-<span class="va">tab</span><span class="op">[[</span><span class="st">"str"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span>
-  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,
-  id <span class="op">=</span> <span class="va">tab</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>
-<span class="op">)</span>
-
-<span class="va">peace_context</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[[</span><span class="st">"str"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[[</span><span class="st">"i"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="va">peace_context</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">peace_context</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">peace_context</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "the breast of a tranquil peace for all of the world"                         </span>
-<span class="co">## [2] "earth in the rapture of peace , justice and safety ."                        </span>
-<span class="co">## [3] "community are committed to achieving peace , security and prosperity for"    </span>
-<span class="co">## [4] "components of post - conflict peace - building , given the"                  </span>
-<span class="co">## [5] "removal and the consolidation of peace and mutual trust between neighbouring"</span>
-<span class="co">## [6] "and the promotion of durable peace and sustainable development in Africa"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">id_peace</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span></span>
+<span>  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
+<span>  str <span class="op">=</span> <span class="st">"peace"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">cpos_peace</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span></span>
+<span>  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
+<span>  id <span class="op">=</span> <span class="va">id_peace</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos_peace</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  cpos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">cpos_peace</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fl">5</span><span class="op">)</span><span class="op">:</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">tab</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span></span>
+<span>  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
+<span>  cpos <span class="op">=</span> <span class="va">tab</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">tab</span><span class="op">[[</span><span class="st">"str"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span></span>
+<span>  corpus <span class="op">=</span> <span class="st">"UNGA"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
+<span>  id <span class="op">=</span> <span class="va">tab</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">peace_context</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[[</span><span class="st">"str"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[[</span><span class="st">"i"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">peace_context</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">peace_context</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">peace_context</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "the breast of a tranquil peace for all of the world"                         </span></span>
+<span><span class="co">## [2] "earth in the rapture of peace , justice and safety ."                        </span></span>
+<span><span class="co">## [3] "community are committed to achieving peace , security and prosperity for"    </span></span>
+<span><span class="co">## [4] "components of post - conflict peace - building , given the"                  </span></span>
+<span><span class="co">## [5] "removal and the consolidation of peace and mutual trust between neighbouring"</span></span>
+<span><span class="co">## [6] "and the promotion of durable peace and sustainable development in Africa"</span></span></code></pre>
 <div class="section level4">
 <h4 id="scenario-2-tidytext-to-cwb">Scenario 2: Tidytext to CWB<a class="anchor" aria-label="anchor" href="#scenario-2-tidytext-to-cwb"></a>
 </h4>
 <p>In a second scenario, we create a corpus of Jane Austen’s books (included in the package <a href="https://CRAN.R-project.org/package=janeaustenr" class="external-link">janeaustenr</a>). Again, we start by preparing an (empty) data directory …</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">austen_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"austen"</span><span class="op">)</span>
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">austen_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"austen"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>… and instantiating a <code>CorpusData</code> object.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Austen</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Austen</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>tidytext</code> package offers an efficient workflow to create the token stream we can assign to the <code>CorpusData</code> object.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">books</span> <span class="op">&lt;-</span> <span class="fu">janeaustenr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janeaustenr/man/austen_books.html" class="external-link">austen_books</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tidytext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span><span class="va">books</span>, <span class="va">word</span>, <span class="va">text</span>, to_lower <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">books</span> <span class="op">&lt;-</span> <span class="fu">janeaustenr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janeaustenr/man/austen_books.html" class="external-link">austen_books</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tidytext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span><span class="va">books</span>, <span class="va">word</span>, <span class="va">text</span>, to_lower <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <p>To demonstrate that we can use an additional positional attribute, we stem the tokens using the <a href="https://CRAN.R-project.org/package=SnowballC" class="external-link">SnowballC</a> package.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">stem</span> <span class="op">:=</span> <span class="fu">SnowballC</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SnowballC/man/wordStem.html" class="external-link">wordStem</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, language <span class="op">=</span> <span class="st">"english"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">stem</span> <span class="op">:=</span> <span class="fu">SnowballC</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SnowballC/man/wordStem.html" class="external-link">wordStem</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">[[</span><span class="st">"word"</span><span class="op">]</span><span class="op">]</span>, language <span class="op">=</span> <span class="st">"english"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>In this case, (zero-based!) corpus positions need to be assigned explicitly.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">cpos</span> <span class="op">:=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">cpos</span> <span class="op">:=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>We can now create the table with the structural attributes.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cpos_max_min</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cpos_left <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, cpos_right <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="fu">cpos_max_min</span><span class="op">(</span><span class="va">.SD</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">book</span><span class="op">]</span>
-<span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span><span class="op">[</span>, <span class="va">book</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">book</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setcolorder.html" class="external-link">setcolorder</a></span><span class="op">(</span><span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"book"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cpos_max_min</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cpos_left <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, cpos_right <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="fu">cpos_max_min</span><span class="op">(</span><span class="va">.SD</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">book</span><span class="op">]</span></span>
+<span><span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span><span class="op">[</span>, <span class="va">book</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">book</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setcolorder.html" class="external-link">setcolorder</a></span><span class="op">(</span><span class="va">Austen</span><span class="op">$</span><span class="va">metadata</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos_left"</span>, <span class="st">"cpos_right"</span>, <span class="st">"book"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>A few finishing touches and we have the token stream ready to be encoded: We remove the metadata from the table in the <code>tokenstream</code> field and order the columns nicely.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">book</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span>
-<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setcolorder.html" class="external-link">setcolorder</a></span><span class="op">(</span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"word"</span>, <span class="st">"stem"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span></code></pre></div>
-<pre><code><span class="co">##           cpos        word        stem</span>
-<span class="co">##      1:      0       SENSE       SENSE</span>
-<span class="co">##      2:      1         AND         AND</span>
-<span class="co">##      3:      2 SENSIBILITY SENSIBILITi</span>
-<span class="co">##      4:      3          by          by</span>
-<span class="co">##      5:      4        Jane        Jane</span>
-<span class="co">##     ---                               </span>
-<span class="co">## 725051: 725050          in          in</span>
-<span class="co">## 725052: 725051         its          it</span>
-<span class="co">## 725053: 725052    national      nation</span>
-<span class="co">## 725054: 725053  importance      import</span>
-<span class="co">## 725055: 725054       Finis        Fini</span></code></pre>
+<code class="sourceCode R"><span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span><span class="op">[</span>, <span class="va">book</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setcolorder.html" class="external-link">setcolorder</a></span><span class="op">(</span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cpos"</span>, <span class="st">"word"</span>, <span class="st">"stem"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Austen</span><span class="op">$</span><span class="va">tokenstream</span></span></code></pre></div>
+<pre><code><span><span class="co">##           cpos        word        stem</span></span>
+<span><span class="co">##      1:      0       SENSE       SENSE</span></span>
+<span><span class="co">##      2:      1         AND         AND</span></span>
+<span><span class="co">##      3:      2 SENSIBILITY SENSIBILITi</span></span>
+<span><span class="co">##      4:      3          by          by</span></span>
+<span><span class="co">##      5:      4        Jane        Jane</span></span>
+<span><span class="co">##     ---                               </span></span>
+<span><span class="co">## 725051: 725050          in          in</span></span>
+<span><span class="co">## 725052: 725051         its          it</span></span>
+<span><span class="co">## 725053: 725052    national      nation</span></span>
+<span><span class="co">## 725054: 725053  importance      import</span></span>
+<span><span class="co">## 725055: 725054       Finis        Fini</span></span></code></pre>
 <p>Ready to encode the corpus!</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Austen</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span>
-   corpus <span class="op">=</span> <span class="st">"AUSTEN"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>,
-   p_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"word"</span>, <span class="st">"stem"</span><span class="op">)</span>, s_attributes <span class="op">=</span> <span class="st">"book"</span>,
-   registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">austen_data_dir_tmp</span>,
-   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## === Makeall: processing corpus AUSTEN ===</span>
-<span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpFHq1st/registry</span>
-<span class="co">## ATTRIBUTE word</span>
-<span class="co">##  + creating LEXSRT ... OK</span>
-<span class="co">##  - lexicon      OK</span>
-<span class="co">##  + creating FREQS ... OK</span>
-<span class="co">##  - frequencies  OK</span>
-<span class="co">##  - token stream OK</span>
-<span class="co">##  + creating REVCIDX ... OK</span>
-<span class="co">##  + creating REVCORP ... OK</span>
-<span class="co">##  ? validating REVCORP ... OK</span>
-<span class="co">##  - index        OK</span>
-<span class="co">## ========================================</span>
-<span class="co">## === Makeall: processing corpus AUSTEN ===</span>
-<span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpFHq1st/registry</span>
-<span class="co">## ATTRIBUTE stem</span>
-<span class="co">##  + creating LEXSRT ... OK</span>
-<span class="co">##  - lexicon      OK</span>
-<span class="co">##  + creating FREQS ... OK</span>
-<span class="co">##  - frequencies  OK</span>
-<span class="co">##  - token stream OK</span>
-<span class="co">##  + creating REVCIDX ... OK</span>
-<span class="co">##  + creating REVCORP ... OK</span>
-<span class="co">##  ? validating REVCORP ... OK</span>
-<span class="co">##  - index        OK</span>
-<span class="co">## ========================================</span></code></pre>
+<code class="sourceCode R"><span><span class="va">Austen</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span></span>
+<span>   corpus <span class="op">=</span> <span class="st">"AUSTEN"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>,</span>
+<span>   p_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"word"</span>, <span class="st">"stem"</span><span class="op">)</span>, s_attributes <span class="op">=</span> <span class="st">"book"</span>,</span>
+<span>   registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">austen_data_dir_tmp</span>,</span>
+<span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## ATTRIBUTE word</span></span>
+<span><span class="co">##  + creating LEXSRT ... OK</span></span>
+<span><span class="co">##  - lexicon      OK</span></span>
+<span><span class="co">##  + creating FREQS ... OK</span></span>
+<span><span class="co">##  - frequencies  OK</span></span>
+<span><span class="co">##  - token stream OK</span></span>
+<span><span class="co">##  + creating REVCIDX ... OK</span></span>
+<span><span class="co">##  + creating REVCORP ... OK</span></span>
+<span><span class="co">##  ? validating REVCORP ... OK</span></span>
+<span><span class="co">##  - index        OK</span></span>
+<span><span class="co">## ========================================</span></span>
+<span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## ATTRIBUTE stem</span></span>
+<span><span class="co">##  + creating LEXSRT ... OK</span></span>
+<span><span class="co">##  - lexicon      OK</span></span>
+<span><span class="co">##  + creating FREQS ... OK</span></span>
+<span><span class="co">##  - frequencies  OK</span></span>
+<span><span class="co">##  - token stream OK</span></span>
+<span><span class="co">##  + creating REVCIDX ... OK</span></span>
+<span><span class="co">##  + creating REVCORP ... OK</span></span>
+<span><span class="co">##  ? validating REVCORP ... OK</span></span>
+<span><span class="co">##  - index        OK</span></span>
+<span><span class="co">## ========================================</span></span></code></pre>
 <p>The new corpus will not be available unless we trigger that files in the registry directory are re-read.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span>registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span>registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p>This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token “pride” occur?</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">corpus</span> <span class="op">&lt;-</span> <span class="st">"AUSTEN"</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"pride"</span>
-<span class="va">p_attr</span> <span class="op">&lt;-</span> <span class="st">"word"</span>
-<span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, str <span class="op">=</span> <span class="va">token</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
-<span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, id <span class="op">=</span> <span class="va">id</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
-<span class="va">count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span>
-<span class="va">count</span></code></pre></div>
-<pre><code><span class="co">## [1] 113</span></code></pre>
+<code class="sourceCode R"><span><span class="va">corpus</span> <span class="op">&lt;-</span> <span class="st">"AUSTEN"</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"pride"</span></span>
+<span><span class="va">p_attr</span> <span class="op">&lt;-</span> <span class="st">"word"</span></span>
+<span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, str <span class="op">=</span> <span class="va">token</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span>
+<span><span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="va">p_attr</span>, id <span class="op">=</span> <span class="va">id</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span>
+<span><span class="va">count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span></span>
+<span><span class="va">count</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 113</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="scenario-3-from-tm-package-vcorpus-to-cwb">Scenario 3: From tm-package VCorpus to CWB<a class="anchor" aria-label="anchor" href="#scenario-3-from-tm-package-vcorpus-to-cwb"></a>
 </h4>
 <p>In the third scenario, we will make the transition from a <code>VCorpus</code> (tm package) to a CWB indexed corpus. We use the Reuters corpus that is included as sample data in the tm package.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://tm.r-forge.r-project.org/" class="external-link">tm</a></span><span class="op">)</span>
-<span class="va">reut21578</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"texts"</span>, <span class="st">"crude"</span>, package <span class="op">=</span> <span class="st">"tm"</span><span class="op">)</span>
-<span class="va">reuters.tm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tm/man/VCorpus.html" class="external-link">VCorpus</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tm/man/DirSource.html" class="external-link">DirSource</a></span><span class="op">(</span><span class="va">reut21578</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reader <span class="op">=</span> <span class="va">readReut21578XMLasPlain</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://tm.r-forge.r-project.org/" class="external-link">tm</a></span><span class="op">)</span></span>
+<span><span class="va">reut21578</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"texts"</span>, <span class="st">"crude"</span>, package <span class="op">=</span> <span class="st">"tm"</span><span class="op">)</span></span>
+<span><span class="va">reuters.tm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tm/man/VCorpus.html" class="external-link">VCorpus</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tm/man/DirSource.html" class="external-link">DirSource</a></span><span class="op">(</span><span class="va">reut21578</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reader <span class="op">=</span> <span class="va">readReut21578XMLasPlain</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>A quick way to attain the data format required for the <code>CorpusData</code> class is to coerce the <code>VCorpus</code> to a <code>tibble</code>, using respective functionality of the <a href="https://CRAN.R-project.org/package=tidytext" class="external-link">tidytext</a> package.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext" class="external-link">tidytext</a></span><span class="op">)</span>
-<span class="va">reuters.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">reuters.tm</span><span class="op">)</span>
-<span class="va">reuters.tbl</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 20 × 17</span></span>
-<span class="co">##    author   datetimestamp       description heading id    language origin topics</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="color: #BB0000;">NA</span>       1987-02-26 <span style="color: #949494;">17:00:56</span> <span style="color: #949494;">""</span>          DIAMON… 127   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> BY TED … 1987-02-26 <span style="color: #949494;">17:34:11</span> <span style="color: #949494;">""</span>          OPEC M… 144   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> <span style="color: #BB0000;">NA</span>       1987-02-26 <span style="color: #949494;">18:18:00</span> <span style="color: #949494;">""</span>          TEXACO… 191   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> <span style="color: #BB0000;">NA</span>       1987-02-26 <span style="color: #949494;">18:21:01</span> <span style="color: #949494;">""</span>          MARATH… 194   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> <span style="color: #BB0000;">NA</span>       1987-02-26 <span style="color: #949494;">19:00:57</span> <span style="color: #949494;">""</span>          HOUSTO… 211   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="color: #BB0000;">NA</span>       1987-03-01 <span style="color: #949494;">03:25:46</span> <span style="color: #949494;">""</span>          KUWAIT… 236   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> By Jere… 1987-03-01 <span style="color: #949494;">03:39:14</span> <span style="color: #949494;">""</span>          INDONE… 237   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="color: #BB0000;">NA</span>       1987-03-01 <span style="color: #949494;">05:27:27</span> <span style="color: #949494;">""</span>          SAUDI … 242   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="color: #BB0000;">NA</span>       1987-03-01 <span style="color: #949494;">08:22:30</span> <span style="color: #949494;">""</span>          QATAR … 246   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> <span style="color: #BB0000;">NA</span>       1987-03-01 <span style="color: #949494;">18:31:44</span> <span style="color: #949494;">""</span>          SAUDI … 248   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">11</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">01:05:49</span> <span style="color: #949494;">""</span>          SAUDI … 273   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">12</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">07:39:23</span> <span style="color: #949494;">""</span>          GULF A… 349   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">13</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">07:43:22</span> <span style="color: #949494;">""</span>          SAUDI … 352   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">14</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">07:43:41</span> <span style="color: #949494;">""</span>          KUWAIT… 353   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">15</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">08:25:42</span> <span style="color: #949494;">""</span>          PHILAD… 368   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">16</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">11:20:05</span> <span style="color: #949494;">""</span>          STUDY … 489   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">17</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">11:28:26</span> <span style="color: #949494;">""</span>          STUDY … 502   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">18</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">12:13:46</span> <span style="color: #949494;">""</span>          UNOCAL… 543   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">19</span> By BERN… 1987-03-02 <span style="color: #949494;">14:38:34</span> <span style="color: #949494;">""</span>          NYMEX … 704   en       Reute… YES   </span>
-<span class="co">## <span style="color: #BCBCBC;">20</span> <span style="color: #BB0000;">NA</span>       1987-03-02 <span style="color: #949494;">14:49:06</span> <span style="color: #949494;">""</span>          ARGENT… 708   en       Reute… YES   </span>
-<span class="co">## <span style="color: #949494;"># … with 9 more variables: lewissplit &lt;chr&gt;, cgisplit &lt;chr&gt;, oldid &lt;chr&gt;,</span></span>
-<span class="co">## <span style="color: #949494;">#   topics_cat &lt;named list&gt;, places &lt;named list&gt;, people &lt;chr&gt;, orgs &lt;chr&gt;,</span></span>
-<span class="co">## <span style="color: #949494;">#   exchanges &lt;chr&gt;, text &lt;chr&gt;</span></span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext" class="external-link">tidytext</a></span><span class="op">)</span></span>
+<span><span class="va">reuters.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">reuters.tm</span><span class="op">)</span></span>
+<span><span class="va">reuters.tbl</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 20 × 17</span></span></span>
+<span><span class="co">##    author        datetimestamp       descr…¹ heading id    langu…² origin topics</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="color: #BB0000;">NA</span>            1987-02-26 <span style="color: #949494;">17:00:56</span> <span style="color: #949494;">""</span>      DIAMON… 127   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> BY TED D'AFF… 1987-02-26 <span style="color: #949494;">17:34:11</span> <span style="color: #949494;">""</span>      OPEC M… 144   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> <span style="color: #BB0000;">NA</span>            1987-02-26 <span style="color: #949494;">18:18:00</span> <span style="color: #949494;">""</span>      TEXACO… 191   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> <span style="color: #BB0000;">NA</span>            1987-02-26 <span style="color: #949494;">18:21:01</span> <span style="color: #949494;">""</span>      MARATH… 194   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> <span style="color: #BB0000;">NA</span>            1987-02-26 <span style="color: #949494;">19:00:57</span> <span style="color: #949494;">""</span>      HOUSTO… 211   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="color: #BB0000;">NA</span>            1987-03-01 <span style="color: #949494;">03:25:46</span> <span style="color: #949494;">""</span>      KUWAIT… 236   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> By Jeremy Cl… 1987-03-01 <span style="color: #949494;">03:39:14</span> <span style="color: #949494;">""</span>      INDONE… 237   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="color: #BB0000;">NA</span>            1987-03-01 <span style="color: #949494;">05:27:27</span> <span style="color: #949494;">""</span>      SAUDI … 242   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="color: #BB0000;">NA</span>            1987-03-01 <span style="color: #949494;">08:22:30</span> <span style="color: #949494;">""</span>      QATAR … 246   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="color: #BB0000;">NA</span>            1987-03-01 <span style="color: #949494;">18:31:44</span> <span style="color: #949494;">""</span>      SAUDI … 248   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">01:05:49</span> <span style="color: #949494;">""</span>      SAUDI … 273   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">07:39:23</span> <span style="color: #949494;">""</span>      GULF A… 349   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">13</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">07:43:22</span> <span style="color: #949494;">""</span>      SAUDI … 352   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">14</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">07:43:41</span> <span style="color: #949494;">""</span>      KUWAIT… 353   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">15</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">08:25:42</span> <span style="color: #949494;">""</span>      PHILAD… 368   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">16</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">11:20:05</span> <span style="color: #949494;">""</span>      STUDY … 489   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">17</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">11:28:26</span> <span style="color: #949494;">""</span>      STUDY … 502   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">18</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">12:13:46</span> <span style="color: #949494;">""</span>      UNOCAL… 543   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">19</span> By BERNICE N… 1987-03-02 <span style="color: #949494;">14:38:34</span> <span style="color: #949494;">""</span>      NYMEX … 704   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">20</span> <span style="color: #BB0000;">NA</span>            1987-03-02 <span style="color: #949494;">14:49:06</span> <span style="color: #949494;">""</span>      ARGENT… 708   en      Reute… YES   </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 9 more variables: lewissplit &lt;chr&gt;, cgisplit &lt;chr&gt;, oldid &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   topics_cat &lt;named list&gt;, places &lt;named list&gt;, people &lt;chr&gt;, orgs &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   exchanges &lt;chr&gt;, text &lt;chr&gt;, and abbreviated variable names ¹​description,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ²​language</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
 <p>Columns with the metadata we may want to encode are still character vectors (length &gt; 1). We turn the columns with the topic categorizations and the places into length-one character vectors.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"topics_cat"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span>
-  <span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"topics_cat"</span><span class="op">]</span><span class="op">]</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"places"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span>
-  <span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"places"</span><span class="op">]</span><span class="op">]</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"topics_cat"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span></span>
+<span>  <span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"topics_cat"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"places"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span></span>
+<span>  <span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"places"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p>This is the input we need. We instantiate a <code>CorpusData</code> object end make sure that a new data directory for the REUTERS corpus exists (and is empty) …</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Reuters</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
-<span class="va">reuters_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"reuters"</span><span class="op">)</span>
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Reuters</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">reuters_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"reuters"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We assign the chunktable and the metadata, coerced to a <code>data.table</code>, to the object …</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Reuters</span><span class="op">$</span><span class="va">chunktable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">reuters.tbl</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"text"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Reuters</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">reuters.tbl</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"topics_cat"</span>, <span class="st">"places"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Reuters</span></code></pre></div>
-<pre><code><span class="co">## chunktable: 2 columns / 20 rows</span>
-<span class="co">## tokenstream: NULL</span>
-<span class="co">## metadata: 3 columns / 20 rows</span></code></pre>
+<code class="sourceCode R"><span><span class="va">Reuters</span><span class="op">$</span><span class="va">chunktable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">reuters.tbl</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"text"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">Reuters</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">reuters.tbl</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"topics_cat"</span>, <span class="st">"places"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">Reuters</span></span></code></pre></div>
+<pre><code><span><span class="co">## chunktable: 2 columns / 20 rows</span></span>
+<span><span class="co">## tokenstream: NULL</span></span>
+<span><span class="co">## metadata: 3 columns / 20 rows</span></span></code></pre>
 <p>… we tokenize the text to gain the token stream table …</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Reuters</span><span class="op">$</span><span class="fu">tokenize</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Reuters</span><span class="op">$</span><span class="fu">tokenize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>… we have a look at the token stream …</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Reuters</span><span class="op">$</span><span class="va">tokenstream</span></code></pre></div>
-<pre><code><span class="co">##        id         word cpos</span>
-<span class="co">##    1: 127      diamond    0</span>
-<span class="co">##    2: 127     shamrock    1</span>
-<span class="co">##    3: 127         corp    2</span>
-<span class="co">##    4: 127         said    3</span>
-<span class="co">##    5: 127         that    4</span>
-<span class="co">##   ---                      </span>
-<span class="co">## 4046: 708  yacimientos 4045</span>
-<span class="co">## 4047: 708 petroliferos 4046</span>
-<span class="co">## 4048: 708     fiscales 4047</span>
-<span class="co">## 4049: 708        added 4048</span>
-<span class="co">## 4050: 708       reuter 4049</span></code></pre>
+<code class="sourceCode R"><span><span class="va">Reuters</span><span class="op">$</span><span class="va">tokenstream</span></span></code></pre></div>
+<pre><code><span><span class="co">##        id         word cpos</span></span>
+<span><span class="co">##    1: 127      diamond    0</span></span>
+<span><span class="co">##    2: 127     shamrock    1</span></span>
+<span><span class="co">##    3: 127         corp    2</span></span>
+<span><span class="co">##    4: 127         said    3</span></span>
+<span><span class="co">##    5: 127         that    4</span></span>
+<span><span class="co">##   ---                      </span></span>
+<span><span class="co">## 4046: 708  yacimientos 4045</span></span>
+<span><span class="co">## 4047: 708 petroliferos 4046</span></span>
+<span><span class="co">## 4048: 708     fiscales 4047</span></span>
+<span><span class="co">## 4049: 708        added 4048</span></span>
+<span><span class="co">## 4050: 708       reuter 4049</span></span></code></pre>
 <p>It seems that we can encode the corpus.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Reuters</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span>
-   corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>,
-   p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"topics_cat"</span>, <span class="st">"places"</span><span class="op">)</span>,
-   registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>,
-   data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,
-   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## === Makeall: processing corpus REUTERS ===</span>
-<span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpFHq1st/registry</span>
-<span class="co">## ATTRIBUTE word</span>
-<span class="co">##  + creating LEXSRT ... OK</span>
-<span class="co">##  - lexicon      OK</span>
-<span class="co">##  + creating FREQS ... OK</span>
-<span class="co">##  - frequencies  OK</span>
-<span class="co">##  - token stream OK</span>
-<span class="co">##  + creating REVCIDX ... OK</span>
-<span class="co">##  + creating REVCORP ... OK</span>
-<span class="co">##  ? validating REVCORP ... OK</span>
-<span class="co">##  - index        OK</span>
-<span class="co">## ========================================</span></code></pre>
+<code class="sourceCode R"><span><span class="va">Reuters</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span></span>
+<span>   corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, encoding <span class="op">=</span> <span class="st">"utf8"</span>,</span>
+<span>   p_attributes <span class="op">=</span> <span class="st">"word"</span>, s_attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"topics_cat"</span>, <span class="st">"places"</span><span class="op">)</span>,</span>
+<span>   registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>,</span>
+<span>   data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span>
+<span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## === Makeall: processing corpus REUTERS ===</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## ATTRIBUTE word</span></span>
+<span><span class="co">##  + creating LEXSRT ... OK</span></span>
+<span><span class="co">##  - lexicon      OK</span></span>
+<span><span class="co">##  + creating FREQS ... OK</span></span>
+<span><span class="co">##  - frequencies  OK</span></span>
+<span><span class="co">##  - token stream OK</span></span>
+<span><span class="co">##  + creating REVCIDX ... OK</span></span>
+<span><span class="co">##  + creating REVCORP ... OK</span></span>
+<span><span class="co">##  ? validating REVCORP ... OK</span></span>
+<span><span class="co">##  - index        OK</span></span>
+<span><span class="co">## ========================================</span></span></code></pre>
 <p>The corpus will not be available unless we call <code><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry()</a></code> so that files in the registry directory are reloaded.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span>registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span>registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></code></pre></div>
 <p>The Reuters corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word “oil”.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, str <span class="op">=</span> <span class="st">"oil"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
-<span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, id <span class="op">=</span> <span class="va">id</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span>
-<span class="va">count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span>
-<span class="va">count</span></code></pre></div>
-<pre><code><span class="co">## [1] 86</span></code></pre>
+<code class="sourceCode R"><span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_str2id</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, str <span class="op">=</span> <span class="st">"oil"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span>
+<span><span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, id <span class="op">=</span> <span class="va">id</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span>
+<span><span class="va">count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cpos</span><span class="op">)</span></span>
+<span><span class="va">count</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 86</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="final-deeds-and-words">Final Deeds and Words<a class="anchor" aria-label="anchor" href="#final-deeds-and-words"></a>
 </h4>
 <p>As a matter of housekeeping, we remove the temporary directory.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">registry_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">regdir_envvar</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">registry_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">regdir_envvar</span><span class="op">)</span></span></code></pre></div>
 <p>Hope everything works! Enjoy! Feedback is welcome!</p>
 </div>
 </div>
@@ -490,7 +492,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

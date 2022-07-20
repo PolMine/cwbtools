@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -69,7 +69,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">conll_get_regions</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">conll_get_regions</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,30 +78,31 @@
 <dd><p>A <code>data.frame</code>, a <code>data.table</code>, or any other object that
 can be coerced to a <code>data.table</code>. The input table is expected to have
 the columns "token" and "ner", and "cpos".</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">"Die"</span>,</span>
-<span class="r-in">    <span class="st">"Bundeskanzlerin"</span>,</span>
-<span class="r-in">    <span class="st">"Angela"</span>,</span>
-<span class="r-in">    <span class="st">"Merkel"</span>,</span>
-<span class="r-in">    <span class="st">"spricht"</span>,</span>
-<span class="r-in">    <span class="st">"im"</span>,</span>
-<span class="r-in">    <span class="st">"Bundestag"</span>,</span>
-<span class="r-in">    <span class="st">"zur"</span>,</span>
-<span class="r-in">    <span class="st">"Lage"</span>,</span>
-<span class="r-in">    <span class="st">"der"</span>,</span>
-<span class="r-in">    <span class="st">"Nation"</span>,</span>
-<span class="r-in">    <span class="st">"."</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  ne <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"B-PERS"</span>, <span class="st">"I-PERS"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"B-ORG"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span><span class="op">)</span>,</span>
-<span class="r-in">  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">100L</span><span class="op">:</span><span class="op">(</span><span class="fl">100L</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">conll_get_regions</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Die"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Bundeskanzlerin"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Angela"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Merkel"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"spricht"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"im"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Bundestag"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"zur"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Lage"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"der"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Nation"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"."</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  ne <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"B-PERS"</span>, <span class="st">"I-PERS"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"B-ORG"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span>, <span class="st">"O"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">100L</span><span class="op">:</span><span class="op">(</span><span class="fl">100L</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">conll_get_regions</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -116,7 +117,7 @@ the columns "token" and "ner", and "cpos".</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

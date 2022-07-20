@@ -18,7 +18,7 @@ and data with restricted access is supported."><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -71,15 +71,15 @@ and data with restricted access is supported.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">zenodo_get_tarball</span><span class="op">(</span>
-  <span class="va">url</span>,
-  destfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".tar.gz"</span><span class="op">)</span>,
-  checksum <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  progress <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="va">gparlsample_url_restricted</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">zenodo_get_tarball</span><span class="op">(</span></span>
+<span>  <span class="va">url</span>,</span>
+<span>  destfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".tar.gz"</span><span class="op">)</span>,</span>
+<span>  checksum <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gparlsample_url_restricted</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -91,22 +91,34 @@ and data with restricted access is supported.</p>
     <dl><dt>url</dt>
 <dd><p>Landing page at Zenodo for resource. Can also be the URL for
 restricted access (?token= appended with a long key).</p></dd>
+
+
 <dt>destfile</dt>
 <dd><p>A <code>character</code> vector with the file path where the downloaded
 file is to be saved. Tilde-expansion is performed. Defaults to a temporary
 file.</p></dd>
+
+
 <dt>checksum</dt>
 <dd><p>A <code>logical</code> value, whether to check md5 sum.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>A <code>logical</code> value, whether to output progess messages.</p></dd>
+
+
 <dt>progress</dt>
 <dd><p>A <code>logical</code> value, whether to report progress during
 download.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The filename of the downloaded corpus tarball, designed to serve as
-input for <code><a href="corpus_utils.html">corpus_install</a></code> (as argument <code>tarball</code>).</p>
+    
+
+<p>The filename of the downloaded corpus tarball, designed to serve as
+input for <code><a href="corpus_utils.html">corpus_install</a></code> (as argument <code>tarball</code>). If the
+resource is not available, <code>NULL</code> is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -121,19 +133,19 @@ restricted data are usually not to be shared.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Temporary directory structure as a preparatory step</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cwb_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="directories.html">create_cwb_directories</a></span><span class="op">(</span></span>
-<span class="r-in">  prefix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  ask <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">cwb_dirs</span><span class="op">[[</span><span class="st">"registry_dir"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Download and install open access resource</span></span>
-<span class="r-in"><span class="va">gparl_url_pub</span> <span class="op">&lt;-</span> <span class="st">"https://doi.org/10.5281/zenodo.3823245"</span></span>
-<span class="r-in"><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparl_url_pub</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Temporary directory structure as a preparatory step</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cwb_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="directories.html">create_cwb_directories</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  prefix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  ask <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>CORPUS_REGISTRY <span class="op">=</span> <span class="va">cwb_dirs</span><span class="op">[[</span><span class="st">"registry_dir"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Download and install open access resource</span></span></span>
+<span class="r-in"><span><span class="va">gparl_url_pub</span> <span class="op">&lt;-</span> <span class="st">"https://doi.org/10.5281/zenodo.3823245"</span></span></span>
+<span class="r-in"><span><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparl_url_pub</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Download resource from Zenodo ───────────────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball URL from Zenodo website</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball URL from Zenodo website ... done</span>
@@ -142,10 +154,10 @@ restricted data are usually not to be shared.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/registry</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/indexed_corpora</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/indexed_corpora</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
@@ -161,41 +173,20 @@ restricted data are usually not to be shared.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> load corpus</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> load corpus ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Download and install resource with restricted access</span></span>
-<span class="r-in"><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparlsample_url_restricted</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Download and install resource with restricted access</span></span></span>
+<span class="r-in"><span><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparlsample_url_restricted</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Download restricted resource from Zenodo ────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> get handle for restricted resource</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> get handle for restricted resource ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball URL from Zenodo website</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Website does not reference files to download.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball URL from Zenodo website ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> tarball to download: <span style="color: #0000BB;">germaparlsample_v0.1.1.tar.gz</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/registry</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/indexed_corpora</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> corpus has been removed (registry and data files)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> copy corpus data to target directory ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> parse registry file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> parse registry file ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> no info file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> update registry data and save registry file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> update registry data and save registry file ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> load corpus</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> load corpus ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in corpus_install(tarball = tarball_tmp):</span> If argument 'tarball' is NULL, either argument 'pkg' or argument 'doi' are required.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -210,7 +201,7 @@ restricted data are usually not to be shared.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ tokens (the token stream)."><!-- mathjax --><script src="https://cdnjs.cloudflar
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -71,68 +71,95 @@ tokens (the token stream).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">p_attribute_encode</span><span class="op">(</span>
-  <span class="va">token_stream</span>,
-  p_attribute <span class="op">=</span> <span class="st">"word"</span>,
-  <span class="va">registry_dir</span>,
-  <span class="va">corpus</span>,
-  <span class="va">data_dir</span>,
-  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"CWB"</span><span class="op">)</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  encoding <span class="op">=</span> <span class="fu"><a href="get_encoding.html">get_encoding</a></span><span class="op">(</span><span class="va">token_stream</span><span class="op">)</span>,
-  compress <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">p_attribute_recode</span><span class="op">(</span>
-  <span class="va">data_dir</span>,
-  <span class="va">p_attribute</span>,
-  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UTF-8"</span>, <span class="st">"latin1"</span><span class="op">)</span>,
-  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UTF-8"</span>, <span class="st">"latin1"</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu">p_attribute_rename</span><span class="op">(</span>
-  <span class="va">corpus</span>,
-  <span class="va">old</span>,
-  <span class="va">new</span>,
-  <span class="va">registry_dir</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  dryrun <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">p_attribute_encode</span><span class="op">(</span></span>
+<span>  <span class="va">token_stream</span>,</span>
+<span>  p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
+<span>  <span class="va">registry_dir</span>,</span>
+<span>  <span class="va">corpus</span>,</span>
+<span>  <span class="va">data_dir</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"CWB"</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  encoding <span class="op">=</span> <span class="fu"><a href="get_encoding.html">get_encoding</a></span><span class="op">(</span><span class="va">token_stream</span><span class="op">)</span>,</span>
+<span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">p_attribute_recode</span><span class="op">(</span></span>
+<span>  <span class="va">data_dir</span>,</span>
+<span>  <span class="va">p_attribute</span>,</span>
+<span>  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UTF-8"</span>, <span class="st">"latin1"</span><span class="op">)</span>,</span>
+<span>  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UTF-8"</span>, <span class="st">"latin1"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">p_attribute_rename</span><span class="op">(</span></span>
+<span>  <span class="va">corpus</span>,</span>
+<span>  <span class="va">old</span>,</span>
+<span>  <span class="va">new</span>,</span>
+<span>  <span class="va">registry_dir</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dryrun <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>token_stream</dt>
 <dd><p>A character vector with the tokens of the corpus.</p></dd>
+
+
 <dt>p_attribute</dt>
 <dd><p>The positional attribute.</p></dd>
+
+
 <dt>registry_dir</dt>
 <dd><p>Registry directory (needed by <code>p_attribute_huffcode</code> and <code>p_attribute_compress_rdx</code>).</p></dd>
+
+
 <dt>corpus</dt>
 <dd><p>The CWB corpus (needed by <code>p_attribute_huffcode</code> and <code>p_attribute_compress_rdx</code>).</p></dd>
+
+
 <dt>data_dir</dt>
 <dd><p>The data directory for the corpus with the binary files.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Either 'CWB' or 'R'.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical.</p></dd>
+
+
 <dt>encoding</dt>
 <dd><p>Encoding as defined in the charset corpus property of the
 registry file for the corpus ('latin1' to 'latin9', and 'utf8').</p></dd>
+
+
 <dt>compress</dt>
 <dd><p>Logical.</p></dd>
+
+
 <dt>from</dt>
 <dd><p>Character string describing the current encoding of the attribute.</p></dd>
+
+
 <dt>to</dt>
 <dd><p>Character string describing the target encoding of the attribute.</p></dd>
+
+
 <dt>old</dt>
 <dd><p>A <code>character</code> vector with p-attributes to be renamed.</p></dd>
+
+
 <dt>new</dt>
 <dd><p>A <code>character</code> vector with new names of p-attributes. The vector
 needs to have the same length as vector <code>old</code>.</p></dd>
+
+
 <dt>dryrun</dt>
 <dd><p>A <code>logical</code> value, whether to suppress actual renaming operation
 for inspecting output messages</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -168,37 +195,37 @@ effective.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB" class="external-link">RcppCWB</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># In this example, we pursue a "pure R" approach. To rely on the "CWB"</span></span>
-<span class="r-in"><span class="co"># method, you can use the cwb_install() function, which will download and</span></span>
-<span class="r-in"><span class="co"># install the CWB command line # tools within the package.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tokens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"examples"</span>, <span class="st">"reuters.txt"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Create new (and empty) directory structure</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"registry"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"data_dir"</span>, <span class="st">"reuters"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"word.corpus"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"word.corpus"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">registry_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Now encode token stream</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">p_attribute_encode</span><span class="op">(</span></span>
-<span class="r-in">  corpus <span class="op">=</span> <span class="st">"reuters"</span>,</span>
-<span class="r-in">  token_stream <span class="op">=</span> <span class="va">tokens</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span>
-<span class="r-in">  data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>, method <span class="op">=</span> <span class="st">"R"</span>,</span>
-<span class="r-in">  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>,</span>
-<span class="r-in">  compress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">  encoding <span class="op">=</span> <span class="st">"utf8"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PolMine/RcppCWB" class="external-link">RcppCWB</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># In this example, we pursue a "pure R" approach. To rely on the "CWB"</span></span></span>
+<span class="r-in"><span><span class="co"># method, you can use the cwb_install() function, which will download and</span></span></span>
+<span class="r-in"><span><span class="co"># install the CWB command line # tools within the package.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tokens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"examples"</span>, <span class="st">"reuters.txt"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create new (and empty) directory structure</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"registry"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"data_dir"</span>, <span class="st">"reuters"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"word.corpus"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"word.corpus"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">registry_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Now encode token stream</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">p_attribute_encode</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  corpus <span class="op">=</span> <span class="st">"reuters"</span>,</span></span>
+<span class="r-in"><span>  token_stream <span class="op">=</span> <span class="va">tokens</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>,</span></span>
+<span class="r-in"><span>  data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>, method <span class="op">=</span> <span class="st">"R"</span>,</span></span>
+<span class="r-in"><span>  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>,</span></span>
+<span class="r-in"><span>  compress <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  encoding <span class="op">=</span> <span class="st">"utf8"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating indices (in memory)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing file: word.corpus</span>
@@ -207,7 +234,7 @@ effective.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating data for new registry file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing registry file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> === Makeall: processing corpus reuters ===</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/registry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/registry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ATTRIBUTE word</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  + creating LEXSRT ... OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - lexicon      OK</span>
@@ -219,36 +246,36 @@ effective.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ? validating REVCORP ... OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - index        OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ========================================</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Create minimal registry file</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">regdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="registry_file.html">registry_data</a></span><span class="op">(</span></span>
-<span class="r-in">  id <span class="op">=</span> <span class="st">"REUTERS"</span>, name <span class="op">=</span> <span class="st">"Reuters Sample Corpus"</span>, home <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span>
-<span class="r-in">  properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>encoding <span class="op">=</span> <span class="st">"utf-8"</span>, language <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span>, p_attributes <span class="op">=</span> <span class="st">"word"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">regfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="registry_file.html">registry_file_write</a></span><span class="op">(</span></span>
-<span class="r-in">  data <span class="op">=</span> <span class="va">regdata</span>, corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span>
-<span class="r-in">  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Reload corpus and run query as a test</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_is_initialized</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create minimal registry file</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">regdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="registry_file.html">registry_data</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="st">"REUTERS"</span>, name <span class="op">=</span> <span class="st">"Reuters Sample Corpus"</span>, home <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span></span>
+<span class="r-in"><span>  properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>encoding <span class="op">=</span> <span class="st">"utf-8"</span>, language <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span>, p_attributes <span class="op">=</span> <span class="st">"word"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">regfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="registry_file.html">registry_file_write</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">regdata</span>, corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
+<span class="r-in"><span>  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Reload corpus and run query as a test</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_is_initialized</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_query</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, query <span class="op">=</span> <span class="st">'[]{3} "oil" []{3};'</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7ffe25132970&gt;</span>
-<span class="r-in"><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_dump_subcorpus</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">kwic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">regions</span>, <span class="fl">1</span>,</span>
-<span class="r-in">  <span class="kw">function</span><span class="op">(</span><span class="va">region</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">    <span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span><span class="st">"REUTERS"</span>, <span class="st">"word"</span>, <span class="va">registry_tmp</span>, cpos <span class="op">=</span> <span class="va">region</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">region</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">words</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">words</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">kwic</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_query</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, query <span class="op">=</span> <span class="st">'[]{3} "oil" []{3};'</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7fac074ac910&gt;</span>
+<span class="r-in"><span><span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_dump_subcorpus</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">kwic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">regions</span>, <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">region</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span><span class="st">"REUTERS"</span>, <span class="st">"word"</span>, <span class="va">registry_tmp</span>, cpos <span class="op">=</span> <span class="va">region</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">region</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">words</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span>, id <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">words</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">kwic</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "prices for crude oil by 1.50 dlrs"          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "light of falling oil product prices and"    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "a weak crude oil market a company"          </span>
@@ -273,7 +300,7 @@ effective.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -20,7 +20,7 @@ with the data.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
       </span>
     </div>
 
@@ -75,65 +75,88 @@ with the data.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pkg_create_cwb_dirs</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">pkg_add_corpus</span><span class="op">(</span>
-  pkg <span class="op">=</span> <span class="st">"."</span>,
-  <span class="va">corpus</span>,
-  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">pkg_add_configure_scripts</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
-
-<span class="fu">pkg_add_description</span><span class="op">(</span>
-  pkg <span class="op">=</span> <span class="st">"."</span>,
-  package <span class="op">=</span> <span class="cn">NULL</span>,
-  version <span class="op">=</span> <span class="st">"0.0.1"</span>,
-  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">author</span>,
-  maintainer <span class="op">=</span> <span class="cn">NULL</span>,
-  description <span class="op">=</span> <span class="st">""</span>,
-  license <span class="op">=</span> <span class="st">""</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">pkg_add_creativecommons_license</span><span class="op">(</span>
-  pkg <span class="op">=</span> <span class="st">"."</span>,
-  license <span class="op">=</span> <span class="st">"CC-BY-NC-SA"</span>,
-  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cwbtools"</span>, <span class="st">"txt"</span>, <span class="st">"licenses"</span>, <span class="st">"CC_BY-NC-SA_3.0.txt"</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu">pkg_add_gitattributes_file</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pkg_create_cwb_dirs</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pkg_add_corpus</span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  <span class="va">corpus</span>,</span>
+<span>  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pkg_add_configure_scripts</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pkg_add_description</span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  package <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"0.0.1"</span>,</span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">author</span>,</span>
+<span>  maintainer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  license <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pkg_add_creativecommons_license</span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  license <span class="op">=</span> <span class="st">"CC-BY-NC-SA"</span>,</span>
+<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"cwbtools"</span>, <span class="st">"txt"</span>, <span class="st">"licenses"</span>, <span class="st">"CC_BY-NC-SA_3.0.txt"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pkg_add_gitattributes_file</span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pkg</dt>
 <dd><p>Path to directory of data package or package name.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>A <code>logical</code> value, whether to be verbose.</p></dd>
+
+
 <dt>corpus</dt>
 <dd><p>Name of the CWB corpus to insert into the package.</p></dd>
+
+
 <dt>registry</dt>
 <dd><p>Registry directory.</p></dd>
+
+
 <dt>package</dt>
 <dd><p>The package name (<code>character</code>), may not include special
 chars, and no underscores ('_').</p></dd>
+
+
 <dt>version</dt>
 <dd><p>The version number of the corpus (defaults to "0.0.1")</p></dd>
+
+
 <dt>date</dt>
 <dd><p>The date of creation, defaults to <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date()</a></code>.</p></dd>
+
+
 <dt>author</dt>
 <dd><p>The author of the package, either character vector or object of class <code>person</code>.</p></dd>
+
+
 <dt>maintainer</dt>
 <dd><p>Maintainer, R package style, either <code>character</code> vector or <code>person</code>.</p></dd>
+
+
 <dt>description</dt>
 <dd><p>description of the data package.</p></dd>
+
+
 <dt>license</dt>
 <dd><p>The license.</p></dd>
+
+
 <dt>file</dt>
 <dd><p>Path to file with fulltext of Creative Commons license.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -170,41 +193,41 @@ Corpora of Parliamentary Protocols: The GermaParl R Package",
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">pkgdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">pkg_create_cwb_dirs</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/R</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/man</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst/extdata</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst/extdata/cwb</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst/extdata/cwb/registry</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst/extdata/cwb/indexed_corpora</span>
-<span class="r-in"><span class="fu">pkg_add_description</span><span class="op">(</span></span>
-<span class="r-in">  pkg <span class="op">=</span> <span class="va">pkgdir</span>,</span>
-<span class="r-in">  package <span class="op">=</span> <span class="st">"reuters"</span>,</span>
-<span class="r-in">  author <span class="op">=</span> <span class="st">"cwbtools"</span>,</span>
-<span class="r-in">  description <span class="op">=</span> <span class="st">"Reuters data package"</span></span>
-<span class="r-in"> <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pkgdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pkg_create_cwb_dirs</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/R</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/man</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst/extdata</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst/extdata/cwb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst/extdata/cwb/registry</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst/extdata/cwb/indexed_corpora</span>
+<span class="r-in"><span><span class="fu">pkg_add_description</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  pkg <span class="op">=</span> <span class="va">pkgdir</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"reuters"</span>,</span></span>
+<span class="r-in"><span>  author <span class="op">=</span> <span class="st">"cwbtools"</span>,</span></span>
+<span class="r-in"><span>  description <span class="op">=</span> <span class="st">"Reuters data package"</span></span></span>
+<span class="r-in"><span> <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pkg_add_description()` was deprecated in cwbtools 0.3.4.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Downloading corpora from a repository (HTTP-Server, Zenodo, S3) using corpus_install() is recommended. Only small corpora should be put into packages as sample data.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating DESCRIPTION file</span>
-<span class="r-in"><span class="fu">pkg_add_corpus</span><span class="op">(</span></span>
-<span class="r-in">  pkg <span class="op">=</span> <span class="va">pkgdir</span>, corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span>
-<span class="r-in">  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">pkg_add_corpus</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  pkg <span class="op">=</span> <span class="va">pkgdir</span>, corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
+<span class="r-in"><span>  registry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pkg_add_corpus()` was deprecated in cwbtools 0.3.4.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Downloading corpora from a repository (HTTP-Server, Zenodo, S3) using corpus_install() is recommended. Only small corpora should be put into packages as sample data.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... directory for indexed corpus does not yet exist, creating: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoo3puO/inst/extdata/cwb/indexed_corpora/reuters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... directory for indexed corpus does not yet exist, creating: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/inst/extdata/cwb/indexed_corpora/reuters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... copying registry file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... copying data files</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... adjusting paths in registry file</span>
-<span class="r-in"><span class="fu">pkg_add_gitattributes_file</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">pkg_add_configure_scripts</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">pkg_add_creativecommons_license</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">pkg_add_gitattributes_file</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pkg_add_configure_scripts</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pkg_add_creativecommons_license</span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">pkgdir</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -219,7 +242,7 @@ Corpora of Parliamentary Protocols: The GermaParl R Package",
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
