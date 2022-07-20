@@ -36,7 +36,8 @@ download.}
 }
 \value{
 The filename of the downloaded corpus tarball, designed to serve as
-input for \code{\link{corpus_install}} (as argument \code{tarball}).
+input for \code{\link{corpus_install}} (as argument \code{tarball}). If the
+resource is not available, \code{NULL} is returned.
 }
 \description{
 Download corpus tarball from Zenodo. Downloading both freely available data

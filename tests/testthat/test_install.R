@@ -161,7 +161,7 @@ test_that(
     success <- corpus_install(tarball = tarball_tmp, load = FALSE)
     testthat::expect_true(success)
 
-    gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY4MjgwNTU5OSwiaWF0IjoxNjUyNDU2NjMwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzMDk5LCJybmQiOiJiNzEyY2JkMCJ9.6PGYPSxvlLNQ_3cdfncSwF6Hm5BSK742BM73jvIist7A2qeseNIwqU0alqkBN-TmvhYz32UQy69RXfAvL9Ag7Q"
+    gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY1NjcxMjc5OSwiaWF0IjoxNjU0MTI1MzA5fQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzNjE2LCJybmQiOiI1NzdmNjU4MiJ9.flJUJJKQAtq0BjkUdu16PZdRCtz0buJIY1kaKFYZEGUnejUh3sGb9oowhHKSVA9ZszIygJ--F69Qsc_4vJ0ieA"
     tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
     success <- corpus_install(tarball = tarball_tmp, ask = FALSE, load = FALSE)
 
