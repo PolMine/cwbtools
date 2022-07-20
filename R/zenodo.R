@@ -179,4 +179,4 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
 #' @rdname zenodo
 #' @keywords datasets
 #' @export
-gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY1NjcxMjc5OSwiaWF0IjoxNjU0MTI1MzA5fQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzNjE2LCJybmQiOiI1NzdmNjU4MiJ9.flJUJJKQAtq0BjkUdu16PZdRCtz0buJIY1kaKFYZEGUnejUh3sGb9oowhHKSVA9ZszIygJ--F69Qsc_4vJ0ieA"
+gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY3MjQzNzU5OSwiaWF0IjoxNjU4MzE5NzgwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjI0ODA4LCJybmQiOiI5N2RkYjdiZCJ9.Bi4bvXO1UXB7h6wT_RlhPWfesRb1CpIH2GNOQZ2Twf9M18k8tx38LBYvACVrKYmLZWTHIrVyN3yl_rCJ9s1PlA"

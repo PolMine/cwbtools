@@ -1,3 +1,9 @@
+cwbtools 0.3.7
+==============
+
+* `gparlsample_url_restricted` has been updated to replace a URL that has been
+defunct.
+
 cwbtools 0.3.6
 ==============
 
