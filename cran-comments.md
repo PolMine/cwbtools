@@ -1,8 +1,9 @@
 ## General remarks
 
-The package has been removed from CRAN due to an ERROR resulting from a 
-broken link for test data. I could not fix this issue in time. I would be very
-glad if 'cwbtools' was back on CRAN soon.
+The package has been removed from CRAN due to an ERROR resulting from a broken
+link for test data. Unfortunately, I could not fix this issue in time. This
+release fixes the issue. I would be very glad if 'cwbtools' was back on CRAN
+soon.
 
 This release also offers a workaround for functionality of the zen4R package 
 that is currently not working.
