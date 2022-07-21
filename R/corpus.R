@@ -187,6 +187,12 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       # }
       
       tarball <- zenodo_get_tarballurl(url = doi)
+      if (is.null(tarball)){
+        if (verbose){
+          cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
+        }
+        return(invisible(FALSE))
+      }
       if (verbose) cli_process_done()
       
       if (verbose) cli_alert_info(

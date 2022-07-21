@@ -88,8 +88,14 @@ test_that(
   "check that corpus_install() fails gracefully if DOI is incorrect",
   {
     skip_on_cran()
-    y <- corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
-    expect_false(y, FALSE)
+    
+    expect_null(
+      zenodo_get_tarballurl(url = "10.5281/zenodo.3823245123")
+    )
+    
+    expect_false(
+      corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
+    )
   }
 )
 

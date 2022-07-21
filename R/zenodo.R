@@ -178,15 +178,27 @@ zenodo_get_tarballurl <- function(url){
   
   stopifnot(is.character(url), length(url) == 1L)
   
-  if (grepl("\\?token=", url)) stop("Not implemented for restricted data.")
+  if (grepl("\\?token=", url)){
+    warning("Not implemented for restricted data.")
+    return(NULL)
+  }
   if (grepl("^10\\.5281/zenodo", url)) url <- sprintf("https://doi.org/%s", url)
+  if (!grepl("10\\.5281/zenodo", url)){
+    warning("Not a Zenodo page, returning `NULL`.")
+    return(NULL)
+  }
   
+  if (isTRUE(http_error(url))){
+    warning(sprintf("HTTP error / cannot access URL %s () ", url))
+    return(NULL)
+  }
+
   trystatus <- try(page <- curl(url = url))
   if (is(trystatus)[[1]] == "try-error"){
     warning("Zenodo not available. Try again later.")
     return(NULL)
   }
-
+  
   trystatus <- try(website <- read_html(page))
   if (is(trystatus)[[1]] == "try-error"){
     warning("Zenodo not available. Try again later.")
@@ -206,8 +218,14 @@ zenodo_get_tarballurl <- function(url){
     `[[`, 1L
   )
   tarball_index <- grep("\\.tar\\.gz", filenames)
-  if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
-  if (length(tarball_index) == 0L) stop("No tarball to be downloaded.")
+  if (length(tarball_index) > 1L){
+    warning("more than one tarball could be downloaded")
+    return(NULL)
+  }
+  if (length(tarball_index) == 0L){
+    warning("No tarball to be downloaded.")
+    return(NULL)
+  }
   
   tarball <- filenames[tarball_index]
   
