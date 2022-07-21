@@ -30,7 +30,8 @@
 #' @importFrom xml2 read_html xml_find_all xml_attr
 #' @importFrom cli col_magenta
 #' @param url Landing page at Zenodo for resource. Can also be the URL for
-#'   restricted access (?token= appended with a long key).
+#'   restricted access (?token= appended with a long key), or a DOI referencing
+#'   objects deposited with Zenodo.
 #' @param destfile A `character` vector with the file path where the downloaded
 #'   file is to be saved. Tilde-expansion is performed. Defaults to a temporary
 #'   file.
@@ -56,9 +57,7 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
   
   h <- new_handle()
   
-  restricted <- grepl("\\?token=", url)
-  
-  if (restricted){
+  if (grepl("\\?token=", url)){
     if (verbose) cat_rule("Download restricted resource from Zenodo")
     if (verbose) cli_process_start("get handle for restricted resource")
     
@@ -81,6 +80,10 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
     
     if (verbose) cli_process_done()
   } else {
+    
+    if (grepl("^10\\.5281/zenodo", url))
+      url <- sprintf("https://doi.org/%s", url)
+
     if (verbose) cat_rule("Download resource from Zenodo")
 
     trystatus <- try(page <- curl(url = url))
@@ -166,6 +169,58 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
 
   destfile
 }
+
+#' @export
+#' @rdname zenodo
+#' @details `zenodo_get_tarballurl` is a (temporary) helper function to
+#'   accomplish a temporarily bugged functionality of the zen4R package.
+zenodo_get_tarballurl <- function(url){
+  
+  stopifnot(is.character(url), length(url) == 1L)
+  
+  if (grepl("\\?token=", url)) stop("Not implemented for restricted data.")
+  if (grepl("^10\\.5281/zenodo", url)) url <- sprintf("https://doi.org/%s", url)
+  
+  trystatus <- try(page <- curl(url = url))
+  if (is(trystatus)[[1]] == "try-error"){
+    warning("Zenodo not available. Try again later.")
+    return(NULL)
+  }
+
+  trystatus <- try(website <- read_html(page))
+  if (is(trystatus)[[1]] == "try-error"){
+    warning("Zenodo not available. Try again later.")
+    return(NULL)
+  }
+  
+  file_elems <- xml_find_all(website, xpath = "//a[@class='filename']")
+  if (length(file_elems) == 0L){
+    warning("Website does not reference files to download.")
+    return(NULL)
+  }
+  filenames <- sapply(
+    strsplit(
+      x = sapply(file_elems, xml_attr, attr = "href"),
+      split = "\\?download"
+    ),
+    `[[`, 1L
+  )
+  tarball_index <- grep("\\.tar\\.gz", filenames)
+  if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
+  if (length(tarball_index) == 0L) stop("No tarball to be downloaded.")
+  
+  tarball <- filenames[tarball_index]
+  
+  md5_el <- xml_find_first(file_elems[[tarball_index]], xpath = "../small")
+  md5sum_zenodo <- gsub("^md5:(.*?)\\s*$", "\\1", xml_text(md5_el))
+  
+  setNames(
+    fs::path("https://zenodo.org", tarball),
+    md5sum_zenodo
+  )
+}
+
+
 
 
 #' @details A sample subset of the GermaParl corpus is deposited at Zenodo for

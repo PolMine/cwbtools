@@ -2,7 +2,7 @@ Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
 Version: 0.3.7
-Date: 2022-07-20
+Date: 2022-07-21
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "aut", email = "christoph.leonhardt@uni-due.de")
   )
@@ -69,6 +69,6 @@ Collate:
     's_attribute.R'
     'vrt.R'
     'zenodo.R'
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 RdMacros: lifecycle

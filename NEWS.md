@@ -1,8 +1,12 @@
 cwbtools 0.3.7
 ==============
 
-* `gparlsample_url_restricted` has been updated to replace a URL that has been
+* `gparlsample_url_restricted` has been updated to replace a URL that has become
 defunct.
+* New auxiliary function `zenodo_get_tarballurl()` steps in for functionality of
+the zen4R package temporarily not working #42. It is used internally by the
+`corpus_install()` function.
+
 
 cwbtools 0.3.6
 ==============
