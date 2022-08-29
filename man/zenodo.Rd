@@ -42,6 +42,9 @@ download.}
 The filename of the downloaded corpus tarball, designed to serve as
 input for \code{\link{corpus_install}} (as argument \code{tarball}). If the
 resource is not available, \code{NULL} is returned.
+
+The path of the downloaded resource, or \code{NULL} if the operation has
+not been successful.
 }
 \description{
 Download corpus tarball from Zenodo. Downloading both freely available data
@@ -73,11 +76,11 @@ Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
 # Download and install open access resource
 gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
 tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
-corpus_install(tarball = tarball_tmp)
+if (!is.null(tarball_tmp)) corpus_install(tarball = tarball_tmp)
 
 # Download and install resource with restricted access
 tarball_tmp <- zenodo_get_tarball(url = gparlsample_url_restricted)
-corpus_install(tarball = tarball_tmp)
+if (!is.null(tarball_tmp)) corpus_install(tarball = tarball_tmp)
 }
 }
 \keyword{datasets}
