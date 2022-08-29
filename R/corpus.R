@@ -29,70 +29,66 @@
 #'        |- file2
 #'        +- file3
 #' }
-#' @details The \code{corpus_install} function will assist the installation of a
+#' @details The `corpus_install()` function will assist the installation of a
 #'   corpus. The following scenarios are offered:
 #' \itemize{
-#'   \item{If argument \code{tarball} is a local tarball, the tarball will
+#'   \item{If argument `tarball` is a local tarball, the tarball will
 #'   be extracted and files will be moved.}
-#'   \item{If \code{tarball} is a URL, the tarball will be downloaded from
-#'   the online location. It is possible to state user credentials using the
-#'   arguments \code{user} and \code{password}. Then the aforementioned
-#'   installation (scenario 1) is executed. If argument \code{pkg} is the
-#'   name of an installed package, corpus files will be moved into this
-#'   package.}
-#'   \item{If argument \code{doi} is Document Object Identifier (DOI), the URL
-#'   from which a corpus tarball can be downloaded is derived from the
-#'   information available at that location. The tarball is downloaded and the
-#'   corpus installed. If argument \code{pkg} is defined, files will be moved
-#'   into a R package, the syste registry and corpus directories are used
-#'   otherwise. Note that at this stage, it is assumed that the DOI has been
-#'   awarded by \href{https://zenodo.org/}{Zenodo}}
-#'   \item{If argument \code{pkg} is provided and specifies an R package (and
-#'   \code{tarball} is \code{NULL}), the corpus package available at a
-#'   CRAN-style repository specified by argument \code{repo} will be installed.
-#'   Internally, the \code{install.packages} function is called and further
-#'   arguments can be passed into this function call. This can be used to pass
-#'   user credentials, e.g. by adding \code{method = "wget" extra = "--user
-#'   donald --password duck"}.
-#'   }
+#'   \item{If `tarball` is a URL, the tarball will be downloaded from the online
+#'   location. It is possible to state user credentials using the arguments
+#'   `user` and `password`. Then the aforementioned installation (scenario 1) is
+#'   executed. If argument `pkg` is the name of an installed package, corpus
+#'   files will be moved into this package.}
+#'   \item{If argument `doi` is Document Object Identifier (DOI), the URL from
+#'   which a corpus tarball can be downloaded is derived from the information
+#'   available at that location. The tarball is downloaded and the corpus
+#'   installed. If argument `pkg` is defined, files will be moved into a R
+#'   package, the syste registry and corpus directories are used otherwise. Note
+#'   that at this stage, it is assumed that the DOI has been awarded by
+#'   \href{https://zenodo.org/}{Zenodo}}
+#'   \item{If argument `pkg` is provided and `tarball` is `NULL`, corpora
+#'   included in the package will be installed as system corpora, using the
+#'   storage location specified by `registry_dir`. }
 #' }
 #' If the corpus to be installed is already available, a dialogue will ask the
 #' user whether an existing corpus shall be deleted and installed anew, if
-#' argument \code{ask} is \code{TRUE}.
+#' argument `ask` is `TRUE`.
 #' @param old Name of the (old) corpus.
 #' @param new Name of the (new) corpus.
-#' @param pkg Name of the data package.
+#' @param pkg Name of a package (length-one `character` vector).
 #' @param repo URL of the repository.
 #' @param tarball URL,  S3-URI or local filename of a tarball with a CWB indexed
-#'   corpus. If \code{NULL} (default) and argument \code{doi} is stated, the
+#'   corpus. If `NULL` (default) and argument `doi` is stated, the
 #'   whereabouts of a corpus tarball will be derived from DOI.
 #' @param doi The DOI (Digital Object Identifier) of a corpus deposited at
 #'   Zenodo (e.g. "10.5281/zenodo.3748858".)
-#' @param lib Directory for R packages, defaults to \code{.libPaths()[1]}.
+#' @param lib Directory for R packages, defaults to `.libPaths()[1]`.
 #' @param verbose Logical, whether to be verbose.
-#' @param ask A \code{logical} value, whether to ask for user input when
+#' @param ask A `logical` value, whether to ask for user input when
 #'   choices are required.
 #' @param registry_dir The corpus registry directory. If missing, the result of
 #'   `cwb_registry_dir()`.
 #' @param corpus The ID of a CWB indexed corpus (in upper case).
 #' @param tarfile Filename of tarball.
-#' @param checksum A length-one \code{character} vector with a MD5 checksum to
+#' @param checksum A length-one `character` vector with a MD5 checksum to
 #'   check for the integrity of a downloaded tarball. If the tarball is
-#'   downloaded from Zenodo by stating a DOI (argument \code{doi}), the checksum
+#'   downloaded from Zenodo by stating a DOI (argument `doi`), the checksum
 #'   included in the metadata for the record is used for the check.
 #' @param corpus_dir The directory that contains the data directories of indexed
 #'   corpora. If missing, the value of `cwb_corpus_dir()` will be used.
 #' @param load A `logical` value, whether to load corpus after installation.
-#' @param ... Further parameters that will be passed into
-#'   \code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
-#'   or \code{download.file}, if \code{tarball} is specified.
-#' @param user A user name that can be specified to download a corpus from a password protected site.
-#' @param password A password that can be specified to download a corpus from a password protected site.
+#' @param ... Further parameters that will be passed into `download.file()`, if
+#'   `tarball` is specified.
+#' @param user A user name that can be specified to download a corpus from a
+#'   password protected site.
+#' @param password A password that can be specified to download a corpus from a
+#'   password protected site.
 #' @name corpus_install
-#' @return Logical value \code{TRUE} if installation has been successful, or \code{FALSE} if not.
+#' @return Logical value `TRUE` if installation has been successful, or `FALSE`
+#'   if not.
 #' @seealso For managing registry files, see \code{\link{registry_file_parse}}
 #' for switching to a packaged corpus.
-#' @importFrom utils available.packages contrib.url install.packages
+#' @importFrom utils available.packages contrib.url
 #' @importFrom utils installed.packages tar
 #' @importFrom curl curl_download new_handle handle_setopt
 #' @importFrom httr http_error
@@ -103,7 +99,8 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom zen4R ZenodoManager
 #' @importFrom cli cli_rule cli_alert_success cli_process_start cli_process_done
-#'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red cli_alert_warning cli_process_failed
+#'   cli_alert_info col_cyan cli_alert_danger cli_text col_blue col_red
+#'   cli_alert_warning cli_process_failed
 #' @importFrom RcppCWB cqp_is_initialized cqp_get_registry cqp_reset_registry
 #'   cl_load_corpus cqp_load_corpus
 #' @importFrom fs path_tidy path_temp
@@ -120,25 +117,30 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
   if (is.null(tarball)){
     if (isFALSE(is.null(pkg))){
-      # A pkg is stated
-      if (!pkg %in% utils::available.packages(contriburl = utils::contrib.url(repos = repo))) {
-        stop(sprintf("package '%s' not available at repo '%s'", pkg, repo))
+      
+      if (nchar(system.file(package = pkg)) == 0L){
+        warning(sprintf("Package `%s` is not available.", pkg))
+        return(invisible(FALSE))
       }
-
-      if (file.access(lib, "6") == -1){
-        stop("You do not have write permissions for directory ", lib,
-             ". Please run R with the required privileges, or provide another directory (param 'lib').")
-      }
-      install.packages(pkgs = pkg, repos = repo, lib = lib, ...)
+      
       pkg_registry <- system.file(package = pkg, "extdata", "cwb", "registry")
+      if (!dir.exists(pkg_registry)){
+        warning("Package stated by `pkg` does not include corpora.")
+        return(invisible(FALSE))
+      }
+      
       corpora <- list.files(pkg_registry)
       for (corpus in corpora){
-        regdata <- registry_file_parse(corpus = corpus, registry_dir = pkg_registry)
-        data_dir <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", corpus)
-        if (regdata[["home"]] != data_dir){
-          regdata[["home"]] <- data_dir
-          registry_file_write(data = regdata, corpus = corpus, registry_dir = pkg_registry)
-        }
+        if (verbose) cli_rule(sprintf("Copy corpus `%s`", corpus))
+        corpus_copy(
+          corpus = corpus,
+          registry_dir = pkg_registry,
+          data_dir = NULL,
+          registry_dir_new = registry_dir,
+          data_dir_new = fs::path(corpus_dir, tolower(corpus)),
+          remove = FALSE,
+          verbose = verbose, progress = interactive()
+        )
       }
       return(invisible(TRUE))
     } else {
@@ -763,14 +765,11 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 #'     "extdata", "cwb", "indexed_corpora", "reuters"
 #'   )
 #' )
-#' unlink(file.path(
-#'   normalizePath(tempdir(), winslash = "/"),
-#'   "cwb", fsep = "/"),
-#'   recursive = TRUE)
+#' unlink(fs::path(tempdir(), "cwb"), recursive = TRUE)
 corpus_copy <- function(
   corpus, registry_dir, data_dir = NULL,
-  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "indexed_corpora", tolower(corpus), fsep = "/"),
+  registry_dir_new = fs::path(tempdir(), "cwb", "registry"),
+  data_dir_new = fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
   remove = FALSE,
   verbose = interactive(),
   progress = TRUE

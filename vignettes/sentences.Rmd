@@ -13,7 +13,7 @@ editor_options:
 
 ## About
 
-Adding an annotation of sentences as a structural attribute to an existing is a frequent scenario. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParlSamplee corpus serves as an example.
+Adding an annotation of sentences as a structural attribute to an existing is a frequent scenario. This vignette offers a basic recipe for a corpus that already includes a part-of-speech annotation. The GermaParlSample corpus serves as an example.
 
 
 ## Getting started
