@@ -88,8 +88,14 @@ test_that(
   "check that corpus_install() fails gracefully if DOI is incorrect",
   {
     skip_on_cran()
-    y <- corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
-    expect_false(y, FALSE)
+    
+    expect_null(
+      zenodo_get_tarballurl(url = "10.5281/zenodo.3823245123")
+    )
+    
+    expect_false(
+      corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
+    )
   }
 )
 
@@ -161,9 +167,10 @@ test_that(
     success <- corpus_install(tarball = tarball_tmp, load = FALSE)
     testthat::expect_true(success)
 
-    gparl_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY1NjcxMjc5OSwiaWF0IjoxNjU0MTI1MzA5fQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjIzNjE2LCJybmQiOiI1NzdmNjU4MiJ9.flJUJJKQAtq0BjkUdu16PZdRCtz0buJIY1kaKFYZEGUnejUh3sGb9oowhHKSVA9ZszIygJ--F69Qsc_4vJ0ieA"
-    tarball_tmp <- zenodo_get_tarball(url = gparl_url_restricted)
+    tarball_tmp <- zenodo_get_tarball(url = gparlsample_url_restricted)
+    if (is.null(tarball_tmp)) testthat::skip_on_cran()
     success <- corpus_install(tarball = tarball_tmp, ask = FALSE, load = FALSE)
+    testthat::expect_true(success)
 
     unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
     unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)

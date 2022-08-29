@@ -106,19 +106,19 @@ be generated using method \code{$add_corpus_positions()}.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CorpusData$new()}}
-\item \href{#method-print}{\code{CorpusData$print()}}
-\item \href{#method-tokenize}{\code{CorpusData$tokenize()}}
-\item \href{#method-import_xml}{\code{CorpusData$import_xml()}}
-\item \href{#method-add_corpus_positions}{\code{CorpusData$add_corpus_positions()}}
-\item \href{#method-purge}{\code{CorpusData$purge()}}
-\item \href{#method-encode}{\code{CorpusData$encode()}}
-\item \href{#method-clone}{\code{CorpusData$clone()}}
+\item \href{#method-CorpusData-new}{\code{CorpusData$new()}}
+\item \href{#method-CorpusData-print}{\code{CorpusData$print()}}
+\item \href{#method-CorpusData-tokenize}{\code{CorpusData$tokenize()}}
+\item \href{#method-CorpusData-import_xml}{\code{CorpusData$import_xml()}}
+\item \href{#method-CorpusData-add_corpus_positions}{\code{CorpusData$add_corpus_positions()}}
+\item \href{#method-CorpusData-purge}{\code{CorpusData$purge()}}
+\item \href{#method-CorpusData-encode}{\code{CorpusData$encode()}}
+\item \href{#method-CorpusData-clone}{\code{CorpusData$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CorpusData-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a new instance of class \code{CorpusData}.
 \subsection{Usage}{
@@ -130,8 +130,8 @@ A class \code{CorpusData} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-CorpusData-print"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-print}{}}}
 \subsection{Method \code{print()}}{
 Print summary of \code{CorpusData} object.
 \subsection{Usage}{
@@ -140,8 +140,8 @@ Print summary of \code{CorpusData} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-tokenize"></a>}}
-\if{latex}{\out{\hypertarget{method-tokenize}{}}}
+\if{html}{\out{<a id="method-CorpusData-tokenize"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-tokenize}{}}}
 \subsection{Method \code{tokenize()}}{
 Simple tokenization of text in chunktable.
 \subsection{Usage}{
@@ -161,8 +161,8 @@ Simple tokenization of text in chunktable.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-import_xml"></a>}}
-\if{latex}{\out{\hypertarget{method-import_xml}{}}}
+\if{html}{\out{<a id="method-CorpusData-import_xml"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-import_xml}{}}}
 \subsection{Method \code{import_xml()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CorpusData$import_xml(
@@ -198,8 +198,8 @@ The \code{CorpusData} object is returned invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_corpus_positions"></a>}}
-\if{latex}{\out{\hypertarget{method-add_corpus_positions}{}}}
+\if{html}{\out{<a id="method-CorpusData-add_corpus_positions"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-add_corpus_positions}{}}}
 \subsection{Method \code{add_corpus_positions()}}{
 Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
 \code{cpos_right} to metadata.
@@ -216,8 +216,8 @@ Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-purge"></a>}}
-\if{latex}{\out{\hypertarget{method-purge}{}}}
+\if{html}{\out{<a id="method-CorpusData-purge"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-purge}{}}}
 \subsection{Method \code{purge()}}{
 Remove patterns from chunkdata that are known to cause problems. This is
 done most efficiently at the chunkdata level of data preparation as the
@@ -238,8 +238,8 @@ tokenization/annotation has been performed.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-encode"></a>}}
-\if{latex}{\out{\hypertarget{method-encode}{}}}
+\if{html}{\out{<a id="method-CorpusData-encode"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-encode}{}}}
 \subsection{Method \code{encode()}}{
 Encode corpus. If the corpus already exists, it will be removed.
 \subsection{Usage}{
@@ -281,8 +281,8 @@ Encode corpus. If the corpus already exists, it will be removed.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CorpusData-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CorpusData-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
