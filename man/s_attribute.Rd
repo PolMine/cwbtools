@@ -136,11 +136,8 @@ structural attribute.
 }
 \examples{
 require("RcppCWB")
-registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
-data_dir_tmp <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "indexed_corpora", "reuters", fsep = "/"
-)
+registry_tmp <- fs::path(tempdir(), "cwb", "registry")
+data_dir_tmp <- fs::path(tempdir(), "cwb", "indexed_corpora", "reuters")
 
 corpus_copy(
   corpus = "REUTERS",

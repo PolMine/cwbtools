@@ -112,10 +112,10 @@ tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reu
 # Create new (and empty) directory structure
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
-registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
-data_dir_tmp <- file.path(tmpdir, "data_dir", "reuters", fsep = "/")
-if (file.exists(file.path(data_dir_tmp, "word.corpus"))){
-  file.remove(file.path(data_dir_tmp, "word.corpus"))
+registry_tmp <- fs::path(tmpdir, "registry")
+data_dir_tmp <- fs::path(tmpdir, "data_dir", "reuters")
+if (file.exists(fs::path(data_dir_tmp, "word.corpus"))){
+  file.remove(fs::path(data_dir_tmp, "word.corpus"))
 }
 if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)

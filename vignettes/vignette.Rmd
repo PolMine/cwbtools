@@ -31,10 +31,8 @@ The CWB stores each indexed corpora in an individual data directory. Registry fi
 For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.
 
 ```{r create_tmp_dirs}
-tmpdir <- fs::path_tidy(tempdir())
-
-registry_tmp <- fs::path(tmpdir, "registry")
-data_dir_tmp <- fs::path(tmpdir, "data_dir")
+registry_tmp <- fs::path(tempdir(), "registry")
+data_dir_tmp <- fs::path(tempdir(), "data_dir")
 
 if (!file.exists(registry_tmp)){
   dir.create (registry_tmp)
@@ -70,7 +68,7 @@ list.files(teidir)
 For our example, we need an (empty) data directory for the UNGA corpus.
 
 ```{r unga_create_dirs, message = FALSE,  results = FALSE}
-unga_data_dir_tmp <- file.path(data_dir_tmp, "unga")
+unga_data_dir_tmp <- fs::path(data_dir_tmp, "unga")
 if (!file.exists(unga_data_dir_tmp)) dir.create(unga_data_dir_tmp)
 file.remove(list.files(unga_data_dir_tmp, full.names = TRUE))
 ```
@@ -172,7 +170,7 @@ head(peace_context)
 In a second scenario, we create a corpus of Jane Austen's books (included in the package [janeaustenr](https://CRAN.R-project.org/package=janeaustenr)).  Again, we start by preparing an (empty) data directory ...
 
 ```{r, message = FALSE, results = FALSE}
-austen_data_dir_tmp <- file.path(data_dir_tmp, "austen")
+austen_data_dir_tmp <- fs::path(data_dir_tmp, "austen")
 if (!file.exists(austen_data_dir_tmp)) dir.create(austen_data_dir_tmp)
 file.remove(list.files(austen_data_dir_tmp, full.names = TRUE))
 ```
@@ -285,7 +283,7 @@ This is the input we need. We instantiate a `CorpusData` object end make sure th
 
 ```{r, results = FALSE}
 Reuters <- CorpusData$new()
-reuters_data_dir_tmp <- file.path(data_dir_tmp, "reuters")
+reuters_data_dir_tmp <- fs::path(data_dir_tmp, "reuters")
 if (!file.exists(reuters_data_dir_tmp)) dir.create(reuters_data_dir_tmp)
 file.remove(list.files(reuters_data_dir_tmp, full.names = TRUE))
 ```

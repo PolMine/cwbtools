@@ -50,7 +50,7 @@
 #' # create temporary registry file so that data in RcppCWB package can be used
 #' 
 #' registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
-#' registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "registry")
+#' registry_tmp <- fs::path(tempdir(), "registry")
 #' if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
 #' r <- registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)
 #' r[["home"]] <- system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
@@ -90,17 +90,17 @@
 #' 
 #' # Remove temporary registry with home dir still pointing to RcppCWB data dir
 #' # to prevent data from being deleted
-#' file.remove(file.path(registry_tmp, "reuters"))
+#' file.remove(fs::path(registry_tmp, "reuters"))
 #' file.remove(registry_tmp)
 #' 
 #' # create temporary directories (registry directory and one for indexed corpora)
 #' 
 #' tmpdir <- normalizePath(tempdir(), winslash = "/")
 #' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-#' registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
-#' data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
-#' if (!dir.exists(registry_tmp)) dir.create(registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
-#' if (!dir.exists(data_dir_tmp)) dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
+#' registry_tmp <- fs::path(tempdir(), "registry")
+#' data_dir_tmp <- fs::path(tempdir(), "data_dir")
+#' if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
+#' if (!dir.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 #' 
 #' CD$encode(
 #'   corpus = "REUTERS", encoding = "utf8",
@@ -280,7 +280,7 @@ CorpusData <- R6::R6Class(
       if (file.exists(registry_dir))
         if (file.info(registry_dir)[["isdir"]] != TRUE)
           stop("registry_dir is not a directory")
-      registry_file <- file.path(registry_dir, tolower(corpus), fsep = "/")
+      registry_file <- fs::path(registry_dir, tolower(corpus))
       
       if (file.exists(registry_file)){
         message(sprintf("registry file for corpus '%s' already exists - it should be removed", corpus))
@@ -291,7 +291,7 @@ CorpusData <- R6::R6Class(
         super_dir <- dirname(registry_dir)
         potential_data_dir <- grep("index", list.files(super_dir), value = TRUE, perl = TRUE)
         if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
-        data_dir <- file.path(super_dir, potential_data_dir, tolower(corpus), fsep = "/")
+        data_dir <- fs::path(super_dir, potential_data_dir, tolower(corpus))
         message(sprintf("suggesting data_dir: %s\n", data_dir))
         feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
         if (feedback != "Y") stop("aborting")

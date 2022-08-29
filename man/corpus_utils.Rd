@@ -220,10 +220,7 @@ semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
 has another format or if it is not available, the return value is \code{NA}.
 }
 \examples{
-registry_file_new <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", "reuters", fsep = "/"
-  )
+registry_file_new <- fs::path(tempdir(), "cwb", "registry", "reuters")
 if (file.exists(registry_file_new)) file.remove(registry_file_new)
 corpus_copy(
   corpus = "REUTERS",
@@ -242,15 +239,9 @@ Q <- '"oil"'
 registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
 data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
 
-registry_dir_tmp <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", fsep = "/"
-)
-registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus), fsep = "/")
-data_dir_tmp <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"
-)
+registry_dir_tmp <- fs::path(tempdir(), "cwb", "registry")
+registry_file_tmp <- fs::path(registry_dir_tmp, tolower(corpus))
+data_dir_tmp <- fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus))
 
 if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
 if (!dir.exists(data_dir_tmp)){
@@ -302,7 +293,7 @@ str <- RcppCWB::cl_id2str(
 )
 unique(str)
 
-unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
+unlink(fs::path(tempdir(), "cwb"), recursive = TRUE)
 }
 \seealso{
 For managing registry files, see \code{\link{registry_file_parse}}

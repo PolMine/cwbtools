@@ -31,7 +31,7 @@
 #'   registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry")
 #'   )
 registry_file_parse <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY")){
-  r <- readLines(file.path(registry_dir, tolower(corpus), fsep = "/"))
+  r <- readLines(fs::path(registry_dir, tolower(corpus)))
   regex_vec <- c(
     name = '^NAME\\s+"(.*?)"\\s*$',
     id = "^ID\\s+(.*?)\\s*$",
@@ -167,7 +167,7 @@ registry_file_compose <- function(x){
 
 #' @rdname registry_file
 #' @export registry_data
-registry_data <- function(name, id, home, info = file.path(home, ".info", fsep = "/"), properties = c(charset = "utf-8"), p_attributes, s_attributes = character()){
+registry_data <- function(name, id, home, info = fs::path(home, ".info"), properties = c(charset = "utf-8"), p_attributes, s_attributes = character()){
   y <- list(
     name = name, id = tolower(id), home = home, info = info,
     properties = properties, p_attributes = p_attributes, s_attributes = s_attributes
@@ -185,7 +185,7 @@ registry_file_write <- function(data, corpus, registry_dir = Sys.getenv("CORPUS_
   regfile <- registry_file_compose(x = data)
   writeLines(
     text = regfile,
-    con = file.path(registry_dir, tolower(corpus), fsep = "/")
+    con = fs::path(registry_dir, tolower(corpus))
   )
   invisible(regfile)
 }

@@ -22,11 +22,8 @@
 #' @seealso To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.
 #' @examples
 #' require("RcppCWB")
-#' registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "cwb", "registry", fsep = "/")
-#' data_dir_tmp <- file.path(
-#'   normalizePath(tempdir(), winslash = "/"),
-#'   "cwb", "indexed_corpora", "reuters", fsep = "/"
-#' )
+#' registry_tmp <- fs::path(tempdir(), "cwb", "registry")
+#' data_dir_tmp <- fs::path(tempdir(), "cwb", "indexed_corpora", "reuters")
 #' 
 #' corpus_copy(
 #'   corpus = "REUTERS",
@@ -83,9 +80,9 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     region_matrix <- matrix(data = as.integer(as.vector(region_matrix)), ncol = 2)
   }
   if (method == "R"){
-    avs_file <- file.path(data_dir, paste(s_attribute, "avs", sep = "."), fsep = "/") # attribute values
-    avx_file <- file.path(data_dir, paste(s_attribute, "avx", sep = "."), fsep = "/") # attribute value index
-    rng_file <- file.path(data_dir, paste(s_attribute, "rng", sep = "."), fsep = "/") # ranges
+    avs_file <- fs::path(data_dir, paste(s_attribute, "avs", sep = ".")) # attribute values
+    avx_file <- fs::path(data_dir, paste(s_attribute, "avx", sep = ".")) # attribute value index
+    rng_file <- fs::path(data_dir, paste(s_attribute, "rng", sep = ".")) # ranges
     
     # generate and write attrib.avs
     if (!is.character(values)) values <- as.character(values)
@@ -129,7 +126,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     
     if (verbose) message(sprintf("... running 'cwb-s-encode' to add structural annotation for attribute '%s'", s_attribute))
     cmd <- c(
-      file.path(cwb_get_bindir(), "cwb-s-encode", fsep = "/"),
+      fs::path(cwb_get_bindir(), "cwb-s-encode"),
       "-d", data_dir,
       "-f", tmp_file,
       "-V", s_attribute
@@ -212,7 +209,7 @@ s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"
 s_attribute_files <- function(s_attribute, data_dir){
   sapply(
     c("avs", "avx", "rng"),
-    function(fileext) file.path(data_dir, paste(s_attribute, fileext, sep = "."), fsep = "/")
+    function(fileext) fs::path(data_dir, paste(s_attribute, fileext, sep = "."))
   )
 }
 
@@ -375,7 +372,8 @@ s_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE){
   rf <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)
   
   for (i in 1L:length(old)){
-    if (verbose) cli::cli_alert(sprintf("renaming s_attribute '%s' to '%s'", old[i], new[i]))
+    if (verbose)
+      cli::cli_alert(sprintf("renaming s_attribute '%s' to '%s'", old[i], new[i]))
     if (!old[i] %in% rf[["s_attributes"]]){
       warning(sprintf("s_attribute '%s' does not exist", old[i]))
       return(FALSE)
