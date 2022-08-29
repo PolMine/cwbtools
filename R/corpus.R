@@ -686,7 +686,7 @@ corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = T
   invisible(TRUE)
 }
 
-#' @details \code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
+#' @details `corpus_as_tarball()` will create a tarball (.tar.gz-file) with
 #'   two subdirectories. The 'registry' subdirectory will host the registry file
 #'   for the tarred corpus. The data files will be put in a subdirectory with
 #'   the corpus name in the 'indexed_corpora' subdirectory.
@@ -709,9 +709,9 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
     data_dir
   }
 
-  if (verbose) message("... moving registry file and data files to temporary directory for creating tarball")
-  tmp_dir <- normalizePath(tempdir(), winslash = "/")
-  archive_dir <- fs::path(tmp_dir, tolower(corpus))
+  if (verbose)
+    cli_process_start("copy registry file and data files to temporary directory for creating tarball")
+  archive_dir <- fs::path(fs::path_temp(), tolower(corpus))
   if (file.exists(archive_dir)) unlink(archive_dir, recursive = TRUE)
   dir.create(archive_dir)
 
@@ -722,20 +722,26 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
   dir.create(archive_data_dir)
   dir.create(archive_corpus_dir)
 
-  file.copy(from = registry_file, to = fs::path(archive_registry_dir, tolower(corpus)))
+  file.copy(
+    from = registry_file,
+    to = fs::path(archive_registry_dir, tolower(corpus))
+  )
   for (x in list.files(home_dir, full.names = TRUE)){
     file.copy(from = x, to = fs::path(archive_corpus_dir, basename(x)))
   }
+  if (verbose) cli_process_done()
 
-  if (verbose) message("... creating tarball")
+  if (verbose) cli_process_start("creating tarball")
   old_wd <- getwd()
   on.exit(setwd(path.expand(old_wd)))
   setwd(archive_dir)
   tar(tarfile = tarfile, compression = "gzip")
+  if (verbose) cli_process_done()
 
-  if (verbose) message("... cleaning up")
+  if (verbose) cli_process_start("cleaning up")
   setwd(path.expand(old_wd))
   unlink(archive_dir, recursive = TRUE)
+  if (verbose) cli_process_done()
 
   invisible( NULL )
 }

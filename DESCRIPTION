@@ -8,7 +8,7 @@ Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andre
   )
 Description: The 'Corpus Workbench' ('CWB', <https://cwb.sourceforge.io/>) offers a classic and mature
  approach for working with large, linguistically and structurally annotated corpora. The 'CWB'
- is memory efficient and its design makes running queries fast, see Evert et al. (2011) 
+ is memory efficient and its design makes running queries fast, see Evert (2011)
  <https://eprints.lancs.ac.uk/id/eprint/62721>. The 'cwbtools' package offers
  pure 'R' tools to create indexed corpus files as well as high-level wrappers for the original 'C'
  implementation of 'CWB' as exposed by the 'RcppCWB' package

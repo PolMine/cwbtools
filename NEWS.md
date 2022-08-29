@@ -16,6 +16,8 @@ longer suggested and the `install.packages()` call (though not evaluated) is
 omitted. Part of the fix for #46.
 * The `fs::path()` function replaces base R `file.path()` throughout to solidify
 the generation of paths and to improve the readability of the code throughout.
+* `p_attribute_encode()` checks that the `character` vector `token_stream` does
+not exceed the CWB corpus size limit (2^31 - 1) #40.
 
 
 cwbtools 0.3.7

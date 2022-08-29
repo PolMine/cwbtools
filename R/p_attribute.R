@@ -10,10 +10,10 @@
 #' \code{p_attribute_huffcode}. Fourth, compress index files using
 #' \code{p_attribute_compress_rdx}.
 #' 
-#' The implementation for the first two steps (\code{p_attribute_encode} and
-#' \code{p_attribute_makeall}) is a pure R implementation (so far). These two
+#' The implementation for the first two steps (`p_attribute_encode()` and
+#' `p_attribute_makeall()`) is a pure R implementation (so far). These two
 #' steps are enough to use the CQP functionality. To run
-#' \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}, an
+#' `p_attribute_huffcode()` and `p_attribute_compress_rdx()`, an
 #' installation of the CWB may be necessary.
 #' 
 #' See the CQP Corpus Encoding Tutorial
@@ -21,11 +21,17 @@
 #' explanation of the procedure (section 3, ``Indexing and compression without
 #' CWB/Perl'').
 #' 
-#' @param corpus The CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).
-#' @param registry_dir Registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).
-#' @param token_stream A character vector with the tokens of the corpus.
-#' @param compress Logical.
-#' @param verbose Logical.
+#' @param corpus The CWB corpus (needed by `p_attribute_huffcode()` and
+#'   `p_attribute_compress_rdx()`).
+#' @param registry_dir Registry directory (needed by `p_attribute_huffcode()`
+#'   and `p_attribute_compress_rdx()`).
+#' @param token_stream A `character` vector with the tokens of the corpus. The
+#'   maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
+#'   threshold is exceeded. See the [CWB Encoding
+#'   Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf) for
+#'   size limitations of corpora.
+#' @param compress A `logical` value.
+#' @param verbose A `logical` value.
 #' @param method Either 'CWB' or 'R'.
 #' @param p_attribute The positional attribute.
 #' @param data_dir The data directory for the corpus with the binary files.
@@ -112,6 +118,15 @@ p_attribute_encode <- function(
   data_dir <- path.expand(data_dir)
   if (!file.exists(data_dir)) stop("data_dir does not exist")
   registry_file <- fs::path(registry_dir, tolower(corpus))
+  
+  if (length(token_stream) >= 2L^31L){
+    warning(
+      sprintf(
+        "The maximum corpus size is 2 147 483 647 tokens, the length of the input vector is %d which is likely to fail.",
+        length(token_stream)
+      )
+    )
+  }
   
   if (method == "R"){
     
