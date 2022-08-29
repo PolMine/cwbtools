@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <h1 data-toc-skip>Introducing ‘cwbtools’</h1>
                         <h4 data-toc-skip class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2022-07-20</h4>
+            <h4 data-toc-skip class="date">2022-08-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/vignettes/vignette.Rmd" class="external-link"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -201,7 +201,7 @@
 <span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus UNGA ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -304,7 +304,7 @@
 <span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -317,7 +317,7 @@
 <span><span class="co">##  - index        OK</span></span>
 <span><span class="co">## ========================================</span></span>
 <span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
 <span><span class="co">## ATTRIBUTE stem</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -383,8 +383,7 @@
 <span><span class="co">## <span style="color: #949494;"># … with 9 more variables: lewissplit &lt;chr&gt;, cgisplit &lt;chr&gt;, oldid &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   topics_cat &lt;named list&gt;, places &lt;named list&gt;, people &lt;chr&gt;, orgs &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   exchanges &lt;chr&gt;, text &lt;chr&gt;, and abbreviated variable names ¹​description,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​language</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ²​language</span></span></span></code></pre>
 <p>Columns with the metadata we may want to encode are still character vectors (length &gt; 1). We turn the columns with the topic categorizations and the places into length-one character vectors.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reuters.tbl</span><span class="op">[[</span><span class="st">"topics_cat"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span></span>
@@ -437,7 +436,7 @@
 <span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus REUTERS ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpXoAWv3/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>

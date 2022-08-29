@@ -18,7 +18,7 @@ corpora."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -420,7 +420,7 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_is_initialized</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_query</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, query <span class="op">=</span> <span class="va">Q</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7fac0f0f3e20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7ff3ecde0d60&gt;</span>
 <span class="r-in"><span><span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_dump_subcorpus</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_dir_tmp</span>, cpos <span class="op">=</span> <span class="va">cpos</span></span></span>

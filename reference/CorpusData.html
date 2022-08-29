@@ -18,7 +18,7 @@ Manage Corpus Data and Encode CWB Corpus."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -105,15 +105,15 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>CorpusData$new()</code></a></p></li>
-<li><p><a href="#method-print"><code>CorpusData$print()</code></a></p></li>
-<li><p><a href="#method-tokenize"><code>CorpusData$tokenize()</code></a></p></li>
-<li><p><a href="#method-import_xml"><code>CorpusData$import_xml()</code></a></p></li>
-<li><p><a href="#method-add_corpus_positions"><code>CorpusData$add_corpus_positions()</code></a></p></li>
-<li><p><a href="#method-purge"><code>CorpusData$purge()</code></a></p></li>
-<li><p><a href="#method-encode"><code>CorpusData$encode()</code></a></p></li>
-<li><p><a href="#method-clone"><code>CorpusData$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-CorpusData-new"><code>CorpusData$new()</code></a></p></li>
+<li><p><a href="#method-CorpusData-print"><code>CorpusData$print()</code></a></p></li>
+<li><p><a href="#method-CorpusData-tokenize"><code>CorpusData$tokenize()</code></a></p></li>
+<li><p><a href="#method-CorpusData-import_xml"><code>CorpusData$import_xml()</code></a></p></li>
+<li><p><a href="#method-CorpusData-add_corpus_positions"><code>CorpusData$add_corpus_positions()</code></a></p></li>
+<li><p><a href="#method-CorpusData-purge"><code>CorpusData$purge()</code></a></p></li>
+<li><p><a href="#method-CorpusData-encode"><code>CorpusData$encode()</code></a></p></li>
+<li><p><a href="#method-CorpusData-clone"><code>CorpusData$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-CorpusData-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialize a new instance of class <code>CorpusData</code>.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -125,7 +125,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <p>A class <code>CorpusData</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-print"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-print"></a><div class="section">
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>Print summary of <code>CorpusData</code> object.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -133,7 +133,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 </div>
 
 
-</div><p></p><hr><a id="method-tokenize"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-tokenize"></a><div class="section">
 <h3 id="method-tokenize-">Method <code>tokenize()</code><a class="anchor" aria-label="anchor" href="#method-tokenize-"></a></h3>
 <p>Simple tokenization of text in chunktable.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -157,7 +157,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-import_xml"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-import_xml"></a><div class="section">
 <h3 id="method-import-xml-">Method <code>import_xml()</code><a class="anchor" aria-label="anchor" href="#method-import-xml-"></a></h3>
 
 <div class="section">
@@ -205,7 +205,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <p>The <code>CorpusData</code> object is returned invisibly.</p>
 </div>
 
-</div><p></p><hr><a id="method-add_corpus_positions"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-add_corpus_positions"></a><div class="section">
 <h3 id="method-add-corpus-positions-">Method <code>add_corpus_positions()</code><a class="anchor" aria-label="anchor" href="#method-add-corpus-positions-"></a></h3>
 <p>Add column <code>cpos</code> to tokenstream and columns <code>cpos_left</code> and
 <code>cpos_right</code> to metadata.</p><div class="section">
@@ -222,7 +222,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-purge"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-purge"></a><div class="section">
 <h3 id="method-purge-">Method <code>purge()</code><a class="anchor" aria-label="anchor" href="#method-purge-"></a></h3>
 <p>Remove patterns from chunkdata that are known to cause problems. This is
 done most efficiently at the chunkdata level of data preparation as the
@@ -243,7 +243,7 @@ tokenization/annotation has been performed.</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-encode"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-encode"></a><div class="section">
 <h3 id="method-encode-">Method <code>encode()</code><a class="anchor" aria-label="anchor" href="#method-encode-"></a></h3>
 <p>Encode corpus. If the corpus already exists, it will be removed.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
@@ -301,7 +301,7 @@ tokenization/annotation has been performed.</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-CorpusData-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
@@ -403,7 +403,7 @@ tokenization/annotation has been performed.</p><div class="section">
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating data for new registry file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing registry file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> === Makeall: processing corpus REUTERS ===</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpHjS7oy/registry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Registry directory: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOAHHn7/registry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ATTRIBUTE word</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  + creating LEXSRT ... OK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - lexicon      OK</span>
