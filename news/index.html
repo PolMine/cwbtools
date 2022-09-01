@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
       </span>
     </div>
 
@@ -32,12 +32,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
-    </li>
-    <li>
-      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
-    </li>
-    <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
     </li>
   </ul></li>
@@ -63,6 +57,16 @@
       <small>Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.8" id="cwbtools-038">cwbtools 0.3.8<small>2022-08-30</small><a class="anchor" aria-label="anchor" href="#cwbtools-038"></a></h2>
+<ul><li>Package names, software names and API are wrapped in single quotes in the DESCRIPTION files, to follow section 1.1.1 of ‘Writing R extensions’ <a href="https://github.com/PolMine/cwbtools/issues/43" class="external-link">#43</a>.</li>
+<li>References in the description of the DESCRIPTION file have been standardized <a href="https://github.com/PolMine/cwbtools/issues/44" class="external-link">#44</a>.</li>
+<li>To meet CRAN requirements, any remaining usage of <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> has been removed from the package. Using argument <code>pkg</code> of <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> will install corpora found in a package as system corpora defined in the default registry directory <a href="https://github.com/PolMine/cwbtools/issues/46" class="external-link">#46</a>.</li>
+<li>The vignettes ‘opennnlp.Rmd’ and ‘sentences.Rmd’ have been removed from the package; they are now part of the PolMine Cookbook repository at <code>https://github.com/PolMine/cookbook</code>. Packages ‘NLP’ and ‘openNLP’ are no longer suggested and the <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> call (though not evaluated) is omitted. Part of the fix for <a href="https://github.com/PolMine/cwbtools/issues/46" class="external-link">#46</a>.</li>
+<li>The <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path()</a></code> function replaces base R <code><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path()</a></code> throughout to solidify the generation of paths and to improve the readability of the code throughout.</li>
+<li>
+<code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> checks that the <code>character</code> vector <code>token_stream</code> does not exceed the CWB corpus size limit (2^31 - 1) <a href="https://github.com/PolMine/cwbtools/issues/40" class="external-link">#40</a>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.7" id="cwbtools-037">cwbtools 0.3.7<a class="anchor" aria-label="anchor" href="#cwbtools-037"></a></h2>
 <ul><li>

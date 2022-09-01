@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
       </span>
     </div>
 
@@ -50,12 +50,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
-    </li>
-    <li>
-      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
-    </li>
-    <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
     </li>
   </ul>
@@ -87,7 +81,7 @@
       <h1 data-toc-skip>Introducing ‘cwbtools’</h1>
                         <h4 data-toc-skip class="author">Andreas Blätte (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2022-08-29</h4>
+            <h4 data-toc-skip class="date">2022-09-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/vignettes/vignette.Rmd" class="external-link"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -110,10 +104,8 @@
 <p>The CWB stores each indexed corpora in an individual data directory. Registry files in a ‘registry directory’ (or ‘registry’ in short) describe the indexed corpora and include the path to the data directory.</p>
 <p>For the following examples, we create a temporary directory structure for registry files, and indexed corpora, making sure that these directories exits and are empty.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_tidy.html" class="external-link">path_tidy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"registry"</span><span class="op">)</span></span>
-<span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"data_dir"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"registry"</span><span class="op">)</span></span>
+<span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"data_dir"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span> <span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span>
@@ -142,7 +134,7 @@
 <span><span class="co">## [6] "N9986569.xml" "N9986587.xml"</span></span></code></pre>
 <p>For our example, we need an (empty) data directory for the UNGA corpus.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">unga_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"unga"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">unga_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"unga"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">unga_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The point of departure then is to create a <code>CorpusData</code> object that will serve as a processor for these files and storage facility for the corpus data. The central fields of the class are named <code>chunktable</code>, <code>tokenstream</code> and <code>metadata</code>. When we inspect the new object at the outset, we will see that these fields are not filled initially.</p>
@@ -201,7 +193,7 @@
 <span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus UNGA ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpeKiiOZ/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -255,7 +247,7 @@
 </h4>
 <p>In a second scenario, we create a corpus of Jane Austen’s books (included in the package <a href="https://CRAN.R-project.org/package=janeaustenr" class="external-link">janeaustenr</a>). Again, we start by preparing an (empty) data directory …</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">austen_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"austen"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">austen_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"austen"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">austen_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>… and instantiating a <code>CorpusData</code> object.</p>
@@ -304,7 +296,7 @@
 <span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpeKiiOZ/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -317,7 +309,7 @@
 <span><span class="co">##  - index        OK</span></span>
 <span><span class="co">## ========================================</span></span>
 <span><span class="co">## === Makeall: processing corpus AUSTEN ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpeKiiOZ/registry</span></span>
 <span><span class="co">## ATTRIBUTE stem</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>
@@ -397,7 +389,7 @@
 <p>This is the input we need. We instantiate a <code>CorpusData</code> object end make sure that a new data directory for the REUTERS corpus exists (and is empty) …</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Reuters</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CorpusData.html">CorpusData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">reuters_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"reuters"</span><span class="op">)</span></span>
+<span><span class="va">reuters_data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, <span class="st">"reuters"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">reuters_data_dir_tmp</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We assign the chunktable and the metadata, coerced to a <code>data.table</code>, to the object …</p>
@@ -436,7 +428,7 @@
 <span>   method <span class="op">=</span> <span class="st">"R"</span>, compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Makeall: processing corpus REUTERS ===</span></span>
-<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaJ4P88/registry</span></span>
+<span><span class="co">## Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpeKiiOZ/registry</span></span>
 <span><span class="co">## ATTRIBUTE word</span></span>
 <span><span class="co">##  + creating LEXSRT ... OK</span></span>
 <span><span class="co">##  - lexicon      OK</span></span>

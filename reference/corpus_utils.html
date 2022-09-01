@@ -18,7 +18,7 @@ corpora."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
       </span>
     </div>
 
@@ -33,12 +33,6 @@ corpora."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
-    </li>
-    <li>
-      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
-    </li>
-    <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
     </li>
   </ul></li>
@@ -105,10 +99,8 @@ corpora.</p>
 <span>  <span class="va">corpus</span>,</span>
 <span>  <span class="va">registry_dir</span>,</span>
 <span>  data_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  registry_dir_new <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, <span class="st">"cwb"</span>,</span>
-<span>    <span class="st">"registry"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span>
-<span>  data_dir_new <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, <span class="st">"cwb"</span>,</span>
-<span>    <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span>
+<span>  registry_dir_new <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span>,</span>
+<span>  data_dir_new <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  remove <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -135,7 +127,7 @@ corpora.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pkg</dt>
-<dd><p>Name of the data package.</p></dd>
+<dd><p>Name of a package (length-one <code>character</code> vector).</p></dd>
 
 
 <dt>repo</dt>
@@ -188,17 +180,18 @@ removing a corpus.</p></dd>
 
 
 <dt>user</dt>
-<dd><p>A user name that can be specified to download a corpus from a password protected site.</p></dd>
+<dd><p>A user name that can be specified to download a corpus from a
+password protected site.</p></dd>
 
 
 <dt>password</dt>
-<dd><p>A password that can be specified to download a corpus from a password protected site.</p></dd>
+<dd><p>A password that can be specified to download a corpus from a
+password protected site.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Further parameters that will be passed into
-<code>install.packages</code>, if argument <code>tarball</code> is <code>NULL</code>, or into
-or <code>download.file</code>, if <code>tarball</code> is specified.</p></dd>
+<dd><p>Further parameters that will be passed into <code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file()</a></code>, if
+<code>tarball</code> is specified.</p></dd>
 
 
 <dt>old</dt>
@@ -250,7 +243,10 @@ having created the copy.</p></dd>
     <h2>Value</h2>
     
 
-<p>Logical value <code>TRUE</code> if installation has been successful, or <code>FALSE</code> if not.</p>
+<p>Logical value <code>TRUE</code> if installation has been successful, or <code>FALSE</code></p>
+
+
+<p>if not.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -280,29 +276,24 @@ See the following stylized directory structure.</p>
        +- file3
 </code></pre></div>
 
-<p>The <code>corpus_install</code> function will assist the installation of a
+<p>The <code>corpus_install()</code> function will assist the installation of a
 corpus. The following scenarios are offered:</p><ul><li><p>If argument <code>tarball</code> is a local tarball, the tarball will
 be extracted and files will be moved.</p></li>
-<li><p>If <code>tarball</code> is a URL, the tarball will be downloaded from
-the online location. It is possible to state user credentials using the
-arguments <code>user</code> and <code>password</code>. Then the aforementioned
-installation (scenario 1) is executed. If argument <code>pkg</code> is the
-name of an installed package, corpus files will be moved into this
-package.</p></li>
-<li><p>If argument <code>doi</code> is Document Object Identifier (DOI), the URL
-from which a corpus tarball can be downloaded is derived from the
-information available at that location. The tarball is downloaded and the
-corpus installed. If argument <code>pkg</code> is defined, files will be moved
-into a R package, the syste registry and corpus directories are used
-otherwise. Note that at this stage, it is assumed that the DOI has been
-awarded by <a href="https://zenodo.org/" class="external-link">Zenodo</a></p></li>
-<li><p>If argument <code>pkg</code> is provided and specifies an R package (and
-<code>tarball</code> is <code>NULL</code>), the corpus package available at a
-CRAN-style repository specified by argument <code>repo</code> will be installed.
-Internally, the <code>install.packages</code> function is called and further
-arguments can be passed into this function call. This can be used to pass
-user credentials, e.g. by adding <code>method = "wget" extra = "--user
-  donald --password duck"</code>.</p></li>
+<li><p>If <code>tarball</code> is a URL, the tarball will be downloaded from the online
+location. It is possible to state user credentials using the arguments
+<code>user</code> and <code>password</code>. Then the aforementioned installation (scenario 1) is
+executed. If argument <code>pkg</code> is the name of an installed package, corpus
+files will be moved into this package.</p></li>
+<li><p>If argument <code>doi</code> is Document Object Identifier (DOI), the URL from
+which a corpus tarball can be downloaded is derived from the information
+available at that location. The tarball is downloaded and the corpus
+installed. If argument <code>pkg</code> is defined, files will be moved into a R
+package, the syste registry and corpus directories are used otherwise. Note
+that at this stage, it is assumed that the DOI has been awarded by
+<a href="https://zenodo.org/" class="external-link">Zenodo</a></p></li>
+<li><p>If argument <code>pkg</code> is provided and <code>tarball</code> is <code>NULL</code>, corpora
+included in the package will be installed as system corpora, using the
+storage location specified by <code>registry_dir</code>.</p></li>
 </ul><p>If the corpus to be installed is already available, a dialogue will ask the
 user whether an existing corpus shall be deleted and installed anew, if
 argument <code>ask</code> is <code>TRUE</code>.</p>
@@ -333,10 +324,7 @@ for switching to a packaged corpus.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">registry_file_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"cwb"</span>, <span class="st">"registry"</span>, <span class="st">"reuters"</span>, fsep <span class="op">=</span> <span class="st">"/"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">registry_file_new</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span>, <span class="st">"reuters"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">registry_file_new</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">registry_file_new</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">corpus_copy</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
@@ -346,10 +334,7 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span>    <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"cwb"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">corpus</span> <span class="op">&lt;-</span> <span class="st">"REUTERS"</span></span></span>
 <span class="r-in"><span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="st">"RcppCWB"</span></span></span>
 <span class="r-in"><span><span class="va">s_attr</span> <span class="op">&lt;-</span> <span class="st">"places"</span></span></span>
@@ -358,15 +343,9 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span><span class="va">registry_dir_src</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="va">pkg</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data_dir_src</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="va">pkg</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">registry_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"cwb"</span>, <span class="st">"registry"</span>, fsep <span class="op">=</span> <span class="st">"/"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">registry_file_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">registry_dir_tmp</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span>, fsep <span class="op">=</span> <span class="st">"/"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">registry_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">registry_file_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">registry_dir_tmp</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">registry_file_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">registry_file_tmp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">data_dir_tmp</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
@@ -420,7 +399,7 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_is_initialized</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_query</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, query <span class="op">=</span> <span class="va">Q</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7ff3ecde0d60&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7f846715c460&gt;</span>
 <span class="r-in"><span><span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_dump_subcorpus</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_dir_tmp</span>, cpos <span class="op">=</span> <span class="va">cpos</span></span></span>
@@ -431,7 +410,7 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">str</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "oil"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, <span class="st">"cwb"</span>, fsep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

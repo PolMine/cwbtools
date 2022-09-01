@@ -18,7 +18,7 @@ and data with restricted access is supported."><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
       </span>
     </div>
 
@@ -33,12 +33,6 @@ and data with restricted access is supported."><!-- mathjax --><script src="http
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/opennlp.html">CWB corpora and openNLP</a>
-    </li>
-    <li>
-      <a href="../articles/sentences.html">How to add a sentence annotation to an indexed corpus</a>
-    </li>
-    <li>
       <a href="../articles/vignette.html">Introducing 'cwbtools'</a>
     </li>
   </ul></li>
@@ -122,6 +116,10 @@ download.</p></dd>
 <p>The filename of the downloaded corpus tarball, designed to serve as
 input for <code><a href="corpus_utils.html">corpus_install</a></code> (as argument <code>tarball</code>). If the
 resource is not available, <code>NULL</code> is returned.</p>
+
+
+<p>The path of the downloaded resource, or <code>NULL</code> if the operation has
+not been successful.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -159,10 +157,10 @@ restricted data are usually not to be shared.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">tarball_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOAHHn7/registry</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOAHHn7/indexed_corpora</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoe05Nv/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoe05Nv/indexed_corpora</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
@@ -192,10 +190,10 @@ restricted data are usually not to be shared.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">tarball_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOAHHn7/registry</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOAHHn7/indexed_corpora</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoe05Nv/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpoe05Nv/indexed_corpora</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
