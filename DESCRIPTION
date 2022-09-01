@@ -1,20 +1,20 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.7
-Date: 2022-07-21
+Version: 0.3.8
+Date: 2022-08-29
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "aut", email = "christoph.leonhardt@uni-due.de")
   )
 Description: The 'Corpus Workbench' ('CWB', <https://cwb.sourceforge.io/>) offers a classic and mature
  approach for working with large, linguistically and structurally annotated corpora. The 'CWB'
- is memory efficient and its design makes running queries fast (Evert and Hardie 2011,
- <http://www.stefan-evert.de/PUB/EvertHardie2011.pdf>). The 'cwbtools' package offers
- pure R tools to create indexed corpus files as well as high-level wrappers for the original C
- implementation of CWB as exposed by the 'RcppCWB' package
- <https://CRAN.R-project.org/package=RcppCWB>. Additional functionality to add and
- modify annotations of corpora from within R makes working with CWB indexed corpora
- much more flexible and convenient. The 'cwbtools' package in combination with the R packages
+ is memory efficient and its design makes running queries fast, see Evert (2011)
+ <https://eprints.lancs.ac.uk/id/eprint/62721>. The 'cwbtools' package offers
+ pure 'R' tools to create indexed corpus files as well as high-level wrappers for the original 'C'
+ implementation of 'CWB' as exposed by the 'RcppCWB' package
+ (<https://CRAN.R-project.org/package=RcppCWB>). Additional functionality to add and
+ modify annotations of corpora from within 'R' makes working with 'CWB' indexed corpora
+ much more flexible and convenient. The 'cwbtools' package in combination with the 'R' packages
  'RcppCWB' (<https://CRAN.R-project.org/package=RcppCWB>) and 'polmineR'
  (<https://CRAN.R-project.org/package=polmineR>) offers a lightweight infrastructure
  to support the combination of quantitative and qualitative approaches for working
@@ -44,10 +44,8 @@ Suggests:
     tidytext,
     SnowballC,
     janeaustenr,
-    NLP,
     testthat,
     rmarkdown,
-    openNLP,
     aws.s3
 VignetteBuilder: knitr
 License: GPL-3

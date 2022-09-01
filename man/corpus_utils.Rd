@@ -46,10 +46,8 @@ corpus_copy(
   corpus,
   registry_dir,
   data_dir = NULL,
-  registry_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
-    "registry", fsep = "/"),
-  data_dir_new = file.path(normalizePath(tempdir(), winslash = "/"), "cwb",
-    "indexed_corpora", tolower(corpus), fsep = "/"),
+  registry_dir_new = fs::path(tempdir(), "cwb", "registry"),
+  data_dir_new = fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
   remove = FALSE,
   verbose = interactive(),
   progress = TRUE
@@ -73,7 +71,7 @@ corpus_testload(
 corpus_get_version(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
 }
 \arguments{
-\item{pkg}{Name of the data package.}
+\item{pkg}{Name of a package (length-one \code{character} vector).}
 
 \item{repo}{URL of the repository.}
 
@@ -104,13 +102,14 @@ removing a corpus.}
 
 \item{verbose}{Logical, whether to be verbose.}
 
-\item{user}{A user name that can be specified to download a corpus from a password protected site.}
+\item{user}{A user name that can be specified to download a corpus from a
+password protected site.}
 
-\item{password}{A password that can be specified to download a corpus from a password protected site.}
+\item{password}{A password that can be specified to download a corpus from a
+password protected site.}
 
-\item{...}{Further parameters that will be passed into
-\code{install.packages}, if argument \code{tarball} is \code{NULL}, or into
-or \code{download.file}, if \code{tarball} is specified.}
+\item{...}{Further parameters that will be passed into \code{download.file()}, if
+\code{tarball} is specified.}
 
 \item{old}{Name of the (old) corpus.}
 
@@ -136,7 +135,8 @@ having created the copy.}
 \item{to}{Character string describing the target encoding of the corpus.}
 }
 \value{
-Logical value \code{TRUE} if installation has been successful, or \code{FALSE} if not.
+Logical value \code{TRUE} if installation has been successful, or \code{FALSE}
+if not.
 }
 \description{
 Utility functions to assist the installation and management of indexed CWB
@@ -170,32 +170,26 @@ See the following stylized directory structure.
        +- file3
 }
 
-The \code{corpus_install} function will assist the installation of a
+The \code{corpus_install()} function will assist the installation of a
 corpus. The following scenarios are offered:
 \itemize{
 \item{If argument \code{tarball} is a local tarball, the tarball will
 be extracted and files will be moved.}
-\item{If \code{tarball} is a URL, the tarball will be downloaded from
-the online location. It is possible to state user credentials using the
-arguments \code{user} and \code{password}. Then the aforementioned
-installation (scenario 1) is executed. If argument \code{pkg} is the
-name of an installed package, corpus files will be moved into this
-package.}
-\item{If argument \code{doi} is Document Object Identifier (DOI), the URL
-from which a corpus tarball can be downloaded is derived from the
-information available at that location. The tarball is downloaded and the
-corpus installed. If argument \code{pkg} is defined, files will be moved
-into a R package, the syste registry and corpus directories are used
-otherwise. Note that at this stage, it is assumed that the DOI has been
-awarded by \href{https://zenodo.org/}{Zenodo}}
-\item{If argument \code{pkg} is provided and specifies an R package (and
-\code{tarball} is \code{NULL}), the corpus package available at a
-CRAN-style repository specified by argument \code{repo} will be installed.
-Internally, the \code{install.packages} function is called and further
-arguments can be passed into this function call. This can be used to pass
-user credentials, e.g. by adding \code{method = "wget" extra = "--user
-  donald --password duck"}.
-}
+\item{If \code{tarball} is a URL, the tarball will be downloaded from the online
+location. It is possible to state user credentials using the arguments
+\code{user} and \code{password}. Then the aforementioned installation (scenario 1) is
+executed. If argument \code{pkg} is the name of an installed package, corpus
+files will be moved into this package.}
+\item{If argument \code{doi} is Document Object Identifier (DOI), the URL from
+which a corpus tarball can be downloaded is derived from the information
+available at that location. The tarball is downloaded and the corpus
+installed. If argument \code{pkg} is defined, files will be moved into a R
+package, the syste registry and corpus directories are used otherwise. Note
+that at this stage, it is assumed that the DOI has been awarded by
+\href{https://zenodo.org/}{Zenodo}}
+\item{If argument \code{pkg} is provided and \code{tarball} is \code{NULL}, corpora
+included in the package will be installed as system corpora, using the
+storage location specified by \code{registry_dir}. }
 }
 If the corpus to be installed is already available, a dialogue will ask the
 user whether an existing corpus shall be deleted and installed anew, if
@@ -226,10 +220,7 @@ semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
 has another format or if it is not available, the return value is \code{NA}.
 }
 \examples{
-registry_file_new <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", "reuters", fsep = "/"
-  )
+registry_file_new <- fs::path(tempdir(), "cwb", "registry", "reuters")
 if (file.exists(registry_file_new)) file.remove(registry_file_new)
 corpus_copy(
   corpus = "REUTERS",
@@ -239,10 +230,7 @@ corpus_copy(
     "extdata", "cwb", "indexed_corpora", "reuters"
   )
 )
-unlink(file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", fsep = "/"),
-  recursive = TRUE)
+unlink(fs::path(tempdir(), "cwb"), recursive = TRUE)
 corpus <- "REUTERS"
 pkg <- "RcppCWB"
 s_attr <- "places"
@@ -251,15 +239,9 @@ Q <- '"oil"'
 registry_dir_src <- system.file(package = pkg, "extdata", "cwb", "registry")
 data_dir_src <- system.file(package = pkg, "extdata", "cwb", "indexed_corpora", tolower(corpus))
 
-registry_dir_tmp <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "registry", fsep = "/"
-)
-registry_file_tmp <- file.path(registry_dir_tmp, tolower(corpus), fsep = "/")
-data_dir_tmp <- file.path(
-  normalizePath(tempdir(), winslash = "/"),
-  "cwb", "indexed_corpora", tolower(corpus), fsep = "/"
-)
+registry_dir_tmp <- fs::path(tempdir(), "cwb", "registry")
+registry_file_tmp <- fs::path(registry_dir_tmp, tolower(corpus))
+data_dir_tmp <- fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus))
 
 if (file.exists(registry_file_tmp)) file.remove(registry_file_tmp)
 if (!dir.exists(data_dir_tmp)){
@@ -311,7 +293,7 @@ str <- RcppCWB::cl_id2str(
 )
 unique(str)
 
-unlink(file.path(normalizePath(tempdir(), winslash = "/"), "cwb", fsep = "/"), recursive = TRUE)
+unlink(fs::path(tempdir(), "cwb"), recursive = TRUE)
 }
 \seealso{
 For managing registry files, see \code{\link{registry_file_parse}}

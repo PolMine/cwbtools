@@ -61,37 +61,34 @@ cwb_install <- function(url_cwb = cwb_get_url(), md5 = attr(url_cwb, "md5"), cwb
   }
 
   if (.Platform$OS.type == "windows"){
-    unzip(file.path(path_temp(), basename(url_cwb), fsep = "/"), exdir = path_temp())
-    bin_dir <- file.path(cwb_dir, "bin")
+    unzip(fs::path(path_temp(), basename(url_cwb)), exdir = path_temp())
+    bin_dir <- fs::path(cwb_dir, "bin")
     if (!dir.exists(bin_dir)) dir.create(bin_dir)
-    for (x in list.files(file.path(path_temp(), subdir, "bin"), full.names = TRUE)){
-      file.copy(
-        from = x,
-        to = file.path(normalizePath(bin_dir, winslash = "/"), basename(x))
-        )
+    for (x in list.files(fs::path(path_temp(), subdir, "bin"), full.names = TRUE)){
+      file.copy(from = x, to = fs::path(bin_dir, basename(x)))
     }
   } else {
-    untar(file.path(path_temp(), basename(url_cwb), fsep = "/"), exdir = path_temp())
-    install_script_file <- file.path(path_temp(), subdir, "install-cwb.sh", fsep = "/")
+    untar(fs::path(path_temp(), basename(url_cwb)), exdir = path_temp())
+    install_script_file <- fs::path(path_temp(), subdir, "install-cwb.sh")
     install_script <- readLines(install_script_file)
     install_script[grep("^PREFIX=", install_script)] <- sprintf("PREFIX='%s'", cwb_dir)
     # the installation script assumes that it is started from the directory of the script
     # however, changing into the directory would violate R package checks
     # so hard links are needed ...
-    install_script <- gsub("bin/\\*", sprintf("%s/*", file.path(path_temp(), subdir, "bin", fsep = "/")), install_script)
-    install_script <- gsub("bin/cwb-config", file.path(path_temp(), subdir, "bin", "cwb-config", fsep = "/"), install_script)
-    install_script <- gsub("instutils/cwb-config.in", file.path(path_temp(), subdir, "instutils", "cwb-config.in", fsep = "/"), install_script)
-    install_script <- gsub("instutils/install.sh", file.path(path_temp(), subdir, "instutils", "install.sh", fsep = "/"), install_script)
-    install_script <- gsub("lib/libcl.a", file.path(path_temp(), subdir, "lib", "libcl.a", fsep = "/"), install_script)
-    install_script <- gsub("include/cwb/cl.h", file.path(path_temp(), subdir, "include", "cwb", "cl.h", fsep = "/"), install_script)
-    install_script <- gsub("include/cwb/cqi.h", file.path(path_temp(), subdir, "include", "cwb", "cqi.h", fsep = "/"), install_script)
-    install_script <- gsub("man/man1/*", file.path(path_temp(), subdir, "man", "man1", "*", fsep = "/"), install_script)
+    install_script <- gsub("bin/\\*", sprintf("%s/*", fs::path(path_temp(), subdir, "bin")), install_script)
+    install_script <- gsub("bin/cwb-config", fs::path(path_temp(), subdir, "bin", "cwb-config"), install_script)
+    install_script <- gsub("instutils/cwb-config.in", fs::path(path_temp(), subdir, "instutils", "cwb-config.in"), install_script)
+    install_script <- gsub("instutils/install.sh", fs::path(path_temp(), subdir, "instutils", "install.sh"), install_script)
+    install_script <- gsub("lib/libcl.a", fs::path(path_temp(), subdir, "lib", "libcl.a"), install_script)
+    install_script <- gsub("include/cwb/cl.h", fs::path(path_temp(), subdir, "include", "cwb", "cl.h"), install_script)
+    install_script <- gsub("include/cwb/cqi.h", fs::path(path_temp(), subdir, "include", "cwb", "cqi.h"), install_script)
+    install_script <- gsub("man/man1/*", fs::path(path_temp(), subdir, "man", "man1", "*"), install_script)
     cat(install_script, file = install_script_file, sep = "\n")
     system(install_script_file)
   }
   unlink(path(path_temp(), basename(url_cwb)))
   unlink(path(path_temp(), subdir))
-  cwb_bindir <- file.path(cwb_dir, "bin")
+  cwb_bindir <- fs::path(cwb_dir, "bin")
   Sys.setenv("CWB_BINDIR" = cwb_bindir)
   cwb_bindir
 }

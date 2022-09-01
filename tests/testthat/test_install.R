@@ -1,10 +1,39 @@
 testthat::context("install")
 
+
+test_that(
+  "corpus_install from pkg",
+  {
+    cwb_dir_tmp <- fs::path(tempdir(), "cwb_tmp")
+    cwb_dirs <- create_cwb_directories(prefix = cwb_dir_tmp, ask = FALSE, verbose = FALSE)
+    
+    if (cqp_is_initialized()){
+      cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+    } else {
+      cqp_initialize(registry = cwb_dirs[["registry_dir"]])
+    }
+
+    corpus_install(
+      pkg = "RcppCWB",
+      registry_dir = cwb_dirs[["registry_dir"]],
+      corpus_dir = cwb_dirs[["corpus_dir"]]
+    )
+    
+    cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+    
+    expect_true("UNGA" %in% RcppCWB::cqp_list_corpora())
+    expect_true("REUTERS" %in% RcppCWB::cqp_list_corpora())
+    
+    unlink(cwb_dir_tmp, recursive = TRUE)
+  }
+)
+
+
 test_that(
   "corpus_install from tarball",
   {
     library(RcppCWB)
-    cwb_dir_tmp <- file.path(tempdir(), "cwb_tmp")
+    cwb_dir_tmp <- fs::path(tempdir(), "cwb_tmp")
     cwb_dirs <- create_cwb_directories(prefix = cwb_dir_tmp, ask = FALSE, verbose = FALSE)
     if (cqp_is_initialized()){
       cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])

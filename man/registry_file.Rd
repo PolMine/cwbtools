@@ -15,7 +15,7 @@ registry_data(
   name,
   id,
   home,
-  info = file.path(home, ".info", fsep = "/"),
+  info = fs::path(home, ".info"),
   properties = c(charset = "utf-8"),
   p_attributes,
   s_attributes = character()

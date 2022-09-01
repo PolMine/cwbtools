@@ -19,7 +19,7 @@ library(data.table)
 # create temporary registry file so that data in RcppCWB package can be used
 
 registry_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb", "registry")
-registry_tmp <- file.path(normalizePath(tempdir(), winslash = "/"), "registry")
+registry_tmp <- fs::path(tempdir(), "registry")
 if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
 r <- registry_file_parse("REUTERS", registry_dir = registry_rcppcwb)
 r[["home"]] <- system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
@@ -59,17 +59,17 @@ CD$metadata <- as.data.table(s_attrs_places)
 
 # Remove temporary registry with home dir still pointing to RcppCWB data dir
 # to prevent data from being deleted
-file.remove(file.path(registry_tmp, "reuters"))
+file.remove(fs::path(registry_tmp, "reuters"))
 file.remove(registry_tmp)
 
 # create temporary directories (registry directory and one for indexed corpora)
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
 if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
-registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
-data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/")
-if (!dir.exists(registry_tmp)) dir.create(registry_tmp <- file.path(tmpdir, "registry", fsep = "/"))
-if (!dir.exists(data_dir_tmp)) dir.create(data_dir_tmp <- file.path(tmpdir, "data_dir", fsep = "/"))
+registry_tmp <- fs::path(tempdir(), "registry")
+data_dir_tmp <- fs::path(tempdir(), "data_dir")
+if (!dir.exists(registry_tmp)) dir.create(registry_tmp)
+if (!dir.exists(data_dir_tmp)) dir.create(data_dir_tmp)
 
 CD$encode(
   corpus = "REUTERS", encoding = "utf8",

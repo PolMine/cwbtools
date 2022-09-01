@@ -19,11 +19,11 @@
 #' # Download and install open access resource
 #' gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
 #' tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
-#' corpus_install(tarball = tarball_tmp)
+#' if (!is.null(tarball_tmp)) corpus_install(tarball = tarball_tmp)
 #' 
 #' # Download and install resource with restricted access
 #' tarball_tmp <- zenodo_get_tarball(url = gparlsample_url_restricted)
-#' corpus_install(tarball = tarball_tmp)
+#' if (!is.null(tarball_tmp)) corpus_install(tarball = tarball_tmp)
 #' }
 #' @export
 #' @importFrom curl curl new_handle handle_cookies curl_fetch_memory curl_download
@@ -39,6 +39,8 @@
 #' @param verbose A `logical` value, whether to output progess messages.
 #' @param progress A `logical` value, whether to report progress during
 #'   download.
+#' @return The path of the downloaded resource, or `NULL` if the operation has
+#'   not been successful.
 #' @rdname zenodo
 zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), checksum = TRUE, verbose = TRUE, progress = TRUE){
   

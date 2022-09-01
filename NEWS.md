@@ -1,3 +1,25 @@
+cwbtools 0.3.8
+==============
+
+* Package names, software names and API are wrapped in single quotes in the
+DESCRIPTION files, to follow section 1.1.1 of 'Writing R extensions' #43.
+* References in the description of the DESCRIPTION file have been standardized
+#44.
+* To meet CRAN requirements, any remaining usage of `install.packages()` has 
+been removed from the package. Using argument `pkg` of `corpus_install()` will
+install corpora found in a package as system corpora defined in the default
+registry directory #46.
+* The vignettes 'opennnlp.Rmd' and 'sentences.Rmd' have been removed from the
+package; they are now part of the PolMine Cookbook repository at
+`https://github.com/PolMine/cookbook`. Packages 'NLP' and 'openNLP' are no
+longer suggested and the `install.packages()` call (though not evaluated) is
+omitted. Part of the fix for #46.
+* The `fs::path()` function replaces base R `file.path()` throughout to solidify
+the generation of paths and to improve the readability of the code throughout.
+* `p_attribute_encode()` checks that the `character` vector `token_stream` does
+not exceed the CWB corpus size limit (2^31 - 1) #40.
+
+
 cwbtools 0.3.7
 ==============
 

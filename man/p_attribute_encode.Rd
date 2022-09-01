@@ -35,24 +35,29 @@ p_attribute_rename(
 )
 }
 \arguments{
-\item{token_stream}{A character vector with the tokens of the corpus.}
+\item{token_stream}{A \code{character} vector with the tokens of the corpus. The
+maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
+threshold is exceeded. See the \href{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}{CWB Encoding Tutorial} for
+size limitations of corpora.}
 
 \item{p_attribute}{The positional attribute.}
 
-\item{registry_dir}{Registry directory (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).}
+\item{registry_dir}{Registry directory (needed by \code{p_attribute_huffcode()}
+and \code{p_attribute_compress_rdx()}).}
 
-\item{corpus}{The CWB corpus (needed by \code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}).}
+\item{corpus}{The CWB corpus (needed by \code{p_attribute_huffcode()} and
+\code{p_attribute_compress_rdx()}).}
 
 \item{data_dir}{The data directory for the corpus with the binary files.}
 
 \item{method}{Either 'CWB' or 'R'.}
 
-\item{verbose}{Logical.}
+\item{verbose}{A \code{logical} value.}
 
 \item{encoding}{Encoding as defined in the charset corpus property of the
 registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 
-\item{compress}{Logical.}
+\item{compress}{A \code{logical} value.}
 
 \item{from}{Character string describing the current encoding of the attribute.}
 
@@ -78,10 +83,10 @@ attributes: First, encode a character vector (the token stream) using
 \code{p_attribute_huffcode}. Fourth, compress index files using
 \code{p_attribute_compress_rdx}.
 
-The implementation for the first two steps (\code{p_attribute_encode} and
-\code{p_attribute_makeall}) is a pure R implementation (so far). These two
+The implementation for the first two steps (\code{p_attribute_encode()} and
+\code{p_attribute_makeall()}) is a pure R implementation (so far). These two
 steps are enough to use the CQP functionality. To run
-\code{p_attribute_huffcode} and \code{p_attribute_compress_rdx}, an
+\code{p_attribute_huffcode()} and \code{p_attribute_compress_rdx()}, an
 installation of the CWB may be necessary.
 
 See the CQP Corpus Encoding Tutorial
@@ -112,10 +117,10 @@ tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reu
 # Create new (and empty) directory structure
 
 tmpdir <- normalizePath(tempdir(), winslash = "/")
-registry_tmp <- file.path(tmpdir, "registry", fsep = "/")
-data_dir_tmp <- file.path(tmpdir, "data_dir", "reuters", fsep = "/")
-if (file.exists(file.path(data_dir_tmp, "word.corpus"))){
-  file.remove(file.path(data_dir_tmp, "word.corpus"))
+registry_tmp <- fs::path(tmpdir, "registry")
+data_dir_tmp <- fs::path(tmpdir, "data_dir", "reuters")
+if (file.exists(fs::path(data_dir_tmp, "word.corpus"))){
+  file.remove(fs::path(data_dir_tmp, "word.corpus"))
 }
 if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)

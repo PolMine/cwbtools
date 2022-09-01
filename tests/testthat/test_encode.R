@@ -6,7 +6,7 @@ test_that(
     library(data.table)
 
     cwb_dirs <- create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
-    austen_data_dir_tmp <- file.path(cwb_dirs[["corpus_dir"]], "austen")
+    austen_data_dir_tmp <- fs::path(cwb_dirs[["corpus_dir"]], "austen")
     dir.create(austen_data_dir_tmp)
 
     Austen <- CorpusData$new()
@@ -65,7 +65,7 @@ test_that(
 
     skip_on_os(os = c("solaris", "windows")) # CWB not available for Solaris
     tryCatch(
-      cwb_install(cwb_dir = file.path(tempdir(), "cwb")),
+      cwb_install(cwb_dir = fs::path(tempdir(), "cwb")),
       error = function(e) testthat::skip("cannot download CWB")
     )
 
@@ -103,6 +103,8 @@ test_that(
     vocab1 <- RcppCWB::cl_id2str(corpus = "AUSTEN", p_attribute = "word", id = 0L:(lex1 - 1L))
     vocab2 <- RcppCWB::cl_id2str(corpus = "AUSTEN2", p_attribute = "word", id = 0L:(lex1 - 1L))
     expect_identical(vocab1, vocab2)
+    
+    lapply(cwb_dirs, unlink) # clean up
   }
 )
 
