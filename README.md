@@ -3,7 +3,7 @@
 [![R build status](https://github.com/PolMine/cwbtools/workflows/R-CMD-check/badge.svg)](https://github.com/PolMine/cwbtools/actions)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cwbtools)](https://cran.r-project.org/package=cwbtools)
 [![codecov](https://codecov.io/gh/PolMine/cwbtools/branch/master/graph/badge.svg)](https://codecov.io/gh/PolMine/cwbtools/branch/master)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6550747.svg)](https://doi.org/10.5281/zenodo.6550747)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7040444.svg)](https://doi.org/10.5281/zenodo.7040444)
 <!-- badges: end -->
 
 # Tools to Create, Modify and Manage Corpora for the Corpus Workbench (CWB)
