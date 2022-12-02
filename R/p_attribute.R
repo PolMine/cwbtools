@@ -29,11 +29,13 @@
 #'   maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
 #'   threshold is exceeded. See the [CWB Encoding
 #'   Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf) for
-#'   size limitations of corpora.
-#' @param compress A `logical` value.
+#'   size limitations of corpora. May also be a file.
+#' @param compress A `logical` value. 
 #' @param verbose A `logical` value.
 #' @param method Either 'CWB' or 'R'.
-#' @param p_attribute The positional attribute.
+#' @param p_attribute The positional attribute. May be more than one, if
+#'   `method` is "CWB". If method is "R", only one positional attribute may be
+#'   supplied.
 #' @param data_dir The data directory for the corpus with the binary files.
 #' @param encoding Encoding as defined in the charset corpus property of the
 #'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
@@ -130,6 +132,15 @@ p_attribute_encode <- function(
   
   if (method == "R"){
     
+    if (length(token_stream) == 1L){
+      if (!file.exists(token_stream)){
+        stop("`token_stream` is a length 1 vector, but is not an existing file")
+      }
+    }
+    
+    if (length(p_attribute) != 1L)
+      stop("If `method` is 'R', only one p-attribute can be processed.")
+    
     if (verbose) message("... writing tokenstream to disk (directly from R, equivalent to cwb-encode)")
     corpus_file <- fs::path(data_dir, paste(p_attribute, "corpus", sep = "."))
     lexicon_file <- fs::path(data_dir, paste(p_attribute, "lexicon", sep = "."))
@@ -182,80 +193,67 @@ p_attribute_encode <- function(
     if (verbose) message("... writing file: ", basename(lexicon_index_file))
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
     rm(idx_raw); gc()
-    ### equivalent to cwb-makeall (build index files)
-    
-    if (FALSE){
-      # this is an old approach to generate the reverse index in a "pure R" 
-      # manner. It has been superseded by including the function cwb_makeall 
-      # in the RcppCWB package 
-      df <- data.frame(id = ids, word = token_stream, stringsAsFactors = FALSE)
-      df[["cpos"]] <- 0L:(nrow(df) - 1L)
-      
-      corpus_cnt_file <- fs::path(data_dir, paste(p_attribute, "corpus.cnt", sep = "."))
-      corpus_rev_file <- fs::path(data_dir, paste(p_attribute, "corpus.rev", sep = "."))
-      corpus_rdx_file <- fs::path(data_dir, paste(p_attribute, "corpus.rdx", sep = "."))
-      lexicon_srt_file <- fs::path(data_dir, paste(p_attribute, "lexicon.srt", sep = "."))
-      
-      # generate cnt file
-      cnt_array <- tapply(X = df[["cpos"]], INDEX = df[["id"]], FUN = length)
-      cnt_matrix <- as.matrix(cnt_array)
-      cnt_vector <- unname(cnt_matrix[,1])
-      writeBin(object = cnt_vector, size = 4, endian = "big", con = corpus_cnt_file)
-      
-      # generate rev file
-      df_rev <- df[order(df[["id"]]),]
-      writeBin(object = df_rev[["cpos"]], size = 4, endian = "big", con = corpus_rev_file)
-      
-      # generate rdx file
-      positions <- c(0L, cumsum(cnt_vector)[1:(length(cnt_vector) - 1)])
-      writeBin(object = positions, size = 4, endian = "big", con = corpus_rdx_file)
-      
-      # generate srt file 
-      # This is what I do not understand sufficiently:
-      # it works for REUTERS, but not for AUSTEN or UNGA
-      # potantially, it is a character encoding issue
-      sorted <- order(lexicon) - 1L
-      writeBin(object = sorted, size = 4, endian = "big", con = lexicon_srt_file)
+
+  } else if (method == "CWB"){
+    if (length(token_stream) == 1L){
+      if (file.exists(token_stream)){
+        vrt_file <- token_stream
+      } else {
+        stop("Argument `token_stream` is length 1, but not an existing file")
+      }
+    } else {
+      vrt_file <- tempfile()
+      data.table::fwrite(
+        list(token_stream = token_stream), file = vrt_file,
+        col.names = FALSE, quote = FALSE, showProgress = interactive()
+      )
     }
     
-  } else if (method == "CWB"){
-    vrt_tmp_file <- tempfile()
-    data.table::fwrite(
-      list(token_stream = token_stream), file = vrt_tmp_file,
-      col.names = FALSE, quote = FALSE, showProgress = interactive()
-    )
-    
-    if (p_attribute == "word"){
+    if ("word" %in% p_attribute){
       if (verbose) message("... running cwb-encode")
-      executable <- if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
       system2(
-        command = fs::path(cwb_get_bindir(), executable),
+        command = fs::path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
+        ),
         args = c(
           sprintf("-d %s", normalizePath(data_dir)),
-          sprintf("-f %s", normalizePath(vrt_tmp_file)),
+          sprintf("-f %s", normalizePath(vrt_file)),
           sprintf("-R %s", normalizePath(registry_file, mustWork = FALSE)),
           sprintf("-c %s", encoding), "-v")
       )
     } else {
       # Add positional attribute to a corpus that already exists
       # some checks at first
-      if (length(token_stream) != cl_attribute_size(corpus = toupper(corpus), attribute = "word", attribute_type = "p", registry = registry_dir))
-        stop("Length of character vector must be identical with size of corpus - not TRUE")
+      corpus_size <- cl_attribute_size(
+        corpus = toupper(corpus),
+        attribute = "word",
+        attribute_type = "p",
+        registry = registry_dir
+      )
+      if (length(token_stream) != 1L){
+          if (length(token_stream) != corpus_size)
+            stop("Length of `token_stream` and corpus size differ!")
+      }
       
-      if (p_attribute %in% registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attribute"]])
-        stop("p-attribute already exists")
+      p_attrs_old <- registry_file_parse(
+        corpus = tolower(corpus),
+        registry_dir = registry_dir
+      )[["p_attributes"]]
+      if (any(p_attribute %in% p_attrs_old)) stop("existing p-attribute")
       
       if (verbose) message("... calling cwb-encode")
-      p_attrs_old <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)[["p_attributes"]] # for checking later if anything is missing
-      executable <- if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
       cwb_encode_cmd_vec <- c(
-        fs::path(cwb_get_bindir(), executable),
+        fs::path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
+        ),
         "-d", normalizePath(data_dir),
-        "-f", normalizePath(vrt_tmp_file),
-        "-R", normalizePath(registry_file, mustWork = FALSE),
+        "-f", normalizePath(vrt_file),
         "-p", "-",
-        "-P", p_attribute,
-        "-c", encoding
+        paste("-P", p_attribute, sep = " "),
+        "-c", encoding,
+        "-v"
       )
       system(paste0(cwb_encode_cmd_vec, collapse = " "))
     }
@@ -280,44 +278,51 @@ p_attribute_encode <- function(
     )
   }
   if (verbose) message("... writing registry file")
-  registry_file_write(regdata, corpus = tolower(corpus), registry_dir = registry_dir)
-  
-  # create reverse index using cwb-makeall
+  registry_file_write(
+    regdata,
+    corpus = tolower(corpus),
+    registry_dir = registry_dir
+  )
   
   if (method == "CWB"){
     if (verbose) message("... calling cwb-makeall")
-    system2(
-      command = fs::path(
-        cwb_get_bindir(),
-        if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
-      ),
-      args = c(
-        sprintf("-r %s", normalizePath(registry_dir)),
-        sprintf("-P %s", p_attribute),
-        "-V", toupper(corpus))
-    )
+    for (p_attr in p_attribute){
+      system2(
+        command = fs::path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
+        ),
+        args = c(
+          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-P %s", p_attr),
+          "-V", toupper(corpus))
+      )
+    }
+    
     
     if (compress){
-      compression_cmd_args <- c(
-        sprintf("-r %s", normalizePath(registry_dir)),
-        sprintf("-P %s", p_attribute),
-        toupper(corpus)
-      )
-      system2(
-        command = normalizePath(fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode"
-        )),
-        args = compression_cmd_args, stdout = TRUE
-      )
-      system2(
-        command = normalizePath(fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx"
-        )),
-        args = compression_cmd_args,
-        stdout = TRUE
-      )
+      for (p_attr in p_attribute){
+        compression_cmd_args <- c(
+          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-P %s", p_attr),
+          toupper(corpus)
+        )
+        system2(
+          command = normalizePath(fs::path(
+            cwb_get_bindir(),
+            if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode"
+          )),
+          args = compression_cmd_args, stdout = TRUE
+        )
+        system2(
+          command = normalizePath(fs::path(
+            cwb_get_bindir(),
+            if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx"
+          )),
+          args = compression_cmd_args,
+          stdout = TRUE
+        )
+      }
     }
   } else if (method == "R"){
     

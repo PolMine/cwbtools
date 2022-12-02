@@ -1,3 +1,8 @@
+cwbtools 0.3.8.9001
+===================
+
+* `p_attribute_encode()` accepts multiple p-attributes if method is "CWB".
+
 cwbtools 0.3.8
 ==============
 
