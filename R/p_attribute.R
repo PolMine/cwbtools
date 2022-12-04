@@ -305,6 +305,7 @@ p_attribute_encode <- function(
         compression_cmd_args <- c(
           sprintf("-r %s", normalizePath(registry_dir)),
           sprintf("-P %s", p_attr),
+          if (verbose) "-v" else character(),
           toupper(corpus)
         )
         system2(
@@ -313,6 +314,12 @@ p_attribute_encode <- function(
             if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode"
           )),
           args = compression_cmd_args, stdout = TRUE
+        )
+        
+        compression_cmd_args <- c(
+          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-P %s", p_attr),
+          toupper(corpus)
         )
         system2(
           command = normalizePath(fs::path(
