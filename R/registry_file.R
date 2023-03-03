@@ -16,6 +16,8 @@
 #' @param id Short name of corpus (\code{character} vector).
 #' @param home Path with data directory for indexed corpus.
 #' @param info A \code{character} vector containing path name of info file.
+#' @param property A single corpus property (`character` vector).
+#' @param value Value of a corpus property (`character` vector).
 #' @param properties Named \code{character} vector with corpus properties,
 #'   should at least include 'charset'.
 #' @param p_attributes A \code{character} vector with positional attributes to
@@ -54,6 +56,8 @@ registry_file_parse <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGIST
   properties <- do.call(rbind, properties_raw)
   registry_data[["properties"]] <- setNames(properties[,3], properties[,2])
   class(registry_data) <- "registry_data"
+  registry_data[["registry_dir"]] <- registry_dir
+  registry_data[["corpus"]] <- corpus
   registry_data
 }
 
@@ -177,15 +181,30 @@ registry_data <- function(name, id, home, info = fs::path(home, ".info"), proper
 }
 
 
-#' @details \code{registry_file_write} will compose a registry file from
-#'   \code{data} and write it to disk.
+#' @details `registry_file_write()` will compose a registry file from
+#'   `data` and write it to disk.
 #' @rdname registry_file
 #' @export registry_file_write
 registry_file_write <- function(data, corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"), ...){
   regfile <- registry_file_compose(x = data)
+  if (missing(corpus)) corpus <- data[["corpus"]]
+  if (missing(registry_dir)) registry_dir <- data[["registry_dir"]]
   writeLines(
     text = regfile,
     con = fs::path(registry_dir, tolower(corpus))
   )
   invisible(regfile)
+}
+
+#' @details `registry_set_property()` will set a single corpus property.
+#' @rdname registry_file
+#' @export registry_set_property
+registry_set_property <- function(data, property, value){
+  stopifnot(
+    is.character(property),
+    length(property) == 1L,
+    length(value) == 1L
+  )
+  data[["properties"]][[property]] <- as.character(value)
+  data
 }

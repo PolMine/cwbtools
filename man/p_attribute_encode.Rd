@@ -38,9 +38,11 @@ p_attribute_rename(
 \item{token_stream}{A \code{character} vector with the tokens of the corpus. The
 maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
 threshold is exceeded. See the \href{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}{CWB Encoding Tutorial} for
-size limitations of corpora.}
+size limitations of corpora. May also be a file.}
 
-\item{p_attribute}{The positional attribute.}
+\item{p_attribute}{The positional attribute. May be more than one, if
+\code{method} is "CWB". If method is "R", only one positional attribute may be
+supplied.}
 
 \item{registry_dir}{Registry directory (needed by \code{p_attribute_huffcode()}
 and \code{p_attribute_compress_rdx()}).}

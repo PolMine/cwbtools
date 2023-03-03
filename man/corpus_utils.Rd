@@ -205,7 +205,7 @@ files reside.
 
 \code{corpus_remove()} can be used to delete a corpus.
 
-\code{corpus_as_tarball} will create a tarball (.tar.gz-file) with
+\code{corpus_as_tarball()} will create a tarball (.tar.gz-file) with
 two subdirectories. The 'registry' subdirectory will host the registry file
 for the tarred corpus. The data files will be put in a subdirectory with
 the corpus name in the 'indexed_corpora' subdirectory.

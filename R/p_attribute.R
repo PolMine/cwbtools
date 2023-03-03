@@ -243,9 +243,12 @@ p_attribute_encode <- function(
       if (any(p_attribute %in% p_attrs_old)) stop("existing p-attribute")
       
       if (verbose) message("... calling cwb-encode")
+      cwb_bindir <- cwb_get_bindir()
+      if (is.null(cwb_bindir) || (length(cwb_bindir) == ""))
+        stop("CWB binaries not found using `cwb_get_bindir()`")
       cwb_encode_cmd_vec <- c(
         fs::path(
-          cwb_get_bindir(),
+          cwb_bindir,
           if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
         ),
         "-d", normalizePath(data_dir),

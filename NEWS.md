@@ -1,7 +1,10 @@
-cwbtools 0.3.8.9001
+cwbtools 0.3.8.9002
 ===================
 
 * `p_attribute_encode()` accepts multiple p-attributes if method is "CWB".
+* New function `registry_set_property()` for setting corpus properties in a 
+pipe.
+* `read_registry_file()` will keep 'registry_dir' and 'corpus'.
 
 cwbtools 0.3.8
 ==============
