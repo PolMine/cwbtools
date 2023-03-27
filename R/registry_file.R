@@ -208,3 +208,18 @@ registry_set_property <- function(data, property, value){
   data[["properties"]][[property]] <- as.character(value)
   data
 }
+
+#' @details `registry_set_info()` will set the path to the info file.
+#' @param info_file Path to the info file providing information on the corpus.
+#' @rdname registry_file
+#' @export registry_set_info
+registry_set_info <- function(data, info_file){
+  stopifnot(
+    length(info_file) == 1L
+  )
+  info_file <- path.expand(info_file)
+  if (!file.exists(info_file)) stop("info file does not exist")
+  
+  data[["info"]] <- info_file
+  data
+}

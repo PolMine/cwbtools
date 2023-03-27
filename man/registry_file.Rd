@@ -6,6 +6,7 @@
 \alias{registry_data}
 \alias{registry_file_write}
 \alias{registry_set_property}
+\alias{registry_set_info}
 \title{Parse and create registry files.}
 \usage{
 registry_file_parse(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
@@ -30,6 +31,8 @@ registry_file_write(
 )
 
 registry_set_property(data, property, value)
+
+registry_set_info(data, info_file)
 }
 \arguments{
 \item{corpus}{A CWB corpus indicated by a length-one \code{character} vector.}
@@ -62,6 +65,8 @@ declare.}
 \item{property}{A single corpus property (\code{character} vector).}
 
 \item{value}{Value of a corpus property (\code{character} vector).}
+
+\item{info_file}{Path to the info file providing information on the corpus.}
 }
 \description{
 A set of functions to parse, create and write registry files.
@@ -81,6 +86,8 @@ that can be written to disk.
 \code{data} and write it to disk.
 
 \code{registry_set_property()} will set a single corpus property.
+
+\code{registry_set_info()} will set the path to the info file.
 }
 \examples{
 regdata <- registry_file_parse(
