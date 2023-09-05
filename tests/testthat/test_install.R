@@ -152,7 +152,7 @@ test_that(
       error = function(e) testthat::skip("Zenodo not available")
     )
     if (!exists("zenodo_record")) testthat::skip()
-    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
+    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["download"]])
     tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
 
     y <- corpus_install(
