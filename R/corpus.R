@@ -157,38 +157,42 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
       if (verbose) cli_rule("Resolve DOI")
       if (verbose) cli_process_start("get Zenodo record referred to by DOI")
-      # tryCatch(
-      #   zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi),
-      #   error = function(e){
-      #     if (verbose){
-      #       cli_process_failed()
-      #     } else {
-      #       cli_alert_danger(sprintf("'no Zenodo record found for DOI '%s'", doi))
-      #     }
-      #   }
-      # )
-      # 
-      # if (!exists("zenodo_record")){
-      #   return(invisible(FALSE)) # unlikely scenario that can only result from error detected by tryCatch()
-      # } else if (is.null(zenodo_record)){
-      #   if (verbose) cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
-      #   return(invisible(FALSE))
-      # } else {
-      #   if (verbose) cli_process_done()
-      # }
-      # 
-      # zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
-      # tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
-      # 
-      # if (length(tarball) > 1L && isTRUE(ask)){
-      #   userchoice <- utils::menu(
-      #     choices = basename(tarball),
-      #     title = "Several tarballs assumed to contain an indexed corpus are available. Which tarball shall be downloaded?"
-      #   )
-      #   tarball <- tarball[userchoice]
-      # }
+      tryCatch(
+        zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = doi),
+        error = function(e){
+          if (verbose){
+            cli_process_failed()
+          } else {
+            cli_alert_danger(sprintf("'no Zenodo record found for DOI '%s'", doi))
+          }
+        }
+      )
+
+      if (!exists("zenodo_record")){
+        return(invisible(FALSE)) # unlikely scenario that can only result from error detected by tryCatch()
+      } else if (is.null(zenodo_record)){
+        if (verbose) cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
+        return(invisible(FALSE))
+      } else {
+        if (verbose) cli_process_done()
+      }
+
+      zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["download"]])
       
-      tarball <- zenodo_get_tarballurl(url = doi)
+      tarball <- grep(
+        "^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz(/content|)$",
+        zenodo_files,
+        value = TRUE
+      )
+
+      if (length(tarball) > 1L && isTRUE(ask)){
+        userchoice <- utils::menu(
+          choices = basename(tarball),
+          title = "Several tarballs assumed to contain an indexed corpus are available. Which tarball shall be downloaded?"
+        )
+        tarball <- tarball[userchoice]
+      }
+      
       if (is.null(tarball)){
         if (verbose){
           cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
@@ -204,11 +208,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
       )
       
-      # zenodo_file_record <- zenodo_record[["files"]][[which(zenodo_files == tarball)]]
-      
-      if (!is.null(checksum)) checksum <- names(tarball)[1]
-      tarball <- unname(tarball)
-      
+      zenodo_file_record <- zenodo_record[["files"]][[which(zenodo_files == tarball)]]
     }
   }
 
@@ -312,12 +312,15 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           "download corpus tarball {col_cyan('%s')} ... done", basename(tarball)
         )
       )
-      # if (exists("zenodo_file_record")){
-      #   if (!is.null(checksum)){
-      #     if (verbose) cli_alert_warning("argument checksum is not NULL but md5 checksum can be derived from Zenodo record - using checksum issued by Zenodo")
-      #   }
-      #   checksum <- zenodo_file_record[["checksum"]]
-      # }
+      if (exists("zenodo_file_record")){
+        if (!is.null(checksum)){
+          if (verbose) 
+            cli_alert_warning(
+              "argument checksum is not NULL but md5 checksum can be derived from Zenodo record - using checksum issued by Zenodo"
+            )
+        }
+        checksum <- zenodo_file_record[["checksum"]]
+      }
       if (isFALSE(is.null(checksum))){
         if (verbose){
           msg <- sprintf("check md5 checksum for tarball %s (expected %s)", basename(tarball), checksum)

@@ -7,6 +7,7 @@ pipe.
 * `read_registry_file()` will keep 'registry_dir' and 'corpus'.
 * `registry_set_info` as new auxiliary function to set path to info file in 
 `registry_data` object.
+* `corpus_install()` reverts to package zen4R to links of files at Zenodo #42.
 
 
 cwbtools 0.3.8
@@ -29,6 +30,8 @@ omitted. Part of the fix for #46.
 the generation of paths and to improve the readability of the code throughout.
 * `p_attribute_encode()` checks that the `character` vector `token_stream` does
 not exceed the CWB corpus size limit (2^31 - 1) #40.
+* `zenodo_get_tarballurl()` is removed from package again (temporarily used when
+zen4R package did not work).
 
 
 cwbtools 0.3.7

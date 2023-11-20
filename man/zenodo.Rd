@@ -3,7 +3,6 @@
 \docType{data}
 \name{zenodo_get_tarball}
 \alias{zenodo_get_tarball}
-\alias{zenodo_get_tarballurl}
 \alias{gparlsample_url_restricted}
 \title{Download corpus tarball from Zenodo}
 \format{
@@ -17,8 +16,6 @@ zenodo_get_tarball(
   verbose = TRUE,
   progress = TRUE
 )
-
-zenodo_get_tarballurl(url)
 
 gparlsample_url_restricted
 }
@@ -51,9 +48,6 @@ Download corpus tarball from Zenodo. Downloading both freely available data
 and data with restricted access is supported.
 }
 \details{
-\code{zenodo_get_tarballurl} is a (temporary) helper function to
-accomplish a temporarily bugged functionality of the zen4R package.
-
 A sample subset of the GermaParl corpus is deposited at Zenodo for
 testing purposes. There are identical open access and restricted versions
 of GermaParlSample to test different flavours of downloading a resource
