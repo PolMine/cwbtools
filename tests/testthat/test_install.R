@@ -137,7 +137,11 @@ test_that(
     old_registry <- Sys.getenv("CORPUS_REGISTRY")
     Sys.setenv(CORPUS_REGISTRY = "")
 
-    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
+    cwb_dirs <- cwbtools::create_cwb_directories(
+      prefix = tempdir(),
+      ask = FALSE,
+      verbose = FALSE
+    )
     Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
 
     if (RcppCWB::cqp_is_initialized()){
@@ -152,8 +156,9 @@ test_that(
       error = function(e) testthat::skip("Zenodo not available")
     )
     if (!exists("zenodo_record")) testthat::skip()
-    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["links"]][["download"]])
-    tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", zenodo_files, value = TRUE)
+    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["download"]])
+    
+    tarball <- grep("^.*?_(v|)\\d+\\.\\d+\\.\\d+\\.tar\\.gz/content$", zenodo_files, value = TRUE)
 
     y <- corpus_install(
       tarball = tarball,

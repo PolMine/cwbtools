@@ -65,89 +65,89 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
     
     trystatus <- try(curl_fetch_memory(url = url, handle = h))
     if (is(trystatus)[[1]] == "try-error"){
-      warning("Zenodo not available. Try again later.")
+      cli_alert_warning("Zenodo not available. Try again later.")
+      return(NULL)
+    }
+    
+    trystatus <- try(page <- curl(url = url, handle = h))
+    if (is(trystatus)[[1]] == "try-error"){
+      cli_alert_warning("Zenodo not available. Try again later.")
       return(NULL)
     }
     
     trystatus <- try(
-      page <- curl(
-        url = strsplit(x = url, split = "\\?token=")[[1]][1],
-        handle = h
-      )
+      website <- read_xml(
+        paste(readLines(page, warn = FALSE), collapse = "\n"),
+        as_html = TRUE, options = c("NOERROR", "NOWARNING", "RECOVER")
+      ),
     )
     if (is(trystatus)[[1]] == "try-error"){
       warning("Zenodo not available. Try again later.")
       return(NULL)
     }
     
-    if (verbose) cli_process_done()
-  } else {
-    
-    if (grepl("^10\\.5281/zenodo", url))
-      url <- sprintf("https://doi.org/%s", url)
-
-    if (verbose) cat_rule("Download resource from Zenodo")
-
-    trystatus <- try(page <- curl(url = url))
-    if (is(trystatus)[[1]] == "try-error"){
-      warning("Zenodo not available. Try again later.")
+    a <- xml_find_all(website, xpath = "//a")
+    files <- xml2::xml_attr(a, attr = "href")
+    tarball_index <- grep("\\.tar\\.gz\\?download=", files)
+    if (length(tarball_index) == 0L){
+      cli_alert_warning("No tarball to be downloaded.")
       return(NULL)
     }
+    
+    tarball <- sprintf("https://zenodo.org/%s", files[tarball_index[1]])
 
-  }
-  
-  if (verbose) cli_process_start("extract tarball URL from Zenodo website")
-  
-  trystatus <- try(website <- read_html(page))
-  if (is(trystatus)[[1]] == "try-error"){
-    warning("Zenodo not available. Try again later.")
-    return(NULL)
+    md5_el <- xml_find_first(a[[tarball_index[1]]], xpath = "../../small")
+    md5sum_zenodo <- gsub("^md5:(.*?)\\s*$", "\\1", xml_text(md5_el))
+    
+    if (verbose) cli_process_done()
+    cli_alert_info("tarball to download: {.href {tarball}}")
+  } else {
+    
+    if (verbose) cat_rule("Download resource from Zenodo")
+    
+    tryCatch(
+      zenodo_record <- ZenodoManager$new()$getRecordByDOI(doi = url),
+      error = function(e){
+        if (verbose){
+          cli_process_failed()
+        } else {
+          cli_alert_danger("'no Zenodo record found for DOI {.href {url}}")
+        }
+      }
+    )
+    
+    if (verbose) cli_process_start("get tarball URL from Zenodo record")
+    
+    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["download"]])
+    
+    if (verbose) cli_process_done()
+    tarball_index <- grep("\\.tar\\.gz/content", zenodo_files)
+    if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
+    tarball <- zenodo_files[tarball_index]
+    
+    md5sum_zenodo <- zenodo_record[["files"]][[tarball_index]][["checksum"]]
+    
+    cli_alert_info("tarball to download: {.path {basename(dirname(tarball))}}")
   }
 
-  file_elems <- xml_find_all(website, xpath = "//a[@class='filename']")
-  if (length(file_elems) == 0L){
-    warning("Website does not reference files to download.")
-    return(NULL)
-  }
-  filenames <- sapply(
-    strsplit(
-      x = sapply(file_elems, xml_attr, attr = "href"),
-      split = "\\?download"
-    ),
-    `[[`, 1L
-  )
-  if (verbose) cli_process_done()
-  tarball_index <- grep("\\.tar\\.gz", filenames)
-  if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
-  tarball <- filenames[tarball_index]
-  
-  md5_el <- xml_find_first(file_elems[[tarball_index]], xpath = "../small")
-  md5sum_zenodo <- gsub("^md5:(.*?)\\s*$", "\\1", xml_text(md5_el))
-  
-  cli_alert_info(
-    paste("tarball to download:", sprintf("{.path %s}", basename(tarball)))
-  )
-  
   trystatus <- try(
     curl_download(
-      url = fs::path("https://zenodo.org", tarball),
+      url = tarball,
       destfile = destfile,
       quiet = !progress, 
       handle = h
     )
   )
   if (is(trystatus)[[1]] == "try-error"){
-    warning("Zenodo not available. Try again later.")
+    cli_alert_warning("Zenodo not available. Try again later.")
     return(NULL)
   }
 
   if (isTRUE(checksum)){
-    if (verbose){
-      msg <- sprintf(
-        "checking whether md5 checksum meets expectation (%s)", col_cyan(md5sum_zenodo)
+    if (verbose)
+      cli_process_start(
+        "checking whether md5 checksum meets expectation ({col_cyan({md5sum_zenodo})})"
       )
-      cli_process_start(msg)
-    }
     tarball_checksum <- tools::md5sum(destfile)
     if (tarball_checksum == md5sum_zenodo){
       if (verbose) cli_process_done()
@@ -163,9 +163,10 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
     }
   } else {
     if (verbose)
-      cli_alert_warning(
-        paste("md5 checksum not checked (argument 'checksum' not 'TRUE') -",
-        "note that checking the integrity of downloaded data is good practice")
+      cli_alert_warning(c(
+        "md5 checksum not checked (argument 'checksum' not 'TRUE') - ",
+        "note that checking the integrity of downloaded data is good practice"),
+        wrap = TRUE
       )
   }
 
@@ -186,4 +187,4 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
 #' @rdname zenodo
 #' @keywords datasets
 #' @export
-gparlsample_url_restricted <- "https://zenodo.org/record/6546810?token=eyJhbGciOiJIUzUxMiIsImV4cCI6MTY3MjQzNzU5OSwiaWF0IjoxNjU4MzE5NzgwfQ.eyJkYXRhIjp7InJlY2lkIjo2NTQ2ODEwfSwiaWQiOjI0ODA4LCJybmQiOiI5N2RkYjdiZCJ9.Bi4bvXO1UXB7h6wT_RlhPWfesRb1CpIH2GNOQZ2Twf9M18k8tx38LBYvACVrKYmLZWTHIrVyN3yl_rCJ9s1PlA"
+gparlsample_url_restricted <- "https://zenodo.org/records/6546810?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImYzZGZlNmVkLWQ3ZDgtNDdiYy05ZGQxLTE2MmRjMThlZWE4MiIsImRhdGEiOnt9LCJyYW5kb20iOiIwMjkzZTFjNjMzZTcwNTQxNTlhMTI4NmUwMGQ1OTQyYyJ9.xiVSz2iVv60l8K9BhgnRGqcU9i7rz5fYs4wHCVuOCfvDNGIuLRJ43jLYfgBo5LJv9GJaqwoaqvA3e74te_Y57A"

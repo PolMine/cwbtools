@@ -163,15 +163,17 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           if (verbose){
             cli_process_failed()
           } else {
-            cli_alert_danger(sprintf("'no Zenodo record found for DOI '%s'", doi))
+            cli_alert_danger("'no Zenodo record found for DOI {.href {doi}}")
           }
         }
       )
 
       if (!exists("zenodo_record")){
-        return(invisible(FALSE)) # unlikely scenario that can only result from error detected by tryCatch()
+        # unlikely scenario that can only result from error detected by tryCatch()
+        return(invisible(FALSE)) 
       } else if (is.null(zenodo_record)){
-        if (verbose) cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
+        if (verbose)
+          cli_alert_danger("'no Zenodo record found for DOI {.href {doi}}")
         return(invisible(FALSE))
       } else {
         if (verbose) cli_process_done()
@@ -195,7 +197,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       
       if (is.null(tarball)){
         if (verbose){
-          cli_alert_danger(sprintf("no Zenodo record found for DOI '%s'", doi))
+          cli_alert_danger("'no Zenodo record found for DOI {.href {doi}}")
         }
         return(invisible(FALSE))
       }
