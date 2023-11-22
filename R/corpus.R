@@ -253,7 +253,10 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball))
       )
 
-      corpus_tarball <- path(cwbtools_tmpdir, basename(tarball))
+      corpus_tarball <- path(
+        cwbtools_tmpdir,
+        basename(gsub("/content$", "", tarball))
+      )
 
       if (is.null(user)){
 
