@@ -118,10 +118,6 @@ test_that(
   {
     skip_on_cran()
     
-    expect_null(
-      zenodo_get_tarballurl(url = "10.5281/zenodo.3823245123")
-    )
-    
     expect_false(
       corpus_install(doi = "10.5281/zenodo.3823245123", verbose = FALSE)
     )

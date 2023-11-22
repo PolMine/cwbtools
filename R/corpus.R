@@ -406,7 +406,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
     # The registry directory and the data directory might be within a subdirectory
     # with the same name of the tarball (or name of tarball without date)
-    subdir1 <- file_path_sans_ext(basename(tarball), compression = TRUE)
+    subdir1 <- file_path_sans_ext(basename(corpus_tarball), compression = TRUE)
     subdir2 <- gsub("^(.*?)(-|_)\\d{4}-\\d{2}-\\d{2}$", "\\1", subdir1)
 
     if (dir.exists(path(path_tidy(cwbtools_tmpdir), subdir1))){
@@ -422,9 +422,9 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     
     # Ask user before overwriting existing corpus ----------------
     for (corpus in corpora){
-      # if (exists("zenodo_record")){
-      #   version <- zenodo_record[["metadata"]][["version"]]
-      # } else {
+      if (exists("zenodo_record")){
+        version <- zenodo_record[["metadata"]][["version"]]
+      } else {
         rf <- registry_file_parse(
           corpus = corpus,
           registry_dir = tmp_registry_dir
@@ -432,11 +432,11 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         if ("version" %in% names(rf[["properties"]])){
           version <- rf[["properties"]][["version"]]
         } else if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz(/content|)$", basename(corpus_tarball))){
-          version <- gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz(/content|)$", "v\\2", basename(tarball))
+          version <- gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz(/content|)$", "v\\2", basename(corpus_tarball))
         } else {
           version <- "unknown"
         }
-      # }
+      }
       
       if (tolower(corpus) %in% list.files(cwb_dirs[["registry_dir"]])){
         regdata <- registry_file_parse(
