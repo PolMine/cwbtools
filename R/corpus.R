@@ -428,8 +428,8 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         )
         if ("version" %in% names(rf[["properties"]])){
           version <- rf[["properties"]][["version"]]
-        } else if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz$", basename(corpus_tarball))){
-          version <- gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz$", "v\\2", basename(tarball))
+        } else if (grepl("^.*?\\d+\\.\\d+\\.\\d+\\.tar\\.gz(/content|)$", basename(corpus_tarball))){
+          version <- gsub("^.*?_(v|)(\\d+\\.\\d+\\.\\d+)\\.tar\\.gz(/content|)$", "v\\2", basename(tarball))
         } else {
           version <- "unknown"
         }
