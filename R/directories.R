@@ -271,15 +271,16 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
 
 
 
-#' @details \code{use_corpus_registry_envvar} is a convenience function that
-#'   will assist users to define the environment variable CORPUS_REGSITRY in the
+#' @details `use_corpus_registry_envvar()` is a convenience function that will
+#'   assist users to define the environment variable CORPUS_REGSITRY in the
 #'   .Renviron-file.  making it available across sessions. The function is
 #'   intended to be used in an interactive R session. An error is thrown if this
 #'   is not the case. The user will be prompted whether the cwbtools package
-#'   shall take care of creating / modifying the .Renviron-file. If not,
-#'   the file will be opened for manual modification with some instructions shown
-#'   in the terminal.
+#'   shall take care of creating / modifying the .Renviron-file. If not, the
+#'   file will be opened for manual modification with some instructions shown in
+#'   the terminal.
 #' @export use_corpus_registry_envvar
+#' @importFrom cli cli_code
 #' @rdname directories
 use_corpus_registry_envvar <- function(registry_dir){
 
@@ -298,7 +299,8 @@ use_corpus_registry_envvar <- function(registry_dir){
   user_input <- menu(
     choices = c("Yes", "No, I want to edit the .Renviron file myself"),
     title = cli_text(
-      "I want the {.pkg cwbtools} package to set the {.envvar CORPUS_REGISTRY} environment variable ",
+      "I want the {.pkg cwbtools} package to set the {.envvar CORPUS_REGISTRY}",
+      " environment variable ",
       "in the {.file .Renviron} file (see {.code ?Startup} for details)."
     )
   )
@@ -307,18 +309,26 @@ use_corpus_registry_envvar <- function(registry_dir){
 
     if (nchar(Sys.getenv("R_ENVIRON_USER")) > 0L){
       renviron_file <- Sys.getenv("R_ENVIRON_USER")
-      cli_alert_info(sprintf("using {.path .Renviron}-file defined in the environment variable {.envvar R_ENVIRON_USER}: {.path %s}", renviron_file))
+      cli_alert_info(
+        "using {.path .Renviron}-file defined in the environment variable {.envvar R_ENVIRON_USER}: {.path {renviron_file}}"
+      )
     } else{
       renviron_file <- path.expand("~/.Renviron")
-      cli_alert_info(sprintf("using default {.path .Renviron}-file: {.path %s}", renviron_file))
+      cli_alert_info(
+        "using default {.path .Renviron}-file: {.path {renviron_file}}"
+      )
     }
 
     if (file.exists(renviron_file)){
 
       if (file.access(renviron_file, mode = 2) == 0L){
-        cli_alert_info("the existing {.path .Renviron}-file exists and will be modified")
+        cli_alert_info(
+          "the existing {.path .Renviron}-file exists and will be modified"
+        )
       } else {
-        cli_alert_danger("you do not have write permissions for the {.path .Renviron} file - aborting")
+        cli_alert_danger(
+          "no write permissions for the {.path .Renviron} file - aborting"
+        )
         return(FALSE)
       }
 

@@ -59,13 +59,13 @@ will return a length-one \code{character} vector with the path of the
 suggested corpus directory, or \code{NULL} if the heuristic does not yield
 a result.
 
-\code{cwb_registry_dir} will return return the system registry
+\code{cwb_registry_dir()} will return return the system registry
 directory. By default, the environment variable CORPUS_REGISTRY defines the
 system registry directory. If the polmineR-package is loaded, a temporary
 registry directory is used, replacing the system registry directory. In
-this case, \code{cwb_registry_dir} will retrieve the directory from the
-option 'polmineR.corpus_registry'. The return value is a length-one
-character vector or \code{NULL}, if no registry directory can be detected.
+this case, \code{cwb_registry_dir()} will retrieve the directory from the option
+'polmineR.corpus_registry'. The return value is a length-one character
+vector or \code{NULL}, if no registry directory can be detected.
 
 \code{cwb_directories} will return a named character vector with the
 registry directory and the corpus directory.
@@ -77,12 +77,12 @@ directories, and whether user feedback is asked for before creating the
 directories. The function returns a named character vector with the
 registry and the corpus directory.
 
-\code{use_corpus_registry_envvar} is a convenience function that
-will assist users to define the environment variable CORPUS_REGSITRY in the
+\code{use_corpus_registry_envvar()} is a convenience function that will
+assist users to define the environment variable CORPUS_REGSITRY in the
 .Renviron-file.  making it available across sessions. The function is
 intended to be used in an interactive R session. An error is thrown if this
 is not the case. The user will be prompted whether the cwbtools package
-shall take care of creating / modifying the .Renviron-file. If not,
-the file will be opened for manual modification with some instructions shown
-in the terminal.
+shall take care of creating / modifying the .Renviron-file. If not, the
+file will be opened for manual modification with some instructions shown in
+the terminal.
 }
