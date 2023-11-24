@@ -225,8 +225,12 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
   )
   
   if (.Platform$OS.type == "windows"){
-    cwb_dirs["registry_dir"] <- path_tidy(utils::shortPathName(path_expand(cwb_dirs["registry_dir"])))
-    cwb_dirs["corpus_dir"] <- path_tidy(utils::shortPathName(path_expand(cwb_dirs["registry_dir"])))
+    cwb_dirs["registry_dir"] <- path_tidy(
+      utils::shortPathName(path_expand(cwb_dirs["registry_dir"]))
+    )
+    cwb_dirs["corpus_dir"] <- path_tidy(
+      utils::shortPathName(path_expand(cwb_dirs["corpus_dir"]))
+    )
   }
 
   for (dirtype in names(cwb_dirs)){
@@ -332,10 +336,14 @@ use_corpus_registry_envvar <- function(registry_dir){
       cat(sprintf('CORPUS_REGISTRY="%s"\n', registry_dir), file = renviron_file, append = TRUE)
 
     } else {
-      cli_alert_info("the {.path .Renviron}-file does not yet exist and needs to be created")
+      cli_alert_info(
+        "the {.path .Renviron}-file does not yet exist and needs to be created"
+      )
       renviron_dirname <- dirname(renviron_file)
       if (file.access(renviron_dirname) != 0L){
-        cli_alert_danger(sprintf("you do not have write permissions for the directory {.path %s}  - aborting", renviron_dirname))
+        cli_alert_danger(
+          "you do not have write permissions for the directory {.path {renviron_dirname}}  - aborting"
+        )
       }
       writeLines(text = sprintf('CORPUS_REGISTRY="%s"', registry_dir), con = renviron_file)
     }
@@ -361,9 +369,9 @@ use_corpus_registry_envvar <- function(registry_dir){
 
   } else if (user_input == 2L){
     cli_alert_warning(
-      sprintf("Include the following line in file {.path .Renviron} to make {.path %s} available as environment variable {.envvar CORPUS_REGISTRY} across R sessions:", registry_dir)
+      "Include the following line in file {.path .Renviron} to make {.path {registry_dir}} available as environment variable {.envvar CORPUS_REGISTRY} across R sessions:"
     )
-    cli::cli_code(sprintf('CORPUS_REGISTRY="%s"', registry_dir))
+    cli_code(sprintf('CORPUS_REGISTRY="%s"', registry_dir))
     cli_alert_warning('Call {.code file.edit("~/.Renviron")} to edit the {.path .Renviron} file from R.')
   }
 }
