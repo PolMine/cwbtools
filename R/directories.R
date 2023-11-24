@@ -43,7 +43,11 @@ cwb_corpus_dir <- function(registry_dir, verbose = TRUE){
   if (length(candidate) == 0L){
     data_dirs <- unname(sapply(
       list.files(registry_dir),
-      function(corpus) registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
+      function(corpus)
+        registry_file_parse(
+          corpus = corpus,
+          registry_dir = registry_dir
+        )[["home"]]
     ))
 
     # exclude temporary directories
@@ -51,7 +55,11 @@ cwb_corpus_dir <- function(registry_dir, verbose = TRUE){
 
     is_in_libdir <- sapply(
       data_dirs,
-      function(data_dir) sapply(.libPaths(), function(libdir) grepl(sprintf("^%s.*?$", libdir), data_dir))
+      function(data_dir)
+        sapply(
+          .libPaths(),
+          function(libdir) grepl(sprintf("^%s.*?$", libdir), data_dir)
+        )
     )
     data_dirs <- data_dirs[!is_in_libdir]
     corpus_dir <- unique(sapply(data_dirs, dirname))
@@ -65,19 +73,23 @@ cwb_corpus_dir <- function(registry_dir, verbose = TRUE){
     corpus_dir <- NULL
   } else if (length(candidate) == 1L){
     corpus_dir <- candidate
-    if (verbose) cli_alert_success(sprintf("directory with data directories found: {col_cyan('%s')}", corpus_dir))
+    if (verbose){
+      cli_alert_success(
+        "directory with data directories found: {.path {corpus_dir}}"
+      )
+    }
   }
 
   corpus_dir
 }
 
-#' @details \code{cwb_registry_dir} will return return the system registry
+#' @details `cwb_registry_dir()` will return return the system registry
 #'   directory. By default, the environment variable CORPUS_REGISTRY defines the
 #'   system registry directory. If the polmineR-package is loaded, a temporary
 #'   registry directory is used, replacing the system registry directory. In
-#'   this case, \code{cwb_registry_dir} will retrieve the directory from the
-#'   option 'polmineR.corpus_registry'. The return value is a length-one
-#'   character vector or \code{NULL}, if no registry directory can be detected.
+#'   this case, `cwb_registry_dir()` will retrieve the directory from the option
+#'   'polmineR.corpus_registry'. The return value is a length-one character
+#'   vector or `NULL`, if no registry directory can be detected.
 #' @rdname directories
 #' @export cwb_registry_dir
 cwb_registry_dir <- function(verbose = TRUE){
@@ -147,7 +159,6 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
     path_expand(prefix)
   }
 
-
   if (dir.exists(prefix)){
     if (file.access(prefix, mode = 2) != 0L){
       stop(sprintf("no write permissions for CWB data directory %s", prefix))
@@ -194,24 +205,52 @@ create_cwb_directories <- function(prefix = "~/cwb", ask = interactive(), verbos
       dir.create(prefix, recursive = TRUE)
     }
     if (dir.exists(prefix)){
-      if (verbose) cli_alert_success(sprintf("parent directory {.path %s} for registry directory and corpus directory has been created", prefix))
+      if (verbose){
+        cli_alert_success(
+          "parent directory {.path {prefix}} for registry directory and corpus directory has been created"
+        )
+      }
     } else {
-      if (verbose) cli_alert_danger(sprintf("parent directory {.path %s} for registry directory and corpus directory not found / created!", prefix))
+      if (verbose){
+        cli_alert_danger(
+          "parent directory {.path {prefix}} for registry directory and corpus directory not found / created!"
+        )
+      }
     }
   }
 
-  cwb_dirs <- c(registry_dir = path(prefix, "registry"), corpus_dir = path(prefix, "indexed_corpora"))
+  cwb_dirs <- c(
+    registry_dir = path(prefix, "registry"),
+    corpus_dir = path(prefix, "indexed_corpora")
+  )
+  
+  if (.Platform$OS.type == "windows"){
+    cwb_dirs["registry_dir"] <- path_tidy(utils::shortPathName(path_expand(cwb_dirs["registry_dir"])))
+    cwb_dirs["corpus_dir"] <- path_tidy(utils::shortPathName(path_expand(cwb_dirs["registry_dir"])))
+  }
 
   for (dirtype in names(cwb_dirs)){
     what <- gsub("^(.*?)_dir$", "\\1", dirtype)
     if (file.exists(cwb_dirs[[dirtype]])){
-      if (verbose) cli_alert_info(sprintf("%s directory {.path %s} already exists", what, cwb_dirs[[dirtype]]))
+      if (verbose){
+        cli_alert_info(
+          "{what} directory {.path {cwb_dirs[[dirtype]]}} already exists"
+        )
+      }
     } else {
       dir.create(cwb_dirs[[dirtype]])
       if (dir.exists(cwb_dirs[[dirtype]])){
-        if (verbose) cli_alert_success(sprintf("%s directory {.path %s} has been created", what, cwb_dirs[[dirtype]]))
+        if (verbose){
+          cli_alert_success(
+            "{what} directory {.path {cwb_dirs[[dirtype]]}} has been created"
+          )
+        }
       } else {
-        if (verbose) cli_alert_warning(sprintf("%s directory {.path %s} has not been created", what, cwb_dirs[[dirtype]]))
+        if (verbose){
+          cli_alert_warning(
+            "{what} directory {.path {cwb_dirs[[dirtype]]}} has not been created"
+          )
+        }
       }
     }
   }
