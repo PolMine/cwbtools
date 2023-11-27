@@ -1,5 +1,5 @@
-cwbtools 0.3.8.9002-9004
-===================
+cwbtools 0.3.9
+==============
 
 * `p_attribute_encode()` accepts multiple p-attributes if method is "CWB".
 * New function `registry_set_property()` for setting corpus properties in a 
@@ -8,6 +8,8 @@ pipe.
 * `registry_set_info` as new auxiliary function to set path to info file in 
 `registry_data` object.
 * `corpus_install()` reverts to package zen4R to links of files at Zenodo #42.
+* `curl::curl_download()` replaces `download.file()` in `corpus_install()`
+if argument `user` is `NULL` (to avoid corrupted download from Zenodo) #53.
 
 
 cwbtools 0.3.8
