@@ -249,9 +249,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
     # Download corpus -------------------
     if (grepl("^http", tarball)){
       if (verbose) cat_rule("Download corpus tarball")
-      if (verbose) cli_alert_info(
-        sprintf("download corpus tarball {col_cyan('%s')}", basename(tarball))
-      )
+      if (verbose) cli_alert_info("download corpus tarball: {.href {tarball}}")
 
       corpus_tarball <- path(
         cwbtools_tmpdir,
@@ -262,41 +260,41 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
 
         tryCatch(
           tarball_not_available <- http_error(tarball),
-          error = function(e) cli_alert_danger("could not connect to server - check internet connection")
+          error = function(e)
+            cli_alert_danger(
+              "could not connect to server - check internet connection"
+            )
         )
-        if (!exists("tarball_not_available")) return(invisible())
+        if (!exists("tarball_not_available")){
+          cli_alert_danger("corpus tarball is not available: {.href {tarball}}")
+          return(invisible())
+        }
         if (isTRUE(tarball_not_available)){
-          cli_alert_danger(sprintf("the corpus tarball is not available: '%s'", tarball))
+          cli_alert_danger("corpus tarball is not available: {.href {tarball}}")
           return(invisible(FALSE))
         }
+        
+        # An earlier version of cwbtools used download.file() on Windows which
+        # used to offer better output messages. Has improved and download.file()
+        # does not work with Zenodo
 
-        if (.Platform$OS.type == "windows"){
-          # Use download.file() because it is able to cope with murky user names / path names
-          # Progress messages are better of download.file(). However curl_download() is more
-          # robust, so we use it when download.file() has failed.
-          trystatus <- try(
-            download.file(
-              url = tarball,
-              destfile = corpus_tarball,
-              quiet = !verbose,
-              cacheOK = FALSE,
-              method = if (isTRUE(capabilities("libcurl"))) "libcurl" else getOption("download.file.method")
-            )
+        trystatus <- tryCatch(
+          curl::curl_download(
+            url = tarball,
+            destfile = corpus_tarball,
+            quiet = !verbose
           )
-          if (is(trystatus)[[1]] == "try-error"){
-            retry <- TRUE
-          } else {
-            retry <- if (trystatus == 1L) TRUE else FALSE
-          }
-          if (isTRUE(retry)) curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
-        } else {
-          curl::curl_download(url = tarball, destfile = corpus_tarball, quiet = !verbose)
+        )
+        if (is(trystatus)[[1]] == "try-error"){
+          cli_alert_danger("download failed")
+          return(NULL)
         }
       } else {
         if (is.null(password)) stop("If user name is offered, a password needs to be specified as well.")
         if (.Platform$OS.type == "windows"){
-          # On Windows, download.file is used because curl will break if destfile includes
-          # special characters. The user and the password are passed in as follows
+          # On Windows, download.file is used because curl will break if
+          # destfile includes special characters. The user and the password are
+          # passed in as follows
           # "https://user:password@polmine.sowi.uni-due.de"
           prefix <- gsub("^(https://|http://).*?$", "\\1", tarball)
           tarball <- gsub("^(https://|http://)(.*?)$", "\\2", tarball)
@@ -307,16 +305,17 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
         } else {
           curl::curl_download(
             url = tarball, destfile = corpus_tarball,
-            handle = handle_setopt(new_handle(), userpwd = sprintf("%s:%s", user, password)),
+            handle = handle_setopt(
+              new_handle(),
+              userpwd = sprintf("%s:%s", user, password)
+            ),
             quiet = !verbose
           )
         }
       }
-      if (verbose) cli_alert_success(
-        sprintf(
-          "download corpus tarball {col_cyan('%s')} ... done", basename(tarball)
-        )
-      )
+      if (verbose)
+        cli_alert_success("download corpus tarball {.href {tarball}} ... done")
+      
       if (exists("zenodo_file_record")){
         if (!is.null(checksum)){
           if (verbose) 
@@ -328,7 +327,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
       }
       if (isFALSE(is.null(checksum))){
         if (verbose){
-          msg <- sprintf("check md5 checksum for tarball %s (expected %s)", basename(tarball), checksum)
+          msg <- "check md5 checksum for tarball {.href {tarball}} (expected: {.val {checksum}})"
           cli_process_start(msg)
         }
         corpus_tarball_checksum <- tools::md5sum(corpus_tarball)
@@ -336,23 +335,25 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
           if (verbose) cli_process_done()
         } else {
           if (verbose) cli_process_failed()
-          cli_alert_danger(
-            sprintf(
-              "md5 checksum of downloaded tarball '%s' is '%s', but Zenodo archive md5 checksum is '%s'",
-              basename(corpus_tarball), corpus_tarball_checksum, checksum
-            )
-          )
+          cli_alert_danger(text = c(
+            "md5 checksum of downloaded tarball {.path {corpus_tarball}} is ",
+            "{.val {corpus_tarball_checksum}}, but Zenodo archive md5 checksum ",
+            "is {.val {checksum}}"
+          ), wrap = TRUE)
           return(invisible(FALSE))
         }
       } else if (FALSE){
-        if (verbose) cli_alert_warning("no md5 checksum provided or available to check downloaded tarball - note that checking the integrity of downloaded data is good practice")
+        if (verbose)
+          cli_alert_warning(
+            "no md5 checksum provided or available to check downloaded tarball - note that checking the integrity of downloaded data is good practice"
+          )
       }
     } else if (grepl("^[sS]3:", tarball)){
       if (!requireNamespace("aws.s3", quietly = TRUE)){
         stop(
           "To download a corpus tarball from S3, package 'aws.s3' is required. ",
           "Package 'aws.s3' is not installed. ",
-          "Install package 'aws.s3' by calling install.packages('aws.s3') and retry."
+          "Install package 'aws.s3' by calling `install.packages('aws.s3')` and retry."
         )
       }
       if (verbose) cat_rule("Download corpus tarball from S3")
