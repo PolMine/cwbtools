@@ -628,7 +628,7 @@ corpus_packages <- function(){
 }
 
 
-#' @details \code{corpus_rename} will rename a corpus, affecting the name of the
+#' @details `corpus_rename()` will rename a corpus, affecting the name of the
 #'   registry file, the corpus id, and the name of the directory where data
 #'   files reside.
 #' @rdname corpus_utils
@@ -673,25 +673,44 @@ corpus_rename <- function(old, new, registry_dir = Sys.getenv("CORPUS_REGISTRY")
 corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = TRUE){
 
   if (missing(registry_dir)) registry_dir <- cwb_registry_dir(verbose = FALSE)
+  if (!tolower(corpus) %in% list.files(registry_dir)){
+    cli_alert_warning("abort removing corpus {.val {corpus}}: no registry file")
+    return(FALSE)
+  }
+  if (verbose) cli_rule("remove corpus {col_blue({corpus})}")
+  if (verbose) cli_alert_info("registry directory: {.path {registry_dir}}")
 
-  stopifnot(tolower(corpus) %in% list.files(registry_dir)) # check that corpus exists
-
-  reg <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
+  reg <- registry_file_parse(
+    corpus = tolower(corpus),
+    registry_dir = registry_dir
+  )
   data_directory <- reg[["home"]]
+  
+  if (verbose) cli_alert_info("data directory: {.path {data_directory}}")
+  
   if (ask){
     userinput <- menu(
       choices = c("Yes", "No"),
-      title = sprintf("Are you sure you want to delete registry and data files for corpus '%s'?", cli::col_red(corpus))
+      title = sprintf(
+        "Are you sure you want to delete registry and data files for corpus '%s'?",
+        cli::col_red(corpus)
+      )
     )
     if (userinput != 1L){
       cli_alert_warning("User abort")
       return(invisible(FALSE))
     }
   }
-  for (x in list.files(data_directory, full.names = TRUE)) file.remove(x)
+  
+  if (verbose) cli_progress_step("remove files in data directory")
+  file.remove(list.files(data_directory, full.names = TRUE))
+  if (verbose) cli_progress_step("remove data directory")
   file.remove(data_directory)
+  if (verbose) cli_progress_step("remove registry file")
   file.remove(fs::path(registry_dir, tolower(corpus)))
-  if (verbose) cli_alert_success("corpus has been removed (registry and data files)")
+  if (verbose) cli_progress_done()
+  if (verbose)
+    cli_alert_success("corpus {.var {corpus}} has been removed")
   invisible(TRUE)
 }
 

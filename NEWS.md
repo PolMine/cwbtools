@@ -1,3 +1,8 @@
+cwbtools 0.3.9.9001
+===================
+* `corpus_remove()` returns `FALSE` (rather than failing with ERROR) when corpus
+does not exist. More telling messages.
+
 cwbtools 0.3.9
 ==============
 
