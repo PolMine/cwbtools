@@ -1,14 +1,16 @@
 #' Manage Corpus Data and Encode CWB Corpus.
 #' 
-#' @param x A single filename, a character vector of filenames, or a directory with XML files.
-#' @param body An xpath expression defining the body of the xml document.
-#' @param verbose Logical, whether to be verbose.
-#' @param progress Logical, whether to show progress bar.
-#' @param meta A named character vector with xpath expressions.
+#' @param x A single filename, a character vector of filenames, or a directory
+#'   with XML files.
+#' @param body An xpath expression defining the body of the XML document.
+#' @param verbose A logical value, whether to be verbose.
+#' @param progress A logical value, whether to show progress bar.
+#' @param meta A named character vector with XPath expressions.
 #' @param mc A numeric/integer value, number of cores to use.
-#' @param compress Logical, whether to compress corpus.
+#' @param compress A logical value, whether to compress corpus.
 #' @param encoding Encoding/charset of the CWB corpus.
-#' @param registry_dir Corpus registry, the directory where registry files are stored.
+#' @param registry_dir Corpus registry, the directory where registry files are
+#'   stored.
 #' @param corpus The name of the CWB corpus.
 #' @param p_attributes Positional attributes.
 #' @param s_attributes Columns that will be encoded as structural attributes.
@@ -16,24 +18,27 @@
 #' @param method Either "R" or "CWB".
 #' @param filenames XXX
 #' @param replacements XXX
-#' @param ... Arguments that are passed into \code{tokenizers::tokenize_words()}.
+#' @param ... Arguments that are passed into `tokenizers::tokenize_words()`.
 #' 
-#' @field chunktable A \code{data.table} with column "id" (unique values),
+#' @field chunktable A `data.table` with column "id" (unique values),
 #'   columns with metadata, and a column with text chunks.
-#' @field tokenstream A \code{data.table} with a column "cpos" (corpus position), and columns
-#'   with positional attributes, such as "word", "lemma", "pos", "stem".
+#' @field tokenstream A `data.table` with a column "cpos" (corpus position), and
+#'   columns with positional attributes, such as "word", "lemma", "pos", "stem".
 #'   
-#' @field metadata A \code{data.table} with a column "id", to link data with chunks/tokenstream,
-#'   columns with document-level metadata, and a column "cpos_left" and "cpos_right", which can
-#'   be generated using method \code{$add_corpus_positions()}.
-#' @field sentences A \code{data.table}.
-#' @field named_entities A \code{data.table}.
+#' @field metadata A `data.table` with a column "id", to link data with
+#'   chunks/tokenstream, columns with document-level metadata, and a column
+#'   "cpos_left" and "cpos_right", which can be generated using method
+#'   `$add_corpus_positions()`.
+#' @field sentences A `data.table`.
+#' @field named_entities A `data.table`.
 #' 
 #' @export CorpusData
-#' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv as.data.table data.table
+#' @importFrom data.table setnames rbindlist .GRP .SD := fread fwrite setorderv
+#'   as.data.table data.table
 #' @importFrom data.table uniqueN setkeyv
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name xml_parents xml_text
+#' @importFrom xml2 read_xml xml_attrs xml_find_all xml_find_first xml_name
+#'   xml_parents xml_text
 #' @importFrom pbapply pblapply timerProgressBar setTimerProgressBar
 #' @importFrom stats setNames
 #' @importFrom stringi stri_detect_regex
@@ -306,13 +311,18 @@ CorpusData <- R6::R6Class(
       
       if (verbose) message("... encoding p-attribute 'word'")
       p_attribute_encode(
-        token_stream = self$tokenstream[["word"]], corpus = corpus, encoding = encoding,
-        registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = verbose,
+        token_stream = self$tokenstream[["word"]],
+        corpus = corpus,
+        encoding = encoding,
+        registry_dir = registry_dir,
+        data_dir = data_dir,
+        method = method,
+        verbose = verbose,
         compress = compress
       )
       
       # add other p-attributes than 'word'
-      if (length(p_attributes > 1)){
+      if (length(p_attributes) > 1L){
         for (new_attribute in p_attributes[which(p_attributes != "word")]){
           if (verbose) message(sprintf("... encoding p-attribute '%s'", new_attribute))
           p_attribute_encode(
@@ -327,20 +337,31 @@ CorpusData <- R6::R6Class(
       for (s_attr in s_attributes){
         if (verbose) message(sprintf("... encoding s-attribute '%s'", s_attr))
         s_attribute_encode(
-          values = self$metadata[[s_attr]], corpus = corpus,
+          values = self$metadata[[s_attr]],
+          corpus = corpus,
           s_attribute = s_attr,
           region_matrix = as.matrix(self$metadata[,c("cpos_left", "cpos_right")]),
-          data_dir = data_dir, registry_dir = registry_dir, encoding = encoding,
-          method = method, verbose = FALSE
+          data_dir = data_dir,
+          registry_dir = registry_dir,
+          encoding = encoding,
+          method = method,
+          verbose = FALSE
         )
       }
       
       reg_data <- registry_data(
-        name = toupper(corpus), id = tolower(corpus),
-        home = path.expand(data_dir), properties = c(charset = encoding), 
-        p_attributes = p_attributes, s_attributes = s_attributes
+        name = toupper(corpus),
+        id = tolower(corpus),
+        home = path.expand(data_dir),
+        properties = c(charset = encoding), 
+        p_attributes = p_attributes,
+        s_attributes = s_attributes
       )
-      registry_file_write(data = reg_data, corpus = tolower(corpus), registry_dir = registry_dir)
+      registry_file_write(
+        data = reg_data,
+        corpus = tolower(corpus),
+        registry_dir = registry_dir
+      )
       invisible(self)
     }
     
