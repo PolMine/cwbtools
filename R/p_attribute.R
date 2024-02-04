@@ -32,6 +32,9 @@
 #'   size limitations of corpora. May also be a file.
 #' @param compress A `logical` value. 
 #' @param verbose A `logical` value.
+#' @param quietly A `logical` value passed into `RcppCWB::cwb_makeall()`,
+#'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 
+#'   verbosity of these functions.
 #' @param method Either 'CWB' or 'R'.
 #' @param p_attribute The positional attribute. May be more than one, if
 #'   `method` is "CWB". If method is "R", only one positional attribute may be
@@ -105,8 +108,15 @@
 #' @importFrom RcppCWB cl_attribute_size cwb_makeall cwb_huffcode cwb_compress_rdx
 #' @importFrom stringi stri_detect_regex stri_replace_all
 p_attribute_encode <- function(
-  token_stream, p_attribute = "word", registry_dir, corpus, data_dir, method = c("R", "CWB"),
-  verbose = TRUE, encoding = get_encoding(token_stream),
+  token_stream,
+  p_attribute = "word",
+  registry_dir,
+  corpus,
+  data_dir,
+  method = c("R", "CWB"),
+  verbose = TRUE,
+  quietly = FALSE,
+  encoding = get_encoding(token_stream),
   compress = FALSE
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
@@ -141,12 +151,15 @@ p_attribute_encode <- function(
     if (length(p_attribute) != 1L)
       stop("If `method` is 'R', only one p-attribute can be processed.")
     
-    if (verbose) message("... writing tokenstream to disk (directly from R, equivalent to cwb-encode)")
+    if (verbose)
+      cli_alert_info(
+        "writing tokenstream to disk (directly from R, equivalent to cwb-encode)"
+      )
     corpus_file <- fs::path(data_dir, paste(p_attribute, "corpus", sep = "."))
     lexicon_file <- fs::path(data_dir, paste(p_attribute, "lexicon", sep = "."))
     lexicon_index_file <- fs::path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
     
-    if (verbose) message("... creating indices (in memory)")
+    if (verbose) cli_progress_step("creating indices (in memory)")
     tokenstream_factor <- factor(token_stream, levels = unique(token_stream))
     rm(token_stream); gc()
     
@@ -167,7 +180,7 @@ p_attribute_encode <- function(
         ))
       }
     }
-    if (verbose) message("... writing file: ", basename(corpus_file))
+    if (verbose) cli_progress_step("writing file: {.path {basename(corpus_file)}}")
     writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
 
     rm(ids); gc()
@@ -184,13 +197,15 @@ p_attribute_encode <- function(
     
     lexicon_hex_list <- lapply(lexicon_hex_list, function(x) c(x, as.raw(0)))
     lexicon_hex_vec <- unlist(lexicon_hex_list)
-    if (verbose) message("... writing file: ", basename(lexicon_file))
+    if (verbose)
+      cli_progress_step("writing file: {.path {basename(lexicon_file)}}")
     writeBin(object = lexicon_hex_vec, con = lexicon_file)
     
     idx_raw <- cumsum(sapply(lexicon_hex_list, length))
     rm(lexicon_hex_list)
     idx <- c(0L, idx_raw[1:(length(idx_raw) - 1L)])
-    if (verbose) message("... writing file: ", basename(lexicon_index_file))
+    if (verbose)
+      cli_progress_step("writing file: {.path {basename(lexicon_index_file)}}")
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
     rm(idx_raw); gc()
 
@@ -265,13 +280,13 @@ p_attribute_encode <- function(
   
   # create or augment registry file
   if (file.exists(registry_file)){
-    if (verbose) message("... reading existing registry file")
+    if (verbose) cli_alert_info("reading existing registry file")
     regdata <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
     
     p_attributes <- c(regdata[["p_attributes"]], if (exists("p_attrs_old")) p_attrs_old else character(), p_attribute)
     regdata[["p_attributes"]] <- unique(p_attributes)
   } else {
-    if (verbose) message("... creating data for new registry file")
+    if (verbose) cli_alert_info("creating data for new registry file")
     regdata <- registry_data(
       name = toupper(corpus),
       id = tolower(corpus),
@@ -280,7 +295,7 @@ p_attribute_encode <- function(
       p_attributes = p_attribute
     )
   }
-  if (verbose) message("... writing registry file")
+  if (verbose) cli_alert_info("writing registry file")
   registry_file_write(
     regdata,
     corpus = tolower(corpus),
@@ -345,10 +360,26 @@ p_attribute_encode <- function(
     )
     if (corpus_size > 0L) cl_delete_corpus(corpus = corpus, registry = registry_dir)
 
-    cwb_makeall(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
+    cwb_makeall(
+      corpus = corpus,
+      p_attribute = p_attribute,
+      registry = registry_dir,
+      quietly = quietly
+    )
+    
     if (compress){
-      cwb_huffcode(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
-      cwb_compress_rdx(corpus = corpus, p_attribute = p_attribute, registry = registry_dir)
+      cwb_huffcode(
+        corpus = corpus,
+        p_attribute = p_attribute,
+        registry = registry_dir,
+        quietly = quietly
+      )
+      cwb_compress_rdx(
+        corpus = corpus,
+        p_attribute = p_attribute,
+        registry = registry_dir,
+        quietly = quietly
+      )
     }
   }
   

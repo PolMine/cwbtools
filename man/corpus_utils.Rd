@@ -199,7 +199,7 @@ argument \code{ask} is \code{TRUE}.
 corpora. Note that the directory structure of all installed packages is
 evaluated which may be slow on network-mounted file systems.
 
-\code{corpus_rename} will rename a corpus, affecting the name of the
+\code{corpus_rename()} will rename a corpus, affecting the name of the
 registry file, the corpus id, and the name of the directory where data
 files reside.
 

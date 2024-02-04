@@ -280,36 +280,73 @@ CorpusData <- R6::R6Class(
     
     #' @description 
     #' Encode corpus. If the corpus already exists, it will be removed.
-    encode = function(corpus, p_attributes = "word", s_attributes = NULL, encoding, registry_dir = Sys.getenv("CORPUS_REGISTRY"), data_dir = NULL, method = c("R", "CWB"), verbose = TRUE, compress = FALSE){
-      
+    #' @param reload A `logical` value, whether to reload corpus.
+    #' @param quietly A `logical` value passed into `RcppCWB::cwb_makeall()`,
+    #'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 
+    #'   verbosity of these functions.
+    #' @importFrom RcppCWB cl_delete_corpus cl_attribute_size cqp_load_corpus
+    #'   corpus_s_attributes corpus_p_attributes cl_find_corpus
+    #' @importFrom cli cli_progress_step cli_progress_done
+    encode = function(
+      corpus,
+      p_attributes = "word",
+      s_attributes = NULL,
+      encoding,
+      registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+      data_dir = NULL,
+      method = c("R", "CWB"),
+      verbose = TRUE,
+      compress = FALSE,
+      reload = TRUE,
+      quietly = TRUE
+    ){
+      if (verbose) cli_rule("Prepare encoding corpus {corpus}")
+
       if (file.exists(registry_dir))
         if (file.info(registry_dir)[["isdir"]] != TRUE)
           stop("registry_dir is not a directory")
+      if (verbose)
+        cli_alert_info("registry directory: {.path {registry_dir}}")
+      
       registry_file <- fs::path(registry_dir, tolower(corpus))
       
       if (file.exists(registry_file)){
-        message(sprintf("registry file for corpus '%s' already exists - it should be removed", corpus))
+        cli_alert_warning(
+          "registry file for corpus {.val {corpus}} already exists"
+        )
         corpus_remove(corpus = corpus, registry_dir = registry_dir)
       }
-      message(sprintf("Creating new corpus '%s'", corpus))
+      
       if (is.null(data_dir)){
         super_dir <- dirname(registry_dir)
-        potential_data_dir <- grep("index", list.files(super_dir), value = TRUE, perl = TRUE)
-        if (length(potential_data_dir) != 1) stop("no data_dir provided, no candidate found")
+        potential_data_dir <- grep(
+          "index",
+          list.files(super_dir),
+          value = TRUE,
+          perl = TRUE
+        )
+        if (length(potential_data_dir) != 1)
+          stop("no data_dir provided, no candidate found")
         data_dir <- fs::path(super_dir, potential_data_dir, tolower(corpus))
-        message(sprintf("suggesting data_dir: %s\n", data_dir))
-        feedback <- readline(prompt = "Use this data directory? (type 'Y' to confirm, anything else to abort)")
+        if (verbose) cli_alert_info("data directory suggested_ {.path {data_dir}}")
+        feedback <- readline(
+          prompt = "Use this data directory? (type 'Y' to confirm)"
+        )
         if (feedback != "Y") stop("aborting")
         if (!file.exists(data_dir)) dir.create(data_dir)
       } else {
         if (!file.exists(data_dir)) dir.create(data_dir)
       }
+      if (verbose) cli_alert_info("data directory: {.path {data_dir}}")
       
       if (!encoding %in% c("ascii", paste("latin", 1:9, sep = ""), "utf8")){
-        stop("encoding is required to be either ascii, latin1 to latin9, or utf8")
+        stop(
+          "encoding is required to be either ascii, latin1 to latin9, or utf8"
+        )
       }
+      if (verbose) cli_alert_info("encoding: {.val {encoding}}")
       
-      if (verbose) message("... encoding p-attribute 'word'")
+      if (verbose) cli_rule("encode p-attribute {.val word}")
       p_attribute_encode(
         token_stream = self$tokenstream[["word"]],
         corpus = corpus,
@@ -318,29 +355,38 @@ CorpusData <- R6::R6Class(
         data_dir = data_dir,
         method = method,
         verbose = verbose,
-        compress = compress
+        compress = compress,
+        quietly = quietly
       )
       
       # add other p-attributes than 'word'
       if (length(p_attributes) > 1L){
-        for (new_attribute in p_attributes[which(p_attributes != "word")]){
-          if (verbose) message(sprintf("... encoding p-attribute '%s'", new_attribute))
+        for (p_attr in p_attributes[which(p_attributes != "word")]){
+          if (verbose) cli_rule("encode p-attribute {.val {p_attr}}")
           p_attribute_encode(
-            token_stream = self$tokenstream[[new_attribute]], corpus = corpus, 
-            p_attribute = new_attribute, encoding = encoding,
-            registry_dir = registry_dir, data_dir = data_dir, method = method, verbose = FALSE,
+            token_stream = self$tokenstream[[p_attr]],
+            corpus = corpus, 
+            p_attribute = p_attr,
+            encoding = encoding,
+            registry_dir = registry_dir,
+            data_dir = data_dir,
+            method = method,
+            verbose = FALSE,
             compress = compress
           )
         }
       }
       
+      if (verbose) cli_rule("Encode s-attributes")
       for (s_attr in s_attributes){
-        if (verbose) message(sprintf("... encoding s-attribute '%s'", s_attr))
+        if (verbose) cli_alert_info("encode s-attribute {.val {s_attr}}")
         s_attribute_encode(
           values = self$metadata[[s_attr]],
           corpus = corpus,
           s_attribute = s_attr,
-          region_matrix = as.matrix(self$metadata[,c("cpos_left", "cpos_right")]),
+          region_matrix = as.matrix(
+            self$metadata[,c("cpos_left", "cpos_right")]
+          ),
           data_dir = data_dir,
           registry_dir = registry_dir,
           encoding = encoding,
@@ -349,6 +395,8 @@ CorpusData <- R6::R6Class(
         )
       }
       
+      if (verbose) cli_rule("Finalizing steps")
+      if (verbose) cli_progress_step("write registry file")
       reg_data <- registry_data(
         name = toupper(corpus),
         id = tolower(corpus),
@@ -362,6 +410,53 @@ CorpusData <- R6::R6Class(
         corpus = tolower(corpus),
         registry_dir = registry_dir
       )
+      if (verbose) cli_progress_done()
+      
+      if (isTRUE(reload)){
+        
+        cl_delete_corpus(corpus = corpus, registry = registry_dir)
+        if (is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
+          if (verbose) cli_alert_success("internal corpus has been unloaded")
+        } else {
+          if (verbose) cli_alert_danger("unloading corpus failed")
+        }
+        
+        # Not too intuitive, but this (re)loads the corpus
+        size <- cl_attribute_size(
+          corpus = corpus,
+          attribute = "word",
+          attribute_type = "p",
+          registry = registry_dir
+        )
+        
+        if (typeof(cl_find_corpus(corpus, registry = registry_dir)) == "externalptr"){
+          if (verbose)
+            cli_alert_success("corpus has been reloaded (size: {.val {size}})")
+        } else {
+          if (verbose) cli_alert_danger("reloading corpus failed")
+        }
+        
+        if (cqp_load_corpus(corpus = corpus, registry = registry_dir)){
+          if (verbose) cli_alert_success("corpus has been reloaded for CQP usage")
+        } else {
+          if (verbose) cli_alert_danger("reloading corpus failed")
+        }
+      }
+      
+      p_attrs <- corpus_p_attributes(corpus = corpus, registry = registry_dir)
+      if (all(p_attributes %in% p_attrs)){
+        if (verbose) cli_alert_success("all p-attributes are available")
+      } else {
+        cli_alert_danger("not all p-attributes available")
+      }
+      
+      s_attrs <- corpus_s_attributes(corpus = corpus, registry = registry_dir)
+      if (all(s_attributes %in% s_attrs)){
+        if (verbose) cli_alert_success("all s-attributes are available")
+      } else {
+        cli_alert_danger("not all s-attributes available")
+      }
+      
       invisible(self)
     }
     

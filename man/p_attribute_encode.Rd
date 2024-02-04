@@ -14,6 +14,7 @@ p_attribute_encode(
   data_dir,
   method = c("R", "CWB"),
   verbose = TRUE,
+  quietly = FALSE,
   encoding = get_encoding(token_stream),
   compress = FALSE
 )
@@ -55,6 +56,10 @@ and \code{p_attribute_compress_rdx()}).}
 \item{method}{Either 'CWB' or 'R'.}
 
 \item{verbose}{A \code{logical} value.}
+
+\item{quietly}{A \code{logical} value passed into \code{RcppCWB::cwb_makeall()},
+\code{RcppCWB::cwb_huffcode()} and \code{RcppCWB::cwb_compress_rdx} to control
+verbosity of these functions.}
 
 \item{encoding}{Encoding as defined in the charset corpus property of the
 registry file for the corpus ('latin1' to 'latin9', and 'utf8').}

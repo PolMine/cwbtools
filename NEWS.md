@@ -1,7 +1,15 @@
-cwbtools 0.3.9.9001
+cwbtools 0.3.9.9002
 ===================
 * `corpus_remove()` returns `FALSE` (rather than failing with ERROR) when corpus
 does not exist. More telling messages.
+* `p_attribute_encode()` has new argument `quietly` passed into RcppCWB functions
+`cwb_compress()` `cwb_huffcode()` and `cwb_compress_rdx()` to control verbosity.
+* Method `$encode()` of `CorpusData` class has new argument `quietly` passed into
+`p_attribute_encode()`.
+* Method `$encode()` has new argument `reload` to trigger unloading and reloading
+corpus, to make s-attributes available #57.
+* The `CorpusData$encode()` method uses messages from the cli package #59.
+
 
 cwbtools 0.3.9
 ==============

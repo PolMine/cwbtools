@@ -1,8 +1,8 @@
 Package: cwbtools
 Type: Package
 Title: Tools to Create, Modify and Manage 'CWB' Corpora
-Version: 0.3.9.9001
-Date: 2023-11-28
+Version: 0.3.9.9002
+Date: 2024-02-04
 Authors@R: c(person("Andreas", "Blaette", role = c("aut", "cre"), email = "andreas.blaette@uni-due.de"),
   person("Christoph", "Leonhardt", role = "aut", email = "christoph.leonhardt@uni-due.de")
   )
@@ -25,7 +25,7 @@ Imports:
     xml2,
     stringi,
     curl,
-    RcppCWB (>= 0.5.2),
+    RcppCWB (>= 0.6.3),
     pbapply,
     methods,
     tools,
