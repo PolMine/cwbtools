@@ -178,7 +178,7 @@ Simple tokenization of text in chunktable.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{filenames}}{XXX}
+\item{\code{filenames}}{A vector of files to process.}
 
 \item{\code{body}}{An xpath expression defining the body of the XML document.}
 
@@ -233,7 +233,8 @@ tokenization/annotation has been performed.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{replacements}}{XXX}
+\item{\code{replacements}}{A list of length-two character vectors with regular
+expressions and replacements.}
 }
 \if{html}{\out{</div>}}
 }

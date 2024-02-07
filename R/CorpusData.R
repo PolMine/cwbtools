@@ -16,8 +16,9 @@
 #' @param s_attributes Columns that will be encoded as structural attributes.
 #' @param data_dir Directory where to create directory for indexed corpus files.
 #' @param method Either "R" or "CWB".
-#' @param filenames XXX
-#' @param replacements XXX
+#' @param filenames A vector of files to process.
+#' @param replacements A list of length-two character vectors with regular
+#'   expressions and replacements.
 #' @param ... Arguments that are passed into `tokenizers::tokenize_words()`.
 #' 
 #' @field chunktable A `data.table` with column "id" (unique values),
@@ -139,7 +140,7 @@ CorpusData <- R6::R6Class(
     },
     
     #' @description
-    #' Print summary of \code{CorpusData} object.
+    #' Print summary of `CorpusData` object.
     print = function(){
       if (is.null(self$chunktable)){
         cat("chunktable: NULL\n")
@@ -221,9 +222,12 @@ CorpusData <- R6::R6Class(
       
       if (!all(file.exists(filenames))) stop("all files provided by x need to exist (not fulfilled)")
       if (is.null(mc) || mc == 1L){
-        data <- if (progress) pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
+        data <- if (progress)
+          pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
       } else if (is.numeric(mc)){
-        data <- if (progress) pblapply(filenames, .xml_reader, cl = mc) else mclapply(filenames, .xml_reader, mc.cores = mc)
+        data <- if (progress).pblapply(filenames, .xml_reader, cl = mc)
+          else
+            mclapply(filenames, .xml_reader, mc.cores = mc)
       } else {
         stop("If argument 'mc' is not NULL nor 1, it is required to be an integer value.")
       }
@@ -242,7 +246,7 @@ CorpusData <- R6::R6Class(
       if (!"id" %in% colnames(self$metadata)) stop("id column required")
       self$tokenstream[, "cpos" := 0L:(nrow(self$tokenstream) - 1L)]
       
-      if (verbose) message("... adding corpus positions to table 'metadata'")
+      if (verbose) cli_alert_info("adding corpus positions to table 'metadata'")
       grpn <- uniqueN(self$tokenstream[["id"]])
       if (interactive()) pb <- timerProgressBar(min = 0, max = grpn, width = getOption("pboptions")[["txt.width"]])
       .fn <- function(.SD, .GRP){
@@ -265,7 +269,10 @@ CorpusData <- R6::R6Class(
     #' tokenization/annotation has been performed.
     purge = function(replacements = list(c("^\\s*<.*?>\\s*$", ""), c("\u2019", "'"))){
       for (i in 1L:length(replacements)){
-        if (verbose) message("... checking for presence of regex: ", replacements[[i]][1])
+        if (verbose)
+          cli_alert_info(
+            "checking for presence of regex: {replacements[[i]][1]}"
+          )
         matches <- stri_detect_regex(str = self$chunkdata[["text"]], pattern = replacements[[i]][1])
         if (any(matches)){
           self$chunkdata[["text"]] <- stri_replace_all(
@@ -372,7 +379,8 @@ CorpusData <- R6::R6Class(
             data_dir = data_dir,
             method = method,
             verbose = FALSE,
-            compress = compress
+            compress = compress,
+            quietly = TRUE
           )
         }
       }
@@ -433,13 +441,14 @@ CorpusData <- R6::R6Class(
           if (verbose)
             cli_alert_success("corpus has been reloaded (size: {.val {size}})")
         } else {
-          if (verbose) cli_alert_danger("reloading corpus failed")
+          if (verbose) cli_alert_danger("reloading corpus failed (CL representation")
         }
         
-        if (cqp_load_corpus(corpus = corpus, registry = registry_dir)){
-          if (verbose) cli_alert_success("corpus has been reloaded for CQP usage")
-        } else {
-          if (verbose) cli_alert_danger("reloading corpus failed")
+        if (!cqp_load_corpus(corpus = corpus, registry = registry_dir)){
+          if (verbose)
+            cli_alert_danger(
+              "reloading corpus failed (CQP representation not available)"
+            )
         }
       }
       
