@@ -45,15 +45,13 @@ size limitations of corpora. May also be a file.}
 \code{method} is "CWB". If method is "R", only one positional attribute may be
 supplied.}
 
-\item{registry_dir}{Registry directory (needed by \code{p_attribute_huffcode()}
-and \code{p_attribute_compress_rdx()}).}
+\item{registry_dir}{Registry directory.}
 
-\item{corpus}{The CWB corpus (needed by \code{p_attribute_huffcode()} and
-\code{p_attribute_compress_rdx()}).}
+\item{corpus}{ID of the CWB corpus to create.}
 
 \item{data_dir}{The data directory for the corpus with the binary files.}
 
-\item{method}{Either 'CWB' or 'R'.}
+\item{method}{Either 'CWB' or 'R', defaults to 'R'. See Details section.}
 
 \item{verbose}{A \code{logical} value.}
 
@@ -79,35 +77,42 @@ needs to have the same length as vector \code{old}.}
 for inspecting output messages}
 }
 \description{
-Pure R implementation to generate positional attribute from a character vector of
+Generate positional attribute from a character vector of
 tokens (the token stream).
 }
 \details{
-Four steps generate the binary CWB corpus data format for positional
-attributes: First, encode a character vector (the token stream) using
-\code{p_attribute_encode}. Second, create reverse index using
-\code{p_attribute_makeall}. Third, compress token stream using
-\code{p_attribute_huffcode}. Fourth, compress index files using
-\code{p_attribute_compress_rdx}.
+Up to four steps generate the binary CWB corpus data format for positional
+attributes:
+\itemize{
+\item Index a character vector (the token stream)
+\item create reverse index,
+\item compress token stream
+\item compress index files.
+See the CQP Corpus Encoding
+Tutorial (\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf})
+(section 3) for an explanation of the procedure .
+}
 
-The implementation for the first two steps (\code{p_attribute_encode()} and
-\code{p_attribute_makeall()}) is a pure R implementation (so far). These two
-steps are enough to use the CQP functionality. To run
-\code{p_attribute_huffcode()} and \code{p_attribute_compress_rdx()}, an
-installation of the CWB may be necessary.
+\code{p_attribute_encode()} offers an R and a CWB implementation controlled by
+argument \code{method}. When choosing method 'R', the indexed token stream is
+generated in 'pure R', then the C implementation of CWB functionality as
+exposed to R via the RcppCWB package is used (function
+\code{RcppCWB::cwb_makeall()}, \code{RcppCWB::cwb_huffcode()},
+\code{RcppCWB::cwb_compress_rdx()}). When choosing method 'CWB', the token stream
+is written to disk, then CWB command line utilities 'cwb-encode',
+cwb-makeall', 'cwb-huffcode' and 'cwb-compress-rdx' are called using
+\code{system2()}. An installation of the 'CWB' is required. The 'R'-method is
+robust and is the recommended approach. The 'CWB'-method is still supported
+as it is used in the test suite of the packaage.
 
-See the CQP Corpus Encoding Tutorial
-(\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}) for an
-explanation of the procedure (section 3, ``Indexing and compression without
-CWB/Perl'').
+\code{p_attribute_recode()} will recode the values in the avs-file and
+change the attribute value index in the avx file. The rng-file remains
+unchanged. The registry file remains unchanged, and it is highly
+recommended to consider \code{s_attribute_recode()} as a helper for
+\code{corpus_recode()} that will recode all s-attributes, all p-attributes, and
+will reset the encoding in the registry file.
 
-\code{p_attribute_recode} will recode the values in the avs-file and change
-the attribute value index in the avx file. The rng-file remains unchanged. The registry
-file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
-as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
-and will reset the encoding in the registry file.
-
-Function \code{p_attribute_rename} can be used to rename a
+Function \code{p_attribute_rename()} can be used to rename a
 positional attribute. Note that the corpus is not refreshed (unloaded,
 re-loaded), so it may be necessary to restart R for changes to become
 effective.

@@ -1,30 +1,32 @@
 #' Encode Positional Attribute(s).
 #' 
-#' Pure R implementation to generate positional attribute from a character vector of
+#' Generate positional attribute from a character vector of
 #' tokens (the token stream).
 #' 
-#' Four steps generate the binary CWB corpus data format for positional
-#' attributes: First, encode a character vector (the token stream) using
-#' \code{p_attribute_encode}. Second, create reverse index using
-#' \code{p_attribute_makeall}. Third, compress token stream using
-#' \code{p_attribute_huffcode}. Fourth, compress index files using
-#' \code{p_attribute_compress_rdx}.
+#' Up to four steps generate the binary CWB corpus data format for positional
+#' attributes:
+#' - Index a character vector (the token stream)
+#' - create reverse index,
+#' - compress token stream
+#' - compress index files.
+#' See the CQP Corpus Encoding
+#' Tutorial (\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf})
+#' (section 3) for an explanation of the procedure .
 #' 
-#' The implementation for the first two steps (`p_attribute_encode()` and
-#' `p_attribute_makeall()`) is a pure R implementation (so far). These two
-#' steps are enough to use the CQP functionality. To run
-#' `p_attribute_huffcode()` and `p_attribute_compress_rdx()`, an
-#' installation of the CWB may be necessary.
+#' `p_attribute_encode()` offers an R and a CWB implementation controlled by
+#' argument `method`. When choosing method 'R', the indexed token stream is
+#' generated in 'pure R', then the C implementation of CWB functionality as
+#' exposed to R via the RcppCWB package is used (function
+#' `RcppCWB::cwb_makeall()`, `RcppCWB::cwb_huffcode()`,
+#' `RcppCWB::cwb_compress_rdx()`). When choosing method 'CWB', the token stream
+#' is written to disk, then CWB command line utilities 'cwb-encode',
+#' cwb-makeall', 'cwb-huffcode' and 'cwb-compress-rdx' are called using
+#' `system2()`. An installation of the 'CWB' is required. The 'R'-method is
+#' robust and is the recommended approach. The 'CWB'-method is still supported
+#' as it is used in the test suite of the packaage.
 #' 
-#' See the CQP Corpus Encoding Tutorial
-#' (\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}) for an
-#' explanation of the procedure (section 3, ``Indexing and compression without
-#' CWB/Perl'').
-#' 
-#' @param corpus The CWB corpus (needed by `p_attribute_huffcode()` and
-#'   `p_attribute_compress_rdx()`).
-#' @param registry_dir Registry directory (needed by `p_attribute_huffcode()`
-#'   and `p_attribute_compress_rdx()`).
+#' @param corpus ID of the CWB corpus to create.
+#' @param registry_dir Registry directory.
 #' @param token_stream A `character` vector with the tokens of the corpus. The
 #'   maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
 #'   threshold is exceeded. See the [CWB Encoding
@@ -35,7 +37,7 @@
 #' @param quietly A `logical` value passed into `RcppCWB::cwb_makeall()`,
 #'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 
 #'   verbosity of these functions.
-#' @param method Either 'CWB' or 'R'.
+#' @param method Either 'CWB' or 'R', defaults to 'R'. See Details section.
 #' @param p_attribute The positional attribute. May be more than one, if
 #'   `method` is "CWB". If method is "R", only one positional attribute may be
 #'   supplied.
@@ -398,11 +400,12 @@ p_attribute_encode <- function(
 }
 
 
-#' @details \code{p_attribute_recode} will recode the values in the avs-file and change
-#' the attribute value index in the avx file. The rng-file remains unchanged. The registry
-#' file remains unchanged, and it is highly recommended to consider \code{s_attribute_recode}
-#' as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
-#' and will reset the encoding in the registry file.
+#' @details `p_attribute_recode()` will recode the values in the avs-file and
+#'   change the attribute value index in the avx file. The rng-file remains
+#'   unchanged. The registry file remains unchanged, and it is highly
+#'   recommended to consider `s_attribute_recode()` as a helper for
+#'   `corpus_recode()` that will recode all s-attributes, all p-attributes, and
+#'   will reset the encoding in the registry file.
 #' @param from Character string describing the current encoding of the attribute.
 #' @param to Character string describing the target encoding of the attribute.
 #' @rdname p_attribute_encode
@@ -438,7 +441,7 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
   invisible( NULL )
 }
 
-#' @details Function \code{p_attribute_rename} can be used to rename a
+#' @details Function `p_attribute_rename()` can be used to rename a
 #'   positional attribute. Note that the corpus is not refreshed (unloaded,
 #'   re-loaded), so it may be necessary to restart R for changes to become
 #'   effective.
@@ -510,7 +513,9 @@ p_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE, d
         rf[["home"]],
         gsub(sprintf("^%s(\\..*?)$", old[i]), sprintf("%s\\1", new[i]), f)
       )
-      if (verbose) cli::cli_alert(sprintf("rename file %s to %s", col_blue(basename(oldfile)), col_blue(basename(newfile))))
+      if (verbose) cli::cli_alert(
+        "rename file {.path {basename(oldfile)}} to {.path{basename(newfile)}}"
+      )
       if (isFALSE(dryrun)) file.rename(from = oldfile, to = newfile)
     }
     
