@@ -80,6 +80,10 @@ needs to have the same length as vector \code{old}.}
 \item{dryrun}{A \code{logical} value, whether to suppress actual renaming operation
 for inspecting output messages}
 }
+\value{
+\code{TRUE} is returned invisibly, if encoding has been successful.
+\code{FALSE} indicates an error has occurred.
+}
 \description{
 Generate positional attribute from a character vector of
 tokens (the token stream).

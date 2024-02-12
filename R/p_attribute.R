@@ -48,6 +48,8 @@
 #' @param data_dir The data directory for the binary files of the corpus.
 #' @param encoding Encoding as defined in the charset corpus property of the
 #'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
+#' @return `TRUE` is returned invisibly, if encoding has been successful.
+#'   `FALSE` indicates an error has occurred.
 #' @export p_attribute_encode
 #' @rdname p_attribute_encode
 #' @examples
@@ -141,7 +143,10 @@ p_attribute_encode <- function(
   compress = FALSE
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
-    stop("encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode")
+    cli_alert_danger(
+      "encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode"
+    )
+    return(FALSE)
   }
   
   if (isFALSE(.check_attribute_name(p_attribute))) return(FALSE)
@@ -149,32 +154,53 @@ p_attribute_encode <- function(
   # the registry file will not accept tilde as a shortcut for the user's home
   # directory so we expand it
   registry_dir <- path.expand(registry_dir)
-  if (!file.exists(registry_dir)) stop("registry_dir does not exist")
+  if (!file.exists(registry_dir)){
+    cli_alert_danger("registry_dir does not exist")
+    return(FALSE)
+  } 
   data_dir <- path.expand(data_dir)
-  if (!file.exists(data_dir)) stop("data_dir does not exist")
+  if (!file.exists(data_dir)){
+    cli_alert_danger("data_dir does not exist")
+    return(FALSE)
+  }
   registry_file <- fs::path(registry_dir, tolower(corpus))
   
   if (length(token_stream) >= 2L^31L){
-    warning(
-      sprintf(
-        "The maximum corpus size is 2 147 483 647 tokens, the length of the input vector is %d which is likely to fail.",
-        length(token_stream)
-      )
+    cli_alert_danger(
+      "The maximum corpus size is 2 147 483 647 tokens, the length of the input vector is {.val {length(token_stream)}} which is likely to fail.",
     )
   }
   
   if (method == "R"){
     
-    if (length(p_attribute) != 1L)
-      stop("If `method` is 'R', only one p-attribute can be processed.")
-    
+    if (length(p_attribute) != 1L){
+      cli_alert_danger(
+        "If `method` is 'R', only one p-attribute can be processed."
+      )
+      return(FALSE)
+    }
+
     corpus_file <- fs::path(data_dir, paste(p_attribute, "corpus", sep = "."))
     lexicon_file <- fs::path(data_dir, paste(p_attribute, "lexicon", sep = "."))
-    lexicon_index_file <- fs::path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
+    lexicon_index_file <- fs::path(
+      data_dir,
+      paste(p_attribute, "lexicon.idx", sep = ".")
+    )
+    for (f in c(corpus_file, lexicon_file, lexicon_index_file)){
+      if (file.exists(f)){
+        cli_alert_danger("File {.path {f}} already exists (remove and retry)")
+        return(FALSE)
+      }
+    }
+    
+    # to be checked: Why could this optionally be a file here?!
 
     if (length(token_stream) == 1L){
       if (!file.exists(token_stream)){
-        stop("`token_stream` is a length 1 vector, but is not an existing file")
+        cli_alert_danger(
+          "`token_stream` is a length 1 vector, but is not an existing file"
+        )
+        return(FALSE)
       }
     }
 
@@ -199,7 +225,8 @@ p_attribute_encode <- function(
         ))
       }
     }
-    if (verbose) cli_progress_step("writing file: {.path {basename(corpus_file)}}")
+    if (verbose)
+      cli_progress_step("writing file: {.path {basename(corpus_file)}}")
     writeBin(object = ids, size = 4L, endian = "big", con = corpus_file)
 
     rm(ids); gc()
@@ -434,6 +461,7 @@ p_attribute_encode <- function(
       }
     }
   }
+  invisible(TRUE)
 }
 
 

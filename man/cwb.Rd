@@ -37,20 +37,21 @@ the CWB has failed.
 }
 \description{
 Some steps for encoding corpora can be performed by calling CWB utilities
-from the command line, which requires an installation of the CWB, either as
+from the command line. This requires an installation of the CWB, either as
 part of the CWB package, or using the default installation location of the
 CWB.
 }
 \details{
-\code{cwb_get_url} will return the URL for downloading the
-appropriate binary (Linux / macOS) of the Corpus Workbench, or the source
-tarball (Linux). The md5 checksum of the file to be downloaded is part of
-the return value as "md5" attribute.
+\code{cwb_get_url()} will return the URL for downloading the appropriate
+binary (Linux / macOS) of the Corpus Workbench, or the source tarball
+(Linux). The md5 checksum of the file to be downloaded is part of the
+return value as "md5" attribute.
 
-\code{cwb_get_bindir} will return the directory where the cwb
-utility programs reside. If \code{cwb_install()} has been used to install
-the CWB, the function returns the directory within the \code{cwbtools}
-package. Alternatively, a check for a local installation is performed.
+\code{cwb_get_bindir()} will return the directory where the cwb utility
+programs reside. If \code{cwb_install()} has been used to install the CWB, the
+function returns the directory within the \code{cwbtools} package.
+Alternatively, a check for a local installation is performed. Returns
+\code{NULL} if CWB installation is not found.
 
-\code{cwb_is_installed} will check whether the CWB is installed.
+\code{cwb_is_installed()} will check whether the CWB is installed.
 }

@@ -1,7 +1,7 @@
 #' Utilities to install Corpus Workbench.
 #' 
 #' Some steps for encoding corpora can be performed by calling CWB utilities
-#' from the command line, which requires an installation of the CWB, either as
+#' from the command line. This requires an installation of the CWB, either as
 #' part of the CWB package, or using the default installation location of the
 #' CWB.
 #' @return The path of the CWB binaries or `NULL` if downloading and installing
@@ -16,41 +16,61 @@
 #' @importFrom httr http_error
 #' @importFrom fs path_temp path_tidy path
 #' @importFrom tools md5sum
-cwb_install <- function(url_cwb = cwb_get_url(), md5 = attr(url_cwb, "md5"), cwb_dir = fs::path(fs::path_temp(), "cwb"), verbose = TRUE){
+cwb_install <- function(
+    url_cwb = cwb_get_url(),
+    md5 = attr(url_cwb, "md5"),
+    cwb_dir = fs::path(fs::path_temp(), "cwb"),
+    verbose = TRUE
+  ){
   
   if (!dir.exists(cwb_dir)){
     success <- dir.create(cwb_dir)
     if (isFALSE(success)){
-      warning(sprintf("Directory '%s' does not exist - cannot create it", cwb_dir))
+      cli_alert_danger(
+        "Directory {.path {cwb_dir}} does not exist - cannot create it"
+      )
       return(NULL)
     }
   } else {
-    if (length(list.files(cwb_dir))) warning("Directory '%s' is not empty", cwb_dir)
+    if (length(list.files(cwb_dir)))
+      cli_alert_danger("Directory {.path {cwb_dir}} is not empty", )
   }
   
-  subdir <- gsub("^(.*?)(-UPDATED|)(\\.tar\\.gz|\\.zip)$", "\\1", basename(url_cwb))
+  subdir <- gsub(
+    "^(.*?)(-UPDATED|)(\\.tar\\.gz|\\.zip)$", "\\1",
+    basename(url_cwb)
+  )
 
   # Download CWB, return NULL in case of failure
   if (isTRUE(http_error(url_cwb))){
-    warning(sprintf("HTTP error / cannot access URL %s () ", url_cwb))
+    cli_alert_danger("HTTP error / cannot access URL {.path {url_cwb}}")
     return(NULL)
   }
   tryCatch(
-    success <- download.file(url_cwb, destfile = path(path_temp(), basename(url_cwb))),
+    success <- download.file(
+      url_cwb,
+      destfile = path(path_temp(), basename(url_cwb))
+    ),
     error = function(e){
-      warning(sprintf("Downloading CWB from URL %s failed - returning NULL", url_cwb))
+      cli_alert_danger(
+        "Downloading CWB from URL {.path {url_cwb}} failed - returning NULL"
+      )
       return(NULL)
     }
   )
   if (success != 0){
-    warning(sprintf("Downloading CWB from URL %s failed - returning NULL", url_cwb))
+    cli_alert_danger(
+      "Downloading CWB from URL {.path {url_cwb}} failed - returning NULL"
+    )
     return(NULL)
   }
   
   if (is.character(md5)){
     stopifnot(nchar(md5) > 0L)
     if (verbose){
-      cli_process_start(sprintf("checking whether md5 sum of downloaded file is %s", md5))
+      cli_process_start(
+        "checking whether md5 sum of downloaded file is {.val {md5}}"
+      )
     }
     if (md5sum(path(path_temp(), basename(url_cwb))) != md5){
       cli_process_failed()
@@ -93,10 +113,10 @@ cwb_install <- function(url_cwb = cwb_get_url(), md5 = attr(url_cwb, "md5"), cwb
   cwb_bindir
 }
 
-#' @details \code{cwb_get_url} will return the URL for downloading the
-#'   appropriate binary (Linux / macOS) of the Corpus Workbench, or the source
-#'   tarball (Linux). The md5 checksum of the file to be downloaded is part of
-#'   the return value as "md5" attribute.
+#' @details `cwb_get_url()` will return the URL for downloading the appropriate
+#'   binary (Linux / macOS) of the Corpus Workbench, or the source tarball
+#'   (Linux). The md5 checksum of the file to be downloaded is part of the
+#'   return value as "md5" attribute.
 #' @rdname cwb
 #' @export cwb_get_url
 cwb_get_url <- function(){
@@ -118,27 +138,29 @@ cwb_get_url <- function(){
 }
 
 #' @param bindir The directory with CWB binaries.
-#' @details \code{cwb_get_bindir} will return the directory where the cwb
-#'   utility programs reside. If \code{cwb_install()} has been used to install
-#'   the CWB, the function returns the directory within the \code{cwbtools}
-#'   package. Alternatively, a check for a local installation is performed.
+#' @details `cwb_get_bindir()` will return the directory where the cwb utility
+#'   programs reside. If `cwb_install()` has been used to install the CWB, the
+#'   function returns the directory within the `cwbtools` package.
+#'   Alternatively, a check for a local installation is performed. Returns
+#'   `NULL` if CWB installation is not found.
 #' @export cwb_get_bindir
 #' @rdname cwb
 cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR")){
   if (file.exists(bindir)){
-    return( bindir )
+    return(bindir)
   } else {
     cwb_config <- "/usr/local/bin/cwb-config"
     if (file.exists(cwb_config)){
       bindir <- system(paste(cwb_config, "--bindir", sep = " "), intern = TRUE)
-      return( bindir )
+      return(bindir)
     } else {
-      return( NULL )
+      return(NULL)
     }
-  } 
+  }
+  return(NULL)
 }
 
-#' @details \code{cwb_is_installed} will check whether the CWB is installed.
+#' @details `cwb_is_installed()` will check whether the CWB is installed.
 #' @export cwb_is_installed
 #' @rdname cwb
 cwb_is_installed <- function(){

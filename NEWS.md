@@ -17,6 +17,8 @@ of argument `compress` and simplification of sample code #61.
 `p_attribute_encode()` and `CorpusData$encode()` using a new (internal)
 function, a telling message is issued if non-ASCII or uppercase characters are
 used. The documentation has been augmented accordingly #48.
+* For method "R", `p_attribute_encode()` checks whether files for encoded p-attribute
+exist and fails gracefully with telling error message if yes #4.
 
 
 cwbtools 0.3.9
