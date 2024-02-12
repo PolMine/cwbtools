@@ -136,8 +136,8 @@ UNGA$encode(
   method = "R",
   p_attributes = "word",
   s_attributes = c("id", "who", "state", "role", "lp", "session", "date"),
-  compress = FALSE
-  )
+  compress = TRUE
+)
 ```
 
 In this example, the logical parameter `compress` is `TRUE`. This triggers a so-called "huffcode"" compression, which will reduce corpus size and speed up queries. For big corpora, compression makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
