@@ -84,8 +84,10 @@ To turn the XML files into the `CorpusData object, we use the method `$import_xm
 
 ```{r basetable, eval = TRUE}
 metadata <- c(
-  lp = "//legislativePeriod", session = "//titleStmt/sessionNo",
-  date = "//publicationStmt/date", url = "//sourceDesc/url",
+  lp = "//legislativePeriod",
+  session = "//titleStmt/sessionNo",
+  date = "//publicationStmt/date",
+  url = "//sourceDesc/url",
   src = "//sourceDesc/filetype"
 )
 UNGA$import_xml(filenames = teifiles, meta = metadata)
@@ -103,7 +105,11 @@ UNGA$metadata <- UNGA$metadata[to_keep][, speaker := NULL]
 We assign more telling column names ... 
 
 ```{r unga_expressive_colnames}
-setnames(UNGA$metadata, old = c("sp_who", "sp_state", "sp_role"), new = c("who", "state", "role"))
+setnames(
+  UNGA$metadata,
+  old = c("sp_who", "sp_state", "sp_role"),
+  new = c("who", "state", "role")
+)
 ```
 
 The CWB requires a tokenstream as input to generate positional attributes. NLP tools will offer lemmatization, part-of-speech-recognition and more. To keep things simple, we perform a very simple tokenization that relies on the [tokenizers](https://CRAN.R-project.org/package=tokenizers) package.
@@ -124,14 +130,18 @@ The `CorpusData` object now includes a table with the token stream, and we are r
 ```{r, message = FALSE}
 s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
 UNGA$encode(
-  registry_dir = registry_tmp, data_dir = unga_data_dir_tmp,
-  corpus = "UNGA", encoding = "utf8", method = "R",
-  p_attributes = "word", s_attributes = character(),
+  registry_dir = registry_tmp,
+  data_dir = unga_data_dir_tmp,
+  corpus = "UNGA",
+  encoding = "utf8",
+  method = "R",
+  p_attributes = "word",
+  s_attributes = c("who", "state", "role", "lp", "session", "date"),
   compress = FALSE
   )
 ```
 
-In this example, the logical parameter `compress` is `TRUE. This triggers a so-called "huffcode"" compression, which will reduce corpus size and speed up queries. For big corpora, compression certainly makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
+In this example, the logical parameter `compress` is `TRUE`. This triggers a so-called "huffcode"" compression, which will reduce corpus size and speed up queries. For big corpora, compression makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
 
 The indexed corpus has now been prepared and can be used with CQP, CQPweb, or -- if you like R -- with a package such as [polmineR](https://CRAN.R-project.org/package=polmineR). To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package. 
 

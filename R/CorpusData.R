@@ -403,7 +403,7 @@ CorpusData <- R6::R6Class(
         )
       }
       
-      if (verbose) cli_rule("Finalizing steps")
+      if (verbose) cli_rule("Prepare registry file")
       if (verbose) cli_progress_step("write registry file")
       reg_data <- registry_data(
         name = toupper(corpus),
@@ -420,11 +420,12 @@ CorpusData <- R6::R6Class(
       )
       if (verbose) cli_progress_done()
       
+      if (verbose) cli_rule("Check result")
       if (isTRUE(reload)){
         
         cl_delete_corpus(corpus = corpus, registry = registry_dir)
         if (is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
-          if (verbose) cli_alert_success("internal corpus has been unloaded")
+          if (verbose) cli_alert_success("corpus unloaded")
         } else {
           if (verbose) cli_alert_danger("unloading corpus failed")
         }
@@ -439,7 +440,7 @@ CorpusData <- R6::R6Class(
         
         if (typeof(cl_find_corpus(corpus, registry = registry_dir)) == "externalptr"){
           if (verbose)
-            cli_alert_success("corpus has been reloaded (size: {.val {size}})")
+            cli_alert_success("corpus reloaded (size: {.val {size}})")
         } else {
           if (verbose) cli_alert_danger("reloading corpus failed (CL representation")
         }
