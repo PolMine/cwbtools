@@ -143,9 +143,7 @@ p_attribute_encode <- function(
   compress = FALSE
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
-    cli_alert_danger(
-      "encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode"
-    )
+    cli_alert_danger("encoding required to be ascii, latin1 to latin9 or utf8")
     return(FALSE)
   }
   

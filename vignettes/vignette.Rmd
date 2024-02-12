@@ -325,11 +325,14 @@ It seems that we can encode the corpus.
 
 ```{r, message = FALSE}
 Reuters$encode(
-   corpus = "REUTERS", encoding = "utf8",
-   p_attributes = "word", s_attributes = c("topics_cat", "places"),
+   corpus = "REUTERS",
+   encoding = "utf8",
+   p_attributes = "word",
+   s_attributes = c("topics_cat", "places"),
    registry_dir = registry_tmp,
-   data_dir = data_dir_tmp,
-   method = "R", compress = FALSE
+   data_dir = reuters_data_dir_tmp,
+   method = "R",
+   compress = FALSE
 )
 ```
 
@@ -347,6 +350,67 @@ cpos <- RcppCWB::cl_id2cpos(corpus = "REUTERS", p_attribute = "word", id = id, r
 count <- length(cpos)
 count
 ```
+
+
+### Scenario 4: Add word stems to existing corpus
+
+Finally, we show how to add a further p-attribute to an existing corpus, using
+the REUTERS corpus we just created.
+
+The initial step here is to decode the entire token stream. It could be done 
+easily using `polmineR::get_token_stream()`, but to avoid creating a further
+dependency, we use basic RcppCWB functionality.
+
+```{r}
+reuters_size <- RcppCWB::attribute_size(
+  corpus = "REUTERS",
+  registry = registry_tmp,
+  attribute = "word",
+  attribute_type = "p"
+)
+
+ids <- RcppCWB::cl_cpos2id(
+  corpus = "REUTERS",
+  registry = registry_tmp,
+  p_attribute = "word",
+  cpos = 0L:(reuters_size - 1L)
+)
+
+token_stream <- RcppCWB::cl_id2str(
+  corpus = "REUTERS",
+  registry = registry_tmp,
+  p_attribute = "word",
+  id = ids
+)
+```
+
+We then generate the stemmed token stream ... 
+
+```{r}
+stemmed <- SnowballC::wordStem(token_stream, language = "en")
+```
+
+... and add this to the corpus.
+
+```{r}
+p_attribute_encode(
+  token_stream = stemmed,
+  p_attribute = "stem",
+  encoding = "utf8",
+  corpus = "REUTERS",
+  registry_dir = registry_tmp,
+  data_dir = reuters_data_dir_tmp,
+  method = "R",
+  verbose = TRUE,
+  quietly = TRUE,
+  compress = TRUE
+)
+```
+
+This is a very basic demo: Obviously, you could use more advanced NLP tools 
+to generate a part-of-speech annotation, lemmatization etc, and add it to an 
+existing corpus.
+
 
 ### Final Deeds and Words
 

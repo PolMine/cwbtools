@@ -777,10 +777,10 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 #' @param data_dir The data directory where the files of the CWB corpus live.
 #' @param registry_dir_new Target directory with for (new) registry files.
 #' @param data_dir_new Target directory for corpus files.
-#' @param remove A \code{logical} value, whether to remove orginal files after
-#'   having created the copy.
+#' @param remove A `logical` value, whether to remove orginal files after having
+#'   created the copy.
 #' @param progress Logical, whether to show a progress bar.
-#' @details \code{corpus_copy} will create a copy of a corpus (useful for
+#' @details `corpus_copy()` will create a copy of a corpus (useful for
 #'   experimental modifications, for instance).
 #' @importFrom cli make_spinner ansi_with_hidden_cursor cli_alert_success
 #' @export corpus_copy
@@ -798,7 +798,9 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 #' )
 #' unlink(fs::path(tempdir(), "cwb"), recursive = TRUE)
 corpus_copy <- function(
-  corpus, registry_dir, data_dir = NULL,
+  corpus,
+  registry_dir,
+  data_dir = NULL,
   registry_dir_new = fs::path(tempdir(), "cwb", "registry"),
   data_dir_new = fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
   remove = FALSE,
@@ -807,17 +809,33 @@ corpus_copy <- function(
   ){
 
   registry_file_old <- fs::path(registry_dir, tolower(corpus))
-  if (!file.exists(registry_file_old)) stop(sprintf("Aborting - registry file %s does not exist.", registry_file_old))
-  if (is.null(data_dir)) data_dir <- registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
+  if (!file.exists(registry_file_old)){
+    cli_alert_danger("registry file {.path {registry_file_old}} does not exist.")
+    return(FALSE)
+  }
+    
+  
+  if (is.null(data_dir)){
+    data_dir <- registry_file_parse(
+      corpus = corpus,
+      registry_dir = registry_dir
+    )[["home"]]
+  }
 
   registry_file_new <- fs::path(registry_dir_new, tolower(corpus))
 
   if (file.exists(registry_file_new)){
-    stop(sprintf("Aborting - registry file %s already exists in target registry", registry_file_new))
+    cli_alert_danger(
+      "target registry file {.path {registry_file_new}} already exists"
+    )
+    return(FALSE)
   }
 
-  if (!dir.exists(registry_dir_new)) dir.create(registry_dir_new, recursive = TRUE)
-  if (!dir.exists(data_dir_new)) dir.create(data_dir_new, recursive = TRUE)
+  if (!dir.exists(registry_dir_new))
+    dir.create(registry_dir_new, recursive = TRUE)
+  
+  if (!dir.exists(data_dir_new))
+    dir.create(data_dir_new, recursive = TRUE)
 
   spinner <- make_spinner(
     template = "{spin} copy corpus data files to target data directory"
@@ -842,8 +860,8 @@ corpus_copy <- function(
   if (verbose) cli_process_done()
 
   if (length(rf[["info"]]) == 1L){
-    # It is a common mistake that the info file is not stated correctly in the registry file,
-    # so this is a forgiving solution to remedy errors
+    # It is a common mistake that the info file is not stated correctly in the
+    # registry file, so this is a forgiving solution to remedy errors
     info_file_old <- fs::path(data_dir, basename(rf[["info"]]))
     if (!file.exists(info_file_old)){
       info_file_guessed <- grep(
