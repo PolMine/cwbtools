@@ -44,23 +44,26 @@ s_attribute_delete(corpus, s_attribute)
 s_attribute_rename(corpus, old, new, registry_dir, verbose = TRUE)
 }
 \arguments{
-\item{values}{A character vector with the values of the structural attribute.}
+\item{values}{A \code{character} vector with the values of the structural
+attribute.}
 
 \item{data_dir}{The data directory where to write the files.}
 
-\item{s_attribute}{Atomic character vector, the name of the structural attribute.}
+\item{s_attribute}{Name of the structural attribute, an atomic \code{character}
+vector containing only lowercase ASCII characters (a-z), digits (0-9), -,
+and _: No non-ASCII or uppercase letters allowed.}
 
 \item{corpus}{A CWB corpus.}
 
 \item{region_matrix}{A two-column \code{matrix} with corpus positions.}
 
-\item{method}{EWither 'R' or 'CWB'.}
+\item{method}{Either 'R' or 'CWB'.}
 
 \item{registry_dir}{Path name of the registry directory.}
 
 \item{encoding}{Encoding of the data.}
 
-\item{delete}{Logical, whether a call to \code{RcppCWB::cl_delete_corpus} is performed.}
+\item{delete}{Logical, whether to call \code{RcppCWB::cl_delete_corpus()}.}
 
 \item{verbose}{Logical.}
 
@@ -73,7 +76,7 @@ coercible to a \code{data.table}) with three columns ("cpos_left",
 "cpos_right", "value").}
 
 \item{y}{Data defining a second s-attribute, a \code{data.table} (or an
-object coercible to a \code{data.table})with three columns ("cpos_left",
+object coercible to a \code{data.table}) with three columns ("cpos_left",
 "cpos_right", "value").}
 
 \item{old}{A \code{character} vector with s-attributes to be renamed.}
@@ -87,13 +90,12 @@ attribute stated in vector \code{old} will get the new names at the 1st, 2nd,
 Read, process and write data on structural attributes.
 }
 \details{
-In addition to using CWB functionality, the \code{s_attribute_encode}
-function includes a pure R implementation to add or modify structural attributes
-of an existing CWB corpus.
+\code{s_attribute_encode()} implements a 'pure R' implementation to add
+or modify structural attributes of an existing CWB corpus.
 
-If the corpus has been loaded/used before,
-a new s-attribute may not be available unless \code{RcppCWB::cl_delete_corpus}
-has been called. Use the argument \code{delete} for calling this function.
+If the corpus has been loaded/used before, a new s-attribute may not be
+available unless \code{RcppCWB::cl_delete_corpus()} has been called. Use the
+argument \code{delete} for calling this function.
 
 \code{s_attribute_recode} will recode the values in the avs-file and change
 the attribute value index in the avx file. The rng-file remains unchanged. The registry
@@ -101,11 +103,11 @@ file remains unchanged, and it is highly recommended to consider \code{s_attribu
 as a helper for \code{corpus_recode} that will recode all s-attributes, all p-attributes,
 and will reset the encoding in the registry file.
 
-\code{s_attribute_files} will return a named character vector with
+\code{s_attribute_files()} will return a named character vector with
 the data files (extensions: "avs", "avx", "rng") in the directory indicated
 by \code{data_dir} for the structural attribute \code{s_attribute}.
 
-\code{s_attribute_get_values} is equivalent to performing the CL
+\code{s_attribute_get_values()} is equivalent to performing the CL
 function cl_struc2id for all strucs of a structural attribute. It is a
 "pure R" operation that is faster than using CL, as it processes entire
 files for the s-attribute directly. The return value is a \code{character}
@@ -118,51 +120,57 @@ column. The result is equivalent to calling RcppCWB::get_region_matrix for
 all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
 function which is fast as it processes files entirely and directly.
 
-\code{s_attribute_merge} combines two tables with regions for
+\code{s_attribute_merge()} combines two tables with regions for
 s-attributes checking for intersections that may cause problems. The
 heuristic is to keep all non-intersecting annotations and those annotations
 that define the same region in object \code{x} and object \code{y}.
 Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
 an identity of the left and the right corpus position ("cpos_left" /
 "cpos_right") are dropped. The scenario for using the function is to decode
-a s-attribute (using \code{s_attribute_decode}), mix in an additional
+a s-attribute (using \code{s_attribute_decode()}), mix in an additional
 annotation, and to re-encode the enhanced s-attribute (using
-\code{s_attribute_encode}).
+\code{s_attribute_encode()}).
 
-Function \code{s_attribute_delete} is not yet implemented.
+Function \code{s_attribute_delete()} is not yet implemented.
 
-Function \code{s_attribute_rename} can be used to rename a
-structural attribute.
+Function \code{s_attribute_rename()} can be used to rename a structural
+attribute.
 }
 \examples{
 require("RcppCWB")
 registry_tmp <- fs::path(tempdir(), "cwb", "registry")
 data_dir_tmp <- fs::path(tempdir(), "cwb", "indexed_corpora", "reuters")
 
+cwb_dir_rcppcwb <- system.file(package = "RcppCWB", "extdata", "cwb")
+registry_dir_rcppcwb <- fs::path(cwb_dir_rcppcwb, "registry")
+data_dir_rcppcwb <- fs::path(cwb_dir_rcppcwb,"indexed_corpora", "reuters")
+
 corpus_copy(
   corpus = "REUTERS",
-  registry_dir = system.file(package = "RcppCWB", "extdata", "cwb", "registry"),
-  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters"),
+  registry_dir = registry_dir_rcppcwb,
+  data_dir = data_dir_rcppcwb,
   registry_dir_new = registry_tmp,
   data_dir_new = data_dir_tmp
 )
 
 no_strucs <- cl_attribute_size(
   corpus = "REUTERS",
-  attribute = "id", attribute_type = "s",
+  attribute = "id",
+  attribute_type = "s",
   registry = registry_tmp
 )
-cpos_list <- lapply(
-  0L:(no_strucs - 1L),
-  function(i)
-    cl_struc2cpos(corpus = "REUTERS", struc = i, s_attribute = "id", registry = registry_tmp)
+
+cpos_matrix <- get_region_matrix(
+      corpus = "REUTERS",
+      struc = 0L:(no_strucs - 1L),
+      s_attribute = "id",
+      registry = registry_tmp
 )
-cpos_matrix <- do.call(rbind, cpos_list)
 
 s_attribute_encode(
-  values = as.character(1L:nrow(cpos_matrix)),
+  values = 1L:nrow(cpos_matrix),
   data_dir = data_dir_tmp,
-  s_attribute = "foo",
+  s_attribute = "id",
   corpus = "REUTERS",
   region_matrix = cpos_matrix,
   method = "R",
@@ -173,15 +181,22 @@ s_attribute_encode(
 )
 
 cl_struc2str(
-  "REUTERS", struc = 0L:(nrow(cpos_matrix) - 1L), s_attribute = "foo", registry = registry_tmp
+  "REUTERS",
+  struc = 0L:(nrow(cpos_matrix) - 1L),
+  s_attribute = "id",
+  registry = registry_tmp
 )
 
 unlink(registry_tmp, recursive = TRUE)
 unlink(data_dir_tmp, recursive = TRUE)
-avs <- s_attribute_get_values(
-  s_attribute = "id",
-  data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+data_dir <- system.file(
+  package = "RcppCWB",
+  "extdata",
+  "cwb",
+  "indexed_corpora",
+  "reuters"
 )
+avs <- s_attribute_get_values(s_attribute = "id", data_dir = data_dir)
 rng <- s_attribute_get_regions(
   s_attribute = "id",
   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
@@ -201,5 +216,6 @@ y <- data.frame(
 s_attribute_merge(x,y)
 }
 \seealso{
-To decode a structural attribute, see \code{\link[RcppCWB]{s_attribute_decode}}.
+To decode a structural attribute, see
+\code{\link[RcppCWB]{s_attribute_decode}}.
 }

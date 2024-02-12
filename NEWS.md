@@ -13,6 +13,10 @@ corpus, to make s-attributes available #57.
 of argument `compress` and simplification of sample code #61.
 * Corrected inconsistencies in the vignette #55.
 * `s_attribute_encode()` coerces input `values` to `character` (rather than failing) #62.
+* The validity of attribute names is checked by `s_attribute_encode()`, 
+`p_attribute_encode()` and `CorpusData$encode()` using a new (internal)
+function, a telling message is issued if non-ASCII or uppercase characters are
+used. The documentation has been augmented accordingly #48.
 
 
 cwbtools 0.3.9

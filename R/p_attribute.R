@@ -40,9 +40,11 @@
 #'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 
 #'   verbosity of these functions.
 #' @param method Either 'CWB' or 'R', defaults to 'R'. See section 'Details'.
-#' @param p_attribute The positional attribute. May be more than one, if
-#'   `method` is "CWB". If method is "R", only one positional attribute may be
-#'   supplied.
+#' @param p_attribute The positional attribute to create - a `character` vector
+#'   containing only lowercase ASCII characters (a-z), digits (0-9), -, and _:
+#'   No non-ASCII or uppercase letters allowed. If method is "R", only one
+#'   positional attribute can be encoded at a time. If `method` is "CWB", more
+#'   than one p-attribute allowed.
 #' @param data_dir The data directory for the binary files of the corpus.
 #' @param encoding Encoding as defined in the charset corpus property of the
 #'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
@@ -123,7 +125,8 @@
 #' )
 #' kwic[1:10]
 #' @export p_attribute_encode
-#' @importFrom RcppCWB cl_attribute_size cwb_makeall cwb_huffcode cwb_compress_rdx
+#' @importFrom RcppCWB cl_attribute_size cwb_makeall cwb_huffcode
+#'   cwb_compress_rdx
 #' @importFrom stringi stri_detect_regex stri_replace_all
 p_attribute_encode <- function(
   token_stream,
@@ -141,8 +144,10 @@ p_attribute_encode <- function(
     stop("encoding required to be ascii, latin1 to latin9, utf8 by cwb-encode")
   }
   
-  # the registry file will not accept tilde as a shortcut for the user's home directory
-  # so we expand it
+  if (isFALSE(.check_attribute_name(p_attribute))) return(FALSE)
+  
+  # the registry file will not accept tilde as a shortcut for the user's home
+  # directory so we expand it
   registry_dir <- path.expand(registry_dir)
   if (!file.exists(registry_dir)) stop("registry_dir does not exist")
   data_dir <- path.expand(data_dir)
@@ -337,7 +342,8 @@ p_attribute_encode <- function(
       system2(
         command = fs::path(
           cwb_get_bindir(),
-          if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
+          if (.Platform$OS.type == "windows")
+            "cwb-makeall.exe" else "cwb-makeall"
         ),
         args = c(
           sprintf("-r %s", normalizePath(registry_dir)),
@@ -358,7 +364,8 @@ p_attribute_encode <- function(
         system2(
           command = normalizePath(fs::path(
             cwb_get_bindir(),
-            if (.Platform$OS.type == "windows") "cwb-huffcode.exe" else "cwb-huffcode"
+            if (.Platform$OS.type == "windows")
+              "cwb-huffcode.exe" else "cwb-huffcode"
           )),
           args = compression_cmd_args, stdout = TRUE
         )
@@ -371,7 +378,8 @@ p_attribute_encode <- function(
         system2(
           command = normalizePath(fs::path(
             cwb_get_bindir(),
-            if (.Platform$OS.type == "windows") "cwb-compress-rdx.exe" else "cwb-compress-rdx"
+            if (.Platform$OS.type == "windows")
+              "cwb-compress-rdx.exe" else "cwb-compress-rdx"
           )),
           args = compression_cmd_args,
           stdout = TRUE
@@ -387,7 +395,8 @@ p_attribute_encode <- function(
       corpus = corpus, attribute = "word", attribute_type = "p",
       registry = registry_dir
     )
-    if (corpus_size > 0L) cl_delete_corpus(corpus = corpus, registry = registry_dir)
+    if (corpus_size > 0L)
+      cl_delete_corpus(corpus = corpus, registry = registry_dir)
 
     cwb_makeall(
       corpus = corpus,
@@ -420,7 +429,8 @@ p_attribute_encode <- function(
     )
     for (x in files_to_remove){
       if (file.exists(x)) {
-        if (file.remove(x)) if (verbose) message("... file successfully removed: ", basename(x))
+        if (file.remove(x)) if (verbose)
+          cli_alert_info("file successfully removed: {.path {basename(x)}}")
       }
     }
   }
@@ -437,6 +447,8 @@ p_attribute_encode <- function(
 #' @param to Character string describing the target encoding of the attribute.
 #' @rdname p_attribute_encode
 p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
+  
+  # missing check! Does file exist?!
   
   p_attr_lexicon_file <- fs::path(data_dir, sprintf("%s.lexicon", p_attribute))
   
@@ -481,6 +493,8 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
 #' @rdname p_attribute_encode
 #' @author Christoph Leonhardt, Andreas Blaette
 p_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE, dryrun = FALSE) {
+  
+  if (isFALSE(.check_attribute_name(new))) return(FALSE)
   
   stopifnot(
     is.character(corpus),

@@ -41,9 +41,11 @@ maximum length is 2 147 483 647 (2^31 - 1); a warning is issued if this
 threshold is exceeded. See the \href{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf}{CWB Encoding Tutorial} for
 size limitations of corpora. May also be a file.}
 
-\item{p_attribute}{The positional attribute. May be more than one, if
-\code{method} is "CWB". If method is "R", only one positional attribute may be
-supplied.}
+\item{p_attribute}{The positional attribute to create - a \code{character} vector
+containing only lowercase ASCII characters (a-z), digits (0-9), -, and _:
+No non-ASCII or uppercase letters allowed. If method is "R", only one
+positional attribute can be encoded at a time. If \code{method} is "CWB", more
+than one p-attribute allowed.}
 
 \item{registry_dir}{Registry directory.}
 

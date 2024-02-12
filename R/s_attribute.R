@@ -9,7 +9,9 @@
 #' @param values A `character` vector with the values of the structural
 #'   attribute.
 #' @param data_dir The data directory where to write the files.
-#' @param s_attribute Atomic character vector, name of the structural attribute.
+#' @param s_attribute Name of the structural attribute, an atomic `character`
+#'   vector containing only lowercase ASCII characters (a-z), digits (0-9), -,
+#'   and _: No non-ASCII or uppercase letters allowed.
 #' @param region_matrix A two-column `matrix` with corpus positions.
 #' @param corpus A CWB corpus.
 #' @param method Either 'R' or 'CWB'.
@@ -90,6 +92,8 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
       )
     }
   }
+  
+  if (isFALSE(.check_attribute_name(s_attribute))) return(FALSE)
   
   stopifnot(
     inherits(region_matrix, "matrix"),
@@ -220,7 +224,10 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
 #' @rdname s_attribute
 s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"), to = c("UTF-8", "latin1")){
   
-  s_attr_files <- s_attribute_files(data_dir = data_dir, s_attribute = s_attribute)
+  s_attr_files <- s_attribute_files(
+    data_dir = data_dir,
+    s_attribute = s_attribute
+  )
   
   # read, recode and write values of s-attribute
   
@@ -264,9 +271,9 @@ s_attribute_recode <- function(data_dir, s_attribute, from = c("UTF-8", "latin1"
 }
 
 
-#' @details \code{s_attribute_files} will return a named character vector with
+#' @details `s_attribute_files()` will return a named character vector with
 #'   the data files (extensions: "avs", "avx", "rng") in the directory indicated
-#'   by \code{data_dir} for the structural attribute \code{s_attribute}.
+#'   by `data_dir` for the structural attribute `s_attribute`.
 #' @export s_attribute_files
 #' @rdname s_attribute
 s_attribute_files <- function(s_attribute, data_dir){
@@ -277,16 +284,20 @@ s_attribute_files <- function(s_attribute, data_dir){
 }
 
 
-#' @details \code{s_attribute_get_values} is equivalent to performing the CL
+#' @details `s_attribute_get_values()` is equivalent to performing the CL
 #'   function cl_struc2id for all strucs of a structural attribute. It is a
 #'   "pure R" operation that is faster than using CL, as it processes entire
-#'   files for the s-attribute directly. The return value is a \code{character}
+#'   files for the s-attribute directly. The return value is a `character`
 #'   vector with all string values for the s-attribute.
 #' @examples
-#' avs <- s_attribute_get_values(
-#'   s_attribute = "id",
-#'   data_dir = system.file(package = "RcppCWB", "extdata", "cwb", "indexed_corpora", "reuters")
+#' data_dir <- system.file(
+#'   package = "RcppCWB",
+#'   "extdata",
+#'   "cwb",
+#'   "indexed_corpora",
+#'   "reuters"
 #' )
+#' avs <- s_attribute_get_values(s_attribute = "id", data_dir = data_dir)
 #' @export s_attribute_get_values
 #' @rdname s_attribute
 s_attribute_get_values <- function(s_attribute, data_dir){
@@ -328,21 +339,21 @@ s_attribute_get_regions <- function(s_attribute, data_dir){
 }
 
 
-#' @details \code{s_attribute_merge} combines two tables with regions for
+#' @details `s_attribute_merge()` combines two tables with regions for
 #'   s-attributes checking for intersections that may cause problems. The
 #'   heuristic is to keep all non-intersecting annotations and those annotations
-#'   that define the same region in object \code{x} and object \code{y}.
-#'   Annotations of \code{x} and \code{y} which overlap uncleanly, i.e. without
+#'   that define the same region in object `x` and object `y`.
+#'   Annotations of `x` and `y` which overlap uncleanly, i.e. without
 #'   an identity of the left and the right corpus position ("cpos_left" /
 #'   "cpos_right") are dropped. The scenario for using the function is to decode
-#'   a s-attribute (using \code{s_attribute_decode}), mix in an additional
+#'   a s-attribute (using `s_attribute_decode()`), mix in an additional
 #'   annotation, and to re-encode the enhanced s-attribute (using
-#'   \code{s_attribute_encode}).
-#' @param x Data defining a first s-attribute, a \code{data.table} (or an object
-#'   coercible to a \code{data.table}) with three columns ("cpos_left",
+#'   `s_attribute_encode()`).
+#' @param x Data defining a first s-attribute, a `data.table` (or an object
+#'   coercible to a `data.table`) with three columns ("cpos_left",
 #'   "cpos_right", "value").
-#' @param y Data defining a second s-attribute, a \code{data.table} (or an
-#'   object coercible to a \code{data.table})with three columns ("cpos_left",
+#' @param y Data defining a second s-attribute, a `data.table` (or an
+#'   object coercible to a `data.table`) with three columns ("cpos_left",
 #'   "cpos_right", "value").
 #' @export s_attribute_merge 
 #' @examples
@@ -394,15 +405,15 @@ s_attribute_merge <- function(x, y){
 }
 
 
-#' @details Function \code{s_attribute_delete} is not yet implemented.
+#' @details Function `s_attribute_delete()` is not yet implemented.
 #' @export s_attribute_delete
 #' @rdname s_attribute
 s_attribute_delete <- function(corpus, s_attribute){
   stop("function 's_attribute_delete' is not yet implemented")
 }
 
-#' @details Function \code{s_attribute_rename} can be used to rename a
-#'   structural attribute.
+#' @details Function `s_attribute_rename()` can be used to rename a structural
+#'   attribute.
 #' @param old A `character` vector with s-attributes to be renamed.
 #' @param new A `character` vector with new names of s-attributes. The vector
 #'   needs to have the same length as vector `old`. The 1st, 2nd, 3rd ... nth

@@ -55,3 +55,21 @@ NULL
 #' @importFrom lifecycle deprecate_soft
 ## usethis namespace: end
 NULL
+
+#' @noRd
+#' @param x `character` vector with attribute names to check.
+#' @importFrom cli cli_alert_danger
+.check_attribute_name <- function(x){
+  if (any(!grepl("^[a-z0-9_-]+$", x) | grepl("^[0-9].*$", x))){
+    cli_alert_danger(
+      text = paste(c(
+        "Attribute names may only contain lowercase ASCII characters (a-z), ",
+        "digits (0-9), -, and _. Names may not include non-ASCII or uppercase ",
+        "letters or start with a digit."
+      ))
+      
+    )
+    return(FALSE)
+  }
+  return(TRUE)
+}
