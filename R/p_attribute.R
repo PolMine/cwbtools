@@ -3,27 +3,27 @@
 #' Generate positional attribute from a character vector of
 #' tokens (the token stream).
 #' 
-#' Up to four steps generate the binary CWB corpus data format for positional
-#' attributes:
-#' - Index a character vector (the token stream)
-#' - create reverse index,
-#' - compress token stream
-#' - compress index files.
-#' See the CQP Corpus Encoding
-#' Tutorial (\url{https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf})
-#' (section 3) for an explanation of the procedure .
+#' Four steps generate the binary CWB corpus data format for positional
+#' attributes: (1) Encode the token stream of the corpus, (2) create index
+#' files, (3) compress token stream and (4) compress index files. Whereas steps
+#' 1 and 2 are required to make a corpus work, steps 3 and 4 are optional yet
+#' useful to reduce disk usage and improve performance. See the [CQP Corpus
+#' Encoding
+#' Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf)
+#' (sections 2-4) for an explanation of the procedure.
 #' 
 #' `p_attribute_encode()` offers an R and a CWB implementation controlled by
-#' argument `method`. When choosing method 'R', the indexed token stream is
-#' generated in 'pure R', then the C implementation of CWB functionality as
-#' exposed to R via the RcppCWB package is used (function
-#' `RcppCWB::cwb_makeall()`, `RcppCWB::cwb_huffcode()`,
-#' `RcppCWB::cwb_compress_rdx()`). When choosing method 'CWB', the token stream
-#' is written to disk, then CWB command line utilities 'cwb-encode',
-#' cwb-makeall', 'cwb-huffcode' and 'cwb-compress-rdx' are called using
-#' `system2()`. An installation of the 'CWB' is required. The 'R'-method is
-#' robust and is the recommended approach. The 'CWB'-method is still supported
-#' as it is used in the test suite of the packaage.
+#' argument `method`. When choosing method 'R', the token stream is encoded in
+#' 'pure R', then the C implementation of CWB functionality as exposed to R via
+#' the RcppCWB package is used (functions `RcppCWB::cwb_makeall()` for indexing,
+#' `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx()` for compression).
+#' When choosing method 'CWB', the token stream is written to disk, then CWB
+#' command line utilities 'cwb-encode', cwb-makeall', 'cwb-huffcode' and
+#' 'cwb-compress-rdx' are called using `system2()`. The CWB-method requires an
+#' installation of the 'CWB'. The `cwb_install()` function will download and #
+#' install the CWB command line tools within the package. The 'CWB'-method is
+#' still supported as it is used in the test suite of the packaage. The
+#' 'R'-method is robust and is recommended.
 #' 
 #' @param corpus ID of the CWB corpus to create.
 #' @param registry_dir Registry directory.
@@ -32,76 +32,92 @@
 #'   threshold is exceeded. See the [CWB Encoding
 #'   Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf) for
 #'   size limitations of corpora. May also be a file.
-#' @param compress A `logical` value. 
-#' @param verbose A `logical` value.
+#' @param compress A `logical` value, whether to run `RcppCWB::cwb_huffcode()`
+#'   and `RcppCWB::cwb_compress_rdx()` (method 'R'), or command line tools
+#'   `cwb-huffcode` and `cwb-compress-rdx` (method 'CWB').
+#' @param verbose A `logical` value, whether to output progress messages.
 #' @param quietly A `logical` value passed into `RcppCWB::cwb_makeall()`,
 #'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 
 #'   verbosity of these functions.
-#' @param method Either 'CWB' or 'R', defaults to 'R'. See Details section.
+#' @param method Either 'CWB' or 'R', defaults to 'R'. See section 'Details'.
 #' @param p_attribute The positional attribute. May be more than one, if
 #'   `method` is "CWB". If method is "R", only one positional attribute may be
 #'   supplied.
-#' @param data_dir The data directory for the corpus with the binary files.
+#' @param data_dir The data directory for the binary files of the corpus.
 #' @param encoding Encoding as defined in the charset corpus property of the
 #'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
 #' @export p_attribute_encode
 #' @rdname p_attribute_encode
 #' @examples
-#' library(RcppCWB)
+#' # In this example, we follow a "pure R" approach. 
 #' 
-#' # In this example, we pursue a "pure R" approach. To rely on the "CWB"
-#' # method, you can use the cwb_install() function, which will download and
-#' # install the CWB command line # tools within the package.
-#' 
-#' tokens <- readLines(system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt"))
+#' reu <- system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt")
+#' tokens <- readLines(reu)
 #' 
 #' # Create new (and empty) directory structure
 #' 
-#' tmpdir <- normalizePath(tempdir(), winslash = "/")
-#' registry_tmp <- fs::path(tmpdir, "registry")
-#' data_dir_tmp <- fs::path(tmpdir, "data_dir", "reuters")
-#' if (file.exists(fs::path(data_dir_tmp, "word.corpus"))){
-#'   file.remove(fs::path(data_dir_tmp, "word.corpus"))
-#' }
+#' registry_tmp <- fs::path(tempdir(), "registry")
+#' data_dir_tmp <- fs::path(tempdir(), "data_dir", "reuters")
+#' 
 #' if (dir.exists(registry_tmp)) unlink(registry_tmp, recursive = TRUE)
 #' if (dir.exists(data_dir_tmp)) unlink(data_dir_tmp, recursive = TRUE)
+#' 
 #' dir.create(registry_tmp)
 #' dir.create(data_dir_tmp, recursive = TRUE)
 #' 
-#' # Now encode token stream
+#' # Encode token stream (without compression)
 #' 
 #' p_attribute_encode(
 #'   corpus = "reuters",
-#'   token_stream = tokens, p_attribute = "word",
-#'   data_dir = data_dir_tmp, method = "R",
+#'   token_stream = tokens,
+#'   p_attribute = "word",
+#'   data_dir = data_dir_tmp,
 #'   registry_dir = registry_tmp,
+#'   method = "R",
 #'   compress = FALSE,
+#'   quietly = TRUE,
 #'   encoding = "utf8"
-#'   )
+#' )
 #' 
-#' # Create minimal registry file
+#' # Augment registry file 
 #' 
 #' regdata <- registry_data(
-#'   id = "REUTERS", name = "Reuters Sample Corpus", home = data_dir_tmp,
-#'   properties = c(encoding = "utf-8", language = "en"), p_attributes = "word"
+#'   id = "REUTERS",
+#'   name = "Reuters Sample Corpus",
+#'   home = data_dir_tmp,
+#'   properties = c(encoding = "utf-8", language = "en"),
+#'   p_attributes = "word"
 #' )
 #' 
 #' regfile <- registry_file_write(
-#'   data = regdata, corpus = "REUTERS",
-#'   registry_dir = registry_tmp, data_dir = data_dir_tmp,
+#'   data = regdata,
+#'   corpus = "REUTERS",
+#'   registry_dir = registry_tmp,
+#'   data_dir = data_dir_tmp,
 #' )
 #' 
-#' # Reload corpus and run query as a test
+#' # Run query as a test
 #' 
-#' if (cqp_is_initialized()) cqp_reset_registry(registry_tmp) else cqp_initialize(registry_tmp)
+#' library(RcppCWB)
 #' 
 #' cqp_query(corpus = "REUTERS", query = '[]{3} "oil" []{3};')
 #' regions <- cqp_dump_subcorpus(corpus = "REUTERS")
+#' 
 #' kwic <- apply(
 #'   regions, 1,
 #'   function(region){
-#'     ids <- cl_cpos2id("REUTERS", "word", registry_tmp, cpos = region[1]:region[2])
-#'     words <- cl_id2str(corpus = "REUTERS", p_attribute = "word", registry = registry_tmp, id = ids)
+#'     ids <- cl_cpos2id(
+#'       "REUTERS",
+#'       p_attribute = "word",
+#'       registry = registry_tmp,
+#'       cpos = region[1]:region[2]
+#'     )
+#'     words <- cl_id2str(
+#'       corpus = "REUTERS",
+#'       p_attribute = "word",
+#'       registry = registry_tmp,
+#'       id = ids
+#'     )
 #'     paste0(words, collapse = " ")
 #'   }
 #' )
@@ -144,23 +160,19 @@ p_attribute_encode <- function(
   
   if (method == "R"){
     
+    if (length(p_attribute) != 1L)
+      stop("If `method` is 'R', only one p-attribute can be processed.")
+    
+    corpus_file <- fs::path(data_dir, paste(p_attribute, "corpus", sep = "."))
+    lexicon_file <- fs::path(data_dir, paste(p_attribute, "lexicon", sep = "."))
+    lexicon_index_file <- fs::path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
+
     if (length(token_stream) == 1L){
       if (!file.exists(token_stream)){
         stop("`token_stream` is a length 1 vector, but is not an existing file")
       }
     }
-    
-    if (length(p_attribute) != 1L)
-      stop("If `method` is 'R', only one p-attribute can be processed.")
-    
-    if (verbose)
-      cli_alert_info(
-        "writing tokenstream to disk (directly from R, equivalent to cwb-encode)"
-      )
-    corpus_file <- fs::path(data_dir, paste(p_attribute, "corpus", sep = "."))
-    lexicon_file <- fs::path(data_dir, paste(p_attribute, "lexicon", sep = "."))
-    lexicon_index_file <- fs::path(data_dir, paste(p_attribute, "lexicon.idx", sep = "."))
-    
+
     if (verbose) cli_progress_step("creating indices (in memory)")
     tokenstream_factor <- factor(token_stream, levels = unique(token_stream))
     rm(token_stream); gc()
@@ -191,7 +203,12 @@ p_attribute_encode <- function(
     rm(tokenstream_factor); gc()
     
     if (encoding == "latin1"){
-      lexicon_hex_list <- iconv(x = lexicon, from = "UTF-8", to = toupper(encoding), toRaw = TRUE)
+      lexicon_hex_list <- iconv(
+        x = lexicon,
+        from = "UTF-8",
+        to = toupper(encoding),
+        toRaw = TRUE
+      )
     } else {
       lexicon_hex_list <- lapply(lexicon, charToRaw)
     }
@@ -209,6 +226,7 @@ p_attribute_encode <- function(
     if (verbose)
       cli_progress_step("writing file: {.path {basename(lexicon_index_file)}}")
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
+    if (verbose) cli_progress_done()
     rm(idx_raw); gc()
 
   } else if (method == "CWB"){
@@ -282,13 +300,22 @@ p_attribute_encode <- function(
   
   # create or augment registry file
   if (file.exists(registry_file)){
-    if (verbose) cli_alert_info("reading existing registry file")
-    regdata <- registry_file_parse(corpus = tolower(corpus), registry_dir = registry_dir)
+    if (verbose)
+      cli_alert_info("updating existing registry file: {.path {registry_file}}")
+    regdata <- registry_file_parse(
+      corpus = tolower(corpus),
+      registry_dir = registry_dir
+    )
     
-    p_attributes <- c(regdata[["p_attributes"]], if (exists("p_attrs_old")) p_attrs_old else character(), p_attribute)
+    p_attributes <- c(
+      regdata[["p_attributes"]],
+      if (exists("p_attrs_old")) p_attrs_old else character(),
+      p_attribute
+    )
     regdata[["p_attributes"]] <- unique(p_attributes)
   } else {
-    if (verbose) cli_alert_info("creating data for new registry file")
+    if (verbose)
+      cli_alert_info("creating new registry file: {.path {registry_file}}")
     regdata <- registry_data(
       name = toupper(corpus),
       id = tolower(corpus),
@@ -297,7 +324,7 @@ p_attribute_encode <- function(
       p_attributes = p_attribute
     )
   }
-  if (verbose) cli_alert_info("writing registry file")
+  
   registry_file_write(
     regdata,
     corpus = tolower(corpus),

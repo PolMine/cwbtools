@@ -1,4 +1,4 @@
-cwbtools 0.3.9.9004
+cwbtools 0.3.9.9005
 ===================
 * `corpus_remove()` returns `FALSE` (rather than failing with ERROR) when corpus
 does not exist. More telling messages.
@@ -9,7 +9,8 @@ does not exist. More telling messages.
 * Method `$encode()` has new argument `reload` to trigger unloading and reloading
 corpus, to make s-attributes available #57.
 * The `CorpusData$encode()` method uses messages from the cli package #59.
-* Outdated documentation of `p_attribute_encode()` rewritten.
+* Outdated documentation of `p_attribute_encode()` rewritten, including explanation
+of argument `compress` and simplification of sample code #61.
 
 
 cwbtools 0.3.9
