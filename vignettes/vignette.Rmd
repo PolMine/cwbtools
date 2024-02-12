@@ -128,7 +128,6 @@ UNGA$tokenstream
 The `CorpusData` object now includes a table with the token stream, and we are ready to import the corpus into the CWB. We use the `$encode()` method for this purpose. Note that the workers are the `p_attribute_encode` function (to encode the token stream), and the `s_attribute_encode` function (to encode the structural attributes / the metadata).
 
 ```{r, message = FALSE}
-s_attrs <- c("id", "who", "state", "role", "lp", "session", "date")
 UNGA$encode(
   registry_dir = registry_tmp,
   data_dir = unga_data_dir_tmp,
@@ -136,7 +135,7 @@ UNGA$encode(
   encoding = "utf8",
   method = "R",
   p_attributes = "word",
-  s_attributes = c("who", "state", "role", "lp", "session", "date"),
+  s_attributes = c("id", "who", "state", "role", "lp", "session", "date"),
   compress = FALSE
   )
 ```

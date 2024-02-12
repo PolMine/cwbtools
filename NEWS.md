@@ -12,6 +12,7 @@ corpus, to make s-attributes available #57.
 * Outdated documentation of `p_attribute_encode()` rewritten, including explanation
 of argument `compress` and simplification of sample code #61.
 * Corrected inconsistencies in the vignette #55.
+* `s_attribute_encode()` coerces input `values` to `character` (rather than failing) #62.
 
 
 cwbtools 0.3.9
