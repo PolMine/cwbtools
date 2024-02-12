@@ -1,5 +1,5 @@
 testthat::context("install")
-
+library(RcppCWB)
 
 test_that(
   "corpus_install from pkg",

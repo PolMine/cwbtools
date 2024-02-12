@@ -34,19 +34,23 @@ test_that(
     # Encode -----------------------------------------
 
     Austen$encode(
-      corpus = "AUSTEN", encoding = "utf8",
-      p_attributes = c("word", "stem"), s_attributes = "book",
-      registry_dir = cwb_dirs[["registry_dir"]], data_dir = austen_data_dir_tmp,
-      method = "R", compress = FALSE
+      corpus = "AUSTEN",
+      encoding = "utf8",
+      p_attributes = c("word", "stem"),
+      s_attributes = "book",
+      registry_dir = cwb_dirs[["registry_dir"]],
+      data_dir = austen_data_dir_tmp,
+      method = "R",
+      compress = FALSE
     )
 
     # Load corpus -------------------------------------------
 
-    if (RcppCWB::cqp_is_initialized()){
-      RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
-    } else {
-      RcppCWB::cqp_initialize(registry = cwb_dirs[["registry_dir"]])
-    }
+    # if (RcppCWB::cqp_is_initialized()){
+    #   RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
+    # } else {
+    #   RcppCWB::cqp_initialize(registry = cwb_dirs[["registry_dir"]])
+    # }
 
     # Check -------------------------------------------------
 
@@ -71,21 +75,28 @@ test_that(
 
 
     Austen$encode(
-      corpus = "AUSTEN2", encoding = "utf8",
-      p_attributes = c("word", "stem"), s_attributes = "book",
-      registry_dir = cwb_dirs[["registry_dir"]], data_dir = austen_data_dir_tmp,
-      method = "CWB", compress = FALSE
+      corpus = "AUSTEN2",
+      encoding = "utf8",
+      p_attributes = c("word", "stem"),
+      s_attributes = "book",
+      registry_dir = cwb_dirs[["registry_dir"]],
+      data_dir = austen_data_dir_tmp,
+      method = "CWB",
+      compress = FALSE,
+      reload = TRUE
     )
-
-    RcppCWB::cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
 
     id2 <- RcppCWB::cl_str2id(
-      corpus = "AUSTEN2", p_attribute = "word",
-      str = "pride", registry = cwb_dirs[["registry_dir"]]
+      corpus = "AUSTEN2",
+      p_attribute = "word",
+      str = "pride",
+      registry = cwb_dirs[["registry_dir"]]
     )
     cpos2 <- RcppCWB::cl_id2cpos(
-      corpus = "AUSTEN2", p_attribute = "word",
-      id = id2, registry = cwb_dirs[["registry_dir"]]
+      corpus = "AUSTEN2",
+      p_attribute = "word",
+      id = id2,
+      registry = cwb_dirs[["registry_dir"]]
     )
 
     expect_identical(length(cpos), length(cpos2))
@@ -104,7 +115,21 @@ test_that(
     vocab2 <- RcppCWB::cl_id2str(corpus = "AUSTEN2", p_attribute = "word", id = 0L:(lex1 - 1L))
     expect_identical(vocab1, vocab2)
     
+    # check availability of s-attributes
+    s_attrs1 <- RcppCWB::corpus_s_attributes(
+      corpus = "AUSTEN",
+      registry = cwb_dirs[["registry_dir"]]
+    )
+    s_attrs2 <- RcppCWB::corpus_s_attributes(
+      corpus = "AUSTEN2",
+      registry = cwb_dirs[["registry_dir"]]
+    )
+    expect_identical(s_attrs1, s_attrs2)
+    
+    
     lapply(cwb_dirs, unlink) # clean up
+    
+    
   }
 )
 
