@@ -136,7 +136,7 @@ UNGA$encode(
   method = "R",
   p_attributes = "word",
   s_attributes = c("id", "who", "state", "role", "lp", "session", "date"),
-  compress = TRUE
+  compress = FALSE
 )
 ```
 
@@ -403,7 +403,7 @@ p_attribute_encode(
   method = "R",
   verbose = TRUE,
   quietly = TRUE,
-  compress = TRUE
+  compress = FALSE
 )
 ```
 
