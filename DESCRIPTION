@@ -46,7 +46,9 @@ Suggests:
     janeaustenr,
     testthat,
     rmarkdown,
-    aws.s3
+    aws.s3,
+    quanteda,
+    dplyr
 VignetteBuilder: knitr
 License: GPL-3
 Language: en-US
@@ -60,6 +62,7 @@ Collate:
     'cwbtools.R'
     'directories.R'
     'encoding.R'
+    'encode.R'
     'ner.R'
     'p_attribute.R'
     'pkg.R'

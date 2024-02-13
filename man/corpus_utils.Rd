@@ -125,8 +125,8 @@ password protected site.}
 
 \item{data_dir_new}{Target directory for corpus files.}
 
-\item{remove}{A \code{logical} value, whether to remove orginal files after
-having created the copy.}
+\item{remove}{A \code{logical} value, whether to remove orginal files after having
+created the copy.}
 
 \item{progress}{Logical, whether to show a progress bar.}
 
@@ -210,7 +210,7 @@ two subdirectories. The 'registry' subdirectory will host the registry file
 for the tarred corpus. The data files will be put in a subdirectory with
 the corpus name in the 'indexed_corpora' subdirectory.
 
-\code{corpus_copy} will create a copy of a corpus (useful for
+\code{corpus_copy()} will create a copy of a corpus (useful for
 experimental modifications, for instance).
 
 \code{corpus_get_version} parses the registry file and derives the
