@@ -20,6 +20,7 @@ used. The documentation has been augmented accordingly #48.
 * For method "R", `p_attribute_encode()` checks whether files for encoded p-attribute
 exist and fails gracefully with telling error message if yes #4.
 * Scenario how to add stemmed token stream to existing corpus added to vignette #14.
+* New method `encode()` to prospectively supersed `CorpusData` class. Includes argument `properties` #13.
 
 
 cwbtools 0.3.9

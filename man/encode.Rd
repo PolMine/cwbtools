@@ -14,6 +14,7 @@ encode(x, ...)
   encoding = "utf8",
   registry_dir = fs::path(tempdir(), "cwb_registry"),
   data_dir = fs::path(tempdir(), "cwb_data_dir", tolower(corpus)),
+  properties = c(),
   method = c("R", "CWB"),
   verbose = TRUE,
   compress = FALSE,
@@ -41,6 +42,11 @@ registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 
 \item{data_dir}{The data directory for the binary files of the corpus.}
 
+\item{properties}{A named \code{character} vector with corpus properties that will
+be added to the registry file describing the corpus. Names of the vector
+indicate a property (such as "version") and the values of the vector the
+values of a corpus property.}
+
 \item{method}{Either 'CWB' or 'R', defaults to 'R'. See section 'Details'.}
 
 \item{verbose}{A \code{logical} value, whether to output progress messages.}
@@ -57,7 +63,7 @@ immediatedly available.}
 verbosity of these functions.}
 }
 \description{
-Encode CWB Corpus.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 library(dplyr)
@@ -66,10 +72,12 @@ library(tidytext)
 registry_tmp <- fs::path(tempdir(), "cwb_registry")
 dir.create(registry_tmp)
 
-tokenstream <- quanteda::data_char_ukimmig2010 \%>\%
+tidydata <- quanteda::data_char_ukimmig2010 \%>\%
    as.data.frame() \%>\%
    as_tibble(rownames = "party") \%>\%
-   rename(`text` = ".") \%>\%
+   rename(`text` = ".")
+   
+tokenstream <- tidydata \%>\%
    unnest_tokens(word, text, to_lower = FALSE, strip_punct = FALSE) \%>\%
    mutate(cpos = 0L:(nrow(.) - 1L))
    
@@ -79,5 +87,9 @@ metadata <- tokenstream \%>\%
 
 tokenstream \%>\%
   select(-cpos) \%>\%
-  encode(corpus = "UKIMMIG2010", s_attributes = metadata)
+  encode(
+    corpus = "UKIMMIG2010",
+    s_attributes = metadata,
+    properties = c(lang = "en")
+  )
 }

@@ -1,11 +1,18 @@
 #' Encode CWB Corpus.
 #' 
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' 
 #' @param x A `data.frame` or an object inheriting from `data.frame` (such as 
 #'   `tibble`, `data.table`).
 #' @param s_attributes A `list` of `data.frame` objects with columns 'cpos_left'
 #'   and 'cpos_right' and columns with s-attributes, the names of which will 
 #'   serve as names of s-attributes. It `s_attributes` is a `data.frame`, it will
 #'   be coerced to a `list`.
+#' @param properties A named `character` vector with corpus properties that will
+#'   be added to the registry file describing the corpus. Names of the vector
+#'   indicate a property (such as "version") and the values of the vector the
+#'   values of a corpus property.
 #' @param reload A logical value, whether to reload the corpus to make it
 #'   immediatedly available.
 #' @param ... Further arguments (unused).
@@ -21,10 +28,12 @@ setGeneric("encode", function(x, ...) standardGeneric("encode"))
 #' registry_tmp <- fs::path(tempdir(), "cwb_registry")
 #' dir.create(registry_tmp)
 #' 
-#' tokenstream <- quanteda::data_char_ukimmig2010 %>%
+#' tidydata <- quanteda::data_char_ukimmig2010 %>%
 #'    as.data.frame() %>%
 #'    as_tibble(rownames = "party") %>%
-#'    rename(`text` = ".") %>%
+#'    rename(`text` = ".")
+#'    
+#' tokenstream <- tidydata %>%
 #'    unnest_tokens(word, text, to_lower = FALSE, strip_punct = FALSE) %>%
 #'    mutate(cpos = 0L:(nrow(.) - 1L))
 #'    
@@ -34,7 +43,11 @@ setGeneric("encode", function(x, ...) standardGeneric("encode"))
 #' 
 #' tokenstream %>%
 #'   select(-cpos) %>%
-#'   encode(corpus = "UKIMMIG2010", s_attributes = metadata)
+#'   encode(
+#'     corpus = "UKIMMIG2010",
+#'     s_attributes = metadata,
+#'     properties = c(lang = "en")
+#'   )
 #' @rdname encode
 setMethod("encode", "data.frame", function(
     x,
@@ -43,6 +56,7 @@ setMethod("encode", "data.frame", function(
     encoding = "utf8",
     registry_dir = fs::path(tempdir(), "cwb_registry"),
     data_dir = fs::path(tempdir(), "cwb_data_dir", tolower(corpus)),
+    properties = c(),
     method = c("R", "CWB"),
     verbose = TRUE,
     compress = FALSE,
@@ -164,22 +178,50 @@ setMethod("encode", "data.frame", function(
     }
   }
   
-  if (verbose) cli_rule("Prepare registry file")
-  if (verbose) cli_progress_step("write registry file")
+  if (verbose) cli_rule("Prepare and registry file")
+  
+  props <- c(charset = encoding)
+  if (length(properties) > 0L){
+    if (is.null(names(properties))){
+      cli_alert_warning(paste0(
+        "`properties` required to be a named character vector ",
+        "(not adding properties)"
+      ))
+    } else {
+      # TODO: check that names are unique, are non-ASCII characters allowed?
+      if ("charset" %in% names(properties)){
+        properties <- properties[-which(names(properties) == "charset")]
+        cli_alert_warning(paste0(
+          "drop property {.val charset} from input vector `properties` to avoid ",
+          "re-defining it (using value of argument `encoding`: {.val {encoding}})"
+        ))
+      }
+      props <- c(props, properties)
+    }
+  }
+  
+  if (verbose) cli_alert_info(paste0(
+    "using corpus properties: ",
+    "{col_blue({paste(paste(names(props), props, sep = ' = '), collapse = ' // ')})}"
+  ))
+  
   reg_data <- registry_data(
     name = toupper(corpus),
     id = tolower(corpus),
     home = path.expand(data_dir),
-    properties = c(charset = encoding), 
+    properties = props, 
     p_attributes = colnames(x),
     s_attributes = s_attr_names
   )
+  if (verbose) cli_progress_step("writing registry file")
   registry_file_write(
     data = reg_data,
     corpus = tolower(corpus),
     registry_dir = registry_dir
   )
   if (verbose) cli_progress_done()
+  
+  if (verbose) cli_alert_info("")
   
   if (verbose) cli_rule("Check result")
   if (isTRUE(reload)){

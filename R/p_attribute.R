@@ -275,7 +275,8 @@ p_attribute_encode <- function(
     }
     
     if ("word" %in% p_attribute){
-      if (verbose) message("... running cwb-encode")
+      if (verbose) cli_alert_info("calling cwb-encode")
+      
       system2(
         command = fs::path(
           cwb_get_bindir(),
@@ -285,8 +286,11 @@ p_attribute_encode <- function(
           sprintf("-d %s", normalizePath(data_dir)),
           sprintf("-f %s", normalizePath(vrt_file)),
           sprintf("-R %s", normalizePath(registry_file, mustWork = FALSE)),
-          sprintf("-c %s", encoding), "-v")
+          sprintf("-c %s", encoding),
+          "-v"
+        )
       )
+      
     } else {
       # Add positional attribute to a corpus that already exists
       # some checks at first
