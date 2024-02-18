@@ -57,7 +57,7 @@
 #' s_attribute_encode(
 #'   values = 1L:nrow(cpos_matrix),
 #'   data_dir = data_dir_tmp,
-#'   s_attribute = "id",
+#'   s_attribute = "article_id",
 #'   corpus = "REUTERS",
 #'   region_matrix = cpos_matrix,
 #'   method = "R",
@@ -70,7 +70,7 @@
 #' cl_struc2str(
 #'   "REUTERS",
 #'   struc = 0L:(nrow(cpos_matrix) - 1L),
-#'   s_attribute = "id",
+#'   s_attribute = "article_id",
 #'   registry = registry_tmp
 #' )
 #' 
