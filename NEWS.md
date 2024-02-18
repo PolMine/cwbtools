@@ -1,4 +1,4 @@
-cwbtools 0.3.9.9005
+cwbtools 0.3.9.9005-9008
 ===================
 * `corpus_remove()` returns `FALSE` (rather than failing with ERROR) when corpus
 does not exist. More telling messages.
@@ -21,7 +21,7 @@ used. The documentation has been augmented accordingly #48.
 exist and fails gracefully with telling error message if yes #4.
 * Scenario how to add stemmed token stream to existing corpus added to vignette #14.
 * New method `encode()` to prospectively supersed `CorpusData` class. Includes argument `properties` #13.
-
+* `s_attribute_encode()` issues warning on Windows when using s-attribute 'id' #69.
 
 cwbtools 0.3.9
 ==============

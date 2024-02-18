@@ -77,7 +77,18 @@
 #' unlink(registry_tmp, recursive = TRUE)
 #' unlink(data_dir_tmp, recursive = TRUE)
 #' @rdname s_attribute
-s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_matrix, method = c("R", "CWB"), registry_dir = Sys.getenv("CORPUS_REGISTRY"), encoding, delete = FALSE, verbose = TRUE){
+s_attribute_encode <- function(
+    values,
+    data_dir,
+    s_attribute,
+    corpus,
+    region_matrix,
+    method = c("R", "CWB"),
+    registry_dir = Sys.getenv("CORPUS_REGISTRY"),
+    encoding,
+    delete = FALSE,
+    verbose = TRUE
+  ){
   
   if (!is.character(values)){
     if (verbose)
@@ -93,7 +104,15 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     }
   }
   
+  stopifnot(is.character(s_attribute), length(s_attribute) == 1L)
   if (isFALSE(.check_attribute_name(s_attribute))) return(FALSE)
+  # See https://github.com/PolMine/cwbtools/issues/69
+  if (.Platform$OS.type == "windows" & s_attribute == "id")
+    cli_alert_warning(paste0(c(
+      "s-attribute name 'id' may cause errors on Windows: ",
+      "Rename s-attribute to avoid issues with reserved filename ",
+      "{.path id.rng}!"
+    )))
   
   stopifnot(
     inherits(region_matrix, "matrix"),
@@ -118,7 +137,7 @@ s_attribute_encode <- function(values, data_dir, s_attribute, corpus, region_mat
     avs_file <- fs::path(data_dir, paste(s_attribute, "avs", sep = "."))
     # attribute value index
     avx_file <- fs::path(data_dir, paste(s_attribute, "avx", sep = "."))
-    # ranges
+    # ranges (filename id.rng not working on Windows)
     rng_file <- fs::path(data_dir, paste(s_attribute, "rng", sep = "."))
     
     # generate and write attrib.avs
