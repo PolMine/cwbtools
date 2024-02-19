@@ -403,13 +403,12 @@ p_attribute_encode <- function(
             if (.Platform$OS.type == "windows")
               "cwb-huffcode.exe" else "cwb-huffcode"
           ),
-          args = compression_cmd_args, stdout = TRUE
+          args = compression_cmd_args, stderr = FALSE
         )
         
         compression_cmd_args <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
-          if (verbose) "-v" else character(), 
           toupper(corpus)
         )
         system2(
@@ -418,8 +417,7 @@ p_attribute_encode <- function(
             if (.Platform$OS.type == "windows")
               "cwb-compress-rdx.exe" else "cwb-compress-rdx"
           ),
-          args = compression_cmd_args,
-          stdout = TRUE
+          args = compression_cmd_args
         )
       }
     }
