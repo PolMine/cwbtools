@@ -408,6 +408,7 @@ p_attribute_encode <- function(
         compression_cmd_args <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
+          if (verbose) "-v" else character(), 
           toupper(corpus)
         )
         system2(
