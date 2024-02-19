@@ -709,7 +709,7 @@ corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = T
   if (verbose) cli_progress_step("remove files in data directory")
   file.remove(list.files(data_directory, full.names = TRUE))
   if (verbose) cli_progress_step("remove data directory")
-  file.remove(data_directory)
+  unlink(data_directory, recursive)
   if (verbose) cli_progress_step("remove registry file")
   file.remove(fs::path(registry_dir, tolower(corpus)))
   if (verbose) cli_progress_done()
