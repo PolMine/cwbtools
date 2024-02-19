@@ -370,13 +370,13 @@ p_attribute_encode <- function(
       system2(
         command = fs::path(
           cwb_get_bindir(),
-          if (.Platform$OS.type == "windows")
-            "cwb-makeall.exe" else "cwb-makeall"
+          if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
         ),
         args = c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
-          "-V", toupper(corpus))
+          "-V", toupper(corpus)
+        )
       )
     }
     
