@@ -283,9 +283,8 @@ p_attribute_encode <- function(
           if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
         ),
         args = c(
-          sprintf("-d %s", normalizePath(data_dir)),
-          sprintf("-f %s", normalizePath(vrt_file)),
-          sprintf("-R %s", normalizePath(registry_file, mustWork = FALSE)),
+          sprintf("-d %s", fs::path(data_dir)),
+          sprintf("-f %s", fs::path(vrt_file)),
           sprintf("-c %s", encoding),
           "-v"
         )
@@ -320,8 +319,8 @@ p_attribute_encode <- function(
           cwb_bindir,
           if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
         ),
-        "-d", normalizePath(data_dir),
-        "-f", normalizePath(vrt_file),
+        "-d", fs::path(data_dir),
+        "-f", fs::path(vrt_file),
         "-p", "-",
         paste("-P", p_attribute, sep = " "),
         "-c", encoding,
@@ -375,7 +374,7 @@ p_attribute_encode <- function(
             "cwb-makeall.exe" else "cwb-makeall"
         ),
         args = c(
-          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
           "-V", toupper(corpus))
       )
@@ -385,31 +384,31 @@ p_attribute_encode <- function(
     if (compress){
       for (p_attr in p_attribute){
         compression_cmd_args <- c(
-          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
           if (verbose) "-v" else character(),
           toupper(corpus)
         )
         system2(
-          command = normalizePath(fs::path(
+          command = fs::path(
             cwb_get_bindir(),
             if (.Platform$OS.type == "windows")
               "cwb-huffcode.exe" else "cwb-huffcode"
-          )),
+          ),
           args = compression_cmd_args, stdout = TRUE
         )
         
         compression_cmd_args <- c(
-          sprintf("-r %s", normalizePath(registry_dir)),
+          sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
           toupper(corpus)
         )
         system2(
-          command = normalizePath(fs::path(
+          command = fs::path(
             cwb_get_bindir(),
             if (.Platform$OS.type == "windows")
               "cwb-compress-rdx.exe" else "cwb-compress-rdx"
-          )),
+          ),
           args = compression_cmd_args,
           stdout = TRUE
         )
