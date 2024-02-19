@@ -366,6 +366,13 @@ p_attribute_encode <- function(
   
   if (method == "CWB"){
     if (verbose) message("... calling cwb-makeall")
+    if (!cwb_is_installed()){
+      cli_alert_danger(
+        "method 'CWB' selected, but CWB is not installed (use `cwb_install()`)"
+      )
+      return(invisible(FALSE))
+    }
+    
     for (p_attr in p_attribute){
       system2(
         command = fs::path(
