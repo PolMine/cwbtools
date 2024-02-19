@@ -702,6 +702,10 @@ corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = T
     }
   }
   
+  if (!is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
+    cl_delete_corpus(corpus = corpus, registry = registry_dir)
+  }
+  
   if (verbose) cli_progress_step("remove files in data directory")
   file.remove(list.files(data_directory, full.names = TRUE))
   if (verbose) cli_progress_step("remove data directory")
