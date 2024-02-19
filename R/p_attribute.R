@@ -394,6 +394,7 @@ p_attribute_encode <- function(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
           if (verbose) "-v" else character(),
+          if (!quietly) "-v" else character(),
           toupper(corpus)
         )
         system2(
