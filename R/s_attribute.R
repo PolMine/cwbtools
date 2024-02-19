@@ -205,6 +205,7 @@ s_attribute_encode <- function(
       fs::path(cwb_get_bindir(), "cwb-s-encode"),
       "-d", data_dir,
       "-f", tmp_file,
+      "-c", encoding,
       "-V", s_attribute
     )
     
