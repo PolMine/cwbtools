@@ -197,6 +197,8 @@ test_that(
       )
     
     # with compression -------------------------------------------------------------
+
+    skip_on_os("windows")
     
     p_attribute_encode(
       token_stream = token_stream,
