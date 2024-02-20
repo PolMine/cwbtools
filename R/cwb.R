@@ -47,9 +47,10 @@ cwb_install <- function(
     return(NULL)
   }
   tryCatch(
-    success <- download.file(
+    success <- curl::curl_download(
       url_cwb,
-      destfile = path(path_temp(), basename(url_cwb))
+      destfile = path(path_temp(), basename(url_cwb)),
+      quiet = !verbose
     ),
     error = function(e){
       cli_alert_danger(
@@ -58,7 +59,7 @@ cwb_install <- function(
       return(NULL)
     }
   )
-  if (success != 0){
+  if (is.null(success) | !file.exists(success)){
     cli_alert_danger(
       "Downloading CWB from URL {.path {url_cwb}} failed - returning NULL"
     )
@@ -104,9 +105,9 @@ cwb_install <- function(
     install_script_file <- fs::path(path_temp(), subdir, "install-cwb.sh")
     install_script <- readLines(install_script_file)
     install_script[grep("^PREFIX=", install_script)] <- sprintf("PREFIX='%s'", cwb_dir)
-    # the installation script assumes that it is started from the directory of the script
-    # however, changing into the directory would violate R package checks
-    # so hard links are needed ...
+    # the installation script assumes that it is started from the directory of
+    # the script however, changing into the directory would violate R package
+    # checks so hard links are needed ...
     install_script <- gsub(
       "bin/\\*",
       sprintf("%s/*", fs::path(path_temp(), subdir, "bin")),
@@ -183,7 +184,7 @@ cwb_get_url <- function(){
       stop("Platform is 'unix', but Sys.info()['sysname'] is neither 'Darwin' (i.e. MacOS) nor 'Linux'")
     }
   } else if (.Platform$OS.type == "windows"){
-    url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/windows/cwb-3.5.0-win64-x86_64.zip/download"
+    url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/windows/cwb-3.5.0-win64-x86_64.zip"
     attr(url_cwb, "md5") <- "3295703d562eec7fe5ad45c0d36a93b7"
   }
   url_cwb

@@ -403,12 +403,13 @@ p_attribute_encode <- function(
           "cwb-huffcode.exe" else "cwb-huffcode"
       )
       
+      cmd_compress <- fs::path(
+        cwb_get_bindir(),
+        if (.Platform$OS.type == "windows")
+          "cwb-compress-rdx.exe" else "cwb-compress-rdx"
+      )
+      
       for (p_attr in p_attribute){
-        cmd_huffcode <- fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows")
-            "cwb-huffcode.exe" else "cwb-huffcode"
-        )
         args_huffcode <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
@@ -426,11 +427,6 @@ p_attribute_encode <- function(
         
         if (verbose) cli_rule("cwb-compress-rdx")
         
-        cmd_compress <- fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows")
-            "cwb-compress-rdx.exe" else "cwb-compress-rdx"
-        )
         args_compress <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
