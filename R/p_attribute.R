@@ -260,6 +260,13 @@ p_attribute_encode <- function(
     rm(idx_raw); gc()
 
   } else if (method == "CWB"){
+    if (!cwb_is_installed()){
+      cli_alert_danger(
+        "method 'CWB' selected, but CWB is not installed (use `cwb_install()`)"
+      )
+      return(invisible(FALSE))
+    }
+    
     if (length(token_stream) == 1L){
       if (file.exists(token_stream)){
         vrt_file <- token_stream
@@ -275,20 +282,24 @@ p_attribute_encode <- function(
     }
     
     if ("word" %in% p_attribute){
-      if (verbose) cli_alert_info("calling cwb-encode")
-      
-      system2(
-        command = fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
-        ),
-        args = c(
-          sprintf("-d %s", fs::path(data_dir)),
-          sprintf("-f %s", fs::path(vrt_file)),
-          sprintf("-c %s", encoding),
-          "-v"
-        )
+      cmd <- fs::path(
+        cwb_get_bindir(),
+        if (.Platform$OS.type == "windows") "cwb-encode.exe" else "cwb-encode"
       )
+      args <- c(
+        sprintf("-d %s", fs::path(data_dir)),
+        sprintf("-f %s", fs::path(vrt_file)),
+        sprintf("-c %s", encoding),
+        "-v"
+      )
+      
+      if (verbose){
+        cli_alert_info(
+          "run cwb-encode: {.code {paste(c(cmd, args), collapse = ' ')}}"
+        )
+      }
+      
+      system2(command = cmd, args = args)
       
     } else {
       # Add positional attribute to a corpus that already exists
@@ -365,61 +376,74 @@ p_attribute_encode <- function(
   )
   
   if (method == "CWB"){
-    if (verbose) message("... calling cwb-makeall")
-    if (!cwb_is_installed()){
-      cli_alert_danger(
-        "method 'CWB' selected, but CWB is not installed (use `cwb_install()`)"
-      )
-      return(invisible(FALSE))
-    }
+    cmd <- fs::path(
+      cwb_get_bindir(),
+      if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
+    )
     
     for (p_attr in p_attribute){
-      system2(
-        command = fs::path(
-          cwb_get_bindir(),
-          if (.Platform$OS.type == "windows") "cwb-makeall.exe" else "cwb-makeall"
-        ),
-        args = c(
-          sprintf("-r %s", fs::path(registry_dir)),
-          sprintf("-P %s", p_attr),
-          "-V", toupper(corpus)
-        )
+      args_makeall <- c(
+        sprintf("-r %s", fs::path(registry_dir)),
+        sprintf("-P %s", p_attr),
+        "-V", toupper(corpus)
       )
+      if (verbose) cli_alert_info(paste0(
+        "run cwb-makeall for p-attribute {.val {p_attr}}: ",
+        "{.code {paste(c(cmd, args_makeall), collapse = ' ')}}"
+      ))
+      system2(command = cmd, args = args_makeall)
     }
     
     
     if (compress){
+      if (verbose) cli_rule("cwb-huffcode")
+      cmd_huffcode <- fs::path(
+        cwb_get_bindir(),
+        if (.Platform$OS.type == "windows")
+          "cwb-huffcode.exe" else "cwb-huffcode"
+      )
+      
       for (p_attr in p_attribute){
-        compression_cmd_args <- c(
+        cmd_huffcode <- fs::path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows")
+            "cwb-huffcode.exe" else "cwb-huffcode"
+        )
+        args_huffcode <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
-          if (verbose) "-v" else character(),
-          if (!quietly) "-v" else character(),
           toupper(corpus)
         )
+        if (verbose) cli_alert_info(paste0(
+          "run cwb-huffcode for p-attribute {.val {p_attr}}: ",
+          "{.code {paste(c(cmd_huffcode, args_huffcode), collapse = ' ')}}"
+        ))
         system2(
-          command = fs::path(
-            cwb_get_bindir(),
-            if (.Platform$OS.type == "windows")
-              "cwb-huffcode.exe" else "cwb-huffcode"
-          ),
-          args = compression_cmd_args, stdout = TRUE
+          command = cmd_huffcode,
+          args = args_huffcode,
+          stdout = if (quietly) FALSE else ""
         )
         
-        compression_cmd_args <- c(
+        if (verbose) cli_rule("cwb-compress-rdx")
+        
+        cmd_compress <- fs::path(
+          cwb_get_bindir(),
+          if (.Platform$OS.type == "windows")
+            "cwb-compress-rdx.exe" else "cwb-compress-rdx"
+        )
+        args_compress <- c(
           sprintf("-r %s", fs::path(registry_dir)),
           sprintf("-P %s", p_attr),
-          if (verbose) "-v" else character(), 
           toupper(corpus)
         )
+        if (verbose) cli_alert_info(paste0(
+          "run cwb-compress-rdx for p-attribute {.val {p_attr}}: ",
+          "{.code {paste(c(cmd_compress, args_compress), collapse = ' ')}}"
+        ))
         system2(
-          command = fs::path(
-            cwb_get_bindir(),
-            if (.Platform$OS.type == "windows")
-              "cwb-compress-rdx.exe" else "cwb-compress-rdx"
-          ),
-          args = compression_cmd_args,
-          stdout = TRUE
+          command = cmd_compress,
+          args = args_compress,
+          stdout = if (quietly) FALSE else ""
         )
       }
     }
@@ -525,12 +549,19 @@ p_attribute_recode <- function(data_dir, p_attribute, from = c("UTF-8", "latin1"
 #' @param old A `character` vector with p-attributes to be renamed.
 #' @param new A `character` vector with new names of p-attributes. The vector
 #'   needs to have the same length as vector `old`.
-#' @param dryrun A `logical` value, whether to suppress actual renaming operation
-#'   for inspecting output messages 
+#' @param dryrun A `logical` value, whether to suppress actual renaming
+#'   operation for inspecting output messages
 #' @export p_attribute_rename
 #' @rdname p_attribute_encode
 #' @author Christoph Leonhardt, Andreas Blaette
-p_attribute_rename <- function(corpus, old, new, registry_dir, verbose = TRUE, dryrun = FALSE) {
+p_attribute_rename <- function(
+    corpus,
+    old,
+    new,
+    registry_dir,
+    verbose = TRUE,
+    dryrun = FALSE
+) {
   
   if (isFALSE(.check_attribute_name(new))) return(FALSE)
   

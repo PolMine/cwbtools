@@ -1,4 +1,4 @@
-#' Utilities to install Corpus Workbench.
+#' Utilities to install the Corpus Workbench (CWB)
 #' 
 #' Some steps for encoding corpora can be performed by calling CWB utilities
 #' from the command line. This requires an installation of the CWB, either as
