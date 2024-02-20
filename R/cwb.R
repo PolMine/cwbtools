@@ -87,6 +87,18 @@ cwb_install <- function(
     for (x in list.files(fs::path(path_temp(), subdir, "bin"), full.names = TRUE)){
       file.copy(from = x, to = fs::path(bin_dir, basename(x)))
     }
+  } else if (Sys.info()["sysname"] == "Darwin"){
+    untar(fs::path(path_temp(), basename(url_cwb)), exdir = path_temp())
+    bin_dir <- fs::path(cwb_dir, "bin")
+    if (!dir.exists(bin_dir)) dir.create(bin_dir)
+    for (x in list.files(fs::path(path_temp(), subdir, "bin"), full.names = TRUE)){
+      file.copy(from = x, to = fs::path(bin_dir, basename(x)))
+    }
+    lib_dir <- fs::path(cwb_dir, "lib")
+    if (!dir.exists(lib_dir)) dir.create(lib_dir)
+    for (x in list.files(fs::path(path_temp(), subdir, "lib"), full.names = TRUE)){
+      file.copy(from = x, to = fs::path(lib_dir, basename(x)))
+    }
   } else {
     untar(fs::path(path_temp(), basename(url_cwb)), exdir = path_temp())
     install_script_file <- fs::path(path_temp(), subdir, "install-cwb.sh")
@@ -95,14 +107,47 @@ cwb_install <- function(
     # the installation script assumes that it is started from the directory of the script
     # however, changing into the directory would violate R package checks
     # so hard links are needed ...
-    install_script <- gsub("bin/\\*", sprintf("%s/*", fs::path(path_temp(), subdir, "bin")), install_script)
-    install_script <- gsub("bin/cwb-config", fs::path(path_temp(), subdir, "bin", "cwb-config"), install_script)
-    install_script <- gsub("instutils/cwb-config.in", fs::path(path_temp(), subdir, "instutils", "cwb-config.in"), install_script)
-    install_script <- gsub("instutils/install.sh", fs::path(path_temp(), subdir, "instutils", "install.sh"), install_script)
-    install_script <- gsub("lib/libcl.a", fs::path(path_temp(), subdir, "lib", "libcl.a"), install_script)
-    install_script <- gsub("include/cwb/cl.h", fs::path(path_temp(), subdir, "include", "cwb", "cl.h"), install_script)
-    install_script <- gsub("include/cwb/cqi.h", fs::path(path_temp(), subdir, "include", "cwb", "cqi.h"), install_script)
-    install_script <- gsub("man/man1/*", fs::path(path_temp(), subdir, "man", "man1", "*"), install_script)
+    install_script <- gsub(
+      "bin/\\*",
+      sprintf("%s/*", fs::path(path_temp(), subdir, "bin")),
+      install_script
+    )
+    install_script <- gsub(
+      "bin/cwb-config",
+      fs::path(path_temp(), subdir, "bin", "cwb-config"),
+      install_script
+    )
+    install_script <- gsub(
+      "instutils/cwb-config.in",
+      fs::path(path_temp(), subdir, "instutils", "cwb-config.in"),
+      install_script
+    )
+    install_script <- gsub(
+      "instutils/install.sh",
+      fs::path(path_temp(), subdir, "instutils", "install.sh"),
+      install_script
+    )
+    install_script <- gsub(
+      "lib/libcl.a",
+      fs::path(path_temp(), subdir, "lib", "libcl.a"),
+      install_script
+    )
+    install_script <- gsub(
+      "include/cwb/cl.h",
+      fs::path(path_temp(), subdir, "include", "cwb", "cl.h"),
+      install_script
+    )
+    install_script <- gsub(
+      "include/cwb/cqi.h",
+      fs::path(path_temp(), subdir, "include", "cwb", "cqi.h"),
+      install_script
+    )
+    install_script <- gsub(
+      "man/man1/*",
+      fs::path(path_temp(), subdir, "man", "man1", "*"),
+      install_script
+    )
+    
     cat(install_script, file = install_script_file, sep = "\n")
     system(install_script_file)
   }
@@ -122,8 +167,8 @@ cwb_install <- function(
 cwb_get_url <- function(){
   if (.Platform$OS.type == "unix"){
     if (Sys.info()["sysname"] == "Darwin"){
-      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-osx-10.5-universal.tar.gz"
-      attr(url_cwb, "md5") <- "c6c47a4d0fda021c949f239337123611"
+      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/darwin/cwb-3.5.0-macos-11.0-arm64.tar.gz"
+      attr(url_cwb, "md5") <- "fcf0516e02624cf991a3f77d4cbefcab"
     } else if (Sys.info()["sysname"] == "Linux"){
       url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-linux-x86_64.tar.gz"
       attr(url_cwb, "md5") <- "ee2f36abadd0242bbfcd84e2381399ea"

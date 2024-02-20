@@ -222,19 +222,19 @@ test_that(
       compress = TRUE
     )
     
-    # austen1b_md5 <- tools::md5sum(list.files(data_dir_tmp1b, full.names = TRUE))
-    # names(austen1b_md5) <- basename(names(austen1b_md5))
-    # 
-    # austen2b_md5 <- tools::md5sum(list.files(data_dir_tmp2b, full.names = TRUE))
-    # names(austen2b_md5) <- basename(names(austen2b_md5))
-    # 
-    # testthat::expect_identical(names(austen1b_md5), names(austen2b_md5))
-    # 
-    # for (file in names(austen1b_md5))
-    #   expect_identical(
-    #     austen1b_md5[[file]],
-    #     austen2b_md5[[file]]
-    #   )
+    austen1b_md5 <- tools::md5sum(list.files(data_dir_tmp1b, full.names = TRUE))
+    names(austen1b_md5) <- basename(names(austen1b_md5))
+
+    austen2b_md5 <- tools::md5sum(list.files(data_dir_tmp2b, full.names = TRUE))
+    names(austen2b_md5) <- basename(names(austen2b_md5))
+
+    testthat::expect_identical(names(austen1b_md5), names(austen2b_md5))
+
+    for (file in names(austen1b_md5))
+      expect_identical(
+        austen1b_md5[[file]],
+        austen2b_md5[[file]]
+      )
   }
 )
 
