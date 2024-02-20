@@ -167,17 +167,24 @@ cwb_install <- function(
 cwb_get_url <- function(){
   if (.Platform$OS.type == "unix"){
     if (Sys.info()["sysname"] == "Darwin"){
-      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/darwin/cwb-3.5.0-macos-11.0-arm64.tar.gz"
-      attr(url_cwb, "md5") <- "fcf0516e02624cf991a3f77d4cbefcab"
+      if (Sys.info()["machine"] == "arm64"){
+        url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/darwin/cwb-3.5.0-macos-11.0-arm64.tar.gz"
+        attr(url_cwb, "md5") <- "fcf0516e02624cf991a3f77d4cbefcab"
+      } else {
+        url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/darwin/cwb-3.5.0-macos-10.13-x86_64.tar.gz"
+        attr(url_cwb, "md5") <- "29ab6a93ffe9e740e73411f654c19957"
+      }
     } else if (Sys.info()["sysname"] == "Linux"){
-      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-linux-x86_64.tar.gz"
-      attr(url_cwb, "md5") <- "ee2f36abadd0242bbfcd84e2381399ea"
+      # url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-linux-x86_64.tar.gz"
+      # attr(url_cwb, "md5") <- "ee2f36abadd0242bbfcd84e2381399ea"
+      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/source/cwb-3.5.0-src.tar.gz"
+      attr(url_cwb, "md5") <- "fb02beb3e3ba637bc6fadd33d51f73af"
     } else {
       stop("Platform is 'unix', but Sys.info()['sysname'] is neither 'Darwin' (i.e. MacOS) nor 'Linux'")
     }
   } else if (.Platform$OS.type == "windows"){
-    url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.4-beta/cwb-3.4.10-windows-i586-UPDATED.zip"
-    attr(url_cwb, "md5") <- "5b9c8eb2e24528da12bbd9c94342b8bf"
+    url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/windows/cwb-3.5.0-win64-x86_64.zip/download"
+    attr(url_cwb, "md5") <- "3295703d562eec7fe5ad45c0d36a93b7"
   }
   url_cwb
 }
