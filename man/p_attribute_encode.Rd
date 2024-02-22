@@ -77,8 +77,8 @@ and \code{RcppCWB::cwb_compress_rdx()} (method 'R'), or command line tools
 \item{new}{A \code{character} vector with new names of p-attributes. The vector
 needs to have the same length as vector \code{old}.}
 
-\item{dryrun}{A \code{logical} value, whether to suppress actual renaming operation
-for inspecting output messages}
+\item{dryrun}{A \code{logical} value, whether to suppress actual renaming
+operation for inspecting output messages}
 }
 \value{
 \code{TRUE} is returned invisibly, if encoding has been successful.

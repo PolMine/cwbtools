@@ -12,7 +12,7 @@
 #'   \href{http://lrec-conf.org/workshops/lrec2018/W2/pdf/15_W2.pdf}{here}.
 #'
 #' @examples
-#' pkgdir <- normalizePath(tempdir(), winslash = "/")
+#' pkgdir <- fs::path_temp()
 #' pkg_create_cwb_dirs(pkg = pkgdir)
 #' pkg_add_description(
 #'   pkg = pkgdir,

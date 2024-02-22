@@ -109,8 +109,6 @@
 #' 
 #' # create temporary directories (registry directory and one for indexed corpora)
 #' 
-#' tmpdir <- normalizePath(tempdir(), winslash = "/")
-#' if (.Platform$OS.type == "windows") tmpdir <- normalizePath(tmpdir, winslash = "/")
 #' registry_tmp <- fs::path(tempdir(), "registry")
 #' data_dir_tmp <- fs::path(tempdir(), "data_dir")
 #' if (!dir.exists(registry_tmp)) dir.create(registry_tmp)

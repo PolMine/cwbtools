@@ -104,7 +104,7 @@ suitable for large binary files, which is the scenario applicable for
 indexed corpus data.
 }
 \examples{
-pkgdir <- normalizePath(tempdir(), winslash = "/")
+pkgdir <- fs::path_temp()
 pkg_create_cwb_dirs(pkg = pkgdir)
 pkg_add_description(
   pkg = pkgdir,

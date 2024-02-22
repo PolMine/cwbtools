@@ -5,7 +5,7 @@
 \alias{cwb_get_url}
 \alias{cwb_get_bindir}
 \alias{cwb_is_installed}
-\title{Utilities to install Corpus Workbench.}
+\title{Utilities to install the Corpus Workbench (CWB)}
 \usage{
 cwb_install(
   url_cwb = cwb_get_url(),

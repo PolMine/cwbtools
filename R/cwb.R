@@ -33,7 +33,7 @@ cwb_install <- function(
     }
   } else {
     if (length(list.files(cwb_dir)))
-      cli_alert_danger("Directory {.path {cwb_dir}} is not empty", )
+      cli_alert_danger("Directory {.path {cwb_dir}} is not empty")
   }
   
   subdir <- gsub(
@@ -100,58 +100,11 @@ cwb_install <- function(
     for (x in list.files(fs::path(path_temp(), subdir, "lib"), full.names = TRUE)){
       file.copy(from = x, to = fs::path(lib_dir, basename(x)))
     }
-  } else {
-    untar(fs::path(path_temp(), basename(url_cwb)), exdir = path_temp())
-    install_script_file <- fs::path(path_temp(), subdir, "install-cwb.sh")
-    install_script <- readLines(install_script_file)
-    install_script[grep("^PREFIX=", install_script)] <- sprintf("PREFIX='%s'", cwb_dir)
-    # the installation script assumes that it is started from the directory of
-    # the script however, changing into the directory would violate R package
-    # checks so hard links are needed ...
-    install_script <- gsub(
-      "bin/\\*",
-      sprintf("%s/*", fs::path(path_temp(), subdir, "bin")),
-      install_script
-    )
-    install_script <- gsub(
-      "bin/cwb-config",
-      fs::path(path_temp(), subdir, "bin", "cwb-config"),
-      install_script
-    )
-    install_script <- gsub(
-      "instutils/cwb-config.in",
-      fs::path(path_temp(), subdir, "instutils", "cwb-config.in"),
-      install_script
-    )
-    install_script <- gsub(
-      "instutils/install.sh",
-      fs::path(path_temp(), subdir, "instutils", "install.sh"),
-      install_script
-    )
-    install_script <- gsub(
-      "lib/libcl.a",
-      fs::path(path_temp(), subdir, "lib", "libcl.a"),
-      install_script
-    )
-    install_script <- gsub(
-      "include/cwb/cl.h",
-      fs::path(path_temp(), subdir, "include", "cwb", "cl.h"),
-      install_script
-    )
-    install_script <- gsub(
-      "include/cwb/cqi.h",
-      fs::path(path_temp(), subdir, "include", "cwb", "cqi.h"),
-      install_script
-    )
-    install_script <- gsub(
-      "man/man1/*",
-      fs::path(path_temp(), subdir, "man", "man1", "*"),
-      install_script
-    )
-    
-    cat(install_script, file = install_script_file, sep = "\n")
-    system(install_script_file)
+  } else if (Sys.info()["sysname"] == "Linux"){
+    debfile <- path(path_temp(), basename(url_cwb))
+    system2(command = "dpkg", args = sprintf("-i %s", debfile))
   }
+  
   unlink(path(path_temp(), basename(url_cwb)))
   unlink(path(path_temp(), subdir))
   cwb_bindir <- fs::path(cwb_dir, "bin")
@@ -176,10 +129,10 @@ cwb_get_url <- function(){
         attr(url_cwb, "md5") <- "29ab6a93ffe9e740e73411f654c19957"
       }
     } else if (Sys.info()["sysname"] == "Linux"){
-      # url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.0.0/cwb-3.0.0-linux-x86_64.tar.gz"
-      # attr(url_cwb, "md5") <- "ee2f36abadd0242bbfcd84e2381399ea"
-      url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/source/cwb-3.5.0-src.tar.gz"
-      attr(url_cwb, "md5") <- "fb02beb3e3ba637bc6fadd33d51f73af"
+      if (TRUE){
+        url_cwb <- "https://sourceforge.net/projects/cwb/files/cwb/cwb-3.5/deb/cwb_3.5.0-1_amd64.deb"
+        attr(url_cwb, "md5") <- "85fb41efd2ad11c566e8d0c5f018634d"
+      }
     } else {
       stop("Platform is 'unix', but Sys.info()['sysname'] is neither 'Darwin' (i.e. MacOS) nor 'Linux'")
     }
