@@ -139,25 +139,20 @@ test_that(
     registry_tmp <- fs::path(tempdir(), "registry")
     dir.create (registry_tmp)
     
-    data_dir_tmp1a <- fs::path(tempdir(), "data_dir", "austen1a")
-    dir.create(data_dir_tmp1a, recursive = TRUE)
-    
-    data_dir_tmp1b <- fs::path(tempdir(), "data_dir", "austen1b")
-    dir.create(data_dir_tmp1b, recursive = TRUE)
-    
-    data_dir_tmp2a <- fs::path(tempdir(), "data_dir", "austen2a")
-    dir.create(data_dir_tmp2a, recursive = TRUE)
-    
-    data_dir_tmp2b <- fs::path(tempdir(), "data_dir", "austen2b")
-    dir.create(data_dir_tmp2b, recursive = TRUE)
-    
     token_stream <- janeaustenr::austen_books() |>
       tidytext::unnest_tokens(word, text, to_lower = FALSE) |>
       _[["word"]]
     
+    if (!cwb_is_installed()) cwb_install()
     
     # without compression ----------------------------------------------------------
     
+    data_dir_tmp1a <- fs::path(tempdir(), "data_dir", "austen1a")
+    dir.create(data_dir_tmp1a, recursive = TRUE)
+    
+    data_dir_tmp2a <- fs::path(tempdir(), "data_dir", "austen2a")
+    dir.create(data_dir_tmp2a, recursive = TRUE)
+
     p_attribute_encode(
       token_stream = token_stream,
       registry_dir = registry_tmp,
@@ -200,6 +195,12 @@ test_that(
 
     skip_on_os("windows")
     
+    data_dir_tmp1b <- fs::path(tempdir(), "data_dir", "austen1b")
+    dir.create(data_dir_tmp1b, recursive = TRUE)
+    
+    data_dir_tmp2b <- fs::path(tempdir(), "data_dir", "austen2b")
+    dir.create(data_dir_tmp2b, recursive = TRUE)
+
     p_attribute_encode(
       token_stream = token_stream,
       registry_dir = registry_tmp,
