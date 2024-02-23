@@ -139,9 +139,10 @@ test_that(
     registry_tmp <- fs::path(tempdir(), "registry")
     dir.create (registry_tmp)
     
-    token_stream <- janeaustenr::austen_books() |>
-      tidytext::unnest_tokens(word, text, to_lower = FALSE) |>
-      _[["word"]]
+    token_stream <- tidytext::unnest_tokens(
+      janeaustenr::austen_books(),
+      word, text, to_lower = FALSE
+    )[["word"]]
     
     if (!cwb_is_installed()) cwb_install()
     
