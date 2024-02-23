@@ -132,6 +132,11 @@ s_attribute_encode <- function(
     )
   }
   
+  m <- region_matrix[order(region_matrix[,1]),] # ensure order
+  if (!all(m[2:nrow(m), 1] - m[1:(nrow(m) - 1), 2] >= 1)){
+    stop("overlapping regions are not permitted")
+  }
+
   if (method == "R"){
     # attribute values
     avs_file <- fs::path(data_dir, paste(s_attribute, "avs", sep = "."))
@@ -168,11 +173,11 @@ s_attribute_encode <- function(
     writeBin(object = avx_vector, con = avx_file, size = 4L, endian = "big")
     
     # generate and write attrib.rng
-    region_vector <- as.vector(t(region_matrix))
+    region_vector <- as.vector(t(m))
     writeBin(object = region_vector, con = rng_file, size = 4L, endian = "big")
   } else if (method == "CWB"){
     
-    tab <- data.table(region_matrix, s_attribute = values)
+    tab <- data.table(m, s_attribute = values)
     setorderv(tab, cols = "cpos_left", order = 1L)
     
     # adjust encoding, if necessary
@@ -229,6 +234,7 @@ s_attribute_encode <- function(
   }
   if (delete)
     cl_delete_corpus(corpus = toupper(corpus), registry = registry_dir)
+  
   invisible( NULL )
 }
 
