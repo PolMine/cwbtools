@@ -341,7 +341,9 @@ CorpusData <- R6::R6Class(
         if (length(potential_data_dir) != 1)
           stop("no data_dir provided, no candidate found")
         data_dir <- fs::path(super_dir, potential_data_dir, tolower(corpus))
-        if (verbose) cli_alert_info("data directory suggested_ {.path {data_dir}}")
+        if (verbose)
+          cli_alert_info("data directory suggested_ {.path {data_dir}}")
+        
         feedback <- readline(
           prompt = "Use this data directory? (type 'Y' to confirm)"
         )
@@ -386,7 +388,7 @@ CorpusData <- R6::R6Class(
             method = method,
             verbose = FALSE,
             compress = compress,
-            quietly = TRUE
+            quietly = quietly
           )
         }
       }
