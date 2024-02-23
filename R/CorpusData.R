@@ -220,13 +220,17 @@ CorpusData <- R6::R6Class(
           }
         }
         y <- list(
-          text = data.table(id = 1L:length(textnodes), text = sapply(textnodes, xml2::xml_text)),
+          text = data.table(
+            id = 1L:length(textnodes),
+            text = sapply(textnodes, xml2::xml_text)
+          ),
           metadata = dt
         )
         return(y)
       }
       
-      if (!all(file.exists(filenames))) stop("all files provided by x need to exist (not fulfilled)")
+      if (!all(file.exists(filenames)))
+        stop("all files provided by x need to exist (not fulfilled)")
       if (is.null(mc) || mc == 1L){
         data <- if (progress)
           pblapply(filenames, .xml_reader) else lapply(filenames, .xml_reader)
@@ -245,8 +249,8 @@ CorpusData <- R6::R6Class(
     },
     
     #' @description 
-    #' Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
-    #' \code{cpos_right} to metadata.
+    #' Add column 'cpos' to tokenstream and columns 'cpos_left' and
+    #' 'cpos_right' to metadata.
     add_corpus_positions = function(verbose = TRUE){
       
       if (!"id" %in% colnames(self$metadata)) stop("id column required")
