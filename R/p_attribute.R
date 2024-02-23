@@ -34,7 +34,8 @@
 #'   size limitations of corpora. May also be a file.
 #' @param compress A `logical` value, whether to run `RcppCWB::cwb_huffcode()`
 #'   and `RcppCWB::cwb_compress_rdx()` (method 'R'), or command line tools
-#'   `cwb-huffcode` and `cwb-compress-rdx` (method 'CWB').
+#'   `cwb-huffcode` and `cwb-compress-rdx` (method 'CWB'). Defaults to `FALSE`
+#'   as compression is not stable on Windows.
 #' @param verbose A `logical` value, whether to output progress messages.
 #' @param quietly A `logical` value passed into `RcppCWB::cwb_makeall()`,
 #'   `RcppCWB::cwb_huffcode()` and `RcppCWB::cwb_compress_rdx` to control 

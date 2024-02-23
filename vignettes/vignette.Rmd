@@ -140,7 +140,7 @@ UNGA$encode(
 )
 ```
 
-In this example, the logical parameter `compress` is `TRUE`. This triggers a so-called "huffcode"" compression, which will reduce corpus size and speed up queries. For big corpora, compression makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
+In this example, the logical parameter `compress` is `FALSE`. If `TRUE`, a so-called "huffcode"" compression if performed., which will reduce corpus size and speed up queries. For big corpora, compression makes sense, but it can be time-consuming. If you want to create a corpus experimentally and do not yet need optimization, performing the compression can be postponed or omitted.
 
 The indexed corpus has now been prepared and can be used with CQP, CQPweb, or -- if you like R -- with a package such as [polmineR](https://CRAN.R-project.org/package=polmineR). To see quickly whether everything has worked out as intended (and to keep installation requirements at a minimum), we use the low-level functionality of the [RcppCWB](https://CRAN.R-project.org/package=RcppCWB) package. 
 
