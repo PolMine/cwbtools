@@ -144,6 +144,7 @@ cwb_get_url <- function(){
 }
 
 #' @param bindir The directory with CWB binaries.
+#' @param verbose Logical, whether to show progress messages.
 #' @details `cwb_get_bindir()` will return the directory where the cwb utility
 #'   programs reside. If `cwb_install()` has been used to install the CWB, the
 #'   function returns the directory within the `cwbtools` package.
@@ -151,13 +152,34 @@ cwb_get_url <- function(){
 #'   `NULL` if CWB installation is not found.
 #' @export cwb_get_bindir
 #' @rdname cwb
-cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR")){
+cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR"), verbose = TRUE){
   if (file.exists(bindir)){
     return(bindir)
   } else {
+    # first we try the `cwb-config` command line tool and return the path 
+    # it returns if successful
+    
+    bindir <- try(
+      {suppressWarnings(
+          system2(command = "cwb-config", args = "--bindir", stderr = TRUE)
+      )},
+      silent = TRUE
+    )
+    if (class(bindir)[1] != "try-error"){
+      cli_alert_info(
+        "`cwb-config` reports directory with CWB binaries: {.path {bindir}}"
+      )
+      return(bindir)
+    }
+    
+    # if the `cwb_config` tool is not on the PATH, it might be here:
     cwb_config <- "/usr/local/bin/cwb-config"
     if (file.exists(cwb_config)){
       bindir <- system(paste(cwb_config, "--bindir", sep = " "), intern = TRUE)
+      cli_alert_info(paste0(c(
+        "`cwb-config` (in: {.path /usr/local/bin/}) reports directory with ",
+        "CWB binaries: {.path {bindir}}"
+      )))
       return(bindir)
     } else {
       return(NULL)

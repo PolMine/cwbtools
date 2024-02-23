@@ -22,7 +22,8 @@ exist and fails gracefully with telling error message if yes #4.
 * Scenario how to add stemmed token stream to existing corpus added to vignette #14.
 * New method `encode()` to prospectively supersed `CorpusData` class. Includes argument `properties` #13.
 * `s_attribute_encode()` issues warning on Windows when using s-attribute 'id' #69.
-* Replace `normalizePath()` by `fs::path()` in `p_attribute_encode()` #65.
+* Replaced `normalizePath()` by `fs::path()` in `p_attribute_encode()` #65.
+* `cwb_get_bindir()` tries to find `cwb-config` system utility, if it is on the path.
 
 cwbtools 0.3.9
 ==============

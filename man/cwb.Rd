@@ -16,7 +16,7 @@ cwb_install(
 
 cwb_get_url()
 
-cwb_get_bindir(bindir = Sys.getenv("CWB_BINDIR"))
+cwb_get_bindir(bindir = Sys.getenv("CWB_BINDIR"), verbose = TRUE)
 
 cwb_is_installed()
 }
@@ -27,7 +27,7 @@ cwb_is_installed()
 
 \item{cwb_dir}{The directory where the CWB shall be installed.}
 
-\item{verbose}{A \code{logical} value, whether to output messages.}
+\item{verbose}{Logical, whether to show progress messages.}
 
 \item{bindir}{The directory with CWB binaries.}
 }
