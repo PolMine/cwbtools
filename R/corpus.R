@@ -599,7 +599,7 @@ corpus_install <- function(pkg = NULL, repo = "https://PolMine.github.io/drat/",
   invisible(TRUE)
 }
 
-#' @details \code{corpus_packages} will detect the packages that include CWB
+#' @details `corpus_packages()` will detect the packages that include CWB
 #'   corpora. Note that the directory structure of all installed packages is
 #'   evaluated which may be slow on network-mounted file systems.
 #' @rdname corpus_utils
@@ -1083,4 +1083,45 @@ corpus_get_version <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTR
     return(NA)
   }
   numeric_version(v_string)
+}
+
+
+#' @details `corpus_reload()` will unload a corpus if necessary and reload it.
+#'   Useful to make new features of a corpus available after modification. 
+#'   Returns logical value `TRUE` if succesful, `FALSE` if not.
+#' @rdname corpus_utils
+#' @export corpus_reload
+corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
+  cl_delete_corpus(corpus = corpus, registry = registry_dir)
+  if (is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
+    if (verbose) cli_alert_success("corpus unloaded")
+  } else {
+    if (verbose) cli_alert_danger("unloading corpus failed")
+    return(FALSE)
+  }
+  
+  # Not too intuitive, but this (re)loads the corpus
+  size <- cl_attribute_size(
+    corpus = corpus,
+    attribute = "word",
+    attribute_type = "p",
+    registry = registry_dir
+  )
+  
+  if (typeof(cl_find_corpus(corpus, registry = registry_dir)) == "externalptr"){
+    if (verbose)
+      cli_alert_success("corpus reloaded (size: {.val {size}})")
+  } else {
+    if (verbose) cli_alert_danger("reloading corpus failed (CL representation")
+    return(FALSE)
+  }
+  
+  if (!cqp_load_corpus(corpus = corpus, registry = registry_dir)){
+    if (verbose)
+      cli_alert_danger(
+        "reloading corpus failed (CQP representation not available)"
+      )
+    return(FALSE)
+  }
+  TRUE
 }

@@ -49,6 +49,8 @@
 #' @param data_dir The data directory for the binary files of the corpus.
 #' @param encoding Encoding as defined in the charset corpus property of the
 #'   registry file for the corpus ('latin1' to 'latin9', and 'utf8').
+#' @param reload A `logical` value that defaults to `TRUE` to ensure that all
+#'   features are available.
 #' @return `TRUE` is returned invisibly, if encoding has been successful.
 #'   `FALSE` indicates an error has occurred.
 #' @export p_attribute_encode
@@ -141,7 +143,8 @@ p_attribute_encode <- function(
   verbose = TRUE,
   quietly = FALSE,
   encoding = get_encoding(token_stream),
-  compress = FALSE
+  compress = FALSE,
+  reload = TRUE
 ){
   if (!encoding %in% c("ascii", paste0("latin", 1:9), "utf8")){
     cli_alert_danger("encoding required to be ascii, latin1 to latin9 or utf8")
@@ -492,6 +495,14 @@ p_attribute_encode <- function(
       }
     }
   }
+  
+  if (reload)
+    corpus_reload(
+      corpus = corpus,
+      registry_dir = registry_dir,
+      verbose = verbose
+    )
+
   invisible(TRUE)
 }
 
@@ -632,6 +643,6 @@ p_attribute_rename <- function(
   if (verbose) cli::cli_alert("update and write registry file")
   registry_file_write(data = rf, corpus = corpus, registry_dir = registry_dir)
   
-  return(TRUE)
+  TRUE
 }
 

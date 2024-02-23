@@ -16,7 +16,8 @@ p_attribute_encode(
   verbose = TRUE,
   quietly = FALSE,
   encoding = get_encoding(token_stream),
-  compress = FALSE
+  compress = FALSE,
+  reload = TRUE
 )
 
 p_attribute_recode(
@@ -66,7 +67,11 @@ registry file for the corpus ('latin1' to 'latin9', and 'utf8').}
 
 \item{compress}{A \code{logical} value, whether to run \code{RcppCWB::cwb_huffcode()}
 and \code{RcppCWB::cwb_compress_rdx()} (method 'R'), or command line tools
-\code{cwb-huffcode} and \code{cwb-compress-rdx} (method 'CWB').}
+\code{cwb-huffcode} and \code{cwb-compress-rdx} (method 'CWB'). Defaults to \code{FALSE}
+as compression is not stable on Windows.}
+
+\item{reload}{A \code{logical} value that defaults to \code{TRUE} to ensure that all
+features are available.}
 
 \item{from}{Character string describing the current encoding of the attribute.}
 

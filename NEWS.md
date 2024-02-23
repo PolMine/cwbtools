@@ -26,6 +26,7 @@ exist and fails gracefully with telling error message if yes #4.
 * `cwb_get_bindir()` tries to find `cwb-config` system utility, if it is on the path.
 * `cwb_get_url()` will get CWB v3.5 installation files #63.
 * Argument `compress` defaults to `FALSE` as corpus compression is not stable on Windows #3.
+* New function `corpus_reload()` for convenient unloading/reloading corpora #68.
 
 cwbtools 0.3.9
 ==============

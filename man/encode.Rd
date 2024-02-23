@@ -53,7 +53,8 @@ values of a corpus property.}
 
 \item{compress}{A \code{logical} value, whether to run \code{RcppCWB::cwb_huffcode()}
 and \code{RcppCWB::cwb_compress_rdx()} (method 'R'), or command line tools
-\code{cwb-huffcode} and \code{cwb-compress-rdx} (method 'CWB').}
+\code{cwb-huffcode} and \code{cwb-compress-rdx} (method 'CWB'). Defaults to \code{FALSE}
+as compression is not stable on Windows.}
 
 \item{reload}{A logical value, whether to reload the corpus to make it
 immediatedly available.}

@@ -10,6 +10,7 @@
 \alias{corpus_recode}
 \alias{corpus_testload}
 \alias{corpus_get_version}
+\alias{corpus_reload}
 \title{Install and manage corpora.}
 \usage{
 corpus_install(
@@ -69,6 +70,8 @@ corpus_testload(
 )
 
 corpus_get_version(corpus, registry_dir = Sys.getenv("CORPUS_REGISTRY"))
+
+corpus_reload(corpus, registry_dir, verbose = TRUE)
 }
 \arguments{
 \item{pkg}{Name of a package (length-one \code{character} vector).}
@@ -195,7 +198,7 @@ If the corpus to be installed is already available, a dialogue will ask the
 user whether an existing corpus shall be deleted and installed anew, if
 argument \code{ask} is \code{TRUE}.
 
-\code{corpus_packages} will detect the packages that include CWB
+\code{corpus_packages()} will detect the packages that include CWB
 corpora. Note that the directory structure of all installed packages is
 evaluated which may be slow on network-mounted file systems.
 
@@ -218,6 +221,10 @@ corpus version number from the corpus properties. The return value is a
 \code{numeric_version} class object. The corpus version is expected to follow
 semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
 has another format or if it is not available, the return value is \code{NA}.
+
+\code{corpus_reload()} will unload a corpus if necessary and reload it.
+Useful to make new features of a corpus available after modification.
+Returns logical value \code{TRUE} if succesful, \code{FALSE} if not.
 }
 \examples{
 registry_file_new <- fs::path(tempdir(), "cwb", "registry", "reuters")
