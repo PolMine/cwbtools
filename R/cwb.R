@@ -1,11 +1,12 @@
 #' Utilities to install the Corpus Workbench (CWB)
 #' 
-#' Some steps for encoding corpora can be performed by calling CWB utilities
-#' from the command line. This requires an installation of the CWB, either as
-#' part of the CWB package, or using the default installation location of the
-#' CWB.
-#' @return The path of the CWB binaries or `NULL` if downloading and installing
-#'   the CWB has failed.
+#' The CWB comprises a set of command line tools for corpus preparation and
+#' management. Functionality for installing and managing these Tools.
+#' 
+#' @details Use `cwb_install()` to download and install CWB binaries (v3.5) from
+#'   [SourceForge](https://cwb.sourceforge.io/). If successful, `cwb_install()`
+#'   returns the directory of the CWB, otherwiese `NULL`. For the installation
+#'   on macOS and Linux, see \url{https://cwb.sourceforge.io/install.php}.
 #' @param url_cwb URL for downloading the CWB.
 #' @param cwb_dir The directory where the CWB shall be installed.
 #' @param md5 The md5 checksum of the compressed file to be downloaded. 
@@ -113,7 +114,7 @@ cwb_install <- function(
 }
 
 #' @details `cwb_get_url()` will return the URL for downloading the appropriate
-#'   binary (Linux / macOS) of the Corpus Workbench, or the source tarball
+#'   binary (Linux / macOS) of the CWB (v3.5), or the source tarball
 #'   (Linux). The md5 checksum of the file to be downloaded is part of the
 #'   return value as "md5" attribute.
 #' @rdname cwb
@@ -145,18 +146,18 @@ cwb_get_url <- function(){
 
 #' @param bindir The directory with CWB binaries.
 #' @param verbose Logical, whether to show progress messages.
-#' @details `cwb_get_bindir()` will return the directory where the cwb utility
-#'   programs reside. If `cwb_install()` has been used to install the CWB, the
-#'   function returns the directory within the `cwbtools` package.
-#'   Alternatively, a check for a local installation is performed. Returns
-#'   `NULL` if CWB installation is not found.
+#' @details `cwb_get_bindir()` detects the directory with the cwb command line
+#'   programs. Defaults to using the value of the environment
+#'   variable "CWB_BINDIR". If unset, the value of `cwb-config --bindir` is
+#'   used. Returns `NULL` if CWB installation is not found.
 #' @export cwb_get_bindir
 #' @rdname cwb
 cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR"), verbose = TRUE){
   if (file.exists(bindir)){
+    if (verbose) cli_alert_info("directory with CWB binaries: {.path {bindir}}")
     return(bindir)
   } else {
-    # first we try the `cwb-config` command line tool and return the path 
+    # we try the `cwb-config` command line tool and return the path 
     # it returns if successful
     
     bindir <- try(
@@ -166,7 +167,7 @@ cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR"), verbose = TRUE){
       silent = TRUE
     )
     if (class(bindir)[1] != "try-error"){
-      cli_alert_info(
+      if (verbose) cli_alert_info(
         "`cwb-config` reports directory with CWB binaries: {.path {bindir}}"
       )
       return(bindir)
@@ -176,7 +177,7 @@ cwb_get_bindir <- function(bindir = Sys.getenv("CWB_BINDIR"), verbose = TRUE){
     cwb_config <- "/usr/local/bin/cwb-config"
     if (file.exists(cwb_config)){
       bindir <- system(paste(cwb_config, "--bindir", sep = " "), intern = TRUE)
-      cli_alert_info(paste0(c(
+      if (verbose) cli_alert_info(paste0(c(
         "`cwb-config` (in: {.path /usr/local/bin/}) reports directory with ",
         "CWB binaries: {.path {bindir}}"
       )))

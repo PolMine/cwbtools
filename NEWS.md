@@ -24,6 +24,7 @@ exist and fails gracefully with telling error message if yes #4.
 * `s_attribute_encode()` issues warning on Windows when using s-attribute 'id' #69.
 * Replaced `normalizePath()` by `fs::path()` in `p_attribute_encode()` #65.
 * `cwb_get_bindir()` tries to find `cwb-config` system utility, if it is on the path.
+* `cwb_get_url()` will get CWB v3.5 installation files #63.
 
 cwbtools 0.3.9
 ==============
