@@ -226,13 +226,9 @@ setMethod("encode", "data.frame", function(
   if (verbose) cli_rule("Check result")
   
   if (isTRUE(reload))
-    cqp_reload_corpus(
-      corpus = corpus,
-      registry = registry_dir,
-      verbose = verbose
-    )
+    corpus_reload(corpus = corpus, registry = registry_dir, verbose = verbose)
   
-    p_attrs <- corpus_p_attributes(corpus = corpus, registry = registry_dir)
+  p_attrs <- corpus_p_attributes(corpus = corpus, registry = registry_dir)
   if (all(colnames(x) %in% p_attrs)){
     if (verbose) cli_alert_success("all p-attributes are available")
   } else {
