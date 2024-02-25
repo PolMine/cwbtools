@@ -347,7 +347,7 @@ p_attribute_encode <- function(
   # create or augment registry file
   if (file.exists(registry_file)){
     if (verbose)
-      cli_alert_info("updating existing registry file: {.path {registry_file}}")
+      cli_alert_info("updating registry file: {.path {registry_file}}")
     regdata <- registry_file_parse(
       corpus = tolower(corpus),
       registry_dir = registry_dir
@@ -456,26 +456,52 @@ p_attribute_encode <- function(
     if (corpus_size > 0L)
       cl_delete_corpus(corpus = corpus, registry = registry_dir)
     
+    if (verbose){
+      if (quietly){
+        cli_progress_step("run `Rcpp::cwb_makeall()`")
+      } else {
+        cli_alert_info("`run Rcpp::cwb_makeall()`")
+      }
+    }
     cwb_makeall(
       corpus = corpus,
       p_attribute = p_attribute,
       registry = registry_dir,
       quietly = quietly
     )
+    if (verbose & quietly) cli_progress_done()
     
     if (compress){
+      
+      if (verbose){
+        if (quietly){
+          cli_progress_step("run `Rcpp::cwb_huffcode()`")
+        } else {
+          cli_alert_info("`run Rcpp::cwb_huffcode()`")
+        }
+      }
       cwb_huffcode(
         corpus = corpus,
         p_attribute = p_attribute,
         registry = registry_dir,
         quietly = quietly
       )
+      if (verbose & quietly) cli_progress_done()
+      
+      if (verbose){
+        if (quietly){
+          cli_progress_step("run `Rcpp::cwb_compress_rdx()`")
+        } else {
+          cli_alert_info("`run Rcpp::cwb_compress_rdx()`")
+        }
+      }
       cwb_compress_rdx(
         corpus = corpus,
         p_attribute = p_attribute,
         registry = registry_dir,
         quietly = quietly
       )
+      if (verbose & quietly) cli_progress_done()
     }
   }
   

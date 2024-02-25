@@ -42,7 +42,7 @@ setGeneric("encode", function(x, ...) standardGeneric("encode"))
 #'   summarise(cpos_left = min(cpos), cpos_right = max(cpos))
 #' 
 #' tokenstream %>%
-#'   select(-cpos) %>%
+#'   select(-party) %>%
 #'   encode(
 #'     corpus = "UKIMMIG2010",
 #'     s_attributes = metadata,
@@ -178,7 +178,7 @@ setMethod("encode", "data.frame", function(
     }
   }
   
-  if (verbose) cli_rule("Prepare and registry file")
+  if (verbose) cli_rule("Prepare and augment registry file")
   
   props <- c(charset = encoding)
   if (length(properties) > 0L){
@@ -221,13 +221,16 @@ setMethod("encode", "data.frame", function(
   )
   if (verbose) cli_progress_done()
   
-  if (verbose) cli_alert_info("")
-  
   if (verbose) cli_rule("Check result")
   
-  if (isTRUE(reload))
-    corpus_reload(corpus = corpus, registry = registry_dir, verbose = verbose)
-  
+  if (isTRUE(reload)){
+    corpus_reload(
+      corpus = corpus,
+      registry_dir = registry_dir,
+      verbose = verbose
+    )
+  }
+
   p_attrs <- corpus_p_attributes(corpus = corpus, registry = registry_dir)
   if (all(colnames(x) %in% p_attrs)){
     if (verbose) cli_alert_success("all p-attributes are available")

@@ -1122,7 +1122,9 @@ corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
       return(FALSE)
     }
   } else {
-    cli_alert_info("CQP is not initialized (see `?RcppCQB::initialize()`)")
+    if (verbose){
+      cli_alert_info("CQP is not initialized (see `?RcppCQB::initialize()`)")
+    }
   }
   
   TRUE

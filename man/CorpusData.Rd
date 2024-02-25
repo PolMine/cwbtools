@@ -206,8 +206,8 @@ The \code{CorpusData} object is returned invisibly.
 \if{html}{\out{<a id="method-CorpusData-add_corpus_positions"></a>}}
 \if{latex}{\out{\hypertarget{method-CorpusData-add_corpus_positions}{}}}
 \subsection{Method \code{add_corpus_positions()}}{
-Add column \code{cpos} to tokenstream and columns \code{cpos_left} and
-\code{cpos_right} to metadata.
+Add column 'cpos' to tokenstream and columns 'cpos_left' and
+'cpos_right' to metadata.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CorpusData$add_corpus_positions(verbose = TRUE)}\if{html}{\out{</div>}}
 }
