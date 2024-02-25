@@ -223,3 +223,13 @@ registry_set_info <- function(data, info_file){
   data[["info"]] <- info_file
   data
 }
+
+#' @details `registry_set_name()` sets the long descriptive name of the corpus.
+#' @param name Long descriptive name of the corpus.
+#' @rdname registry_file
+#' @export registry_set_name
+registry_set_name <- function(data, name){
+  stopifnot(is.character(name), length(name) == 1L)
+  data[["name"]] <- name
+  data
+}

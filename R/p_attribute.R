@@ -57,6 +57,7 @@
 #' @rdname p_attribute_encode
 #' @examples
 #' # In this example, we follow a "pure R" approach. 
+#' library(dplyr)
 #' 
 #' reu <- system.file(package = "RcppCWB", "extdata", "examples", "reuters.txt")
 #' tokens <- readLines(reu)
@@ -88,20 +89,12 @@
 #' 
 #' # Augment registry file 
 #' 
-#' regdata <- registry_data(
-#'   id = "REUTERS",
-#'   name = "Reuters Sample Corpus",
-#'   home = data_dir_tmp,
-#'   properties = c(encoding = "utf-8", language = "en"),
-#'   p_attributes = "word"
-#' )
-#' 
-#' regfile <- registry_file_write(
-#'   data = regdata,
-#'   corpus = "REUTERS",
-#'   registry_dir = registry_tmp,
-#'   data_dir = data_dir_tmp,
-#' )
+#' registry_file_parse(corpus = "REUTERS", registry_dir = registry_tmp) %>%
+#'   registry_set_name("Reuters Sample Corpus") %>%
+#'   registry_set_property("charset", "utf8") %>%
+#'   registry_set_property("language", "en") %>%
+#'   registry_set_property("build_date", as.character(Sys.Date())) %>%
+#'   registry_file_write()
 #' 
 #' # Run query as a test
 #' 
