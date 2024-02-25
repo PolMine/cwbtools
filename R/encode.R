@@ -42,7 +42,7 @@ setGeneric("encode", function(x, ...) standardGeneric("encode"))
 #'   summarise(cpos_left = min(cpos), cpos_right = max(cpos))
 #' 
 #' tokenstream %>%
-#'   select(-party) %>%
+#'   select(-cpos, -party) %>%
 #'   encode(
 #'     corpus = "UKIMMIG2010",
 #'     s_attributes = metadata,

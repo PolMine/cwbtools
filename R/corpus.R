@@ -1091,6 +1091,7 @@ corpus_get_version <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTR
 #'   Returns logical value `TRUE` if succesful, `FALSE` if not.
 #' @rdname corpus_utils
 #' @export corpus_reload
+#' @importFrom RcppCWB cqp_initialize
 corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
   cl_delete_corpus(corpus = corpus, registry = registry_dir)
   if (!is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
@@ -1107,25 +1108,32 @@ corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
   )
   
   if (typeof(cl_find_corpus(corpus, registry = registry_dir)) == "externalptr"){
-    if (verbose)
-      cli_alert_success("corpus reloaded (size: {.val {size}})")
+    cl <- "CL success"
   } else {
+    cl <- "(CL ERROR)"
     if (verbose) cli_alert_danger("reloading corpus failed (CL representation")
     return(FALSE)
   }
+  
   if (cqp_is_initialized()){
+    cqp_reset_registry(registry = registry_dir)
     if (!cqp_load_corpus(corpus = corpus, registry = registry_dir)){
+      cqp <- "CQP ERROR"
       if (verbose)
         cli_alert_danger(
           "reloading corpus failed (CQP representation not available)"
         )
-      return(FALSE)
+      # return(FALSE)
+    } else {
+      cqp <- "CQP success"
     }
   } else {
-    if (verbose){
-      cli_alert_info("CQP is not initialized (see `?RcppCQB::initialize()`)")
-    }
+    cqp_initialize(registry = registry_dir)
+    cqp <- "CQP not initialized"
   }
+  
+  if (verbose)
+    cli_alert_success("corpus reloaded: {cl} / {cqp}")
   
   TRUE
 }

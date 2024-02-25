@@ -1,7 +1,7 @@
 #' Manage Corpus Data and Encode CWB Corpus.
 #' 
 #' See the [CWB Encoding
-#' Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial/2.html) on
+#' Tutorial](https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf) on
 #' characters allowed for encoding attributes: "By convention, all attribute
 #' names must be lowercase (more precisely, they may only contain the characters
 #' a-z, 0-9, -, and _, and may not start with a digit). Therefore, the names of

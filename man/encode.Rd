@@ -87,7 +87,7 @@ metadata <- tokenstream \%>\%
   summarise(cpos_left = min(cpos), cpos_right = max(cpos))
 
 tokenstream \%>\%
-  select(-cpos) \%>\%
+  select(-cpos, -party) \%>\%
   encode(
     corpus = "UKIMMIG2010",
     s_attributes = metadata,
