@@ -159,11 +159,16 @@ setMethod("encode", "data.frame", function(
   for (i in seq_along(s_attributes)){
     s_attrs <- setdiff(
       colnames(s_attributes[[i]]),
-      c("cpos_left", "cpos_right"))
+      c("cpos_left", "cpos_right")
+    )
     for (s_attr in s_attrs){
-      if (verbose) cli_alert_info("encode s-attribute {.val {s_attr}}")
+      data <- s_attributes[[i]][[s_attr]]
+      if (verbose)
+        cli_alert_info(
+          "encode s-attribute {.val {s_attr}} ({.val {length(data)}} regions)"
+        )
       s_attribute_encode(
-        values = s_attributes[[i]][[s_attr]],
+        values = data,
         corpus = corpus,
         s_attribute = s_attr,
         region_matrix = as.matrix(

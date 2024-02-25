@@ -145,6 +145,13 @@ p_attribute_encode <- function(
   }
   
   if (isFALSE(.check_attribute_name(p_attribute))) return(FALSE)
+  if (any(is.na(token_stream))){
+    if (verbose)
+      cli_alert_info(
+        "replacing `NA` values in input token stream with empty strings"
+      )
+    token_stream[which(is.na(token_stream))] <- ""
+  }
   
   # the registry file will not accept tilde as a shortcut for the user's home
   # directory so we expand it

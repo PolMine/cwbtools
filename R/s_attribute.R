@@ -132,7 +132,16 @@ s_attribute_encode <- function(
     )
   }
   
-  m <- region_matrix[order(region_matrix[,1]),] # ensure order
+  # ensure order
+  sortvec <- order(region_matrix[,1])
+  if (!identical(sortvec, 1L:nrow(region_matrix))){
+    cli_alert_info("regions and values reordered (input regions not yet sorted)")
+    values <- values[sortvec]
+    m <- region_matrix[sortvec,] 
+  } else {
+    m <- region_matrix
+  }
+  
   if (!all(m[2:nrow(m), 1] - m[1:(nrow(m) - 1), 2] >= 1)){
     stop("overlapping regions are not permitted")
   }
