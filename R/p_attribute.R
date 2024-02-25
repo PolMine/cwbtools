@@ -174,7 +174,6 @@ p_attribute_encode <- function(
   }
   
   if (method == "R"){
-    
     if (length(p_attribute) != 1L){
       cli_alert_danger(
         "If `method` is 'R', only one p-attribute can be processed."
@@ -262,7 +261,6 @@ p_attribute_encode <- function(
     writeBin(object = idx, size = 4L, endian = "big", con = lexicon_index_file)
     if (verbose) cli_progress_done()
     rm(idx_raw); gc()
-
   } else if (method == "CWB"){
     if (!cwb_is_installed()){
       cli_alert_danger(
@@ -451,14 +449,13 @@ p_attribute_encode <- function(
     
     # Check whether corpus has been loaded and delete corpus if necessary
     # cwb_makeall will crash if corpus is loaded
-    
     corpus_size <- RcppCWB::cl_attribute_size(
       corpus = corpus, attribute = "word", attribute_type = "p",
       registry = registry_dir
     )
     if (corpus_size > 0L)
       cl_delete_corpus(corpus = corpus, registry = registry_dir)
-
+    
     cwb_makeall(
       corpus = corpus,
       p_attribute = p_attribute,
@@ -502,7 +499,7 @@ p_attribute_encode <- function(
       registry_dir = registry_dir,
       verbose = verbose
     )
-
+  
   invisible(TRUE)
 }
 

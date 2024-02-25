@@ -1093,9 +1093,7 @@ corpus_get_version <- function(corpus, registry_dir = Sys.getenv("CORPUS_REGISTR
 #' @export corpus_reload
 corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
   cl_delete_corpus(corpus = corpus, registry = registry_dir)
-  if (is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
-    if (verbose) cli_alert_success("corpus unloaded")
-  } else {
+  if (!is.null(cl_find_corpus(corpus = corpus, registry = registry_dir))){
     if (verbose) cli_alert_danger("unloading corpus failed")
     return(FALSE)
   }
@@ -1115,13 +1113,17 @@ corpus_reload <- function(corpus, registry_dir, verbose = TRUE){
     if (verbose) cli_alert_danger("reloading corpus failed (CL representation")
     return(FALSE)
   }
-  
-  if (!cqp_load_corpus(corpus = corpus, registry = registry_dir)){
-    if (verbose)
-      cli_alert_danger(
-        "reloading corpus failed (CQP representation not available)"
-      )
-    return(FALSE)
+  if (cqp_is_initialized()){
+    if (!cqp_load_corpus(corpus = corpus, registry = registry_dir)){
+      if (verbose)
+        cli_alert_danger(
+          "reloading corpus failed (CQP representation not available)"
+        )
+      return(FALSE)
+    }
+  } else {
+    cli_alert_info("CQP is not initialized (see `?RcppCQB::initialize()`)")
   }
+  
   TRUE
 }
