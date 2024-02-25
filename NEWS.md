@@ -28,6 +28,8 @@ exist and fails gracefully with telling error message if yes #4.
 * Argument `compress` defaults to `FALSE` as corpus compression is not stable on Windows #3.
 * New function `corpus_reload()` for convenient unloading/reloading corpora #68.
 * Simplifications of the vignette #60.
+* function `corpus_as_tarball()` and `corpus_copy()` now have `registry_file_parse(corpus, registry_dir)[["home"]]` as default value, so that values are more consistent across `corpus_*` functions #18.
+
 
 cwbtools 0.3.9
 ==============

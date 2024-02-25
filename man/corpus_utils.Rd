@@ -41,12 +41,18 @@ corpus_rename(
 
 corpus_remove(corpus, registry_dir, ask = interactive(), verbose = TRUE)
 
-corpus_as_tarball(corpus, registry_dir, data_dir, tarfile, verbose = TRUE)
+corpus_as_tarball(
+  corpus,
+  registry_dir,
+  data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
+  tarfile,
+  verbose = TRUE
+)
 
 corpus_copy(
   corpus,
   registry_dir,
-  data_dir = NULL,
+  data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
   registry_dir_new = fs::path(tempdir(), "cwb", "registry"),
   data_dir_new = fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
   remove = FALSE,

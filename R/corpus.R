@@ -724,7 +724,13 @@ corpus_remove <- function(corpus, registry_dir, ask = interactive(), verbose = T
 #'   the corpus name in the 'indexed_corpora' subdirectory.
 #' @rdname corpus_utils
 #' @export corpus_as_tarball
-corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose = TRUE){
+corpus_as_tarball <- function(
+    corpus,
+    registry_dir,
+    data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
+    tarfile,
+    verbose = TRUE
+  ){
 
   registry_file <- fs::path(registry_dir, tolower(corpus))
   if (!file.exists(registry_file)){
@@ -734,8 +740,9 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
         corpus, registry_dir)
     )
   }
-
-  home_dir <- if (missing(data_dir)){
+  
+  # unlikely scenario, because this is the default value
+  home_dir <- if (missing(data_dir) || is.null(data_dir)){
     registry_file_parse(corpus = corpus, registry_dir = registry_dir)[["home"]]
   } else {
     data_dir
@@ -804,7 +811,7 @@ corpus_as_tarball <- function(corpus, registry_dir, data_dir, tarfile, verbose =
 corpus_copy <- function(
   corpus,
   registry_dir,
-  data_dir = NULL,
+  data_dir = registry_file_parse(corpus, registry_dir)[["home"]],
   registry_dir_new = fs::path(tempdir(), "cwb", "registry"),
   data_dir_new = fs::path(tempdir(), "cwb", "indexed_corpora", tolower(corpus)),
   remove = FALSE,
@@ -818,7 +825,7 @@ corpus_copy <- function(
     return(FALSE)
   }
     
-  
+  # as data_dir defaults to the value assigned here potentially superfluous
   if (is.null(data_dir)){
     data_dir <- registry_file_parse(
       corpus = corpus,
