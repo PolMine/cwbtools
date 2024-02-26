@@ -102,6 +102,11 @@ cwb_install <- function(
       file.copy(from = x, to = fs::path(lib_dir, basename(x)))
     }
   } else if (Sys.info()["sysname"] == "Linux"){
+    if (Sys.info()["machine"] == "arm64"){
+      cli_alert_warning("package architecture will not match system (arm64)")
+      return(NULL)
+    }
+    
     debfile <- path(path_temp(), basename(url_cwb))
     # This requires sudo privileges and is likely to fail unless the R session
     # has been started using sudo rights 
