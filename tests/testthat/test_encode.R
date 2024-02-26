@@ -67,7 +67,8 @@ test_that(
 
     # Check CWB encoded version against R version
 
-    skip_on_os(os = "windows") # CWB not available for Solaris
+    skip_on_os(os = "windows")
+    skip_on_cran()
     tryCatch(
       {success <- cwb_install(cwb_dir = fs::path(tempdir(), "cwb"))},
       error = function(e) testthat::skip("cannot download CWB")
@@ -126,10 +127,7 @@ test_that(
     )
     expect_identical(s_attrs1, s_attrs2)
     
-    
     lapply(cwb_dirs, unlink) # clean up
-    
-    
   }
 )
 
