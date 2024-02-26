@@ -144,15 +144,13 @@ test_that(
       word, text, to_lower = FALSE
     )[["word"]]
     
-    if (!cwb_is_installed()) cwb_install()
-    
-    # without compression ----------------------------------------------------------
+    # pure R -------------------------------------------------------------------
     
     data_dir_tmp1a <- fs::path(tempdir(), "data_dir", "austen1a")
     dir.create(data_dir_tmp1a, recursive = TRUE)
     
-    data_dir_tmp2a <- fs::path(tempdir(), "data_dir", "austen2a")
-    dir.create(data_dir_tmp2a, recursive = TRUE)
+    data_dir_tmp1b <- fs::path(tempdir(), "data_dir", "austen1b")
+    dir.create(data_dir_tmp1b, recursive = TRUE)
 
     p_attribute_encode(
       token_stream = token_stream,
@@ -169,6 +167,32 @@ test_that(
     p_attribute_encode(
       token_stream = token_stream,
       registry_dir = registry_tmp,
+      corpus = "AUSTEN1B",
+      data_dir = data_dir_tmp1b,
+      method = "R",
+      verbose = TRUE,
+      quietly = FALSE,
+      encoding = "utf8",
+      compress = TRUE
+    )
+    
+    
+    # CWB ----------------------------------------------------------------------
+
+    skip_on_os("windows") # we know that compression does not work on Windows
+    skip_on_cran() # installation on Linux requires sudo privileges
+    
+    if (!cwb_is_installed()) cwb_install()
+    
+    data_dir_tmp2a <- fs::path(tempdir(), "data_dir", "austen2a")
+    dir.create(data_dir_tmp2a, recursive = TRUE)
+
+    data_dir_tmp2b <- fs::path(tempdir(), "data_dir", "austen2b")
+    dir.create(data_dir_tmp2b, recursive = TRUE)
+
+    p_attribute_encode(
+      token_stream = token_stream,
+      registry_dir = registry_tmp,
       corpus = "AUSTEN2A",
       data_dir = data_dir_tmp2a,
       method = "CWB",
@@ -177,6 +201,20 @@ test_that(
       encoding = "utf8",
       compress = FALSE
     )
+
+    p_attribute_encode(
+      token_stream = token_stream,
+      registry_dir = registry_tmp,
+      corpus = "AUSTEN2B",
+      data_dir = data_dir_tmp2b,
+      method = "CWB",
+      verbose = TRUE,
+      quietly = FALSE,
+      encoding = "utf8",
+      compress = TRUE
+    )
+    
+    # tests --------------------------------------------------------------------
     
     austen1a_md5 <- tools::md5sum(list.files(data_dir_tmp1a, full.names = TRUE))
     names(austen1a_md5) <- basename(names(austen1a_md5))
@@ -191,41 +229,7 @@ test_that(
         austen1a_md5[[file]],
         austen2a_md5[[file]]
       )
-    
-    # with compression -------------------------------------------------------------
 
-    skip_on_os("windows")
-    
-    data_dir_tmp1b <- fs::path(tempdir(), "data_dir", "austen1b")
-    dir.create(data_dir_tmp1b, recursive = TRUE)
-    
-    data_dir_tmp2b <- fs::path(tempdir(), "data_dir", "austen2b")
-    dir.create(data_dir_tmp2b, recursive = TRUE)
-
-    p_attribute_encode(
-      token_stream = token_stream,
-      registry_dir = registry_tmp,
-      corpus = "AUSTEN1B",
-      data_dir = data_dir_tmp1b,
-      method = "R",
-      verbose = TRUE,
-      quietly = FALSE,
-      encoding = "utf8",
-      compress = TRUE
-    )
-    
-    p_attribute_encode(
-      token_stream = token_stream,
-      registry_dir = registry_tmp,
-      corpus = "AUSTEN2B",
-      data_dir = data_dir_tmp2b,
-      method = "CWB",
-      verbose = TRUE,
-      quietly = FALSE,
-      encoding = "utf8",
-      compress = TRUE
-    )
-    
     austen1b_md5 <- tools::md5sum(list.files(data_dir_tmp1b, full.names = TRUE))
     names(austen1b_md5) <- basename(names(austen1b_md5))
 
