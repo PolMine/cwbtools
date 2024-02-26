@@ -5,7 +5,11 @@ test_that(
   "corpus_install from pkg",
   {
     cwb_dir_tmp <- fs::path(tempdir(), "cwb_tmp")
-    cwb_dirs <- create_cwb_directories(prefix = cwb_dir_tmp, ask = FALSE, verbose = FALSE)
+    cwb_dirs <- create_cwb_directories(
+      prefix = cwb_dir_tmp,
+      ask = FALSE,
+      verbose = FALSE
+    )
     
     if (cqp_is_initialized()){
       cqp_reset_registry(registry = cwb_dirs[["registry_dir"]])
@@ -126,7 +130,7 @@ test_that(
 
 
 test_that(
-  "zenodo_get_tarball()",
+  "zenodo_get_tarball() - public resource",
   {
     skip_on_ci()
     
@@ -141,6 +145,24 @@ test_that(
     success <- corpus_install(tarball = tarball_tmp, load = FALSE)
     testthat::expect_true(success)
     
+    unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
+    unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)
+    Sys.setenv("CORPUS_REGISTRY" = old_registry)
+  }
+)
+
+test_that(
+  "zenodo_get_tarball() - restricted resource",
+  {
+    skip_on_ci()
+    skip_on_cran()
+    
+    old_registry <- Sys.getenv("CORPUS_REGISTRY")
+    Sys.setenv(CORPUS_REGISTRY = "")
+    
+    cwb_dirs <- cwbtools::create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
+    Sys.setenv(CORPUS_REGISTRY = cwb_dirs[["registry_dir"]])
+    
     tarball_tmp <- zenodo_get_tarball(url = gparlsample_url_restricted)
     if (is.null(tarball_tmp)) testthat::skip_on_cran()
     success <- corpus_install(tarball = tarball_tmp, ask = FALSE, load = FALSE)
@@ -151,6 +173,7 @@ test_that(
     Sys.setenv("CORPUS_REGISTRY" = old_registry)
   }
 )
+
 
 test_that(
   "check that corpus_install() aborts if md5 checksum is invalid",
