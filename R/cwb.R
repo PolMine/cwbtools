@@ -103,7 +103,18 @@ cwb_install <- function(
     }
   } else if (Sys.info()["sysname"] == "Linux"){
     debfile <- path(path_temp(), basename(url_cwb))
+    # This requires sudo privileges and is likely to fail unless the R session
+    # has been started using sudo rights 
     system2(command = "dpkg", args = sprintf("-i %s", debfile))
+    success <- try(system2(command = "dpkg", args = sprintf("-i %s", debfile)))
+    if (class(success)[1] == "try-error"){
+      cli_alert_warning(paste0(c(
+        "CWB installation aborted. Are sudo privileges missing? ",
+        "Consider installation from command line, see: ",
+        "{.href https://cwb.sourceforge.io/install.php}"
+      )))
+      return(NULL)
+    }
   }
   
   unlink(path(path_temp(), basename(url_cwb)))
