@@ -102,7 +102,8 @@ cwb_install <- function(
       file.copy(from = x, to = fs::path(lib_dir, basename(x)))
     }
   } else if (Sys.info()["sysname"] == "Linux"){
-    if (Sys.info()["machine"] == "arm64"){
+    # "aarch64" and "arm64" are the same thing (= Apple Silicon)
+    if (Sys.info()["machine"] %in% c("arm64", "aarch64")){
       cli_alert_warning("package architecture will not match system (arm64)")
       return(NULL)
     }
