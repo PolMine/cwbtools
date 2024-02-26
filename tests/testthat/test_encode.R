@@ -69,10 +69,10 @@ test_that(
 
     skip_on_os(os = "windows") # CWB not available for Solaris
     tryCatch(
-      cwb_install(cwb_dir = fs::path(tempdir(), "cwb")),
+      {success <- cwb_install(cwb_dir = fs::path(tempdir(), "cwb"))},
       error = function(e) testthat::skip("cannot download CWB")
     )
-
+    if (is.null(success)) testthat::skip("cannot install CWB")
 
     Austen$encode(
       corpus = "AUSTEN2",
