@@ -18,7 +18,7 @@ Manage Corpus Data and Encode CWB Corpus."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -65,6 +65,16 @@ Manage Corpus Data and Encode CWB Corpus."><!-- mathjax --><script src="https://
     </div>
 
 
+    <div id="details">
+    <h2>Details</h2>
+    <p>See the <a href="https://cwb.sourceforge.io/files/CWB_Encoding_Tutorial.pdf" class="external-link">CWB Encoding Tutorial</a> on
+characters allowed for encoding attributes: "By convention, all attribute
+names must be lowercase (more precisely, they may only contain the characters
+a-z, 0-9, -, and _, and may not start with a digit). Therefore, the names of
+XML elements to be included in the CWB corpus must not contain any non-ASCII
+or uppercase letters." (section 2)</p>
+<p>Import XML files.</p>
+    </div>
     <div id="public-fields">
     <h2>Public fields</h2>
     <p></p><div class="r6-fields"><dl><dt><code>chunktable</code></dt>
@@ -73,14 +83,15 @@ columns with metadata, and a column with text chunks.</p></dd>
 
 
 <dt><code>tokenstream</code></dt>
-<dd><p>A <code>data.table</code> with a column "cpos" (corpus position), and columns
-with positional attributes, such as "word", "lemma", "pos", "stem".</p></dd>
+<dd><p>A <code>data.table</code> with a column "cpos" (corpus position), and
+columns with positional attributes, such as "word", "lemma", "pos", "stem".</p></dd>
 
 
 <dt><code>metadata</code></dt>
-<dd><p>A <code>data.table</code> with a column "id", to link data with chunks/tokenstream,
-columns with document-level metadata, and a column "cpos_left" and "cpos_right", which can
-be generated using method <code>$add_corpus_positions()</code>.</p></dd>
+<dd><p>A <code>data.table</code> with a column "id", to link data with
+chunks/tokenstream, columns with document-level metadata, and a column
+"cpos_left" and "cpos_right", which can be generated using method
+<code>$add_corpus_positions()</code>.</p></dd>
 
 
 <dt><code>sentences</code></dt>
@@ -137,15 +148,15 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
-<dd><p>Arguments that are passed into <code><a href="https://lincolnmullen.com/software/tokenizers/reference/basic-tokenizers.html" class="external-link">tokenizers::tokenize_words()</a></code>.</p></dd>
+<dd><p>Arguments that are passed into <code><a href="https://docs.ropensci.org/tokenizers/reference/basic-tokenizers.html" class="external-link">tokenizers::tokenize_words()</a></code>.</p></dd>
 
 
 <dt><code>verbose</code></dt>
-<dd><p>Logical, whether to be verbose.</p></dd>
+<dd><p>A logical value, whether to be verbose.</p></dd>
 
 
 <dt><code>progress</code></dt>
-<dd><p>Logical, whether to show progress bar.</p></dd>
+<dd><p>A logical value, whether to show progress bar.</p></dd>
 
 
 </dl><p></p></div>
@@ -168,15 +179,15 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>filenames</code></dt>
-<dd><p>XXX</p></dd>
+<dd><p>A vector of files to process.</p></dd>
 
 
 <dt><code>body</code></dt>
-<dd><p>An xpath expression defining the body of the xml document.</p></dd>
+<dd><p>An xpath expression defining the body of the XML document.</p></dd>
 
 
 <dt><code>meta</code></dt>
-<dd><p>A named character vector with xpath expressions.</p></dd>
+<dd><p>A named character vector with XPath expressions.</p></dd>
 
 
 <dt><code>mc</code></dt>
@@ -184,16 +195,11 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 
 
 <dt><code>progress</code></dt>
-<dd><p>Logical, whether to show progress bar.</p></dd>
+<dd><p>A logical value, whether to show progress bar.</p></dd>
 
 
 </dl><p></p></div>
 </div>
-<div class="section">
-<h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
-<p>Import XML files.</p>
-</div>
-
 <div class="section">
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
 <p>The <code>CorpusData</code> object is returned invisibly.</p>
@@ -201,8 +207,8 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 
 </div><p></p><hr><a id="method-CorpusData-add_corpus_positions"></a><div class="section">
 <h3 id="method-add-corpus-positions-">Method <code>add_corpus_positions()</code><a class="anchor" aria-label="anchor" href="#method-add-corpus-positions-"></a></h3>
-<p>Add column <code>cpos</code> to tokenstream and columns <code>cpos_left</code> and
-<code>cpos_right</code> to metadata.</p><div class="section">
+<p>Add column 'cpos' to tokenstream and columns 'cpos_left' and
+'cpos_right' to metadata.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CorpusData</span><span class="op">$</span><span class="fu">add_corpus_positions</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -210,7 +216,7 @@ be generated using method <code>$add_corpus_positions()</code>.</p></dd>
 <div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>verbose</code></dt>
-<dd><p>Logical, whether to be verbose.</p></dd>
+<dd><p>A logical value, whether to be verbose.</p></dd>
 
 
 </dl><p></p></div>
@@ -231,14 +237,15 @@ tokenization/annotation has been performed.</p><div class="section">
 <div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>replacements</code></dt>
-<dd><p>XXX</p></dd>
+<dd><p>A list of length-two character vectors with regular
+expressions and replacements.</p></dd>
 
 
 </dl><p></p></div>
 </div>
 
 </div><p></p><hr><a id="method-CorpusData-encode"></a><div class="section">
-<h3 id="method-encode-">Method <code>encode()</code><a class="anchor" aria-label="anchor" href="#method-encode-"></a></h3>
+<h3 id="method-encode-">Method <code><a href="encode.html">encode()</a></code><a class="anchor" aria-label="anchor" href="#method-encode-"></a></h3>
 <p>Encode corpus. If the corpus already exists, it will be removed.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CorpusData</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span></span>
@@ -250,7 +257,9 @@ tokenization/annotation has been performed.</p><div class="section">
 <span>  data_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"CWB"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  compress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reload <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quietly <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -273,7 +282,8 @@ tokenization/annotation has been performed.</p><div class="section">
 
 
 <dt><code>registry_dir</code></dt>
-<dd><p>Corpus registry, the directory where registry files are stored.</p></dd>
+<dd><p>Corpus registry, the directory where registry files are
+stored.</p></dd>
 
 
 <dt><code>data_dir</code></dt>
@@ -285,11 +295,21 @@ tokenization/annotation has been performed.</p><div class="section">
 
 
 <dt><code>verbose</code></dt>
-<dd><p>Logical, whether to be verbose.</p></dd>
+<dd><p>A logical value, whether to be verbose.</p></dd>
 
 
 <dt><code>compress</code></dt>
-<dd><p>Logical, whether to compress corpus.</p></dd>
+<dd><p>A logical value, whether to compress corpus.</p></dd>
+
+
+<dt><code>reload</code></dt>
+<dd><p>A <code>logical</code> value, whether to reload corpus.</p></dd>
+
+
+<dt><code>quietly</code></dt>
+<dd><p>A <code>logical</code> value passed into <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">RcppCWB::cwb_makeall()</a></code>,
+<code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">RcppCWB::cwb_huffcode()</a></code> and <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">RcppCWB::cwb_compress_rdx</a></code> to control
+verbosity of these functions.</p></dd>
 
 
 </dl><p></p></div>
@@ -341,7 +361,7 @@ tokenization/annotation has been performed.</p><div class="section">
 <span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"places"</span>, method <span class="op">=</span> <span class="st">"R"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s_attrs_places</span><span class="op">[[</span><span class="st">"id"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">s_attrs_places</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">s_attrs_places</span>, old <span class="op">=</span> <span class="st">"value"</span>, new <span class="op">=</span> <span class="st">"places"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">s_attrs_places</span>, old <span class="op">=</span> <span class="st">"value"</span>, new <span class="op">=</span> <span class="st">"places"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># decode positional attribute 'word'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -352,18 +372,18 @@ tokenization/annotation has been performed.</p><div class="section">
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_id2str</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, id <span class="op">=</span> <span class="va">ids</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tokens</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, word <span class="op">=</span> <span class="va">tokens</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, word <span class="op">=</span> <span class="va">tokens</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tokenstream</span><span class="op">[[</span><span class="st">"cpos"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tokenstream</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create CorpusData object (see vignette for further explanation)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">CD</span> <span class="op">&lt;-</span> <span class="va">CorpusData</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">CD</span><span class="op">$</span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tokenstream</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">CD</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">s_attrs_places</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">CD</span><span class="op">$</span><span class="va">tokenstream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tokenstream</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">CD</span><span class="op">$</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">s_attrs_places</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove temporary registry with home dir still pointing to RcppCWB data dir</span></span></span>
 <span class="r-in"><span><span class="co"># to prevent data from being deleted</span></span></span>
@@ -374,8 +394,6 @@ tokenization/annotation has been performed.</p><div class="section">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create temporary directories (registry directory and one for indexed corpora)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span><span class="op">)</span> <span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="va">tmpdir</span>, winslash <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"data_dir"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">registry_tmp</span><span class="op">)</span></span></span>
@@ -387,29 +405,38 @@ tokenization/annotation has been performed.</p><div class="section">
 <span class="r-in"><span>  registry_dir <span class="op">=</span> <span class="va">registry_tmp</span>, data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span></span>
 <span class="r-in"><span>  method <span class="op">=</span> <span class="st">"R"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating new corpus 'REUTERS'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... encoding p-attribute 'word'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing tokenstream to disk (directly from R, equivalent to cwb-encode)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating indices (in memory)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing file: word.corpus</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing file: word.lexicon</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing file: word.lexicon.idx</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... creating data for new registry file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... writing registry file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> === Makeall: processing corpus REUTERS ===</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Registry directory: /var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpVB8DzH/registry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ATTRIBUTE word</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + creating LEXSRT ... OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - lexicon      OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + creating FREQS ... OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - frequencies  OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - token stream OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + creating REVCIDX ... OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  + creating REVCORP ... OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ? validating REVCORP ... OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - index        OK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ========================================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... encoding s-attribute 'places'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Prepare encoding corpus REUTERS ─────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/data_dir</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> encoding: <span style="color: #0000BB;">"utf8"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── encode p-attribute <span style="color: #0000BB;">"word"</span> ───────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> creating indices (in memory)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> creating indices (in memory) <span style="color: #B2B2B2;">[104ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">word.corpus</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">word.corpus</span> <span style="color: #B2B2B2;">[258ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">word.lexicon</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">word.lexicon</span> <span style="color: #B2B2B2;">[25ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">word.lexicon.idx</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">word.lexicon.idx</span> <span style="color: #B2B2B2;">[17ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> creating new registry file: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/registry/reuters</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> run `Rcpp::cwb_makeall()`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> run `Rcpp::cwb_makeall()` <span style="color: #B2B2B2;">[7ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> corpus reloaded: CL success / CQP success</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Encode s-attributes ─────────────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> encode s-attribute <span style="color: #0000BB;">"places"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Prepare registry file ───────────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> write registry file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> write registry file <span style="color: #B2B2B2;">[5ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Check result ────────────────────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> corpus reloaded: CL success / CQP success</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> all p-attributes are available</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> all s-attributes are available</span>
 <span class="r-in"><span><span class="va">reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="registry_file.html">registry_data</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"REUTERS"</span>, id <span class="op">=</span> <span class="st">"REUTERS"</span>, home <span class="op">=</span> <span class="va">data_dir_tmp</span>, p_attributes <span class="op">=</span> <span class="st">"word"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="registry_file.html">registry_file_write</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">reg</span>, corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, registry_dir <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -720,7 +747,7 @@ tokenization/annotation has been performed.</p><div class="section">
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

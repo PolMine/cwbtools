@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -99,12 +99,9 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>The package is available via CRAN and can be installed as follows on Windows, macOS and Linux.</p>
-<pre class="{r}"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cwbtools"</span><span class="op">)</span></span></code></pre>
+<p><code>{r} install.packages("cwbtools")</code></p>
 <p>To install the development version of the package, use the installation mechanism offered by the <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a> package. On Windows, an installation of <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> may be necessary.</p>
-<pre class="{r}"><code><span><span class="co"># Make sure the remotes package is present</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"remotes"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span>,<span class="st">"Package"</span><span class="op">]</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>R_REMOTES_STANDALONE <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"PolMine/cwbtools"</span>, ref <span class="op">=</span> <span class="st">"dev"</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<p><code>{r} # Make sure the remotes package is present if (!"remotes" %in% installed.packages()[,"Package"]) install.packages("remotes") Sys.setenv(R_REMOTES_STANDALONE = "true") remotes::install_github("PolMine/cwbtools", ref = "dev", force = TRUE)</code></p>
 <p><strong>Explanatory note:</strong></p>
 <p>The default approach to install the development version <code>cwbtools</code> from GitHub would be <code>devtools::install_github("PolMine/cwbtools", ref = "dev")</code>. However, the concurrent dependency of <code>devtools</code> and of <code>cwbtools</code> on the <code>curl</code> package may cause nerve-wrecking problems if <code>curl</code> can be updated: If a newer version of <code>curl</code> is available, the user will be prompted whether this update is desired. Most users will agree. However, this update will fail because <code>curl</code> is loaded by <code>devtools</code>, and parts of the <code>curl</code> package cannot be deleted/updated (the dynamic library that is loaded).</p>
 <p>To avoid having to perform manual updates in the correct order, using the original <code>install_github()</code> function of the <code>remotes</code> package is recommended. When setting the environment variable <code>R_REMOTES_STANDALONE</code> to <code>true</code>, the <code>remotes</code> package will rely on a minimal set of additional packages. The aforementioned situation that may make the installation of <code>cwbtools</code> difficult for most users is omitted.</p>
@@ -173,7 +170,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

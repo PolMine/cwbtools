@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -82,7 +82,13 @@
 <span>  <span class="va">corpus</span>,</span>
 <span>  registry_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">registry_set_property</span><span class="op">(</span><span class="va">data</span>, <span class="va">property</span>, <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">registry_set_info</span><span class="op">(</span><span class="va">data</span>, <span class="va">info_file</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">registry_set_name</span><span class="op">(</span><span class="va">data</span>, <span class="va">name</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -100,7 +106,7 @@
 
 
 <dt>name</dt>
-<dd><p>Long descriptive name of corpus (<code>character</code> vector).</p></dd>
+<dd><p>Long descriptive name of the corpus.</p></dd>
 
 
 <dt>id</dt>
@@ -137,6 +143,18 @@ declare.</p></dd>
 <dt>...</dt>
 <dd><p>further parameters</p></dd>
 
+
+<dt>property</dt>
+<dd><p>A single corpus property (<code>character</code> vector).</p></dd>
+
+
+<dt>value</dt>
+<dd><p>Value of a corpus property (<code>character</code> vector).</p></dd>
+
+
+<dt>info_file</dt>
+<dd><p>Path to the info file providing information on the corpus.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -147,8 +165,11 @@ explanation of the registry file format.</p>
 <p><code>registry_file_compose</code> will turn an
 <code>registry_data</code>-object into a character vector with a registry file
 that can be written to disk.</p>
-<p><code>registry_file_write</code> will compose a registry file from
+<p><code>registry_file_write()</code> will compose a registry file from
 <code>data</code> and write it to disk.</p>
+<p><code>registry_set_property()</code> will set a single corpus property.</p>
+<p><code>registry_set_info()</code> will set the path to the info file.</p>
+<p><code>registry_set_name()</code> sets the long descriptive name of the corpus.</p>
     </div>
 
     <div id="ref-examples">
@@ -171,7 +192,7 @@ that can be written to disk.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

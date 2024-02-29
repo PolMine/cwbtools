@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -58,6 +58,50 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.9.9005-9008" id="cwbtools-0399005-9008">cwbtools 0.3.9.9005-9008<a class="anchor" aria-label="anchor" href="#cwbtools-0399005-9008"></a></h2>
+<ul><li>
+<code><a href="../reference/corpus_utils.html">corpus_remove()</a></code> returns <code>FALSE</code> (rather than failing with ERROR) when corpus does not exist. More telling messages.</li>
+<li>
+<code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> has new argument <code>quietly</code> passed into RcppCWB functions <code>cwb_compress()</code> <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">cwb_huffcode()</a></code> and <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">cwb_compress_rdx()</a></code> to control verbosity.</li>
+<li>Method <code>$encode()</code> of <code>CorpusData</code> class has new argument <code>quietly</code> passed into <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code>.</li>
+<li>Method <code>$encode()</code> has new argument <code>reload</code> to trigger unloading and reloading corpus, to make s-attributes available <a href="https://github.com/PolMine/cwbtools/issues/57" class="external-link">#57</a>.</li>
+<li>The <code>CorpusData$encode()</code> method uses messages from the cli package <a href="https://github.com/PolMine/cwbtools/issues/59" class="external-link">#59</a>.</li>
+<li>Outdated documentation of <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> rewritten, including explanation of argument <code>compress</code> and simplification of sample code <a href="https://github.com/PolMine/cwbtools/issues/61" class="external-link">#61</a>.</li>
+<li>Corrected inconsistencies in the vignette <a href="https://github.com/PolMine/cwbtools/issues/55" class="external-link">#55</a>.</li>
+<li>
+<code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code> coerces input <code>values</code> to <code>character</code> (rather than failing) <a href="https://github.com/PolMine/cwbtools/issues/62" class="external-link">#62</a>.</li>
+<li>The validity of attribute names is checked by <code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code>, <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> and <code>CorpusData$encode()</code> using a new (internal) function, a telling message is issued if non-ASCII or uppercase characters are used. The documentation has been augmented accordingly <a href="https://github.com/PolMine/cwbtools/issues/48" class="external-link">#48</a>.</li>
+<li>For method “R”, <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> checks whether files for encoded p-attribute exist and fails gracefully with telling error message if yes <a href="https://github.com/PolMine/cwbtools/issues/4" class="external-link">#4</a>.</li>
+<li>Scenario how to add stemmed token stream to existing corpus added to vignette <a href="https://github.com/PolMine/cwbtools/issues/14" class="external-link">#14</a>.</li>
+<li>New method <code><a href="../reference/encode.html">encode()</a></code> to prospectively supersed <code>CorpusData</code> class. Includes argument <code>properties</code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
+<li>
+<code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code> issues warning on Windows when using s-attribute ‘id’ <a href="https://github.com/PolMine/cwbtools/issues/69" class="external-link">#69</a>.</li>
+<li>Replaced <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> by <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path()</a></code> in <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/65" class="external-link">#65</a>.</li>
+<li>
+<code><a href="../reference/cwb.html">cwb_get_bindir()</a></code> tries to find <code>cwb-config</code> system utility, if it is on the path.</li>
+<li>
+<code><a href="../reference/cwb.html">cwb_get_url()</a></code> will get CWB v3.5 installation files <a href="https://github.com/PolMine/cwbtools/issues/63" class="external-link">#63</a>.</li>
+<li>Argument <code>compress</code> defaults to <code>FALSE</code> as corpus compression is not stable on Windows <a href="https://github.com/PolMine/cwbtools/issues/3" class="external-link">#3</a>.</li>
+<li>New function <code><a href="../reference/corpus_utils.html">corpus_reload()</a></code> for convenient unloading/reloading corpora <a href="https://github.com/PolMine/cwbtools/issues/68" class="external-link">#68</a>.</li>
+<li>Simplifications of the vignette <a href="https://github.com/PolMine/cwbtools/issues/60" class="external-link">#60</a>.</li>
+<li>function <code><a href="../reference/corpus_utils.html">corpus_as_tarball()</a></code> and <code><a href="../reference/corpus_utils.html">corpus_copy()</a></code> now have <code>registry_file_parse(corpus, registry_dir)[["home"]]</code> as default value, so that values are more consistent across <code>corpus_*</code> functions <a href="https://github.com/PolMine/cwbtools/issues/18" class="external-link">#18</a>.</li>
+<li>New utility function <code><a href="../reference/registry_file.html">registry_set_name()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.9" id="cwbtools-039">cwbtools 0.3.9<small>2023-11-27</small><a class="anchor" aria-label="anchor" href="#cwbtools-039"></a></h2>
+<ul><li>
+<code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> accepts multiple p-attributes if method is “CWB”.</li>
+<li>New function <code><a href="../reference/registry_file.html">registry_set_property()</a></code> for setting corpus properties in a pipe.</li>
+<li>
+<code>read_registry_file()</code> will keep ‘registry_dir’ and ‘corpus’.</li>
+<li>
+<code>registry_set_info</code> as new auxiliary function to set path to info file in <code>registry_data</code> object.</li>
+<li>
+<code><a href="../reference/corpus_utils.html">corpus_install()</a></code> reverts to package zen4R to links of files at Zenodo <a href="https://github.com/PolMine/cwbtools/issues/42" class="external-link">#42</a>.</li>
+<li>
+<code><a href="https://rdrr.io/pkg/curl/man/curl_download.html" class="external-link">curl::curl_download()</a></code> replaces <code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file()</a></code> in <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> if argument <code>user</code> is <code>NULL</code> (to avoid corrupted download from Zenodo) <a href="https://github.com/PolMine/cwbtools/issues/53" class="external-link">#53</a>.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.8" id="cwbtools-038">cwbtools 0.3.8<small>2022-08-30</small><a class="anchor" aria-label="anchor" href="#cwbtools-038"></a></h2>
 <ul><li>Package names, software names and API are wrapped in single quotes in the DESCRIPTION files, to follow section 1.1.1 of ‘Writing R extensions’ <a href="https://github.com/PolMine/cwbtools/issues/43" class="external-link">#43</a>.</li>
 <li>References in the description of the DESCRIPTION file have been standardized <a href="https://github.com/PolMine/cwbtools/issues/44" class="external-link">#44</a>.</li>
@@ -66,16 +110,19 @@
 <li>The <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path()</a></code> function replaces base R <code><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path()</a></code> throughout to solidify the generation of paths and to improve the readability of the code throughout.</li>
 <li>
 <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> checks that the <code>character</code> vector <code>token_stream</code> does not exceed the CWB corpus size limit (2^31 - 1) <a href="https://github.com/PolMine/cwbtools/issues/40" class="external-link">#40</a>.</li>
+<li>
+<code>zenodo_get_tarballurl()</code> is removed from package again (temporarily used when zen4R package did not work).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.7" id="cwbtools-037">cwbtools 0.3.7<a class="anchor" aria-label="anchor" href="#cwbtools-037"></a></h2>
 <ul><li>
 <code>gparlsample_url_restricted</code> has been updated to replace a URL that has become defunct.</li>
-<li>New auxiliary function <code><a href="../reference/zenodo.html">zenodo_get_tarballurl()</a></code> steps in for functionality of the zen4R package temporarily not working <a href="https://github.com/PolMine/cwbtools/issues/42" class="external-link">#42</a>. It is used internally by the <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function.</li>
+<li>New auxiliary function <code>zenodo_get_tarballurl()</code> steps in for functionality of the zen4R package temporarily not working <a href="https://github.com/PolMine/cwbtools/issues/42" class="external-link">#42</a>. It is used internally by the <code><a href="../reference/corpus_utils.html">corpus_install()</a></code> function.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.6" id="cwbtools-036">cwbtools 0.3.6<small>2022-06-02</small><a class="anchor" aria-label="anchor" href="#cwbtools-036"></a></h2>
-<ul><li>Ensure that <code><a href="../reference/zenodo.html">zenodo_get_tarball()</a></code> fails gracefully if Zenodo is temporarily not available.</li></ul></div>
+<ul><li>Ensure that <code><a href="../reference/zenodo.html">zenodo_get_tarball()</a></code> fails gracefully if Zenodo is temporarily not available.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.5" id="cwbtools-035">cwbtools 0.3.5<small>2022-05-14</small><a class="anchor" aria-label="anchor" href="#cwbtools-035"></a></h2>
 <ul><li>New function <code><a href="../reference/p_attribute_encode.html">p_attribute_rename()</a></code>, corresponding to <code><a href="../reference/s_attribute.html">s_attribute_rename()</a></code>.</li>
@@ -91,7 +138,7 @@
 <h2 class="page-header" data-toc-text="0.3.4" id="cwbtools-034">cwbtools 0.3.4<small>2021-06-11</small><a class="anchor" aria-label="anchor" href="#cwbtools-034"></a></h2>
 <ul><li>The function <code><a href="../reference/pkg_utils.html">pkg_add_description()</a></code> is declared deprecated. To alert users, functionality of the lifecycle package is used (<a href="https://github.com/PolMine/cwbtools/issues/1" class="external-link">#1</a>).</li>
 <li>A new function <code><a href="../reference/as.vrt.html">as.vrt()</a></code> will generate valid *.vrt files from <code>xml_document</code> input.</li>
-<li>Added Left-to-Right Mark / "</li>
+<li>Added Left-to-Right Mark / “00E” to signs that are cleaned.</li>
 <li>Due to an inconsistency in the code of <code><a href="../reference/directories.html">cwb_corpus_dir()</a></code>, the function would falsely yield <code>NA</code> results if the CWB directory would contain more than two directories.</li>
 <li>To be able to recognize faulty directories, the registry directory and the corpus directory are reported by <code><a href="../reference/directories.html">cwb_corpus_dir()</a></code> and <code><a href="../reference/directories.html">cwb_registry_dir()</a></code>. Argument <code>verbose</code> can be used to suppress this output.</li>
 <li>The statement on ‘LazyData’ has been removed from the DESCRIPTION file to avoid a warning emerging with R-devel on CRAN check machines (<a href="https://github.com/PolMine/cwbtools/issues/33" class="external-link">#33</a>).</li>
@@ -107,7 +154,8 @@
 <h2 class="page-header" data-toc-text="0.3.3" id="cwbtools-033">cwbtools 0.3.3<small>2021-02-23</small><a class="anchor" aria-label="anchor" href="#cwbtools-033"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-3-3">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-3-3"></a></h3>
-<ul><li>Assumptions about the directory structure in a corpus tarball are somewhat relaxed: The name of the data directory may also be “data” (not just “indexed_corpora”) and data files need not be necessarily in a subdirectory of the data directory. This makes downloading and installing the Europarl and the Dickens corpus possible.</li></ul></div>
+<ul><li>Assumptions about the directory structure in a corpus tarball are somewhat relaxed: The name of the data directory may also be “data” (not just “indexed_corpora”) and data files need not be necessarily in a subdirectory of the data directory. This makes downloading and installing the Europarl and the Dickens corpus possible.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-0-3-3">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-3-3"></a></h3>
 <ul><li>The dependency on the devtools package can be dropped as one consequence of removing the Europarl vignette.</li>
@@ -116,10 +164,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bux-fixes-0-3-3">BUX FIXES<a class="anchor" aria-label="anchor" href="#bux-fixes-0-3-3"></a></h3>
-<ul><li>A unit test that involves calling <code><a href="../reference/cwb.html">cwb_install()</a></code> is skipped on Solaris to ensure that Solaris CRAN tests will not fail: A CWB binary is not available for Solaris.</li></ul></div>
+<ul><li>A unit test that involves calling <code><a href="../reference/cwb.html">cwb_install()</a></code> is skipped on Solaris to ensure that Solaris CRAN tests will not fail: A CWB binary is not available for Solaris.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="documentation-fixes-0-3-3">DOCUMENTATION FIXES<a class="anchor" aria-label="anchor" href="#documentation-fixes-0-3-3"></a></h3>
-<ul><li>The vignette “europarl.Rmd” is dropped altogether: Putting corpora into packages is not the recommended approach any more.</li></ul></div>
+<ul><li>The vignette “europarl.Rmd” is dropped altogether: Putting corpora into packages is not the recommended approach any more.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.2" id="cwbtools-032">cwbtools 0.3.2<small>2021-02-17</small><a class="anchor" aria-label="anchor" href="#cwbtools-032"></a></h2>
@@ -150,13 +200,15 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-fixes-0-3-2">DOCUMENTATION FIXES<a class="anchor" aria-label="anchor" href="#documentation-fixes-0-3-2"></a></h3>
-<ul><li>A misleading, deprecated example in a dontrun section of the general package documentation has been removed (<a href="https://github.com/PolMine/cwbtools/issues/23" class="external-link">#23</a>). The vignette includes a working and tested example how to encode the REUTERS corpus.</li></ul></div>
+<ul><li>A misleading, deprecated example in a dontrun section of the general package documentation has been removed (<a href="https://github.com/PolMine/cwbtools/issues/23" class="external-link">#23</a>). The vignette includes a working and tested example how to encode the REUTERS corpus.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.1" id="cwbtools-031">cwbtools 0.3.1<small>2020-07-21</small><a class="anchor" aria-label="anchor" href="#cwbtools-031"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-3-1">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-3-1"></a></h3>
-<ul><li>The (weak) dependency on the polmineR package (it was in the ‘Suggests:’ section of the DESCRIPTION file) has been removed. Changes are purely internal (higher-level polmineR functions have been replaced by lower-level RcppCWB functions, some tests were re-written). Dropping the dependency has the advantage that there is a much clearer structure of dependencies now (RcppCWB -&gt; cwbtools -&gt; polmineR).</li></ul></div>
+<ul><li>The (weak) dependency on the polmineR package (it was in the ‘Suggests:’ section of the DESCRIPTION file) has been removed. Changes are purely internal (higher-level polmineR functions have been replaced by lower-level RcppCWB functions, some tests were re-written). Dropping the dependency has the advantage that there is a much clearer structure of dependencies now (RcppCWB -&gt; cwbtools -&gt; polmineR).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-0-3-1">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-3-1"></a></h3>
 <ul><li>A remaining CLI formatting issue has been removed from the user dialogue for modifying the .Renviron file.</li>
@@ -193,7 +245,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-fixes-0-3-0">DOCUMENTATION FIXES<a class="anchor" aria-label="anchor" href="#documentation-fixes-0-3-0"></a></h3>
-<ul><li>A problem with updating the <code>curl</code> dependency of <code>cwbtools</code> that may arise when <code>devtools::install_github()</code> is used is addressed in an extended explanation in the README.md file how to install the development version of <code>cwbtools</code> using <code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">remotes::install_github()</a></code> (<a href="https://github.com/PolMine/cwbtools/issues/21" class="external-link">#21</a>).</li></ul></div>
+<ul><li>A problem with updating the <code>curl</code> dependency of <code>cwbtools</code> that may arise when <code>devtools::install_github()</code> is used is addressed in an extended explanation in the README.md file how to install the development version of <code>cwbtools</code> using <code>remotes::install_github()</code> (<a href="https://github.com/PolMine/cwbtools/issues/21" class="external-link">#21</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="cwbtools-020">cwbtools 0.2.0<small>2020-04-14</small><a class="anchor" aria-label="anchor" href="#cwbtools-020"></a></h2>
@@ -207,7 +260,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-0-2-0">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-2-0"></a></h3>
-<ul><li>The default value of the argument “repo” that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account (“<a href="https://PolMine.github.io/drat/" class="external-link uri">https://PolMine.github.io/drat/</a>”).</li></ul></div>
+<ul><li>The default value of the argument “repo” that defines the repository for packaged corpora is now the drat repository of the PolMine GitHub account (“<a href="https://PolMine.github.io/drat/" class="external-link uri">https://PolMine.github.io/drat/</a>”).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="documentation-fixes-0-2-0">DOCUMENTATION FIXES<a class="anchor" aria-label="anchor" href="#documentation-fixes-0-2-0"></a></h3>
 <ul><li>New R6 Roxygen documentation used for documenting the <code>CorpusData</code> class.</li>
@@ -218,19 +272,23 @@
 <h2 class="page-header" data-toc-text="0.1.2" id="cwbtools-012">cwbtools 0.1.2<small>2019-12-17</small><a class="anchor" aria-label="anchor" href="#cwbtools-012"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-1-2">BUG FIXES<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-2"></a></h3>
-<ul><li>Trying to remove the entire temporary session directory at the end of the package vignettes caused problems to build the package documentation. A more limited approach to clean up temporary files after build the vignettes will omit this problem.</li></ul></div>
+<ul><li>Trying to remove the entire temporary session directory at the end of the package vignettes caused problems to build the package documentation. A more limited approach to clean up temporary files after build the vignettes will omit this problem.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.1" id="cwbtools-011">cwbtools 0.1.1<small>2019-12-09</small><a class="anchor" aria-label="anchor" href="#cwbtools-011"></a></h2>
 <div class="section level3">
 <h3 id="minor-improvements-0-1-1">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-1"></a></h3>
-<ul><li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (<a href="https://github.com/PolMine/cwbtools/issues/11" class="external-link">#11</a>).</li></ul></div>
+<ul><li>The <code><a href="../reference/pkg_utils.html">pkg_add_corpus()</a></code> function will now create the cwb directories (registry and data directory) if necessary. Previously, these directories were required to exist before moving a corpus into a package, making it necessary to put dummy files into packages to keep R CMD build from issuing warnings and git from dropping these directories. Creating the directories on demand is a precondition for a CRAN release of data packages (<a href="https://github.com/PolMine/cwbtools/issues/11" class="external-link">#11</a>).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-1-1">BUG FIXES<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-1"></a></h3>
-<ul><li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code>length(class(matrix(1:4,2,2)))</code> will return the value 2.</li></ul></div>
+<ul><li>In the upcoming R version 4.0, the <code>matrix</code> class will inherit from class <code>array</code>. The new package version now takes into account that <code>length(class(matrix(1:4,2,2)))</code> will return the value 2.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="documentation-fixes-0-1-1">DOCUMENTATION FIXES<a class="anchor" aria-label="anchor" href="#documentation-fixes-0-1-1"></a></h3>
-<ul><li>The NEWS file now follows the styleguide such that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> will generate a proper changelog page.</li></ul></div>
+<ul><li>The NEWS file now follows the styleguide such that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> will generate a proper changelog page.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="cwbtools-010">cwbtools 0.1.0<small>2019-10-21</small><a class="anchor" aria-label="anchor" href="#cwbtools-010"></a></h2>
@@ -304,10 +362,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="cwbtools-005">cwbtools 0.0.5<a class="anchor" aria-label="anchor" href="#cwbtools-005"></a></h2>
-<ul><li>undocumented</li></ul></div>
+<ul><li>undocumented</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.4" id="cwbtools-004">cwbtools 0.0.4<a class="anchor" aria-label="anchor" href="#cwbtools-004"></a></h2>
-<ul><li>askYesNo function has been replaced by readlines(), to ensure compatibility with R versions &lt; 3.5</li></ul></div>
+<ul><li>askYesNo function has been replaced by readlines(), to ensure compatibility with R versions &lt; 3.5</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -322,7 +382,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

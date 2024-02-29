@@ -18,7 +18,7 @@ corpora."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -93,12 +93,18 @@ corpora.</p>
 <span></span>
 <span><span class="fu">corpus_remove</span><span class="op">(</span><span class="va">corpus</span>, <span class="va">registry_dir</span>, ask <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">corpus_as_tarball</span><span class="op">(</span><span class="va">corpus</span>, <span class="va">registry_dir</span>, <span class="va">data_dir</span>, <span class="va">tarfile</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">corpus_as_tarball</span><span class="op">(</span></span>
+<span>  <span class="va">corpus</span>,</span>
+<span>  <span class="va">registry_dir</span>,</span>
+<span>  data_dir <span class="op">=</span> <span class="fu"><a href="registry_file.html">registry_file_parse</a></span><span class="op">(</span><span class="va">corpus</span>, <span class="va">registry_dir</span><span class="op">)</span><span class="op">[[</span><span class="st">"home"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  <span class="va">tarfile</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">corpus_copy</span><span class="op">(</span></span>
 <span>  <span class="va">corpus</span>,</span>
 <span>  <span class="va">registry_dir</span>,</span>
-<span>  data_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_dir <span class="op">=</span> <span class="fu"><a href="registry_file.html">registry_file_parse</a></span><span class="op">(</span><span class="va">corpus</span>, <span class="va">registry_dir</span><span class="op">)</span><span class="op">[[</span><span class="st">"home"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  registry_dir_new <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span>,</span>
 <span>  data_dir_new <span class="op">=</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">corpus</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  remove <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -121,7 +127,9 @@ corpora.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">corpus_get_version</span><span class="op">(</span><span class="va">corpus</span>, registry_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">corpus_get_version</span><span class="op">(</span><span class="va">corpus</span>, registry_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"CORPUS_REGISTRY"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">corpus_reload</span><span class="op">(</span><span class="va">corpus</span>, <span class="va">registry_dir</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -223,8 +231,8 @@ password protected site.</p></dd>
 
 
 <dt>remove</dt>
-<dd><p>A <code>logical</code> value, whether to remove orginal files after
-having created the copy.</p></dd>
+<dd><p>A <code>logical</code> value, whether to remove orginal files after having
+created the copy.</p></dd>
 
 
 <dt>progress</dt>
@@ -297,24 +305,27 @@ storage location specified by <code>registry_dir</code>.</p></li>
 </ul><p>If the corpus to be installed is already available, a dialogue will ask the
 user whether an existing corpus shall be deleted and installed anew, if
 argument <code>ask</code> is <code>TRUE</code>.</p>
-<p><code>corpus_packages</code> will detect the packages that include CWB
+<p><code>corpus_packages()</code> will detect the packages that include CWB
 corpora. Note that the directory structure of all installed packages is
 evaluated which may be slow on network-mounted file systems.</p>
-<p><code>corpus_rename</code> will rename a corpus, affecting the name of the
+<p><code>corpus_rename()</code> will rename a corpus, affecting the name of the
 registry file, the corpus id, and the name of the directory where data
 files reside.</p>
 <p><code>corpus_remove()</code> can be used to delete a corpus.</p>
-<p><code>corpus_as_tarball</code> will create a tarball (.tar.gz-file) with
+<p><code>corpus_as_tarball()</code> will create a tarball (.tar.gz-file) with
 two subdirectories. The 'registry' subdirectory will host the registry file
 for the tarred corpus. The data files will be put in a subdirectory with
 the corpus name in the 'indexed_corpora' subdirectory.</p>
-<p><code>corpus_copy</code> will create a copy of a corpus (useful for
+<p><code>corpus_copy()</code> will create a copy of a corpus (useful for
 experimental modifications, for instance).</p>
 <p><code>corpus_get_version</code> parses the registry file and derives the
 corpus version number from the corpus properties. The return value is a
 <code>numeric_version</code> class object. The corpus version is expected to follow
 semantic versioning (three digits, e.g. '0.8.1'). If the corpus version
 has another format or if it is not available, the return value is <code>NA</code>.</p>
+<p><code>corpus_reload()</code> will unload a corpus if necessary and reload it.
+Useful to make new features of a corpus available after modification.
+Returns logical value <code>TRUE</code> if succesful, <code>FALSE</code> if not.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -399,7 +410,7 @@ for switching to a packaged corpus.</p></div>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_is_initialized</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_reset_registry</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_initialize.html" class="external-link">cqp_initialize</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_query</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span>, query <span class="op">=</span> <span class="va">Q</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x7fd609fde500&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;pointer: 0x555e13753420&gt;</span>
 <span class="r-in"><span><span class="va">cpos</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cqp_query.html" class="external-link">cqp_dump_subcorpus</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="va">corpus</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu">RcppCWB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/p_attributes.html" class="external-link">cl_cpos2id</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="va">corpus</span>, p_attribute <span class="op">=</span> <span class="st">"word"</span>, registry <span class="op">=</span> <span class="va">registry_dir_tmp</span>, cpos <span class="op">=</span> <span class="va">cpos</span></span></span>
@@ -425,7 +436,7 @@ for switching to a packaged corpus.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

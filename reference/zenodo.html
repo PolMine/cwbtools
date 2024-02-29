@@ -18,7 +18,7 @@ and data with restricted access is supported."><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -73,8 +73,6 @@ and data with restricted access is supported.</p>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">zenodo_get_tarballurl</span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
-<span></span>
 <span><span class="va">gparlsample_url_restricted</span></span></code></pre></div>
     </div>
 
@@ -123,9 +121,7 @@ not been successful.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p><code>zenodo_get_tarballurl</code> is a (temporary) helper function to
-accomplish a temporarily bugged functionality of the zen4R package.</p>
-<p>A sample subset of the GermaParl corpus is deposited at Zenodo for
+    <p>A sample subset of the GermaParl corpus is deposited at Zenodo for
 testing purposes. There are identical open access and restricted versions
 of GermaParlSample to test different flavours of downloading a resource
 from Zenodo. The URL for restricted access includes an access token which
@@ -150,12 +146,32 @@ restricted data are usually not to be shared.</p>
 <span class="r-in"><span><span class="va">gparl_url_pub</span> <span class="op">&lt;-</span> <span class="st">"https://doi.org/10.5281/zenodo.3823245"</span></span></span>
 <span class="r-in"><span><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparl_url_pub</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Download resource from Zenodo ───────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball URL from Zenodo website</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in open.connection(x, "rb") : HTTP error 504.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Zenodo not available. Try again later.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball URL from Zenodo website ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> get tarball URL from Zenodo record</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> get tarball URL from Zenodo record ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> tarball to download: <span style="color: #0000BB;">germaparlsample_v0.1.0.tar.gz</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">cd542b95b3e6c80600f896c2a288</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">tarball_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/indexed_corpora</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> copy corpus data to target directory ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> parse registry file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> parse registry file ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> no info file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> update registry data and save registry file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> update registry data and save registry file ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> load corpus</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> load corpus ... done</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Download and install resource with restricted access</span></span></span>
 <span class="r-in"><span><span class="va">tarball_tmp</span> <span class="op">&lt;-</span> <span class="fu">zenodo_get_tarball</span><span class="op">(</span>url <span class="op">=</span> <span class="va">gparlsample_url_restricted</span><span class="op">)</span></span></span>
@@ -163,21 +179,31 @@ restricted data are usually not to be shared.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> get handle for restricted resource</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> get handle for restricted resource ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball URL from Zenodo website</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball URL from Zenodo website ... done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> tarball to download: <span style="color: #0000BB;">germaparlsample_v0.1.1.tar.gz</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> tarball to download: <span style="color: #0000BB; font-style: italic;">&lt;https://zenodo.org//records/6546810/files/germaparlsample_v0.1.1.tar.gz?download=1&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> checking whether md5 checksum meets expectation (<span style="color: #00BBBB;">81d6131ac55b36f40442b7e320e6</span>…</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">tarball_tmp</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="corpus_utils.html">corpus_install</a></span><span class="op">(</span>tarball <span class="op">=</span> <span class="va">tarball_tmp</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── Get CWB directories ─────────────────────────────────────────────────────────</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpVB8DzH/registry</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpVB8DzH/indexed_corpora</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/indexed_corpora</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Install corpus ──────────────────────────────────────────────────────────────</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> extract tarball</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> extract tarball ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── remove corpus <span style="color: #0000BB;">GERMAPARLSAMPLE</span> ───────────────────────────────────────────────</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> registry directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/registry</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> data directory: <span style="color: #0000BB;">/tmp/RtmpNiZNrn/indexed_corpora/germaparlsample</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> remove files in data directory</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> remove files in data directory <span style="color: #B2B2B2;">[6ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> remove data directory</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> remove data directory <span style="color: #B2B2B2;">[12ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> remove registry file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> remove registry file <span style="color: #B2B2B2;">[11ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> corpus `GERMAPARLSAMPLE` has been removed</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> copy corpus data to target directory ... done</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> parse registry file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> parse registry file ... done</span>
@@ -204,7 +230,7 @@ restricted data are usually not to be shared.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

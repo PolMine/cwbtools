@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -99,7 +99,8 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>values</dt>
-<dd><p>A character vector with the values of the structural attribute.</p></dd>
+<dd><p>A <code>character</code> vector with the values of the structural
+attribute.</p></dd>
 
 
 <dt>data_dir</dt>
@@ -107,7 +108,9 @@
 
 
 <dt>s_attribute</dt>
-<dd><p>Atomic character vector, the name of the structural attribute.</p></dd>
+<dd><p>Name of the structural attribute, an atomic <code>character</code>
+vector containing only lowercase ASCII characters (a-z), digits (0-9), -,
+and _: No non-ASCII or uppercase letters allowed.</p></dd>
 
 
 <dt>corpus</dt>
@@ -119,7 +122,7 @@
 
 
 <dt>method</dt>
-<dd><p>EWither 'R' or 'CWB'.</p></dd>
+<dd><p>Either 'R' or 'CWB'.</p></dd>
 
 
 <dt>registry_dir</dt>
@@ -131,7 +134,7 @@
 
 
 <dt>delete</dt>
-<dd><p>Logical, whether a call to <code><a href="https://rdrr.io/pkg/RcppCWB/man/cl_delete_corpus.html" class="external-link">RcppCWB::cl_delete_corpus</a></code> is performed.</p></dd>
+<dd><p>Logical, whether to call <code><a href="https://rdrr.io/pkg/RcppCWB/man/cl_delete_corpus.html" class="external-link">RcppCWB::cl_delete_corpus()</a></code>.</p></dd>
 
 
 <dt>verbose</dt>
@@ -154,7 +157,7 @@ coercible to a <code>data.table</code>) with three columns ("cpos_left",
 
 <dt>y</dt>
 <dd><p>Data defining a second s-attribute, a <code>data.table</code> (or an
-object coercible to a <code>data.table</code>)with three columns ("cpos_left",
+object coercible to a <code>data.table</code>) with three columns ("cpos_left",
 "cpos_right", "value").</p></dd>
 
 
@@ -171,21 +174,20 @@ attribute stated in vector <code>old</code> will get the new names at the 1st, 2
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>In addition to using CWB functionality, the <code>s_attribute_encode</code>
-function includes a pure R implementation to add or modify structural attributes
-of an existing CWB corpus.</p>
-<p>If the corpus has been loaded/used before,
-a new s-attribute may not be available unless <code><a href="https://rdrr.io/pkg/RcppCWB/man/cl_delete_corpus.html" class="external-link">RcppCWB::cl_delete_corpus</a></code>
-has been called. Use the argument <code>delete</code> for calling this function.</p>
+    <p><code>s_attribute_encode()</code> implements a 'pure R' implementation to add
+or modify structural attributes of an existing CWB corpus.</p>
+<p>If the corpus has been loaded/used before, a new s-attribute may not be
+available unless <code><a href="https://rdrr.io/pkg/RcppCWB/man/cl_delete_corpus.html" class="external-link">RcppCWB::cl_delete_corpus()</a></code> has been called. Use the
+argument <code>delete</code> for calling this function.</p>
 <p><code>s_attribute_recode</code> will recode the values in the avs-file and change
 the attribute value index in the avx file. The rng-file remains unchanged. The registry
 file remains unchanged, and it is highly recommended to consider <code>s_attribute_recode</code>
 as a helper for <code>corpus_recode</code> that will recode all s-attributes, all p-attributes,
 and will reset the encoding in the registry file.</p>
-<p><code>s_attribute_files</code> will return a named character vector with
+<p><code>s_attribute_files()</code> will return a named character vector with
 the data files (extensions: "avs", "avx", "rng") in the directory indicated
 by <code>data_dir</code> for the structural attribute <code>s_attribute</code>.</p>
-<p><code>s_attribute_get_values</code> is equivalent to performing the CL
+<p><code>s_attribute_get_values()</code> is equivalent to performing the CL
 function cl_struc2id for all strucs of a structural attribute. It is a
 "pure R" operation that is faster than using CL, as it processes entire
 files for the s-attribute directly. The return value is a <code>character</code>
@@ -196,23 +198,24 @@ positions are in the first column, right corpus positions in the second
 column. The result is equivalent to calling RcppCWB::get_region_matrix for
 all strucs of a s-attribute, but may be somewhat faster. It is a "pure R"
 function which is fast as it processes files entirely and directly.</p>
-<p><code>s_attribute_merge</code> combines two tables with regions for
+<p><code>s_attribute_merge()</code> combines two tables with regions for
 s-attributes checking for intersections that may cause problems. The
 heuristic is to keep all non-intersecting annotations and those annotations
 that define the same region in object <code>x</code> and object <code>y</code>.
 Annotations of <code>x</code> and <code>y</code> which overlap uncleanly, i.e. without
 an identity of the left and the right corpus position ("cpos_left" /
 "cpos_right") are dropped. The scenario for using the function is to decode
-a s-attribute (using <code>s_attribute_decode</code>), mix in an additional
+a s-attribute (using <code><a href="https://rdrr.io/pkg/RcppCWB/man/s_attribute_decode.html" class="external-link">s_attribute_decode()</a></code>), mix in an additional
 annotation, and to re-encode the enhanced s-attribute (using
-<code>s_attribute_encode</code>).</p>
-<p>Function <code>s_attribute_delete</code> is not yet implemented.</p>
-<p>Function <code>s_attribute_rename</code> can be used to rename a
-structural attribute.</p>
+<code>s_attribute_encode()</code>).</p>
+<p>Function <code>s_attribute_delete()</code> is not yet implemented.</p>
+<p>Function <code>s_attribute_rename()</code> can be used to rename a structural
+attribute.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>To decode a structural attribute, see <code><a href="https://rdrr.io/pkg/RcppCWB/man/s_attribute_decode.html" class="external-link">s_attribute_decode</a></code>.</p></div>
+    <div class="dont-index"><p>To decode a structural attribute, see
+<code><a href="https://rdrr.io/pkg/RcppCWB/man/s_attribute_decode.html" class="external-link">s_attribute_decode</a></code>.</p></div>
     </div>
 
     <div id="ref-examples">
@@ -221,30 +224,36 @@ structural attribute.</p>
 <span class="r-in"><span><span class="va">registry_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cwb_dir_rcppcwb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">registry_dir_rcppcwb</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">cwb_dir_rcppcwb</span>, <span class="st">"registry"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data_dir_rcppcwb</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></span><span class="op">(</span><span class="va">cwb_dir_rcppcwb</span>,<span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="corpus_utils.html">corpus_copy</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
-<span class="r-in"><span>  registry_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"registry"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  registry_dir <span class="op">=</span> <span class="va">registry_dir_rcppcwb</span>,</span></span>
+<span class="r-in"><span>  data_dir <span class="op">=</span> <span class="va">data_dir_rcppcwb</span>,</span></span>
 <span class="r-in"><span>  registry_dir_new <span class="op">=</span> <span class="va">registry_tmp</span>,</span></span>
 <span class="r-in"><span>  data_dir_new <span class="op">=</span> <span class="va">data_dir_tmp</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">no_strucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/cl_attribute_size.html" class="external-link">cl_attribute_size</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
-<span class="r-in"><span>  attribute <span class="op">=</span> <span class="st">"id"</span>, attribute_type <span class="op">=</span> <span class="st">"s"</span>,</span></span>
+<span class="r-in"><span>  attribute <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>  attribute_type <span class="op">=</span> <span class="st">"s"</span>,</span></span>
 <span class="r-in"><span>  registry <span class="op">=</span> <span class="va">registry_tmp</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cpos_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="va">no_strucs</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/s_attributes.html" class="external-link">cl_struc2cpos</a></span><span class="op">(</span>corpus <span class="op">=</span> <span class="st">"REUTERS"</span>, struc <span class="op">=</span> <span class="va">i</span>, s_attribute <span class="op">=</span> <span class="st">"id"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cpos_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/get_region_matrix.html" class="external-link">get_region_matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
+<span class="r-in"><span>      struc <span class="op">=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="va">no_strucs</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      s_attribute <span class="op">=</span> <span class="st">"id"</span>,</span></span>
+<span class="r-in"><span>      registry <span class="op">=</span> <span class="va">registry_tmp</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cpos_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">cpos_list</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">s_attribute_encode</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cpos_matrix</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  values <span class="op">=</span> <span class="fl">1L</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cpos_matrix</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  data_dir <span class="op">=</span> <span class="va">data_dir_tmp</span>,</span></span>
-<span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"foo"</span>,</span></span>
+<span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"article_id"</span>,</span></span>
 <span class="r-in"><span>  corpus <span class="op">=</span> <span class="st">"REUTERS"</span>,</span></span>
 <span class="r-in"><span>  region_matrix <span class="op">=</span> <span class="va">cpos_matrix</span>,</span></span>
 <span class="r-in"><span>  method <span class="op">=</span> <span class="st">"R"</span>,</span></span>
@@ -253,20 +262,29 @@ structural attribute.</p>
 <span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  delete <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... adding s-attribute 'foo' to registry</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> class of input `values` is <span style="color: #0000BB;">"integer"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> unique values after coercion to `character` vector: <span style="color: #0000BB;">20</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> add s-attribute <span style="color: #0000BB;">"article_id"</span> to registry</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/RcppCWB/man/s_attributes.html" class="external-link">cl_struc2str</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="st">"REUTERS"</span>, struc <span class="op">=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cpos_matrix</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span>, s_attribute <span class="op">=</span> <span class="st">"foo"</span>, registry <span class="op">=</span> <span class="va">registry_tmp</span></span></span>
+<span class="r-in"><span>  <span class="st">"REUTERS"</span>,</span></span>
+<span class="r-in"><span>  struc <span class="op">=</span> <span class="fl">0L</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cpos_matrix</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1L</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"article_id"</span>,</span></span>
+<span class="r-in"><span>  registry <span class="op">=</span> <span class="va">registry_tmp</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] "16" "17" "18" "19" "20"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">registry_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">data_dir_tmp</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">avs</span> <span class="op">&lt;-</span> <span class="fu">s_attribute_get_values</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"id"</span>,</span></span>
-<span class="r-in"><span>  data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"RcppCWB"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"extdata"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"cwb"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"indexed_corpora"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"reuters"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">avs</span> <span class="op">&lt;-</span> <span class="fu">s_attribute_get_values</span><span class="op">(</span>s_attribute <span class="op">=</span> <span class="st">"id"</span>, data_dir <span class="op">=</span> <span class="va">data_dir</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rng</span> <span class="op">&lt;-</span> <span class="fu">s_attribute_get_regions</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  s_attribute <span class="op">=</span> <span class="st">"id"</span>,</span></span>
 <span class="r-in"><span>  data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"RcppCWB"</span>, <span class="st">"extdata"</span>, <span class="st">"cwb"</span>, <span class="st">"indexed_corpora"</span>, <span class="st">"reuters"</span><span class="op">)</span></span></span>
@@ -303,7 +321,7 @@ structural attribute.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
