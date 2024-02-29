@@ -58,8 +58,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.3.9.9005-9008" id="cwbtools-0399005-9008">cwbtools 0.3.9.9005-9008<a class="anchor" aria-label="anchor" href="#cwbtools-0399005-9008"></a></h2>
+<h2 class="page-header" data-toc-text="0.4.0" id="cwbtools-040">cwbtools 0.4.0<small>2024-02-26</small><a class="anchor" aria-label="anchor" href="#cwbtools-040"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
+<ul><li>New method <code><a href="../reference/encode.html">encode()</a></code> to prospectively supersed <code>CorpusData</code> class. Includes argument <code>properties</code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
+<li>New function <code><a href="../reference/corpus_utils.html">corpus_reload()</a></code> for convenient unloading/reloading corpora <a href="https://github.com/PolMine/cwbtools/issues/68" class="external-link">#68</a>.</li>
+<li>New utility function <code><a href="../reference/registry_file.html">registry_set_name()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-0-4-0">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-0-4-0"></a></h3>
 <ul><li>
+<code><a href="../reference/cwb.html">cwb_get_url()</a></code> will get CWB v3.5 installation files <a href="https://github.com/PolMine/cwbtools/issues/63" class="external-link">#63</a>.</li>
+<li>
 <code><a href="../reference/corpus_utils.html">corpus_remove()</a></code> returns <code>FALSE</code> (rather than failing with ERROR) when corpus does not exist. More telling messages.</li>
 <li>
 <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> has new argument <code>quietly</code> passed into RcppCWB functions <code>cwb_compress()</code> <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">cwb_huffcode()</a></code> and <code><a href="https://rdrr.io/pkg/RcppCWB/man/cwb_utils.html" class="external-link">cwb_compress_rdx()</a></code> to control verbosity.</li>
@@ -72,21 +82,20 @@
 <code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code> coerces input <code>values</code> to <code>character</code> (rather than failing) <a href="https://github.com/PolMine/cwbtools/issues/62" class="external-link">#62</a>.</li>
 <li>The validity of attribute names is checked by <code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code>, <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> and <code>CorpusData$encode()</code> using a new (internal) function, a telling message is issued if non-ASCII or uppercase characters are used. The documentation has been augmented accordingly <a href="https://github.com/PolMine/cwbtools/issues/48" class="external-link">#48</a>.</li>
 <li>For method “R”, <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> checks whether files for encoded p-attribute exist and fails gracefully with telling error message if yes <a href="https://github.com/PolMine/cwbtools/issues/4" class="external-link">#4</a>.</li>
-<li>Scenario how to add stemmed token stream to existing corpus added to vignette <a href="https://github.com/PolMine/cwbtools/issues/14" class="external-link">#14</a>.</li>
-<li>New method <code><a href="../reference/encode.html">encode()</a></code> to prospectively supersed <code>CorpusData</code> class. Includes argument <code>properties</code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
-<li>
-<code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code> issues warning on Windows when using s-attribute ‘id’ <a href="https://github.com/PolMine/cwbtools/issues/69" class="external-link">#69</a>.</li>
-<li>Replaced <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> by <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path()</a></code> in <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/65" class="external-link">#65</a>.</li>
+<li>Argument <code>compress</code> defaults to <code>FALSE</code> as corpus compression is not stable on Windows <a href="https://github.com/PolMine/cwbtools/issues/3" class="external-link">#3</a>.</li>
+<li>function <code><a href="../reference/corpus_utils.html">corpus_as_tarball()</a></code> and <code><a href="../reference/corpus_utils.html">corpus_copy()</a></code> now have <code>registry_file_parse(corpus, registry_dir)[["home"]]</code> as default value, so that values are more consistent across <code>corpus_*</code> functions <a href="https://github.com/PolMine/cwbtools/issues/18" class="external-link">#18</a>.</li>
 <li>
 <code><a href="../reference/cwb.html">cwb_get_bindir()</a></code> tries to find <code>cwb-config</code> system utility, if it is on the path.</li>
 <li>
-<code><a href="../reference/cwb.html">cwb_get_url()</a></code> will get CWB v3.5 installation files <a href="https://github.com/PolMine/cwbtools/issues/63" class="external-link">#63</a>.</li>
-<li>Argument <code>compress</code> defaults to <code>FALSE</code> as corpus compression is not stable on Windows <a href="https://github.com/PolMine/cwbtools/issues/3" class="external-link">#3</a>.</li>
-<li>New function <code><a href="../reference/corpus_utils.html">corpus_reload()</a></code> for convenient unloading/reloading corpora <a href="https://github.com/PolMine/cwbtools/issues/68" class="external-link">#68</a>.</li>
-<li>Simplifications of the vignette <a href="https://github.com/PolMine/cwbtools/issues/60" class="external-link">#60</a>.</li>
-<li>function <code><a href="../reference/corpus_utils.html">corpus_as_tarball()</a></code> and <code><a href="../reference/corpus_utils.html">corpus_copy()</a></code> now have <code>registry_file_parse(corpus, registry_dir)[["home"]]</code> as default value, so that values are more consistent across <code>corpus_*</code> functions <a href="https://github.com/PolMine/cwbtools/issues/18" class="external-link">#18</a>.</li>
-<li>New utility function <code><a href="../reference/registry_file.html">registry_set_name()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/13" class="external-link">#13</a>.</li>
+<code><a href="../reference/s_attribute.html">s_attribute_encode()</a></code> issues warning on Windows when using s-attribute ‘id’ <a href="https://github.com/PolMine/cwbtools/issues/69" class="external-link">#69</a>.</li>
+<li>Replaced <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> by <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path()</a></code> in <code><a href="../reference/p_attribute_encode.html">p_attribute_encode()</a></code> <a href="https://github.com/PolMine/cwbtools/issues/65" class="external-link">#65</a>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="improved-documentataion-0-4-0">Improved documentataion<a class="anchor" aria-label="anchor" href="#improved-documentataion-0-4-0"></a></h3>
+<ul><li>Simplifications of the vignette <a href="https://github.com/PolMine/cwbtools/issues/60" class="external-link">#60</a>.</li>
+<li>Scenario how to add stemmed token stream to existing corpus added to vignette <a href="https://github.com/PolMine/cwbtools/issues/14" class="external-link">#14</a>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.9" id="cwbtools-039">cwbtools 0.3.9<small>2023-11-27</small><a class="anchor" aria-label="anchor" href="#cwbtools-039"></a></h2>
 <ul><li>
