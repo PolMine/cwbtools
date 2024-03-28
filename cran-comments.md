@@ -1,6 +1,6 @@
 ## General remarks
 
-Fixed all known bugs, and introduced some new functionality. The basic setup of the package is unchanged.
+Maintanence release, fixes issue with `zenodo_get_tarball()` reported on CRAN check machine.
 
 
 ## Test environments

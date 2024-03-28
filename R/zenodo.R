@@ -26,7 +26,8 @@
 #' if (!is.null(tarball_tmp)) corpus_install(tarball = tarball_tmp)
 #' }
 #' @export
-#' @importFrom curl curl new_handle handle_cookies curl_fetch_memory curl_download
+#' @importFrom curl curl new_handle handle_cookies curl_fetch_memory
+#'   curl_download
 #' @importFrom xml2 read_html xml_find_all xml_attr
 #' @importFrom cli col_magenta
 #' @param url Landing page at Zenodo for resource. Can also be the URL for
@@ -42,7 +43,13 @@
 #' @return The path of the downloaded resource, or `NULL` if the operation has
 #'   not been successful.
 #' @rdname zenodo
-zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), checksum = TRUE, verbose = TRUE, progress = TRUE){
+zenodo_get_tarball <- function(
+    url,
+    destfile = tempfile(fileext = ".tar.gz"),
+    checksum = TRUE,
+    verbose = TRUE,
+    progress = TRUE
+  ){
   
   stopifnot(
     is.character(url),
@@ -112,17 +119,19 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
           cli_process_failed()
         } else {
           cli_alert_danger("'no Zenodo record found for DOI {.href {url}}")
+          return(NULL)
         }
       }
     )
     
     if (verbose) cli_process_start("get tarball URL from Zenodo record")
     
-    zenodo_files <- sapply(zenodo_record[["files"]], function(x) x[["download"]])
+    zenodo_files <- sapply(zenodo_record[["files"]], `[[`, "download")
     
     if (verbose) cli_process_done()
     tarball_index <- grep("\\.tar\\.gz/content", zenodo_files)
-    if (length(tarball_index) > 1L) stop("more than one tarball could be downloaded")
+    if (length(tarball_index) > 1L)
+      stop("more than one tarball could be downloaded")
     tarball <- zenodo_files[tarball_index]
     
     md5sum_zenodo <- zenodo_record[["files"]][[tarball_index]][["checksum"]]
@@ -146,7 +155,7 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
   if (isTRUE(checksum)){
     if (verbose)
       cli_process_start(
-        "checking whether md5 checksum meets expectation ({col_cyan({md5sum_zenodo})})"
+        "check that md5 checksum is ({col_cyan({md5sum_zenodo})})"
       )
     tarball_checksum <- tools::md5sum(destfile)
     if (tarball_checksum == md5sum_zenodo){
@@ -155,7 +164,7 @@ zenodo_get_tarball <- function(url, destfile = tempfile(fileext = ".tar.gz"), ch
       if (verbose) cli_process_failed()
       cli_alert_danger(
         sprintf(
-          "md5 checksum of corpus tarball is '%s' and fails to meet expectation",
+          "md5 checksum of corpus tarball is '%s', differs from expectation",
           col_magenta(tarball_checksum)
         )
       )

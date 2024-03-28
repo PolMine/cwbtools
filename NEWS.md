@@ -1,3 +1,9 @@
+cwbtools 0.4.1
+==============
+
+* `zenodo_get_tarball()` failse gracefully if Zenodo is not available #72.
+
+
 cwbtools 0.4.0
 ==============
 
