@@ -5,9 +5,9 @@ Maintanence release, fixes issue with `zenodo_get_tarball()` reported on CRAN ch
 
 ## Test environments
 
-* local macOS install, R 4.3.2
-* GitHub Actions (Ubuntu, macOS, Windows) R 4.3.2
-* win-builder (devel, release 4.3.2, oldrel)
+* local macOS install, R 4.3.3
+* GitHub Actions (Ubuntu, macOS, Windows) R 4.3.4
+* win-builder (devel, oldrel, 4.4.0)
 
 ## R CMD check results
 

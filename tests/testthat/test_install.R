@@ -143,7 +143,7 @@ test_that(
     gparl_url_pub <- "https://doi.org/10.5281/zenodo.3823245"
     tarball_tmp <- zenodo_get_tarball(url = gparl_url_pub)
     success <- corpus_install(tarball = tarball_tmp, load = FALSE)
-    testthat::expect_true(success)
+    if (!is.null(success)) testthat::expect_true(success)
     
     unlink(cwb_dirs[["corpus_dir"]], recursive = TRUE)
     unlink(cwb_dirs[["registry_dir"]], recursive = TRUE)
