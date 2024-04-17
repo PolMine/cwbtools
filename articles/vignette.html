@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Introducing 'cwbtools' • cwbtools</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cwbtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
                         <h4 data-toc-skip class="author">Andreas Blätte
 (<a href="mailto:andreas.blaette@uni-due.de" class="email">andreas.blaette@uni-due.de</a>)</h4>
             
-            <h4 data-toc-skip class="date">2024-02-29</h4>
+            <h4 data-toc-skip class="date">2024-04-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PolMine/cwbtools/blob/HEAD/vignettes/vignette.Rmd" class="external-link"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="hidden name"><code>vignette.Rmd</code></div>
@@ -173,7 +173,7 @@ We first create an (empty) data directory …</p>
 create the token stream we can assign to the <code>CorpusData</code>
 object.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tidytext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu">tidytext</span><span class="fu">::</span><span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span></span>
 <span>  <span class="fu">janeaustenr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janeaustenr/man/austen_books.html" class="external-link">austen_books</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">word</span>, <span class="va">text</span>, to_lower <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -429,7 +429,7 @@ Reuters corpus that is included as sample data in the tm package.</p>
 <code>tibble</code>, using respective functionality of the <a href="https://CRAN.R-project.org/package=tidytext" class="external-link">tidytext</a>
 package.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext" class="external-link">tidytext</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/" class="external-link">tidytext</a></span><span class="op">)</span></span>
 <span><span class="va">reuters.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">reuters.tm</span><span class="op">)</span></span>
 <span><span class="va">reuters.tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 20 × 17</span></span></span>
@@ -584,10 +584,10 @@ functionality.</p>
 <span>  compress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> creating indices (in memory)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> creating indices (in memory) <span style="color: #B2B2B2;">[191ms]</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> creating indices (in memory) <span style="color: #B2B2B2;">[175ms]</span></span></span></code></pre>
 <pre><code><span><span class="co">## </span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">stem.corpus</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">stem.corpus</span> <span style="color: #B2B2B2;">[537ms]</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">stem.corpus</span> <span style="color: #B2B2B2;">[518ms]</span></span></span></code></pre>
 <pre><code><span><span class="co">## </span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">stem.lexicon</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">stem.lexicon</span> <span style="color: #B2B2B2;">[19ms]</span></span></span></code></pre>
@@ -595,7 +595,7 @@ functionality.</p>
 <pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> writing file: <span style="color: #0000BB;">stem.lexicon.idx</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> writing file: <span style="color: #0000BB;">stem.lexicon.idx</span> <span style="color: #B2B2B2;">[17ms]</span></span></span></code></pre>
 <pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> updating registry file: <span style="color: #0000BB;">/tmp/RtmpjIrO5y/registry/reuters</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> updating registry file: <span style="color: #0000BB;">/tmp/RtmpoU7DjI/registry/reuters</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> run `Rcpp::cwb_makeall()`</span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> run `Rcpp::cwb_makeall()` <span style="color: #B2B2B2;">[7ms]</span></span></span></code></pre>
 <pre><code><span><span class="co">## </span></span></code></pre>
@@ -634,7 +634,7 @@ add it to an existing corpus.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>
