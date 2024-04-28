@@ -54,6 +54,10 @@ Core operations on structural and positional attributes are implemented in "pure
 
 ### Scenario 1: Tidytext to CWB 
 
+```{r run_tidytext, include = FALSE, echo = FALSE}
+run_tidytext_example <- requireNamespace("tidytext") && requireNamespace("janeaustenr")
+```
+
 As a basic scenario, we create a corpus of Jane Austen's books (included in the package [janeaustenr](https://CRAN.R-project.org/package=janeaustenr)).  We first create an (empty) data directory ...
 
 ```{r, message = FALSE, results = FALSE}
@@ -71,7 +75,7 @@ Austen <- CorpusData$new()
 
 The `tidytext` package offers an efficient workflow to create the token stream we can assign to the `CorpusData` object.
 
-```{r}
+```{r eval = run_tidytext_example}
 tbl <- tidytext::unnest_tokens(
   janeaustenr::austen_books(),
   word, text, to_lower = FALSE
@@ -82,19 +86,19 @@ Austen$tokenstream <- as.data.table(tbl)
 
 To demonstrate that we can use an additional positional attribute, we stem the tokens using the [SnowballC](https://CRAN.R-project.org/package=SnowballC) package.
 
-```{r}
+```{r, eval = run_tidytext_example}
 Austen$tokenstream[, stem := SnowballC::wordStem(Austen$tokenstream[["word"]], language = "english")]
 ```
 
 In this case, (zero-based!) corpus positions need to be assigned explicitly. 
 
-```{r}
+```{r, eval = run_tidytext_example}
 Austen$tokenstream[, cpos := 0L:(nrow(tbl) - 1L)]
 ```
 
 We can now create (and inspect) the table with the structural attributes.
 
-```{r}
+```{r, eval = run_tidytext_example}
 cpos_max_min <- function(x)
   list(cpos_left = min(x[["cpos"]]), cpos_right = max(x[["cpos"]]))
 Austen$metadata <- Austen$tokenstream[, cpos_max_min(.SD), by = book]
@@ -106,7 +110,7 @@ head(Austen$tokenstream)
 
 A few finishing touches and we have the token stream ready to be encoded: We remove the metadata from the table in the `tokenstream` field and order the columns nicely. 
 
-```{r}
+```{r, eval = run_tidytext_example}
 Austen$tokenstream[, book := NULL]
 setcolorder(Austen$tokenstream, c("cpos", "word", "stem"))
 Austen$tokenstream
@@ -114,7 +118,7 @@ Austen$tokenstream
 
 Ready to encode the corpus!
 
-```{r, message = FALSE}
+```{r, message = FALSE, eval = run_tidytext_example}
 Austen$encode(
    corpus = "AUSTEN",
    encoding = "utf8",
@@ -130,7 +134,7 @@ Austen$encode(
 
 This is a rudimentary check (using low-level RcppCWB functions) whether to corpus can be used. How often does the token "pride" occur?
 
-```{r}
+```{r, eval = run_tidytext_example}
 ids <- RcppCWB::cl_str2id(
   corpus = "AUSTEN",
   p_attribute = "word",
@@ -279,7 +283,7 @@ reuters.tm <- VCorpus(
 
 A quick way to attain the data format required for the `CorpusData` class is to coerce the `VCorpus` to a `tibble`, using respective functionality of the [tidytext](https://CRAN.R-project.org/package=tidytext) package.
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 library(tidytext)
 reuters.tbl <- tidy(reuters.tm)
 reuters.tbl
@@ -287,7 +291,7 @@ reuters.tbl
 
 Columns with the metadata we may want to encode are still character vectors (length > 1). We turn the columns with the topic categorizations and the places into length-one character vectors.
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 topics <- sapply(reuters.tbl[["topics_cat"]], paste, collapse = "|")
 places <- sapply(reuters.tbl[["places"]], paste, collapse = "|")
 
@@ -297,7 +301,7 @@ reuters.tbl[["places"]] <- places
 
 This is the input we need. We instantiate a `CorpusData` object end make sure that a new data directory for the REUTERS corpus exists (and is empty) ...
 
-```{r, results = FALSE}
+```{r, results = FALSE, eval = requireNamespace("tidytext", quietly = TRUE)}
 Reuters <- CorpusData$new()
 reuters_data_dir_tmp <- fs::path(data_dir_tmp, "reuters")
 if (!file.exists(reuters_data_dir_tmp)) dir.create(reuters_data_dir_tmp)
@@ -306,7 +310,7 @@ file.remove(list.files(reuters_data_dir_tmp, full.names = TRUE))
 
 We assign the chunktable and the metadata, coerced to a `data.table`, to the object ... 
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 Reuters$chunktable <- data.table(reuters.tbl[, c("id", "text")])
 Reuters$metadata <- data.table(reuters.tbl[,c("id", "topics", "places")])
 Reuters
@@ -314,19 +318,19 @@ Reuters
 
 ... we tokenize the text to gain the token stream table ... 
 
-```{r, message = FALSE, results = FALSE}
+```{r, message = FALSE, results = FALSE, eval = requireNamespace("tidytext", quietly = TRUE)}
 Reuters$tokenize()
 ```
 
 ... we have a look at the token stream ... 
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 Reuters$tokenstream
 ```
 
 It seems that we can encode the corpus.
 
-```{r, message = FALSE}
+```{r, message = FALSE, eval = requireNamespace("tidytext", quietly = TRUE)}
 Reuters$encode(
    corpus = "REUTERS",
    encoding = "utf8",
@@ -341,7 +345,7 @@ Reuters$encode(
 
 The REUTERS corpus is about oil production in the Middle East. To check quickly, whether it works, we count the number of occurrences of the word "oil".
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 ids <- RcppCWB::cl_str2id(
   corpus = "REUTERS",
   p_attribute = "word",
@@ -369,7 +373,7 @@ The initial step here is to decode the entire token stream. It could be done
 easily using `polmineR::get_token_stream()`, but to avoid creating a further
 dependency, we use basic RcppCWB functionality.
 
-```{r}
+```{r, eval = requireNamespace("tidytext", quietly = TRUE)}
 reuters_size <- RcppCWB::attribute_size(
   corpus = "REUTERS",
   registry = registry_tmp,
@@ -394,13 +398,13 @@ token_stream <- RcppCWB::cl_id2str(
 
 We then generate the stemmed token stream ... 
 
-```{r}
+```{r, eval = requireNamespace("SnowballC") && requireNamespace("tidytext")}
 stemmed <- SnowballC::wordStem(token_stream, language = "en")
 ```
 
 ... and add this to the corpus.
 
-```{r}
+```{r, eval = requireNamespace("SnowballC") && requireNamespace("tidytext")}
 p_attribute_encode(
   token_stream = stemmed,
   p_attribute = "stem",

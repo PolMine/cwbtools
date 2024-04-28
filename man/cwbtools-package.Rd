@@ -39,7 +39,7 @@ quantitative and qualitative approaches when working with textual data.
 \references{
 Christ, Oliver (1994): "A Modular and Flexible Architecture for
 an Integrated Corpus Query System". \emph{Proceedings of COMPLEX'94},
-pp.23-32. \href{https://arxiv.org/pdf/cmp-lg/9408005.pdf}{(available online here)}
+pp.23-32. \href{http://arxiv.org/pdf/cmp-lg/9408005}{(available online here)}
 
 Evert, Stefan and Andrew Hardie (2011): "Twenty-first
 century Corpus Workbench: Updating a query architecture for the new

@@ -4,6 +4,8 @@ test_that(
   "encode corpus",
   {
     library(data.table)
+    testthat::skip_if_not_installed("janeaustenr")
+    testthat::skip_if_not_installed("tidytext")
 
     cwb_dirs <- create_cwb_directories(prefix = tempdir(), ask = FALSE, verbose = FALSE)
     austen_data_dir_tmp <- fs::path(cwb_dirs[["corpus_dir"]], "austen")
@@ -134,6 +136,9 @@ test_that(
 test_that(
   "check p_attribute with R/CWB, without/with compression",
   {
+    testthat::skip_if_not_installed("janeaustenr")
+    testthat::skip_if_not_installed("tidytext")
+    
     registry_tmp <- fs::path(tempdir(), "registry")
     dir.create (registry_tmp)
     

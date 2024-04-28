@@ -67,8 +67,11 @@ verbosity of these functions.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-library(dplyr)
-library(tidytext)
+dplyr_available <- requireNamespace("dplyr")
+tidytext_available <- requireNamespace("tidytext")
+quanteda_available <- requireNamespace("quanteda")
+
+if (dplyr_available && tidytext_available && quanteda_available){
 
 registry_tmp <- fs::path(tempdir(), "cwb_registry")
 dir.create(registry_tmp)
@@ -93,4 +96,6 @@ tokenstream \%>\%
     s_attributes = metadata,
     properties = c(lang = "en")
   )
+  
+}
 }

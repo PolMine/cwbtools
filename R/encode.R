@@ -22,8 +22,11 @@
 setGeneric("encode", function(x, ...) standardGeneric("encode"))
 
 #' @examples
-#' library(dplyr)
-#' library(tidytext)
+#' dplyr_available <- requireNamespace("dplyr")
+#' tidytext_available <- requireNamespace("tidytext")
+#' quanteda_available <- requireNamespace("quanteda")
+#' 
+#' if (dplyr_available && tidytext_available && quanteda_available){
 #' 
 #' registry_tmp <- fs::path(tempdir(), "cwb_registry")
 #' dir.create(registry_tmp)
@@ -48,6 +51,8 @@ setGeneric("encode", function(x, ...) standardGeneric("encode"))
 #'     s_attributes = metadata,
 #'     properties = c(lang = "en")
 #'   )
+#'   
+#' }
 #' @rdname encode
 setMethod("encode", "data.frame", function(
     x,

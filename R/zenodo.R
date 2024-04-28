@@ -85,7 +85,8 @@ zenodo_get_tarball <- function(
     trystatus <- try(
       website <- read_xml(
         paste(readLines(page, warn = FALSE), collapse = "\n"),
-        as_html = TRUE, options = c("NOERROR", "NOWARNING", "RECOVER")
+        as_html = TRUE,
+        options = c("NOERROR", "NOWARNING", "RECOVER")
       ),
     )
     if (is(trystatus)[[1]] == "try-error"){

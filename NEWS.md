@@ -1,3 +1,9 @@
+cwbtools 0.4.2
+==============
+
+* All packages listed in 'Suggests' section of DESCRIPTION used conditionally (pass checks with _R_CHECK_DEPENDS_ONLY_=true) #74.
+
+
 cwbtools 0.4.1
 ==============
 
