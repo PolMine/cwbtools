@@ -22,11 +22,15 @@
 setGeneric("encode", function(x, ...) standardGeneric("encode"))
 
 #' @examples
+#' # This is an example we run conditionally as packages are suggested.
+#' 
 #' dplyr_available <- requireNamespace("dplyr")
 #' tidytext_available <- requireNamespace("tidytext")
 #' quanteda_available <- requireNamespace("quanteda")
 #' 
 #' if (dplyr_available && tidytext_available && quanteda_available){
+#' 
+#' library(dplyr) # pipe would not be available otherwise
 #' 
 #' registry_tmp <- fs::path(tempdir(), "cwb_registry")
 #' dir.create(registry_tmp)
