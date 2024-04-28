@@ -76,6 +76,7 @@ quanteda_available <- requireNamespace("quanteda")
 if (dplyr_available && tidytext_available && quanteda_available){
 
 library(dplyr) # pipe would not be available otherwise
+library(tidytext)
 
 registry_tmp <- fs::path(tempdir(), "cwb_registry")
 dir.create(registry_tmp)
